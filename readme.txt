@@ -1,6 +1,6 @@
 === Statnive ===
 Contributors: statnive
-Tags: analytics, statistics, privacy, woocommerce, dashboard
+Tags: analytics, statistics, privacy, tracking, dashboard
 Requires at least: 6.4
 Tested up to: 6.8
 Requires PHP: 8.1
@@ -20,9 +20,9 @@ Statnive gives WordPress site owners fast, smart, and easy-to-understand analyti
 
 = Why Statnive? =
 
-* **Revenue per Visitor** — The only WordPress analytics plugin that puts RPV front and center. Know which traffic sources actually make you money, not just which ones send the most clicks.
+* **Channel intelligence** — Automatically groups traffic into Organic Search, Social Media, Direct, Referral, and Email so you see which channels drive real results.
 * **Privacy by default** — No cookies, no localStorage, no fingerprinting. GDPR, CCPA, and APPI compliant out of the box. Daily rotating salts make cross-day tracking impossible.
-* **Zero-config setup** — Install, activate, done. WooCommerce tracking works automatically. No tracking code to paste, no account to create, no external service to connect.
+* **Zero-config setup** — Install, activate, done. No tracking code to paste, no account to create, no external service to connect.
 
 = Key Features =
 
@@ -35,15 +35,15 @@ Statnive gives WordPress site owners fast, smart, and easy-to-understand analyti
 * **Privacy compliance** — DNT/GPC respect, configurable data retention, WordPress Privacy API (export/erase)
 * **Email reports** — Weekly or monthly email summaries delivered to your inbox
 
-= Pro Features =
+= Pro Features (planned) =
 
-* WooCommerce revenue tracking with Revenue per Visitor (RPV)
-* Unlimited custom events (free tier: 5 events)
-* All form integrations (Contact Form 7, Gravity Forms, Elementor)
-* Advanced reporting with PDF export
-* Campaign manager with UTM URL builder
-* External REST API with API key authentication
-* Priority support with SLA
+* WooCommerce revenue tracking with Revenue per Visitor (RPV) — coming soon
+* Unlimited custom events (free tier: 5 events) — coming soon
+* All form integrations (Contact Form 7, Gravity Forms, Elementor) — coming soon
+* Advanced reporting with PDF export — coming soon
+* Campaign manager with UTM URL builder — coming soon
+* External REST API with API key authentication — coming soon
+* Priority support with SLA — coming soon
 
 [Learn more at statnive.com](https://statnive.com)
 
@@ -69,7 +69,7 @@ Yes. Statnive is designed for GDPR compliance from the ground up: no cookies, no
 
 = Does it work with WooCommerce? =
 
-Yes. WooCommerce tracking is auto-detected on activation — no setup code required. Revenue per Visitor (RPV) reporting is available with a Pro license.
+Statnive tracks pageviews and visitor analytics on any WordPress site, including WooCommerce stores. Dedicated WooCommerce revenue tracking with Revenue per Visitor (RPV) is planned for a future release.
 
 = How much does it slow down my site? =
 
@@ -93,7 +93,7 @@ All data is stored in your WordPress database on your own server. Statnive creat
 
 == Screenshots ==
 
-1. All your key metrics in one view — visitors, events, pageviews, and revenue with trend comparison
+1. All your key metrics in one view — visitors, events, and pageviews with trend comparison
 2. Know where your visitors come from — country and city breakdown without third-party services
 3. Understand your audience — device types, browsers, and operating systems at a glance
 4. See who's on your site right now — live visitor count with active pages and recent activity
@@ -122,8 +122,8 @@ If you enter a premium license key, the plugin connects to the StatNive API.
 * When: Only when you manually activate a license key, and weekly thereafter to verify status
 * Data sent: License key, site URL, plugin version
 * Purpose: Validate premium license subscriptions
-* StatNive Privacy Policy: https://statnive.com/privacy-policy
-* StatNive Terms of Service: https://statnive.com/terms-of-use
+* StatNive Privacy Policy: https://statnive.com/privacy
+* StatNive Terms of Service: https://statnive.com/terms
 
 No visitor data is ever sent to any external service. All analytics data remains in your WordPress database.
 
