@@ -49,7 +49,7 @@ final class AggregationService {
 					COUNT(DISTINCT s.visitor_id),
 					COUNT(DISTINCT s.ID),
 					COUNT(v.ID),
-					COALESCE(SUM(s.duration), 0),
+					COALESCE(SUM(v.duration), 0),
 					SUM(CASE WHEN s.total_views = 1 THEN 1 ELSE 0 END)
 				FROM `{$views}` v
 				INNER JOIN `{$sessions}` s ON v.session_id = s.ID
@@ -89,10 +89,11 @@ final class AggregationService {
 				SELECT %s,
 					COUNT(DISTINCT s.visitor_id),
 					COUNT(DISTINCT s.ID),
-					(SELECT COUNT(*) FROM `{$views}` WHERE DATE(viewed_at) = %s),
-					COALESCE(SUM(s.duration), 0),
+					COUNT(v.ID),
+					COALESCE(SUM(v.duration), 0),
 					SUM(CASE WHEN s.total_views = 1 THEN 1 ELSE 0 END)
 				FROM `{$sessions}` s
+				LEFT JOIN `{$views}` v ON v.session_id = s.ID AND DATE(v.viewed_at) = %s
 				WHERE DATE(s.started_at) = %s
 				ON DUPLICATE KEY UPDATE
 					visitors = VALUES(visitors),

@@ -75,7 +75,6 @@ final class SummaryControllerTest extends WP_UnitTestCase {
 				'visitor_id'  => $visitor_id,
 				'started_at'  => $datetime,
 				'total_views' => 1,
-				'duration'    => 30,
 			] );
 			$session_id = (int) $wpdb->insert_id;
 
@@ -83,6 +82,7 @@ final class SummaryControllerTest extends WP_UnitTestCase {
 				'session_id'      => $session_id,
 				'resource_uri_id' => $uri_id,
 				'viewed_at'       => $datetime,
+				'duration'        => 30,
 			] );
 		}
 		// phpcs:enable WordPress.DB.DirectDatabaseQuery
@@ -178,5 +178,94 @@ final class SummaryControllerTest extends WP_UnitTestCase {
 			$data['totals']['views'],
 			'Summary views should reflect fresh data that arrived after aggregation'
 		);
+	}
+
+	/**
+	 * Insert raw data with explicit view duration (for duration pipeline tests).
+	 *
+	 * @param string $date         Date (Y-m-d).
+	 * @param string $uri          Page URI.
+	 * @param int    $count        Number of visitors/sessions/views.
+	 * @param int    $view_duration Duration in seconds for each view.
+	 */
+	private function insert_raw_data_with_duration( string $date, string $uri, int $count, int $view_duration ): void {
+		global $wpdb;
+
+		$visitors_table = TableRegistry::get( 'visitors' );
+		$sessions_table = TableRegistry::get( 'sessions' );
+		$views_table    = TableRegistry::get( 'views' );
+		$uris_table     = TableRegistry::get( 'resource_uris' );
+
+		$datetime = $date . ' 12:00:00';
+
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery
+		$wpdb->query(
+			$wpdb->prepare(
+				"INSERT IGNORE INTO `{$uris_table}` (uri, uri_hash) VALUES (%s, %d)",
+				$uri,
+				crc32( $uri )
+			)
+		);
+		$uri_id = (int) $wpdb->get_var(
+			$wpdb->prepare( "SELECT ID FROM `{$uris_table}` WHERE uri = %s", $uri )
+		);
+
+		for ( $i = 0; $i < $count; $i++ ) {
+			$wpdb->insert( $visitors_table, [
+				'hash'       => random_bytes( 8 ),
+				'created_at' => $datetime,
+			] );
+			$visitor_id = (int) $wpdb->insert_id;
+
+			// Session duration stays 0 (realistic — never populated by EngagementController).
+			$wpdb->insert( $sessions_table, [
+				'visitor_id'  => $visitor_id,
+				'started_at'  => $datetime,
+				'total_views' => 1,
+			] );
+			$session_id = (int) $wpdb->insert_id;
+
+			$wpdb->insert( $views_table, [
+				'session_id'      => $session_id,
+				'resource_uri_id' => $uri_id,
+				'viewed_at'       => $datetime,
+				'duration'        => $view_duration,
+			] );
+		}
+		// phpcs:enable WordPress.DB.DirectDatabaseQuery
+	}
+
+	/**
+	 * @testdox Summary today real-time fallback includes view duration
+	 */
+	public function test_summary_today_includes_view_duration(): void {
+		$today = gmdate( 'Y-m-d' );
+
+		// Insert data with duration on views, not sessions.
+		$this->insert_raw_data_with_duration( $today, '/duration-test', 3, 25 );
+
+		$request  = $this->build_summary_request( $today, $today );
+		$response = $this->controller->get_items( $request );
+		$data     = $response->get_data();
+
+		$this->assertSame( 200, $response->get_status() );
+		$this->assertSame( 75, $data['totals']['total_duration'], 'Today real-time fallback should sum views.duration (3 × 25 = 75)' );
+	}
+
+	/**
+	 * @testdox Summary aggregated data includes view duration
+	 */
+	public function test_summary_aggregated_includes_view_duration(): void {
+		$yesterday = gmdate( 'Y-m-d', strtotime( '-1 day' ) );
+
+		$this->insert_raw_data_with_duration( $yesterday, '/duration-agg', 2, 40 );
+		AggregationService::aggregate_day( $yesterday );
+
+		$request  = $this->build_summary_request( $yesterday, $yesterday );
+		$response = $this->controller->get_items( $request );
+		$data     = $response->get_data();
+
+		$this->assertSame( 200, $response->get_status() );
+		$this->assertSame( 80, $data['totals']['total_duration'], 'Aggregated summary should sum views.duration (2 × 40 = 80)' );
 	}
 }

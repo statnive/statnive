@@ -84,7 +84,6 @@ final class AggregationServiceTest extends WP_UnitTestCase {
 					'visitor_id'  => $visitor_id,
 					'started_at'  => $datetime,
 					'total_views' => $sess_views,
-					'duration'    => $sess_views * 30,
 				] );
 				$session_id = (int) $wpdb->insert_id;
 
@@ -93,6 +92,7 @@ final class AggregationServiceTest extends WP_UnitTestCase {
 						'session_id'      => $session_id,
 						'resource_uri_id' => $uri_id,
 						'viewed_at'       => $datetime,
+						'duration'        => 30,
 					] );
 					$view_index++;
 				}
@@ -248,5 +248,206 @@ final class AggregationServiceTest extends WP_UnitTestCase {
 		$is_aggregated = AggregationService::is_aggregated( $date );
 
 		$this->assertTrue( $is_aggregated, 'Day should be marked as aggregated after running aggregate_day' );
+	}
+
+	/**
+	 * @testdox Duration is aggregated from views.duration, not sessions.duration
+	 */
+	public function test_duration_aggregated_from_views_not_sessions(): void {
+		global $wpdb;
+
+		$date     = '2026-04-03';
+		$datetime = $date . ' 10:00:00';
+
+		$visitors_table = TableRegistry::get( 'visitors' );
+		$sessions_table = TableRegistry::get( 'sessions' );
+		$views_table    = TableRegistry::get( 'views' );
+		$uris_table     = TableRegistry::get( 'resource_uris' );
+
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery
+		$wpdb->query(
+			$wpdb->prepare(
+				"INSERT IGNORE INTO `{$uris_table}` (uri, uri_hash) VALUES (%s, %d)",
+				'/test-duration',
+				crc32( '/test-duration' )
+			)
+		);
+		$uri_id = (int) $wpdb->get_var(
+			$wpdb->prepare( "SELECT ID FROM `{$uris_table}` WHERE uri = %s", '/test-duration' )
+		);
+
+		$wpdb->insert( $visitors_table, [
+			'hash'       => random_bytes( 8 ),
+			'created_at' => $datetime,
+		] );
+		$visitor_id = (int) $wpdb->insert_id;
+
+		// Session has duration = 0 (realistic — never populated).
+		$wpdb->insert( $sessions_table, [
+			'visitor_id'  => $visitor_id,
+			'started_at'  => $datetime,
+			'total_views' => 2,
+			'duration'    => 0,
+		] );
+		$session_id = (int) $wpdb->insert_id;
+
+		// Views have duration set by EngagementController.
+		$wpdb->insert( $views_table, [
+			'session_id'      => $session_id,
+			'resource_uri_id' => $uri_id,
+			'viewed_at'       => $datetime,
+			'duration'        => 45,
+		] );
+		$wpdb->insert( $views_table, [
+			'session_id'      => $session_id,
+			'resource_uri_id' => $uri_id,
+			'viewed_at'       => $datetime,
+			'duration'        => 30,
+		] );
+		// phpcs:enable WordPress.DB.DirectDatabaseQuery
+
+		AggregationService::aggregate_day( $date );
+
+		$summary        = TableRegistry::get( 'summary' );
+		$summary_totals = TableRegistry::get( 'summary_totals' );
+
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery
+		$summary_row = $wpdb->get_row(
+			$wpdb->prepare( "SELECT * FROM `{$summary}` WHERE date = %s", $date )
+		);
+		$totals_row = $wpdb->get_row(
+			$wpdb->prepare( "SELECT * FROM `{$summary_totals}` WHERE date = %s", $date )
+		);
+		// phpcs:enable WordPress.DB.DirectDatabaseQuery
+
+		$this->assertNotNull( $summary_row );
+		$this->assertSame( 75, (int) $summary_row->total_duration, 'Summary total_duration should equal sum of views.duration (45+30=75)' );
+
+		$this->assertNotNull( $totals_row );
+		$this->assertSame( 75, (int) $totals_row->total_duration, 'Summary totals total_duration should equal sum of views.duration (45+30=75)' );
+	}
+
+	/**
+	 * @testdox Zero engagement produces zero total_duration
+	 */
+	public function test_duration_zero_when_no_engagement(): void {
+		global $wpdb;
+
+		$date     = '2026-04-04';
+		$datetime = $date . ' 10:00:00';
+
+		$visitors_table = TableRegistry::get( 'visitors' );
+		$sessions_table = TableRegistry::get( 'sessions' );
+		$views_table    = TableRegistry::get( 'views' );
+		$uris_table     = TableRegistry::get( 'resource_uris' );
+
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery
+		$wpdb->query(
+			$wpdb->prepare(
+				"INSERT IGNORE INTO `{$uris_table}` (uri, uri_hash) VALUES (%s, %d)",
+				'/no-engagement',
+				crc32( '/no-engagement' )
+			)
+		);
+		$uri_id = (int) $wpdb->get_var(
+			$wpdb->prepare( "SELECT ID FROM `{$uris_table}` WHERE uri = %s", '/no-engagement' )
+		);
+
+		$wpdb->insert( $visitors_table, [
+			'hash'       => random_bytes( 8 ),
+			'created_at' => $datetime,
+		] );
+		$visitor_id = (int) $wpdb->insert_id;
+
+		$wpdb->insert( $sessions_table, [
+			'visitor_id'  => $visitor_id,
+			'started_at'  => $datetime,
+			'total_views' => 1,
+		] );
+		$session_id = (int) $wpdb->insert_id;
+
+		// View with default duration = 0 (no engagement sent).
+		$wpdb->insert( $views_table, [
+			'session_id'      => $session_id,
+			'resource_uri_id' => $uri_id,
+			'viewed_at'       => $datetime,
+			'duration'        => 0,
+		] );
+		// phpcs:enable WordPress.DB.DirectDatabaseQuery
+
+		AggregationService::aggregate_day( $date );
+
+		$summary_totals = TableRegistry::get( 'summary_totals' );
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery
+		$row = $wpdb->get_row(
+			$wpdb->prepare( "SELECT * FROM `{$summary_totals}` WHERE date = %s", $date )
+		);
+
+		$this->assertNotNull( $row );
+		$this->assertSame( 0, (int) $row->total_duration, 'Zero engagement should produce zero total_duration' );
+	}
+
+	/**
+	 * @testdox Mixed duration views aggregate correctly
+	 */
+	public function test_mixed_duration_views(): void {
+		global $wpdb;
+
+		$date     = '2026-04-05';
+		$datetime = $date . ' 10:00:00';
+
+		$visitors_table = TableRegistry::get( 'visitors' );
+		$sessions_table = TableRegistry::get( 'sessions' );
+		$views_table    = TableRegistry::get( 'views' );
+		$uris_table     = TableRegistry::get( 'resource_uris' );
+
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery
+		$wpdb->query(
+			$wpdb->prepare(
+				"INSERT IGNORE INTO `{$uris_table}` (uri, uri_hash) VALUES (%s, %d)",
+				'/mixed-duration',
+				crc32( '/mixed-duration' )
+			)
+		);
+		$uri_id = (int) $wpdb->get_var(
+			$wpdb->prepare( "SELECT ID FROM `{$uris_table}` WHERE uri = %s", '/mixed-duration' )
+		);
+
+		$wpdb->insert( $visitors_table, [
+			'hash'       => random_bytes( 8 ),
+			'created_at' => $datetime,
+		] );
+		$visitor_id = (int) $wpdb->insert_id;
+
+		$wpdb->insert( $sessions_table, [
+			'visitor_id'  => $visitor_id,
+			'started_at'  => $datetime,
+			'total_views' => 3,
+		] );
+		$session_id = (int) $wpdb->insert_id;
+
+		// 3 views with durations: 0 (no engagement), 30, 60.
+		foreach ( [ 0, 30, 60 ] as $duration ) {
+			$wpdb->insert( $views_table, [
+				'session_id'      => $session_id,
+				'resource_uri_id' => $uri_id,
+				'viewed_at'       => $datetime,
+				'duration'        => $duration,
+			] );
+		}
+		// phpcs:enable WordPress.DB.DirectDatabaseQuery
+
+		AggregationService::aggregate_day( $date );
+
+		$summary_totals = TableRegistry::get( 'summary_totals' );
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery
+		$row = $wpdb->get_row(
+			$wpdb->prepare( "SELECT * FROM `{$summary_totals}` WHERE date = %s", $date )
+		);
+
+		$this->assertNotNull( $row );
+		$this->assertSame( 90, (int) $row->total_duration, 'Mixed duration views (0+30+60) should aggregate to 90' );
 	}
 }

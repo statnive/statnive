@@ -118,10 +118,11 @@ final class SummaryController extends WP_REST_Controller {
 					"SELECT
 						COUNT(DISTINCT s.visitor_id) AS visitors,
 						COUNT(DISTINCT s.ID) AS sessions,
-						(SELECT COUNT(*) FROM `{$views_table}` WHERE DATE(viewed_at) = %s) AS views,
-						COALESCE(SUM(s.duration), 0) AS total_duration,
+						COUNT(v.ID) AS views,
+						COALESCE(SUM(v.duration), 0) AS total_duration,
 						SUM(CASE WHEN s.total_views = 1 THEN 1 ELSE 0 END) AS bounces
 					FROM `{$sessions_table}` s
+					LEFT JOIN `{$views_table}` v ON v.session_id = s.ID AND DATE(v.viewed_at) = %s
 					WHERE DATE(s.started_at) = %s",
 					$today,
 					$today
