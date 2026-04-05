@@ -74,30 +74,54 @@ final class EngagementController extends WP_REST_Controller {
 
 		global $wpdb;
 		$views_table = TableRegistry::get( 'views' );
+		$uris_table  = TableRegistry::get( 'resource_uris' );
 
-		// Update the most recent view matching this resource.
-		$uris_table = TableRegistry::get( 'resource_uris' );
+		$page_url = sanitize_text_field( $data['page_url'] ?? '' );
 
 		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery
 		// phpcs:disable WordPress.DB.DirectDatabaseQuery.NoCaching
 		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-		$wpdb->query(
-			$wpdb->prepare(
-				"UPDATE `{$views_table}`
-				SET duration = %d, scroll_depth = %d
-				WHERE ID = (
-					SELECT max_id FROM (
-						SELECT MAX(ID) AS max_id FROM `{$views_table}`
-						WHERE resource_uri_id = (
-							SELECT ID FROM `{$uris_table}` WHERE resource_id = %d LIMIT 1
-						)
-					) AS subq
-				)",
-				$engagement_time,
-				$scroll_depth,
-				$res_id
-			)
-		);
+		if ( ! empty( $page_url ) ) {
+			// URI-based lookup — unique per path, avoids resource_id=0 collisions.
+			$uri_hash = crc32( $page_url );
+			$wpdb->query(
+				$wpdb->prepare(
+					"UPDATE `{$views_table}`
+					SET duration = %d, scroll_depth = %d
+					WHERE ID = (
+						SELECT max_id FROM (
+							SELECT MAX(v.ID) AS max_id
+							FROM `{$views_table}` v
+							INNER JOIN `{$uris_table}` ru ON v.resource_uri_id = ru.ID
+							WHERE ru.uri_hash = %d AND ru.uri = %s
+						) AS subq
+					)",
+					$engagement_time,
+					$scroll_depth,
+					$uri_hash,
+					$page_url
+				)
+			);
+		} else {
+			// Fallback: resource_id lookup (backward compat with old tracker versions).
+			$wpdb->query(
+				$wpdb->prepare(
+					"UPDATE `{$views_table}`
+					SET duration = %d, scroll_depth = %d
+					WHERE ID = (
+						SELECT max_id FROM (
+							SELECT MAX(ID) AS max_id FROM `{$views_table}`
+							WHERE resource_uri_id = (
+								SELECT ID FROM `{$uris_table}` WHERE resource_id = %d LIMIT 1
+							)
+						) AS subq
+					)",
+					$engagement_time,
+					$scroll_depth,
+					$res_id
+				)
+			);
+		}
 		// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery
 		// phpcs:enable WordPress.DB.DirectDatabaseQuery.NoCaching

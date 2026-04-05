@@ -167,6 +167,7 @@ window.statnive = window.statnive || function() {
 			scroll_depth: metrics.scroll_depth,
 			resource_type: hitParams.resource_type || 'page',
 			resource_id: hitParams.resource_id || 0,
+			page_url: window.location.pathname || '/',
 			signature: hitParams.signature || ''
 		};
 		sendToUrl(config.engagementUrl, payload);
