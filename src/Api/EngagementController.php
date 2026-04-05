@@ -76,13 +76,24 @@ final class EngagementController extends WP_REST_Controller {
 		$views_table = TableRegistry::get( 'views' );
 		$uris_table  = TableRegistry::get( 'resource_uris' );
 
+		$pvid     = sanitize_text_field( $data['pvid'] ?? '' );
 		$page_url = sanitize_text_field( $data['page_url'] ?? '' );
 
 		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery
 		// phpcs:disable WordPress.DB.DirectDatabaseQuery.NoCaching
 		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-		if ( ! empty( $page_url ) ) {
-			// URI-based lookup — unique per path, avoids resource_id=0 collisions.
+		if ( ! empty( $pvid ) && strlen( $pvid ) <= 16 ) {
+			// Exact match via page visit ID — each pageview gets its own duration.
+			$wpdb->query(
+				$wpdb->prepare(
+					"UPDATE `{$views_table}` SET duration = %d, scroll_depth = %d WHERE pvid = %s",
+					$engagement_time,
+					$scroll_depth,
+					$pvid
+				)
+			);
+		} elseif ( ! empty( $page_url ) ) {
+			// Fallback: URI-based lookup for tracker versions without pvid.
 			$uri_hash = crc32( $page_url );
 			$wpdb->query(
 				$wpdb->prepare(
@@ -103,7 +114,7 @@ final class EngagementController extends WP_REST_Controller {
 				)
 			);
 		} else {
-			// Fallback: resource_id lookup (backward compat with old tracker versions).
+			// Legacy fallback: resource_id lookup.
 			$wpdb->query(
 				$wpdb->prepare(
 					"UPDATE `{$views_table}`

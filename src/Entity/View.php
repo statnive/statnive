@@ -40,6 +40,7 @@ final class View {
 		$resource_uri_id = self::resolve_resource_uri( $profile );
 		$resource_id     = self::resolve_resource( $profile );
 		$timestamp       = $profile->get( 'timestamp' );
+		$pvid            = $profile->get( 'pvid', '' );
 
 		$view_table = TableRegistry::get( 'views' );
 
@@ -48,11 +49,12 @@ final class View {
 		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$wpdb->query(
 			$wpdb->prepare(
-				"INSERT INTO `{$view_table}` (session_id, resource_uri_id, resource_id, viewed_at) VALUES (%d, %d, %d, %s)",
+				"INSERT INTO `{$view_table}` (session_id, resource_uri_id, resource_id, viewed_at, pvid) VALUES (%d, %d, %d, %s, %s)",
 				$session_id,
 				$resource_uri_id,
 				$resource_id,
-				$timestamp
+				$timestamp,
+				$pvid
 			)
 		);
 

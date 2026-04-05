@@ -47,6 +47,7 @@ final class VisitorProfile {
 		$profile->set( 'signature', sanitize_text_field( $payload['signature'] ?? '' ) );
 		$profile->set( 'page_url', sanitize_text_field( $payload['page_url'] ?? '' ) );
 		$profile->set( 'page_query', sanitize_text_field( $payload['page_query'] ?? '' ) );
+		$profile->set( 'pvid', sanitize_text_field( $payload['pvid'] ?? '' ) );
 
 		// Server-side data (never from client).
 		$profile->set( 'ip', IpExtractor::extract() );

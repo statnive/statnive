@@ -28,10 +28,15 @@
 	if (typeof w.callPhantom === 'function' || w.__nightmare) return;
 	if (!n.languages || n.languages.length === 0) return;
 
+	// Generate page visit ID for engagement correlation.
+	var pvid = Math.random().toString(36).substring(2,10) + Math.random().toString(36).substring(2,10);
+	w.statnive_pvid = pvid;
+
 	// Build payload.
 	var p = {
 		resource_type: h.resource_type || 'page',
 		resource_id: h.resource_id || 0,
+		pvid: pvid,
 		referrer: d.referrer || '',
 		screen_width: w.screen ? w.screen.width : 0,
 		screen_height: w.screen ? w.screen.height : 0,

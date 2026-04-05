@@ -36,6 +36,15 @@ window.statnive = window.statnive || function() {
 	var consentGranted = false;
 
 	/**
+	 * Generate a page visit ID for engagement correlation.
+	 */
+	function generatePvid() {
+		var id = Math.random().toString(36).substring(2, 10) + Math.random().toString(36).substring(2, 10);
+		window.statnive_pvid = id;
+		return id;
+	}
+
+	/**
 	 * Check if tracking should be blocked by Do Not Track or Global Privacy Control.
 	 */
 	function isTrackingBlocked() {
@@ -58,6 +67,7 @@ window.statnive = window.statnive || function() {
 		var payload = {
 			resource_type: hitParams.resource_type || 'page',
 			resource_id: hitParams.resource_id || 0,
+			pvid: window.statnive_pvid || generatePvid(),
 			referrer: document.referrer || '',
 			screen_width: window.screen ? window.screen.width : 0,
 			screen_height: window.screen ? window.screen.height : 0,
@@ -167,6 +177,7 @@ window.statnive = window.statnive || function() {
 			scroll_depth: metrics.scroll_depth,
 			resource_type: hitParams.resource_type || 'page',
 			resource_id: hitParams.resource_id || 0,
+			pvid: window.statnive_pvid || '',
 			page_url: window.location.pathname || '/',
 			signature: hitParams.signature || ''
 		};

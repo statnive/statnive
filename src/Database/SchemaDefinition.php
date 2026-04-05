@@ -92,12 +92,14 @@ final class SchemaDefinition {
   next_view_id bigint(20) unsigned DEFAULT NULL,
   duration int(11) unsigned DEFAULT 0,
   scroll_depth tinyint(3) unsigned DEFAULT 0,
+  pvid char(16) DEFAULT NULL,
   PRIMARY KEY  (ID),
   KEY idx_session_id (session_id),
   KEY idx_resource_uri_id (resource_uri_id),
   KEY idx_viewed_at (viewed_at),
   KEY idx_viewed_session (viewed_at, session_id),
-  KEY idx_viewed_resource (viewed_at, resource_uri_id)
+  KEY idx_viewed_resource (viewed_at, resource_uri_id),
+  KEY idx_pvid (pvid)
 ) {$charset_collate};\n\n";
 
 		// 4. Resources — content metadata cache.
