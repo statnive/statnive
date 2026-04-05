@@ -4,9 +4,10 @@
 	"private": true,
 	"description": "Simple stats, clear decisions. Privacy-first analytics for WordPress.",
 	"scripts": {
-		"build": "vite build && vite build --mode tracker",
+		"build": "vite build && vite build --mode tracker && vite build --mode tracker-core",
 		"build:react": "vite build",
-		"build:tracker": "vite build --config vite.config.ts --mode tracker",
+		"build:tracker": "vite build --mode tracker && vite build --mode tracker-core",
+		"build:tracker-core": "vite build --mode tracker-core",
 		"dev": "vite build --watch",
 		"dev:tracker": "vite build --config vite.config.ts --mode tracker --watch",
 		"test": "vitest run",

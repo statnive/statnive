@@ -37,6 +37,15 @@ final class FrontendHandler {
 
 	/**
 	 * Enqueue the tracker script on frontend pages.
+	 *
+	 * Two-stage loading architecture for optimal Web Vitals:
+	 *
+	 * Stage 1 (inline, ~500B): Fires the pageview hit immediately from an inline
+	 *   script in wp_footer. Zero external requests in the critical rendering path.
+	 *
+	 * Stage 2 (async external): Loads the full tracker for engagement tracking,
+	 *   auto-tracking, custom events, and consent management. Downloads in parallel,
+	 *   doesn't affect FCP/LCP.
 	 */
 	public static function enqueue_tracker(): void {
 		// Don't track if tracking is disabled.
@@ -49,25 +58,59 @@ final class FrontendHandler {
 			return;
 		}
 
-		$tracker_url  = plugins_url( 'public/tracker/statnive.js', STATNIVE_FILE );
 		$tracker_path = STATNIVE_PATH . 'public/tracker/statnive.js';
+		$core_path    = STATNIVE_PATH . 'public/tracker/statnive-core.js';
 
 		// Only enqueue if the built file exists.
 		if ( ! file_exists( $tracker_path ) ) {
 			return;
 		}
 
+		// Build configuration (shared between both stages).
+		$config = self::build_config();
+		$json   = wp_json_encode( $config, JSON_UNESCAPED_SLASHES );
+
+		// Stage 1: Inline core tracker in wp_footer for immediate pageview.
+		// Zero external requests — pageview fires from inline script.
+		if ( file_exists( $core_path ) ) {
+			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
+			$core_js = file_get_contents( $core_path );
+			if ( false !== $core_js ) {
+				add_action(
+					'wp_footer',
+					static function () use ( $json, $core_js ): void {
+						wp_print_inline_script_tag(
+							'window.StatniveConfig=' . $json . ';' . $core_js
+						);
+					},
+					20
+				);
+			}
+		}
+
+		// Stage 2: Full tracker (async) for engagement, events, auto-tracking.
+		// The full tracker detects window.statnive_hit_sent and skips the pageview,
+		// only initializing deferred modules.
+		$tracker_url = plugins_url( 'public/tracker/statnive.js', STATNIVE_FILE );
+
 		wp_enqueue_script(
 			self::SCRIPT_HANDLE,
 			$tracker_url,
 			[],
 			STATNIVE_VERSION,
-			[ 'in_footer' => true ]
+			[
+				'in_footer' => true,
+				'strategy'  => 'async',
+			]
 		);
 
-		// Build and inject configuration.
-		$config = self::build_config();
-		wp_localize_script( self::SCRIPT_HANDLE, 'StatniveConfig', $config );
+		// Inject config via inline 'before' for the async tracker too.
+		// MUST use 'before' position — 'after' cascades to blocking.
+		wp_add_inline_script(
+			self::SCRIPT_HANDLE,
+			'window.StatniveConfig=window.StatniveConfig||' . $json . ';',
+			'before'
+		);
 	}
 
 	/**
@@ -87,14 +130,20 @@ final class FrontendHandler {
 			return $tag;
 		}
 
-		// Compute SRI hash.
-		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
-		$content = file_get_contents( $tracker_path );
-		if ( false === $content ) {
-			return $tag;
-		}
+		// Compute SRI hash (cached in transient, keyed by file modification time).
+		$mtime     = (int) filemtime( $tracker_path );
+		$cache_key = 'statnive_sri_' . $mtime;
+		$hash      = get_transient( $cache_key );
 
-		$hash = 'sha256-' . base64_encode( hash( 'sha256', $content, true ) );
+		if ( false === $hash ) {
+			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
+			$content = file_get_contents( $tracker_path );
+			if ( false === $content ) {
+				return $tag;
+			}
+			$hash = 'sha256-' . base64_encode( hash( 'sha256', $content, true ) );
+			set_transient( $cache_key, $hash, MONTH_IN_SECONDS );
+		}
 
 		// Add integrity and crossorigin attributes.
 		$tag = str_replace(

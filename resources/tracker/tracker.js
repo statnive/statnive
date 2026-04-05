@@ -180,11 +180,43 @@ window.statnive = window.statnive || function() {
 	}
 
 	/**
+	 * Initialize deferred (non-critical) modules during browser idle time.
+	 * Engagement, auto-tracking, and CSS events don't block the critical
+	 * rendering path — they initialize when the browser is idle.
+	 */
+	function initDeferredModules() {
+		var idle = window.requestIdleCallback || function(cb) { setTimeout(cb, 80); };
+		idle(function() {
+			if (__FEATURE_ENGAGEMENT__) {
+				engagementTracker = createEngagementTracker();
+				engagementTracker.start();
+				document.addEventListener('visibilitychange', function() {
+					if (document.hidden) flushEngagement();
+				});
+				window.addEventListener('beforeunload', flushEngagement);
+			}
+
+			if (__FEATURE_EVENTS__) {
+				if (options.autoTrack) {
+					registerAutoTracking(sendEvent);
+				}
+				registerCssEventTracking(sendEvent);
+			}
+		});
+	}
+
+	/**
 	 * Initialize tracker.
 	 */
 	function init() {
 		if (isTrackingBlocked()) return;
 		if (!config.restUrl) return;
+
+		// If inline core tracker already sent the pageview, only init deferred modules.
+		if (window.statnive_hit_sent) {
+			initDeferredModules();
+			return;
+		}
 
 		// Bot detection (client-side).
 		if (__FEATURE_BOT_DETECTION__) {
@@ -192,26 +224,11 @@ window.statnive = window.statnive || function() {
 			if (botCheck.is_bot) return; // Silent drop for bots.
 		}
 
-		// Stage 1: Send pageview immediately.
+		// Critical path: Send pageview immediately.
 		sendHit(buildPayload());
 
-		// Stage 2: Start engagement tracking (deferred).
-		if (__FEATURE_ENGAGEMENT__) {
-			engagementTracker = createEngagementTracker();
-			engagementTracker.start();
-			document.addEventListener('visibilitychange', function() {
-				if (document.hidden) flushEngagement();
-			});
-			window.addEventListener('beforeunload', flushEngagement);
-		}
-
-		// Custom events: auto-tracking + CSS events.
-		if (__FEATURE_EVENTS__) {
-			if (options.autoTrack) {
-				registerAutoTracking(sendEvent);
-			}
-			registerCssEventTracking(sendEvent);
-		}
+		// Deferred: Non-critical modules during idle time.
+		initDeferredModules();
 	}
 
 	// Expose the event API globally.
@@ -231,16 +248,17 @@ window.statnive = window.statnive || function() {
 		// Will wrap history.pushState/replaceState + popstate.
 	}
 
-	// Consent mode: deferred init.
+	// Consent mode: deferred init or immediate.
+	// With async strategy, the script executes as soon as downloaded.
+	// No DOMContentLoaded wait needed — the tracker reads window/navigator
+	// globals and fires sendBeacon, none of which require DOM.
 	if (options.consentMode === 'disabled-until-consent') {
 		// Don't auto-init. Wait for consent banner signal.
 		window.statnive_init = init;
 		// Register consent banner listeners (Real Cookie Banner, Complianz, CookieYes).
 		registerConsentBannerListeners(init, setConsentGranted);
-	} else if (document.readyState === 'complete' || document.readyState === 'interactive') {
-		init();
 	} else {
-		document.addEventListener('DOMContentLoaded', init);
+		init();
 	}
 
 })(window, document);

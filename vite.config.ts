@@ -3,7 +3,16 @@ import { resolve } from 'path';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 
+// Shared Terser options for all tracker builds.
+const trackerTerserOptions = {
+	compress: {
+		drop_console: true,
+		passes: 2,
+	},
+};
+
 export default defineConfig(({ mode }) => {
+	// Full tracker build (async external script with all features).
 	if (mode === 'tracker') {
 		return {
 			publicDir: false,
@@ -15,14 +24,9 @@ export default defineConfig(({ mode }) => {
 					fileName: () => 'statnive.js',
 				},
 				outDir: resolve(__dirname, 'public/tracker'),
-				emptyOutDir: true,
+				emptyOutDir: false,
 				minify: 'terser',
-				terserOptions: {
-					compress: {
-						drop_console: true,
-						passes: 2,
-					},
-				},
+				terserOptions: trackerTerserOptions,
 				sourcemap: true,
 				reportCompressedSize: true,
 			},
@@ -31,6 +35,36 @@ export default defineConfig(({ mode }) => {
 				__FEATURE_EVENTS__: true,
 				__FEATURE_ENGAGEMENT__: true,
 				__FEATURE_BOT_DETECTION__: true,
+			},
+		};
+	}
+
+	// Core inline tracker build (~300B minified, inlined in wp_footer).
+	if (mode === 'tracker-core') {
+		return {
+			publicDir: false,
+			build: {
+				lib: {
+					entry: resolve(__dirname, 'resources/tracker/tracker-core.js'),
+					name: 'statnive_core',
+					formats: ['iife'],
+					fileName: () => 'statnive-core.js',
+				},
+				outDir: resolve(__dirname, 'public/tracker'),
+				emptyOutDir: false,
+				minify: 'terser',
+				terserOptions: {
+					...trackerTerserOptions,
+					mangle: { toplevel: true },
+				},
+				sourcemap: false,
+				reportCompressedSize: true,
+			},
+			define: {
+				__FEATURE_SPA__: false,
+				__FEATURE_EVENTS__: false,
+				__FEATURE_ENGAGEMENT__: false,
+				__FEATURE_BOT_DETECTION__: false,
 			},
 		};
 	}
