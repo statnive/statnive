@@ -16,6 +16,9 @@ import { DevicesPage } from '@/pages/devices';
 import { LanguagesPage } from '@/pages/languages';
 import { RealtimePage } from '@/pages/realtime';
 import { SettingsPage } from '@/pages/settings';
+import type { DateRange } from '@/types/api';
+
+const VALID_RANGES: DateRange[] = ['today', '7d', '30d', 'this-month', 'last-month', 'custom'];
 
 const queryClient = new QueryClient({
 	defaultOptions: {
@@ -28,7 +31,14 @@ const queryClient = new QueryClient({
 });
 
 // Root route with dashboard layout shell.
+// Search params hold the shared date range so it persists across tabs and reloads.
 const rootRoute = createRootRoute({
+	validateSearch: (search: Record<string, unknown>): { range: DateRange } => ({
+		range:
+			typeof search.range === 'string' && VALID_RANGES.includes(search.range as DateRange)
+				? (search.range as DateRange)
+				: '7d',
+	}),
 	component: () => (
 		<DashboardLayout>
 			<Outlet />

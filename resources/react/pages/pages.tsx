@@ -2,14 +2,13 @@ import { useMemo, useDeferredValue, useState } from 'react';
 import { useDateRange } from '@/hooks/use-date-range';
 import { usePages } from '@/hooks/use-pages';
 import { useEntryPages, useExitPages } from '@/hooks/use-entry-exit-pages';
-import { DateRangePicker } from '@/components/shared/date-range-picker';
 import { DataTable, type Column } from '@/components/shared/data-table';
 import { formatNumber, formatDuration } from '@/lib/utils';
 import type { PageRow, EntryExitPage } from '@/types/api';
 import { Search } from 'lucide-react';
 
 export function PagesPage() {
-	const { range, params, setDateRange } = useDateRange();
+	const { params } = useDateRange();
 	const { data: pages, isLoading: loadingPages } = usePages(params.from, params.to, 50);
 	const { data: entry, isLoading: loadingEntry } = useEntryPages(params.from, params.to);
 	const { data: exit, isLoading: loadingExit } = useExitPages(params.from, params.to);
@@ -58,10 +57,7 @@ export function PagesPage() {
 
 	return (
 		<div className="space-y-6">
-			<div className="flex items-center justify-between">
-				<h2 className="text-lg font-semibold">Pages</h2>
-				<DateRangePicker value={range} onChange={setDateRange} />
-			</div>
+			<h2 className="text-lg font-semibold">Pages</h2>
 
 			{/* Search */}
 			<div className="relative max-w-sm">

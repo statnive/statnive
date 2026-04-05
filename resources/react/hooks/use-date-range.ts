@@ -1,4 +1,5 @@
-import { useState, useMemo, useCallback } from 'react';
+import { useMemo, useCallback } from 'react';
+import { useSearch, useNavigate } from '@tanstack/react-router';
 import type { DateRange } from '@/types/api';
 
 interface DateRangeParams {
@@ -56,14 +57,18 @@ function resolvePreviousRange(params: DateRangeParams): DateRangeParams {
 }
 
 export function useDateRange() {
-	const [range, setRange] = useState<DateRange>('7d');
+	const { range } = useSearch({ from: '__root__' });
+	const navigate = useNavigate();
 
 	const params = useMemo(() => resolveRange(range), [range]);
 	const previousParams = useMemo(() => resolvePreviousRange(params), [params]);
 
-	const setDateRange = useCallback((newRange: DateRange) => {
-		setRange(newRange);
-	}, []);
+	const setDateRange = useCallback(
+		(newRange: DateRange) => {
+			navigate({ search: (prev) => ({ ...prev, range: newRange }) });
+		},
+		[navigate],
+	);
 
 	return { range, params, previousParams, setDateRange };
 }

@@ -1,13 +1,12 @@
 import { useMemo } from 'react';
 import { useDateRange } from '@/hooks/use-date-range';
 import { useDimensions } from '@/hooks/use-dimensions';
-import { DateRangePicker } from '@/components/shared/date-range-picker';
 import { DataTable, type Column } from '@/components/shared/data-table';
 import { formatNumber } from '@/lib/utils';
 import type { DimensionRow } from '@/types/api';
 
 export function DevicesPage() {
-	const { range, params, setDateRange } = useDateRange();
+	const { params } = useDateRange();
 	const { data: deviceTypes } = useDimensions('devices', params.from, params.to);
 	const { data: browsers, isLoading: loadingBrowsers } = useDimensions('browsers', params.from, params.to);
 	const { data: oss, isLoading: loadingOs } = useDimensions('oss', params.from, params.to);
@@ -28,10 +27,7 @@ export function DevicesPage() {
 
 	return (
 		<div className="space-y-6">
-			<div className="flex items-center justify-between">
-				<h2 className="text-lg font-semibold">Devices</h2>
-				<DateRangePicker value={range} onChange={setDateRange} />
-			</div>
+			<h2 className="text-lg font-semibold">Devices</h2>
 
 			{/* Device Type Breakdown */}
 			<div className="grid grid-cols-3 gap-4">

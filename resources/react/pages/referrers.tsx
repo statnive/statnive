@@ -2,7 +2,6 @@ import { useMemo } from 'react';
 import { useDateRange } from '@/hooks/use-date-range';
 import { useSources } from '@/hooks/use-sources';
 import { useUtm } from '@/hooks/use-utm';
-import { DateRangePicker } from '@/components/shared/date-range-picker';
 import { DualBarCell } from '@/components/shared/dual-bar-cell';
 import { DataTable, type Column } from '@/components/shared/data-table';
 import { formatNumber } from '@/lib/utils';
@@ -11,7 +10,7 @@ import type { SourceRow, UtmRow } from '@/types/api';
 const CHANNELS = ['Organic Search', 'Direct', 'Social Media', 'Referral', 'Email'] as const;
 
 export function ReferrersPage() {
-	const { range, params, setDateRange } = useDateRange();
+	const { params } = useDateRange();
 	const { data: sources, isLoading: loadingSources } = useSources(params.from, params.to, 50);
 	const { data: utm, isLoading: loadingUtm } = useUtm(params.from, params.to);
 
@@ -60,10 +59,7 @@ export function ReferrersPage() {
 
 	return (
 		<div className="space-y-6">
-			<div className="flex items-center justify-between">
-				<h2 className="text-lg font-semibold">Referrers</h2>
-				<DateRangePicker value={range} onChange={setDateRange} />
-			</div>
+			<h2 className="text-lg font-semibold">Referrers</h2>
 
 			{/* Channel Summary Cards */}
 			<div className="grid grid-cols-2 gap-4 md:grid-cols-5">

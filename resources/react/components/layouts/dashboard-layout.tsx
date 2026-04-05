@@ -1,6 +1,8 @@
 import { type ReactNode, useEffect, useMemo } from 'react';
 import { Link, useRouter, useRouterState } from '@tanstack/react-router';
 import { cn } from '@/lib/utils';
+import { useDateRange } from '@/hooks/use-date-range';
+import { DateRangePicker } from '@/components/shared/date-range-picker';
 import { useKeyboardShortcuts } from '@/hooks/use-keyboard-shortcuts';
 import { registerWpCommands } from '@/lib/wp-commands';
 import {
@@ -35,9 +37,16 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
 	const currentPath = routerState.location.pathname;
 	const siteTitle = window.StatniveDashboard?.siteTitle ?? 'WordPress';
 
+	const { range, setDateRange } = useDateRange();
+
+	const showDatePicker =
+		!currentPath.startsWith('/realtime') && !currentPath.startsWith('/settings');
+
 	// Register WP Command Palette commands on mount.
 	useEffect(() => {
-		registerWpCommands((path) => router.navigate({ to: path }));
+		registerWpCommands((path) =>
+			router.navigate({ to: path, search: (prev: Record<string, unknown>) => prev }),
+		);
 	}, [router]);
 
 	// Keyboard shortcuts: 1-8 for tab navigation.
@@ -46,7 +55,11 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
 			Object.fromEntries(
 				navItems.map((item, index) => [
 					String(index + 1),
-					() => router.navigate({ to: item.to }),
+					() =>
+						router.navigate({
+							to: item.to,
+							search: (prev: Record<string, unknown>) => prev,
+						}),
 				]),
 			),
 		[router],
@@ -73,6 +86,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
 							— {siteTitle}
 						</span>
 					</div>
+					{showDatePicker && <DateRangePicker value={range} onChange={setDateRange} />}
 				</div>
 			</header>
 
@@ -91,6 +105,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
 								<Link
 									key={item.to}
 									to={item.to}
+									search={(prev) => prev}
 									className={cn(
 										'flex items-center gap-1.5 whitespace-nowrap border-b-2 px-3 py-2.5 text-sm font-medium transition-colors duration-150',
 										isActive

@@ -17,6 +17,8 @@ vi.mock('@tanstack/react-router', () => ({
 	useRouterState: () => ({
 		location: { pathname: '/' },
 	}),
+	useSearch: () => ({ range: '7d' }),
+	useNavigate: () => vi.fn(),
 }));
 
 vi.mock('@/hooks/use-keyboard-shortcuts', () => ({

@@ -4,7 +4,6 @@ import { useSummary } from '@/hooks/use-summary';
 import { useSources } from '@/hooks/use-sources';
 import { usePages } from '@/hooks/use-pages';
 import { KpiCard } from '@/components/shared/kpi-card';
-import { DateRangePicker } from '@/components/shared/date-range-picker';
 import { DualBarCell } from '@/components/shared/dual-bar-cell';
 import { DataTable, type Column } from '@/components/shared/data-table';
 import { TimeSeriesChart } from '@/components/charts/time-series-chart';
@@ -12,7 +11,7 @@ import { formatNumber, formatDuration, percentChange } from '@/lib/utils';
 import type { SourceRow, PageRow } from '@/types/api';
 
 export function OverviewPage() {
-	const { range, params, previousParams, setDateRange } = useDateRange();
+	const { range, params, previousParams } = useDateRange();
 	const { data: current, isLoading: loadingCurrent } = useSummary(params.from, params.to);
 	const { data: previous, isLoading: loadingPrev } = useSummary(
 		previousParams.from,
@@ -105,11 +104,7 @@ export function OverviewPage() {
 
 	return (
 		<div className="space-y-6">
-			{/* Date Range Picker */}
-			<div className="flex items-center justify-between">
-				<h2 className="text-lg font-semibold">Overview</h2>
-				<DateRangePicker value={range} onChange={setDateRange} />
-			</div>
+			<h2 className="text-lg font-semibold">Overview</h2>
 
 			{/* KPI Cards */}
 			<div className="grid grid-cols-2 gap-4 md:grid-cols-4">
