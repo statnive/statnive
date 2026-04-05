@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+<ruleset name="Statnive">
+	<description>WordPress Coding Standards for Statnive plugin.</description>
+
+	<!-- Scan source files -->
+	<file>./src</file>
+	<file>./statnive.php</file>
+	<file>./uninstall.php</file>
+
+	<!-- Exclude generated/vendor code -->
+	<exclude-pattern>./src/Dependencies/*</exclude-pattern>
+	<exclude-pattern>./vendor/*</exclude-pattern>
+	<exclude-pattern>./node_modules/*</exclude-pattern>
+	<exclude-pattern>./tests/*</exclude-pattern>
+
+	<!-- Use WordPress standards -->
+	<rule ref="WordPress">
+		<!-- Allow short array syntax -->
+		<exclude name="Universal.Arrays.DisallowShortArraySyntax"/>
+		<!-- PSR-4 uses PascalCase filenames, not WP hyphenated-lowercase -->
+		<exclude name="WordPress.Files.FileName.NotHyphenatedLowercase"/>
+		<exclude name="WordPress.Files.FileName.InvalidClassFileName"/>
+		<!-- File doc comments are redundant with class doc comments -->
+		<exclude name="Squiz.Commenting.FileComment.Missing"/>
+		<!-- WP_REST_Controller properties are inherited — no docblocks needed -->
+		<exclude name="Squiz.Commenting.VariableComment.Missing"/>
+	</rule>
+
+	<!-- WordPress Extra standards -->
+	<rule ref="WordPress-Extra"/>
+
+	<!-- Plugin text domain -->
+	<rule ref="WordPress.WP.I18n">
+		<properties>
+			<property name="text_domain" type="array">
+				<element value="statnive"/>
+			</property>
+		</properties>
+	</rule>
+
+	<!-- Minimum WordPress and PHP versions -->
+	<config name="minimum_wp_version" value="6.4"/>
+	<config name="minimum_supported_wp_version" value="6.4"/>
+
+	<!-- PHP compatibility -->
+	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
+		<properties>
+			<property name="prefixes" type="array">
+				<element value="statnive"/>
+				<element value="Statnive"/>
+				<element value="STATNIVE"/>
+			</property>
+		</properties>
+	</rule>
+
+	<!-- Allow interpolated table names in prepared SQL.
+	     All table names come from TableRegistry (internal code, not user input). -->
+	<rule ref="WordPress.DB.PreparedSQL.InterpolatedNotPrepared">
+		<exclude-pattern>./src/Entity/*</exclude-pattern>
+		<exclude-pattern>./src/Database/*</exclude-pattern>
+		<exclude-pattern>./src/Service/*</exclude-pattern>
+		<exclude-pattern>./src/Api/*</exclude-pattern>
+		<exclude-pattern>./src/Admin/*</exclude-pattern>
+		<exclude-pattern>./src/Cron/*</exclude-pattern>
+		<exclude-pattern>./src/Privacy/*</exclude-pattern>
+		<exclude-pattern>./src/Import/*</exclude-pattern>
+		<exclude-pattern>./src/Email/*</exclude-pattern>
+		<exclude-pattern>./src/Data/*</exclude-pattern>
+		<exclude-pattern>./src/Feature/*</exclude-pattern>
+		<exclude-pattern>./src/Licensing/*</exclude-pattern>
+		<exclude-pattern>./src/Addon/*</exclude-pattern>
+	</rule>
+
+	<!-- Show colors and progress -->
+	<arg name="colors"/>
+	<arg value="sp"/>
+</ruleset>

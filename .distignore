@@ -1,0 +1,84 @@
+# Version control
+/.git
+/.github
+
+# Node.js
+/node_modules
+package.json
+package-lock.json
+
+# Build tool configuration
+vite.config.ts
+vitest.config.ts
+tsconfig.json
+playwright.config.ts
+
+# Source files (compiled versions ship in public/)
+# Tracker source ships for WP.org Guideline 4 (human-readable code).
+# React source excluded — public repo link in readme.txt.
+/resources/react
+
+# PHP dev tooling
+composer.json
+composer.lock
+phpstan.neon
+.phpcs.xml.dist
+phpunit.xml.dist
+phpunit-integration.xml
+.phpunit.result.cache
+
+# Vendor dev-only packages (runtime deps: geoip2, matomo, maxmind*, mustangostang, psr)
+# Also exclude test dirs inside runtime packages
+/vendor/*/tests
+/vendor/*/*/tests
+/vendor/*/*/*/tests
+/vendor/*/ext/tests
+/vendor/bin
+/vendor/coenjacobs
+/vendor/dealerdirect
+/vendor/myclabs
+/vendor/nikic
+/vendor/phar-io
+/vendor/php-stubs
+/vendor/phpcsstandards
+/vendor/phpstan
+/vendor/phpunit
+/vendor/sebastian
+/vendor/squizlabs
+/vendor/staabm
+/vendor/szepeviktor
+/vendor/theseer
+/vendor/wp-coding-standards
+/vendor/yoast
+/vendor/symfony
+
+# Tests
+/tests
+/bin
+
+# Dev environment
+.wp-env.json
+blueprint.json
+
+# Artifacts
+/playwright-report
+/test-results
+/coverage
+screenshot-*.png
+
+# Docs (readme.txt is the WP.org file)
+README.md
+CHANGELOG.md
+
+# Meta
+.distignore
+.gitignore
+.editorconfig
+
+# IDE / OS
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db

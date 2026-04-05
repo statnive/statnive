@@ -1,0 +1,56 @@
+id,device_type,user_agent,viewport_w,viewport_h,timezone,locale,accept_language,is_logged_in,username,password,is_bot
+d01,desktop,"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",1920,1080,America/New_York,en-US,"en-US,en;q=0.9",0,,,0
+d02,desktop,"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",1440,900,America/Los_Angeles,en-US,"en-US,en;q=0.9",0,,,0
+d03,desktop,"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:125.0) Gecko/20100101 Firefox/125.0",1920,1080,Europe/London,en-GB,"en-GB,en;q=0.9",0,,,0
+d04,desktop,"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.4 Safari/605.1.15",1440,900,Europe/Berlin,de-DE,"de-DE,de;q=0.9,en;q=0.8",0,,,0
+d05,desktop,"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0",1920,1200,America/Chicago,en-US,"en-US,en;q=0.9",0,,,0
+d06,desktop,"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",2560,1440,Asia/Tokyo,ja-JP,"ja-JP,ja;q=0.9,en;q=0.8",0,,,0
+d07,desktop,"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36",1366,768,Europe/Paris,fr-FR,"fr-FR,fr;q=0.9,en;q=0.8",0,,,0
+d08,desktop,"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",1680,1050,America/Denver,en-US,"en-US,en;q=0.9",0,,,0
+d09,desktop,"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:125.0) Gecko/20100101 Firefox/125.0",1920,1080,Europe/Madrid,es-ES,"es-ES,es;q=0.9,en;q=0.8",0,,,0
+d10,desktop,"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:125.0) Gecko/20100101 Firefox/125.0",1920,1080,Asia/Kolkata,hi-IN,"hi-IN,hi;q=0.9,en;q=0.8",0,,,0
+d11,desktop,"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",1920,1080,America/New_York,en-US,"en-US,en;q=0.9",1,root,q1w2e3,0
+d12,desktop,"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",1440,900,Europe/London,en-GB,"en-GB,en;q=0.9",1,root,q1w2e3,0
+d13,desktop,"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0",2560,1440,America/Los_Angeles,en-US,"en-US,en;q=0.9",1,root,q1w2e3,0
+d14,desktop,"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.4 Safari/605.1.15",1440,900,Europe/Berlin,de-DE,"de-DE,de;q=0.9",1,root,q1w2e3,0
+d15,desktop,"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:125.0) Gecko/20100101 Firefox/125.0",1920,1080,Asia/Tokyo,ja-JP,"ja-JP,ja;q=0.9",1,root,q1w2e3,0
+d16,desktop,"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",1600,900,America/Sao_Paulo,pt-BR,"pt-BR,pt;q=0.9,en;q=0.8",0,,,0
+d17,desktop,"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36",1440,900,Asia/Shanghai,zh-CN,"zh-CN,zh;q=0.9,en;q=0.8",0,,,0
+d18,desktop,"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 OPR/110.0.0.0",1920,1080,Europe/Moscow,ru-RU,"ru-RU,ru;q=0.9,en;q=0.8",0,,,0
+d19,desktop,"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",1920,1080,Asia/Seoul,ko-KR,"ko-KR,ko;q=0.9,en;q=0.8",0,,,0
+d20,desktop,"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.3 Safari/605.1.15",1680,1050,Australia/Sydney,en-AU,"en-AU,en;q=0.9",0,,,0
+d21,desktop,"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",1920,1080,Europe/Amsterdam,nl-NL,"nl-NL,nl;q=0.9,en;q=0.8",0,,,0
+d22,desktop,"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",1920,1080,Asia/Dubai,ar-AE,"ar-AE,ar;q=0.9,en;q=0.8",0,,,0
+d23,desktop,"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:125.0) Gecko/20100101 Firefox/125.0",1366,768,America/Mexico_City,es-MX,"es-MX,es;q=0.9,en;q=0.8",0,,,0
+d24,desktop,"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",2560,1600,Europe/Stockholm,sv-SE,"sv-SE,sv;q=0.9,en;q=0.8",0,,,0
+d25,desktop,"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",1920,1080,Europe/Warsaw,pl-PL,"pl-PL,pl;q=0.9,en;q=0.8",0,,,0
+d26,desktop,"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",1440,900,Asia/Singapore,en-SG,"en-SG,en;q=0.9",0,,,0
+d27,desktop,"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36",1920,1080,Africa/Cairo,ar-EG,"ar-EG,ar;q=0.9,en;q=0.8",0,,,0
+d28,desktop,"Mozilla/5.0 (X11; Linux x86_64; rv:125.0) Gecko/20100101 Firefox/125.0",2560,1440,Europe/Helsinki,fi-FI,"fi-FI,fi;q=0.9,en;q=0.8",0,,,0
+d29,desktop,"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",1920,1080,America/Toronto,en-CA,"en-CA,en;q=0.9,fr;q=0.8",0,,,0
+d30,desktop,"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.4 Safari/605.1.15",1440,900,Pacific/Auckland,en-NZ,"en-NZ,en;q=0.9",0,,,0
+m01,mobile,"Mozilla/5.0 (iPhone; CPU iPhone OS 17_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.4 Mobile/15E148 Safari/604.1",390,844,America/New_York,en-US,"en-US,en;q=0.9",0,,,0
+m02,mobile,"Mozilla/5.0 (Linux; Android 14; SM-S918B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.6367.82 Mobile Safari/537.36",360,800,Europe/London,en-GB,"en-GB,en;q=0.9",0,,,0
+m03,mobile,"Mozilla/5.0 (iPhone; CPU iPhone OS 17_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.3 Mobile/15E148 Safari/604.1",375,812,America/Los_Angeles,en-US,"en-US,en;q=0.9",0,,,0
+m04,mobile,"Mozilla/5.0 (Linux; Android 14; Pixel 8 Pro) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.6367.82 Mobile Safari/537.36",412,915,Europe/Berlin,de-DE,"de-DE,de;q=0.9",0,,,0
+m05,mobile,"Mozilla/5.0 (iPhone; CPU iPhone OS 17_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/124.0.6367.88 Mobile/15E148 Safari/604.1",390,844,Asia/Tokyo,ja-JP,"ja-JP,ja;q=0.9",0,,,0
+m06,mobile,"Mozilla/5.0 (Linux; Android 14; SM-A546B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.6367.82 Mobile Safari/537.36",360,780,Asia/Kolkata,hi-IN,"hi-IN,hi;q=0.9,en;q=0.8",0,,,0
+m07,mobile,"Mozilla/5.0 (iPhone; CPU iPhone OS 17_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.4 Mobile/15E148 Safari/604.1",393,852,Europe/Paris,fr-FR,"fr-FR,fr;q=0.9",0,,,0
+m08,mobile,"Mozilla/5.0 (Linux; Android 14; SM-G991B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.6312.118 Mobile Safari/537.36",360,800,America/Sao_Paulo,pt-BR,"pt-BR,pt;q=0.9",0,,,0
+m09,mobile,"Mozilla/5.0 (iPhone; CPU iPhone OS 17_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.3 Mobile/15E148 Safari/604.1",375,812,Asia/Shanghai,zh-CN,"zh-CN,zh;q=0.9",0,,,0
+m10,mobile,"Mozilla/5.0 (Linux; Android 14; Redmi Note 13 Pro) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.6367.82 Mobile Safari/537.36",393,873,Asia/Kolkata,hi-IN,"hi-IN,hi;q=0.9",0,,,0
+m11,mobile,"Mozilla/5.0 (iPhone; CPU iPhone OS 17_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.4 Mobile/15E148 Safari/604.1",390,844,America/Chicago,en-US,"en-US,en;q=0.9",1,root,q1w2e3,0
+m12,mobile,"Mozilla/5.0 (Linux; Android 14; SM-S918B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.6367.82 Mobile Safari/537.36",360,800,Europe/Berlin,de-DE,"de-DE,de;q=0.9",1,root,q1w2e3,0
+m13,mobile,"Mozilla/5.0 (iPhone; CPU iPhone OS 17_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.4 Mobile/15E148 Safari/604.1",390,844,Asia/Tokyo,ja-JP,"ja-JP,ja;q=0.9",1,root,q1w2e3,0
+m14,mobile,"Mozilla/5.0 (Linux; Android 14; Pixel 8) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.6367.82 Mobile Safari/537.36",412,915,Europe/London,en-GB,"en-GB,en;q=0.9",1,root,q1w2e3,0
+m15,mobile,"Mozilla/5.0 (iPhone; CPU iPhone OS 17_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.3 Mobile/15E148 Safari/604.1",375,812,America/New_York,en-US,"en-US,en;q=0.9",1,root,q1w2e3,0
+t01,tablet,"Mozilla/5.0 (iPad; CPU OS 17_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.4 Mobile/15E148 Safari/604.1",1024,1366,America/New_York,en-US,"en-US,en;q=0.9",0,,,0
+t02,tablet,"Mozilla/5.0 (iPad; CPU OS 17_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.3 Mobile/15E148 Safari/604.1",768,1024,Europe/London,en-GB,"en-GB,en;q=0.9",0,,,0
+t03,tablet,"Mozilla/5.0 (Linux; Android 14; SM-X810) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.6367.82 Safari/537.36",800,1280,Asia/Tokyo,ja-JP,"ja-JP,ja;q=0.9",0,,,0
+t04,tablet,"Mozilla/5.0 (iPad; CPU OS 17_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/124.0.6367.88 Mobile/15E148 Safari/604.1",1024,1366,Europe/Berlin,de-DE,"de-DE,de;q=0.9",0,,,0
+t05,tablet,"Mozilla/5.0 (Linux; Android 14; SM-X710) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.6312.118 Safari/537.36",800,1280,America/Los_Angeles,en-US,"en-US,en;q=0.9",0,,,0
+b01,desktop,"Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)",1920,1080,America/New_York,en-US,"en-US,en;q=0.9",0,,,1
+b02,desktop,"Mozilla/5.0 (compatible; bingbot/2.0; +http://www.bing.com/bingbot.htm)",1920,1080,America/New_York,en-US,"en-US,en;q=0.9",0,,,1
+b03,desktop,"Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; GPTBot/1.2; +https://openai.com/gptbot)",1920,1080,America/New_York,en-US,"en-US,en;q=0.9",0,,,1
+b04,desktop,"ClaudeBot/1.0; +https://www.anthropic.com/claude-bot",1920,1080,America/New_York,en-US,"en-US,en;q=0.9",0,,,1
+b05,desktop,"Mozilla/5.0 (compatible; AhrefsBot/7.0; +http://ahrefs.com/robot/)",1920,1080,America/New_York,en-US,"en-US,en;q=0.9",0,,,1

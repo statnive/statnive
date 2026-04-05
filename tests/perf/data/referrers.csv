@@ -1,0 +1,32 @@
+url,expected_channel
+,Direct
+,Direct
+,Direct
+,Direct
+https://www.google.com/search?q=analytics+plugin,Organic Search
+https://www.google.com/search?q=wordpress+stats,Organic Search
+https://www.google.com/search?q=site+traffic+tracker,Organic Search
+https://www.google.co.uk/search?q=wp+analytics,Organic Search
+https://www.bing.com/search?q=best+analytics+wordpress,Organic Search
+https://duckduckgo.com/?q=privacy+analytics+plugin,Organic Search
+https://search.yahoo.com/search?p=wordpress+analytics,Organic Search
+https://www.facebook.com/sharer/sharer.php,Social
+https://www.facebook.com/greenleaf.outdoors,Social
+https://t.co/abc123,Social
+https://twitter.com/greenleafoutdoors/status/12345,Social
+https://www.linkedin.com/feed,Social
+https://www.reddit.com/r/WordPress/comments/abc,Social
+https://www.instagram.com/,Social
+https://www.pinterest.com/pin/12345,Social
+https://newsletter.greenleaf.example.com/click,Email
+https://mail.google.com/mail/u/0,Email
+https://outlook.live.com/mail/0/inbox,Email
+https://www.wpbeginner.com/best-analytics-plugins,Referral
+https://developer.wordpress.org/plugins/analytics,Referral
+https://kinsta.com/blog/wordpress-analytics,Referral
+https://wordpress.org/plugins/browse/popular,Referral
+https://www.producthunt.com/posts/statnive,Referral
+https://github.com/greenleaf/statnive,Referral
+https://news.ycombinator.com/item?id=12345,Referral
+https://www.google.com/aclk?sa=l&ai=abc,Paid Search
+https://www.bing.com/aclick?ld=abc,Paid Search

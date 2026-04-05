@@ -1,0 +1,43 @@
+{
+	"$schema": "https://playground.wordpress.net/blueprint-schema.json",
+	"landingPage": "/wp-admin/admin.php?page=statnive",
+	"preferredVersions": {
+		"php": "8.2",
+		"wp": "latest"
+	},
+	"features": {
+		"networking": true
+	},
+	"steps": [
+		{
+			"step": "installPlugin",
+			"pluginData": {
+				"resource": "wordpress.org/plugins",
+				"slug": "wp-consent-api"
+			}
+		},
+		{
+			"step": "setSiteOptions",
+			"options": {
+				"blogname": "GreenLeaf Outdoors",
+				"blogdescription": "Premium outdoor gear and adventure equipment"
+			}
+		},
+		{
+			"step": "runPHP",
+			"code": "<?php\nrequire_once '/wordpress/wp-load.php';\nactivate_plugin('statnive/statnive.php');\n$pages = [\n    'About Us' => 'Learn about our mission.',\n    'Contact' => 'Get in touch with our team.',\n    'Shop' => 'Browse our outdoor gear.',\n    'Blog' => 'Adventure tips and guides.',\n    'Pricing' => 'Plans for every explorer.',\n];\nforeach ($pages as $title => $desc) {\n    wp_insert_post(['post_title' => $title, 'post_content' => '<!-- wp:paragraph --><p>' . $desc . '</p><!-- /wp:paragraph -->', 'post_status' => 'publish', 'post_type' => 'page']);\n}\n$posts = ['Best Hiking Trails 2026', 'Camping Gear Guide', 'Winter Climbing Tips', 'Trail Running Shoes Review', 'Kayaking for Beginners', 'Mountain Biking Safety', 'Tent Buying Guide', 'Backpacking Essentials', 'Rock Climbing Basics', 'Outdoor Photography Tips'];\nforeach ($posts as $title) {\n    wp_insert_post(['post_title' => $title, 'post_content' => '<!-- wp:paragraph --><p>Expert guide on ' . strtolower($title) . '.</p><!-- /wp:paragraph -->', 'post_status' => 'publish', 'post_type' => 'post']);\n}\n"
+		},
+		{
+			"step": "runPHP",
+			"code": "<?php\nrequire_once '/wordpress/wp-load.php';\nglobal $wpdb;\n$p = $wpdb->prefix . 'statnive_';\n\n// Seed dimension tables.\n$countries = [['US','United States','NA','North America'],['GB','United Kingdom','EU','Europe'],['DE','Germany','EU','Europe'],['FR','France','EU','Europe'],['JP','Japan','AS','Asia']];\nforeach ($countries as $c) {\n    $wpdb->insert($p.'countries', ['code'=>$c[0],'name'=>$c[1],'continent_code'=>$c[2],'continent'=>$c[3]]);\n}\n\n$devices = ['Desktop','Mobile','Tablet'];\nforeach ($devices as $d) { $wpdb->insert($p.'device_types', ['name'=>$d]); }\n\n$browsers = ['Chrome','Safari','Firefox','Edge'];\nforeach ($browsers as $b) { $wpdb->insert($p.'device_browsers', ['name'=>$b]); }\n\n$oss = ['Windows','macOS','iOS','Android'];\nforeach ($oss as $o) { $wpdb->insert($p.'device_oss', ['name'=>$o]); }\n\n$langs = ['en-US','de-DE','ja-JP','fr-FR'];\nforeach ($langs as $l) { $wpdb->insert($p.'languages', ['code'=>$l]); }\n\n$refs = [\n    ['Organic Search','Google','google.com'],\n    ['Social Media','Facebook','facebook.com'],\n    ['Direct','',''],\n    ['Referral','Reddit','reddit.com'],\n    ['Email','Newsletter','mailchimp.com'],\n];\nforeach ($refs as $r) {\n    $wpdb->insert($p.'referrers', ['channel'=>$r[0],'name'=>$r[1],'domain'=>$r[2],'domain_hash'=>crc32($r[2])]);\n}\n\n// Seed resource_uris for pages.\n$all_posts = get_posts(['post_type'=>['post','page'],'numberposts'=>15,'post_status'=>'publish']);\nforeach ($all_posts as $post) {\n    $uri = str_replace(home_url(), '', get_permalink($post));\n    $wpdb->insert($p.'resource_uris', ['resource_type'=>$post->post_type,'resource_id'=>$post->ID,'uri'=>$uri,'uri_hash'=>crc32($uri)]);\n    $wpdb->insert($p.'resources', ['resource_type'=>$post->post_type,'resource_id'=>$post->ID,'cached_title'=>$post->post_title]);\n}\n\necho 'Dimensions seeded: ' . $wpdb->get_var(\"SELECT COUNT(*) FROM {$p}countries\") . ' countries, ' . $wpdb->get_var(\"SELECT COUNT(*) FROM {$p}referrers\") . ' referrers';\n"
+		},
+		{
+			"step": "runPHP",
+			"code": "<?php\nrequire_once '/wordpress/wp-load.php';\nglobal $wpdb;\n$p = $wpdb->prefix . 'statnive_';\n\n$uri_ids = $wpdb->get_col(\"SELECT ID FROM {$p}resource_uris LIMIT 10\");\nif (empty($uri_ids)) { echo 'No URIs found'; exit; }\n$country_ids = $wpdb->get_col(\"SELECT ID FROM {$p}countries\");\n$device_ids = $wpdb->get_col(\"SELECT ID FROM {$p}device_types\");\n$browser_ids = $wpdb->get_col(\"SELECT ID FROM {$p}device_browsers\");\n$os_ids = $wpdb->get_col(\"SELECT ID FROM {$p}device_oss\");\n$lang_ids = $wpdb->get_col(\"SELECT ID FROM {$p}languages\");\n$ref_ids = $wpdb->get_col(\"SELECT ID FROM {$p}referrers\");\n\n// Seed 7 days of raw data.\nfor ($d = 6; $d >= 0; $d--) {\n    $date = gmdate('Y-m-d', strtotime(\"-{$d} days\"));\n    $daily_visitors = rand(80, 200);\n    for ($v = 0; $v < $daily_visitors; $v++) {\n        $hash = random_bytes(8);\n        $ts = $date . ' ' . sprintf('%02d:%02d:%02d', rand(6,23), rand(0,59), rand(0,59));\n        $wpdb->insert($p.'visitors', ['hash'=>$hash, 'created_at'=>$ts]);\n        $vid = $wpdb->insert_id;\n        if (!$vid) continue;\n        $views_count = rand(1, 4);\n        $wpdb->insert($p.'sessions', [\n            'visitor_id'=>$vid, 'ip_hash'=>$hash, 'started_at'=>$ts,\n            'total_views'=>$views_count, 'user_id'=>0, 'duration'=>rand(10, 300),\n            'country_id'=>$country_ids[array_rand($country_ids)],\n            'device_type_id'=>$device_ids[array_rand($device_ids)],\n            'device_browser_id'=>$browser_ids[array_rand($browser_ids)],\n            'device_os_id'=>$os_ids[array_rand($os_ids)],\n            'language_id'=>$lang_ids[array_rand($lang_ids)],\n            'referrer_id'=>$ref_ids[array_rand($ref_ids)],\n        ]);\n        $sid = $wpdb->insert_id;\n        if (!$sid) continue;\n        for ($pv = 0; $pv < $views_count; $pv++) {\n            $wpdb->insert($p.'views', [\n                'session_id'=>$sid,\n                'resource_uri_id'=>$uri_ids[array_rand($uri_ids)],\n                'viewed_at'=>$date . ' ' . sprintf('%02d:%02d:%02d', rand(6,23), rand(0,59), rand(0,59)),\n            ]);\n        }\n    }\n}\n\necho 'Raw data seeded: ' . $wpdb->get_var(\"SELECT COUNT(*) FROM {$p}visitors\") . ' visitors, ' . $wpdb->get_var(\"SELECT COUNT(*) FROM {$p}views\") . ' views';\n"
+		},
+		{
+			"step": "runPHP",
+			"code": "<?php\nrequire_once '/wordpress/wp-load.php';\nglobal $wpdb;\n$p = $wpdb->prefix . 'statnive_';\n\n// Run aggregation for all 7 days to populate summary tables.\nfor ($d = 6; $d >= 0; $d--) {\n    $date = gmdate('Y-m-d', strtotime(\"-{$d} days\"));\n    Statnive\\Service\\AggregationService::aggregate_day($date);\n}\n\necho 'Aggregation complete: ' . $wpdb->get_var(\"SELECT COUNT(*) FROM {$p}summary_totals\") . ' summary_totals rows, ' . $wpdb->get_var(\"SELECT COUNT(*) FROM {$p}summary\") . ' summary rows';\n"
+		}
+	]
+}

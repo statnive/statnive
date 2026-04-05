@@ -1,0 +1,21 @@
+source,medium,campaign,term,content
+google,cpc,spring_sale,outdoor gear,banner_hero
+google,cpc,brand_awareness,hiking boots,text_ad
+facebook,social,summer_promo,,carousel_1
+facebook,paid_social,retarget_cart,,dynamic_product
+twitter,social,product_launch,,tweet_link
+twitter,social,blog_share,,organic_post
+instagram,social,influencer_collab,,story_swipe
+linkedin,social,b2b_outreach,,sponsored_post
+newsletter,email,weekly_digest,,header_cta
+newsletter,email,flash_sale,,button_primary
+mailchimp,email,abandoned_cart,,reminder_1
+mailchimp,email,welcome_series,,onboarding_3
+bing,cpc,search_general,analytics plugin,text_ad
+bing,cpc,competitor_target,wp statistics,text_ad
+reddit,social,community_post,,comment_link
+youtube,video,tutorial_series,,description_link
+tiktok,social,viral_campaign,,bio_link
+pinterest,social,product_pins,,pin_link
+affiliate,referral,partner_program,,sidebar_banner
+direct,none,,,

@@ -1,0 +1,147 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Statnive\Api;
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+use Statnive\Import\CsvImporter;
+use Statnive\Import\WPStatisticsImporter;
+use WP_REST_Controller;
+use WP_REST_Request;
+use WP_REST_Response;
+use WP_REST_Server;
+
+/**
+ * REST API controller for data import operations.
+ *
+ * Handles CSV and WP Statistics imports with progress tracking.
+ */
+final class ImportController extends WP_REST_Controller {
+
+	protected $namespace = 'statnive/v1';
+	protected $rest_base = 'import';
+
+	/**
+	 * Register routes.
+	 */
+	public function register_routes(): void {
+		// CSV import.
+		register_rest_route(
+			$this->namespace,
+			'/' . $this->rest_base . '/csv/start',
+			[
+				[
+					'methods'             => WP_REST_Server::CREATABLE,
+					'callback'            => [ $this, 'start_csv' ],
+					'permission_callback' => [ $this, 'permissions_check' ],
+				],
+			]
+		);
+		register_rest_route(
+			$this->namespace,
+			'/' . $this->rest_base . '/csv/progress',
+			[
+				[
+					'methods'             => WP_REST_Server::READABLE,
+					'callback'            => [ $this, 'csv_progress' ],
+					'permission_callback' => [ $this, 'permissions_check' ],
+				],
+			]
+		);
+
+		// WP Statistics import.
+		register_rest_route(
+			$this->namespace,
+			'/' . $this->rest_base . '/wp-statistics/start',
+			[
+				[
+					'methods'             => WP_REST_Server::CREATABLE,
+					'callback'            => [ $this, 'start_wp_statistics' ],
+					'permission_callback' => [ $this, 'permissions_check' ],
+				],
+			]
+		);
+		register_rest_route(
+			$this->namespace,
+			'/' . $this->rest_base . '/wp-statistics/progress',
+			[
+				[
+					'methods'             => WP_REST_Server::READABLE,
+					'callback'            => [ $this, 'wp_statistics_progress' ],
+					'permission_callback' => [ $this, 'permissions_check' ],
+				],
+			]
+		);
+	}
+
+	/**
+	 * Permission check.
+	 *
+	 * @param WP_REST_Request $request Request.
+	 * @return bool
+	 */
+	public function permissions_check( $request ): bool {
+		return current_user_can( 'manage_options' );
+	}
+
+	/**
+	 * Start CSV import.
+	 *
+	 * @param WP_REST_Request $request Request.
+	 * @return WP_REST_Response
+	 */
+	public function start_csv( WP_REST_Request $request ): WP_REST_Response {
+		$file_path = sanitize_text_field( $request->get_param( 'file_path' ) ?? '' );
+		if ( empty( $file_path ) || ! file_exists( $file_path ) ) {
+			return new WP_REST_Response( [ 'message' => 'File not found.' ], 400 );
+		}
+
+		$importer = new CsvImporter();
+		$importer->start( [ 'file_path' => $file_path ] );
+
+		return new WP_REST_Response( [ 'status' => 'started' ], 200 );
+	}
+
+	/**
+	 * Get CSV import progress.
+	 *
+	 * @param WP_REST_Request $request Request.
+	 * @return WP_REST_Response
+	 */
+	public function csv_progress( WP_REST_Request $request ): WP_REST_Response {
+		$importer = new CsvImporter();
+		return new WP_REST_Response( $importer->get_progress(), 200 );
+	}
+
+	/**
+	 * Start WP Statistics import.
+	 *
+	 * @param WP_REST_Request $request Request.
+	 * @return WP_REST_Response
+	 */
+	public function start_wp_statistics( WP_REST_Request $request ): WP_REST_Response {
+		if ( ! WPStatisticsImporter::is_available() ) {
+			return new WP_REST_Response( [ 'message' => 'WP Statistics tables not found.' ], 400 );
+		}
+
+		$importer = new WPStatisticsImporter();
+		$importer->start( [] );
+
+		return new WP_REST_Response( [ 'status' => 'started' ], 200 );
+	}
+
+	/**
+	 * Get WP Statistics import progress.
+	 *
+	 * @param WP_REST_Request $request Request.
+	 * @return WP_REST_Response
+	 */
+	public function wp_statistics_progress( WP_REST_Request $request ): WP_REST_Response {
+		$importer = new WPStatisticsImporter();
+		return new WP_REST_Response( $importer->get_progress(), 200 );
+	}
+}

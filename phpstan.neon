@@ -1,0 +1,14 @@
+parameters:
+    level: 6
+    paths:
+        - src
+        - statnive.php
+        - uninstall.php
+    excludePaths:
+        - src/Dependencies
+    scanDirectories:
+        - vendor
+    ignoreErrors: []
+
+includes:
+    - vendor/szepeviktor/phpstan-wordpress/extension.neon

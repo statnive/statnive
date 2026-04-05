@@ -1,0 +1,16 @@
+product_id,sku,price,name,category
+1,GL-TENT-001,299.99,Alpine Pro 4-Person Tent,Camping
+2,GL-BOOT-001,189.99,Trail Master Hiking Boots,Footwear
+3,GL-PACK-001,149.99,Summit 65L Backpack,Packs
+4,GL-JACK-001,229.99,StormShield Waterproof Jacket,Clothing
+5,GL-SLEEP-001,119.99,Arctic Night Sleeping Bag,Camping
+6,GL-POLE-001,89.99,Carbon Trekking Poles,Accessories
+7,GL-COOK-001,49.99,Ultralight Camp Stove,Cooking
+8,GL-FILT-001,39.99,PureFlow Water Filter,Hydration
+9,GL-HEAD-001,34.99,LumiTrail Headlamp,Lighting
+10,GL-MATT-001,79.99,CloudRest Sleeping Pad,Camping
+11,GL-SOCK-001,24.99,Merino Wool Hiking Socks,Footwear
+12,GL-GLOV-001,44.99,ThermaGrip Winter Gloves,Clothing
+13,GL-BINO-001,199.99,WideView 10x42 Binoculars,Optics
+14,GL-KNIFE-001,59.99,MultiTrail Pocket Knife,Tools
+15,GL-MAP-001,14.99,National Park Trail Map Set,Navigation

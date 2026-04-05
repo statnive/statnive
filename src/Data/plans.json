@@ -1,0 +1,70 @@
+{
+	"free": {
+		"name": "Free",
+		"features": [
+			"dashboard",
+			"basic_sources",
+			"geo_data",
+			"realtime",
+			"device_detection",
+			"languages"
+		],
+		"limits": {
+			"retention_days": 30,
+			"custom_events": 0
+		}
+	},
+	"starter": {
+		"name": "Starter",
+		"price": 49,
+		"features": [
+			"dashboard",
+			"basic_sources",
+			"geo_data",
+			"realtime",
+			"device_detection",
+			"languages",
+			"form_tracking_cf7",
+			"custom_events",
+			"email_reports"
+		],
+		"limits": {
+			"retention_days": 365,
+			"custom_events": 5
+		}
+	},
+	"professional": {
+		"name": "Professional",
+		"price": 99,
+		"features": [
+			"dashboard",
+			"basic_sources",
+			"geo_data",
+			"realtime",
+			"device_detection",
+			"languages",
+			"form_tracking_cf7",
+			"custom_events",
+			"email_reports",
+			"woocommerce_revenue",
+			"all_forms",
+			"rest_api",
+			"wpml",
+			"data_plus",
+			"advanced_reporting"
+		],
+		"limits": {
+			"retention_days": 3650,
+			"custom_events": -1
+		}
+	},
+	"agency": {
+		"name": "Agency",
+		"price": 199,
+		"features": ["*"],
+		"limits": {
+			"retention_days": 3650,
+			"custom_events": -1
+		}
+	}
+}
