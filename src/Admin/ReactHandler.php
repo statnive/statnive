@@ -92,10 +92,13 @@ final class ReactHandler {
 				}
 
 				// Inject import map before the module script.
+				// wp_get_inline_script_tag() wraps content in CDATA on non-html5 themes,
+				// which breaks importmap JSON parsing. Output directly instead.
 				$importmap_tag = '';
 				if ( ! empty( $import_map ) ) {
 					$importmap_json = wp_json_encode( [ 'imports' => $import_map ], JSON_UNESCAPED_SLASHES );
-					$importmap_tag  = wp_get_inline_script_tag( $importmap_json, [ 'type' => 'importmap' ] );
+					// phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedScript -- importmap is data, not executable JS; content from wp_json_encode is safe.
+					$importmap_tag = '<script type="importmap">' . $importmap_json . '</script>' . "\n";
 				}
 
 				$tag = str_replace( ' src=', ' type="module" src=', $tag );
