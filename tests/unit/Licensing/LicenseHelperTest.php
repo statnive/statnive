@@ -14,13 +14,14 @@ declare(strict_types=1);
 
 namespace Statnive\Tests\Unit\Licensing;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Statnive\Licensing\LicenseHelper;
 use Statnive\Licensing\LicenseStatus;
 
-/**
- * @covers \Statnive\Licensing\LicenseHelper
- * @covers \Statnive\Licensing\LicenseStatus
- */
+#[CoversClass(LicenseHelper::class)]
+#[CoversClass(LicenseStatus::class)]
 final class LicenseHelperTest extends TestCase {
 
 	/**
@@ -60,9 +61,7 @@ final class LicenseHelperTest extends TestCase {
 		$this->assertSame( '****-ABCD', $masked );
 	}
 
-	/**
-	 * @dataProvider license_key_mask_provider
-	 */
+	#[DataProvider('license_key_mask_provider')]
 	public function test_masking_various_keys( string $key, string $expected ): void {
 		$this->assertSame( $expected, $this->mask_key( $key ) );
 	}

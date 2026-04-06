@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Statnive\Tests\Unit\Service;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Statnive\Service\DeviceService;
 
@@ -12,9 +13,8 @@ use Statnive\Service\DeviceService;
  *
  * Verifies correct browser, device type, and OS detection regardless of
  * whether DeviceDetector or the fallback regex parser is used (bug #5).
- *
- * @covers \Statnive\Service\DeviceService
  */
+#[CoversClass(DeviceService::class)]
 final class DeviceServiceFallbackTest extends TestCase {
 
 	protected function setUp(): void {

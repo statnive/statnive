@@ -13,12 +13,12 @@ declare(strict_types=1);
 
 namespace Statnive\Tests\Unit\Feature;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Statnive\Feature\PlanDefinition;
 
-/**
- * @covers \Statnive\Feature\PlanDefinition
- */
+#[CoversClass(PlanDefinition::class)]
 final class PlanDefinitionTest extends TestCase {
 
 	protected function setUp(): void {
@@ -26,9 +26,7 @@ final class PlanDefinitionTest extends TestCase {
 		PlanDefinition::clear_cache();
 	}
 
-	/**
-	 * @dataProvider retention_limit_provider
-	 */
+	#[DataProvider('retention_limit_provider')]
 	public function test_retention_limit_per_tier( string $tier, int $expected_days ): void {
 		$days = PlanDefinition::get_limit( $tier, 'retention_days' );
 

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Statnive\Tests\Unit;
 
+use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -11,9 +12,8 @@ use PHPUnit\Framework\TestCase;
  *
  * Parses actual files to detect version mismatches between the plugin header,
  * the STATNIVE_VERSION constant, and package.json.
- *
- * @covers \Statnive\Service\DeviceService
  */
+#[CoversNothing]
 final class VersionConsistencyTest extends TestCase {
 
 	/**

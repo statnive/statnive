@@ -4,14 +4,12 @@ declare(strict_types=1);
 
 namespace Statnive\Tests\Unit\Service;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Statnive\Service\IpAnonymizer;
 
-/**
- * Unit tests for IpAnonymizer.
- *
- * @covers \Statnive\Service\IpAnonymizer
- */
+#[CoversClass(IpAnonymizer::class)]
 final class IpAnonymizerTest extends TestCase {
 
 	public function test_ipv4_zeros_last_octet(): void {
@@ -44,9 +42,7 @@ final class IpAnonymizerTest extends TestCase {
 		$this->assertSame( '0.0.0.0', IpAnonymizer::anonymize( '' ) );
 	}
 
-	/**
-	 * @dataProvider ipv4_provider
-	 */
+	#[DataProvider('ipv4_provider')]
 	public function test_ipv4_anonymization( string $input, string $expected ): void {
 		$this->assertSame( $expected, IpAnonymizer::anonymize( $input ) );
 	}

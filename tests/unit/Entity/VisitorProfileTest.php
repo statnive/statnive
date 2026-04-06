@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Statnive\Tests\Unit\Entity;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Statnive\Entity\VisitorProfile;
 
@@ -13,9 +14,8 @@ use Statnive\Entity\VisitorProfile;
  * Tests the metadata get/set/has operations and fluent builder methods.
  * WordPress-dependent methods (from_request, persist, compute_visitor_hash)
  * are tested in integration tests.
- *
- * @covers \Statnive\Entity\VisitorProfile
  */
+#[CoversClass(VisitorProfile::class)]
 final class VisitorProfileTest extends TestCase {
 
 	public function test_set_and_get(): void {

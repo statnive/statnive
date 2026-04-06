@@ -4,16 +4,17 @@ declare(strict_types=1);
 
 namespace Statnive\Tests\Unit\Security;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
+use Statnive\Security\HmacValidator;
 
 /**
  * Unit tests for HmacValidator.
  *
  * These tests verify the HMAC generation and verification logic
  * without requiring WordPress. We test the core crypto operations directly.
- *
- * @covers \Statnive\Security\HmacValidator
  */
+#[CoversClass(HmacValidator::class)]
 final class HmacValidatorTest extends TestCase {
 
 	public function test_hmac_sha256_produces_64_char_hex(): void {

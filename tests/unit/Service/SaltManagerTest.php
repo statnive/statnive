@@ -16,11 +16,11 @@ declare(strict_types=1);
 
 namespace Statnive\Tests\Unit\Service;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
+use Statnive\Service\SaltManager;
 
-/**
- * @covers \Statnive\Service\SaltManager
- */
+#[CoversClass(SaltManager::class)]
 final class SaltManagerTest extends TestCase {
 
 	/**

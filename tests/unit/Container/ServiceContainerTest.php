@@ -4,15 +4,12 @@ declare(strict_types=1);
 
 namespace Statnive\Tests\Unit\Container;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Statnive\Container\ServiceContainer;
 use stdClass;
 
-/**
- * Unit tests for ServiceContainer.
- *
- * @covers \Statnive\Container\ServiceContainer
- */
+#[CoversClass(ServiceContainer::class)]
 final class ServiceContainerTest extends TestCase {
 
 	protected function setUp(): void {

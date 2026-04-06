@@ -14,12 +14,11 @@ declare(strict_types=1);
 
 namespace Statnive\Tests\Unit\Cron;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Statnive\Cron\DailyAggregationJob;
 
-/**
- * @covers \Statnive\Cron\DailyAggregationJob
- */
+#[CoversClass(DailyAggregationJob::class)]
 final class CronScheduleTest extends TestCase {
 
 	public function test_cron_hook_name_matches_specification(): void {

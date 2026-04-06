@@ -14,13 +14,14 @@ declare(strict_types=1);
 
 namespace Statnive\Tests\Unit\Feature;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Statnive\Feature\FeatureGate;
 use Statnive\Feature\PlanDefinition;
 
-/**
- * @covers \Statnive\Feature\FeatureGate
- * @covers \Statnive\Feature\PlanDefinition
- */
+#[CoversClass(FeatureGate::class)]
+#[CoversClass(PlanDefinition::class)]
 final class FeatureGateTest extends TestCase {
 
 	protected function setUp(): void {
@@ -29,9 +30,7 @@ final class FeatureGateTest extends TestCase {
 		PlanDefinition::clear_cache();
 	}
 
-	/**
-	 * @dataProvider tier_feature_provider
-	 */
+	#[DataProvider('tier_feature_provider')]
 	public function test_feature_gate_evaluates_access_per_tier( string $tier, string $feature, bool $expected ): void {
 		$result = PlanDefinition::plan_has_feature( $tier, $feature );
 

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Statnive\Tests\Unit\Service;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Statnive\Service\GeoIPDownloader;
 
@@ -11,9 +12,8 @@ use Statnive\Service\GeoIPDownloader;
  * Unit tests for GeoIPDownloader constants and configuration.
  *
  * Limited to what can be tested without WordPress functions.
- *
- * @covers \Statnive\Service\GeoIPDownloader
  */
+#[CoversClass(GeoIPDownloader::class)]
 final class GeoIPDownloaderTest extends TestCase {
 
 	public function test_no_third_party_mirror_constant(): void {

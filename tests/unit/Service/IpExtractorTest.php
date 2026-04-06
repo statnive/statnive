@@ -4,14 +4,12 @@ declare(strict_types=1);
 
 namespace Statnive\Tests\Unit\Service;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Statnive\Service\IpExtractor;
 
-/**
- * Unit tests for IpExtractor.
- *
- * @covers \Statnive\Service\IpExtractor
- */
+#[CoversClass(IpExtractor::class)]
 final class IpExtractorTest extends TestCase {
 
 	/**
@@ -28,9 +26,7 @@ final class IpExtractorTest extends TestCase {
 		);
 	}
 
-	/**
-	 * @dataProvider proxy_header_provider
-	 */
+	#[DataProvider('proxy_header_provider')]
 	public function test_ip_extracted_from_proxy_header( string $header, string $value, string $expected_ip ): void {
 		$_SERVER[ $header ]     = $value;
 		$_SERVER['REMOTE_ADDR'] = '127.0.0.1';
