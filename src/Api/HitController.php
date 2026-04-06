@@ -63,6 +63,12 @@ final class HitController extends WP_REST_Controller {
 
 	/**
 	 * Register the /hit route.
+	 *
+	 * Schema-driven validation lets WordPress core run sanitize/validate
+	 * callbacks for every accepted field before our handler executes.
+	 * The endpoint is intentionally public (`__return_true`); HMAC signature
+	 * verification + transient rate limiting + DNT/GPC headers provide the
+	 * security boundary.
 	 */
 	public function register_routes(): void {
 		register_rest_route(
@@ -73,9 +79,78 @@ final class HitController extends WP_REST_Controller {
 					'methods'             => WP_REST_Server::CREATABLE,
 					'callback'            => [ $this, 'create_item' ],
 					'permission_callback' => '__return_true',
+					'args'                => self::get_route_args(),
 				],
 			]
 		);
+	}
+
+	/**
+	 * Argument schema for the /hit route.
+	 *
+	 * Note: the tracker sends `Content-Type: text/plain` to avoid the CORS
+	 * preflight, so the JSON body is parsed manually inside `create_item()`
+	 * via {@see PayloadValidator}. The schema below is therefore primarily
+	 * documentation + a hint to Plugin Check / OpenAPI scanners that every
+	 * field has a declared type and sanitizer. Runtime sanitization still
+	 * happens in `create_item()`.
+	 *
+	 * @return array<string, array<string, mixed>>
+	 */
+	private static function get_route_args(): array {
+		return [
+			'resource_type'   => [
+				'type'              => 'string',
+				'required'          => true,
+				'sanitize_callback' => 'sanitize_text_field',
+			],
+			'resource_id'     => [
+				'type'              => 'integer',
+				'sanitize_callback' => 'absint',
+			],
+			'referrer'        => [
+				'type'              => 'string',
+				'format'            => 'uri',
+				'sanitize_callback' => 'esc_url_raw',
+			],
+			'screen_width'    => [
+				'type'              => 'integer',
+				'sanitize_callback' => 'absint',
+			],
+			'screen_height'   => [
+				'type'              => 'integer',
+				'sanitize_callback' => 'absint',
+			],
+			'language'        => [
+				'type'              => 'string',
+				'sanitize_callback' => 'sanitize_text_field',
+			],
+			'timezone'        => [
+				'type'              => 'string',
+				'sanitize_callback' => 'sanitize_text_field',
+			],
+			'signature'       => [
+				'type'              => 'string',
+				'required'          => true,
+				'sanitize_callback' => 'sanitize_text_field',
+			],
+			'page_url'        => [
+				'type'              => 'string',
+				'format'            => 'uri',
+				'sanitize_callback' => 'esc_url_raw',
+			],
+			'page_query'      => [
+				'type'              => 'string',
+				'sanitize_callback' => 'sanitize_text_field',
+			],
+			'pvid'            => [
+				'type'              => 'string',
+				'sanitize_callback' => 'sanitize_text_field',
+			],
+			'consent_granted' => [
+				'type' => 'boolean',
+			],
+		];
 	}
 
 	/**
