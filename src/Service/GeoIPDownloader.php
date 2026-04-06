@@ -113,10 +113,12 @@ final class GeoIPDownloader {
 				}
 			}
 
-			// Cleanup temp files.
-			// phpcs:ignore WordPress.WP.AlternativeFunctions.unlink_unlink
+			// Cleanup temp files. Errors silenced because the archive may have
+			// been removed mid-extraction by an antivirus/scanner — that is
+			// not actionable from here.
+			// phpcs:ignore WordPress.WP.AlternativeFunctions.unlink_unlink,WordPress.PHP.NoSilencedErrors.Discouraged
 			@unlink( $tmp_file );
-			// phpcs:ignore WordPress.WP.AlternativeFunctions.unlink_unlink
+			// phpcs:ignore WordPress.WP.AlternativeFunctions.unlink_unlink,WordPress.PHP.NoSilencedErrors.Discouraged
 			@unlink( $tar_path );
 
 			return $found;
@@ -125,7 +127,7 @@ final class GeoIPDownloader {
 				// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
 				error_log( '[Statnive][GeoIP] Archive extraction failed: ' . $e->getMessage() );
 			}
-			// phpcs:ignore WordPress.WP.AlternativeFunctions.unlink_unlink
+			// phpcs:ignore WordPress.WP.AlternativeFunctions.unlink_unlink,WordPress.PHP.NoSilencedErrors.Discouraged
 			@unlink( $tmp_file );
 			return false;
 		}

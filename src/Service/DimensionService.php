@@ -330,9 +330,9 @@ final class DimensionService {
 		global $wpdb;
 		$table = TableRegistry::get( $table_name );
 
-		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery
-		// phpcs:disable WordPress.DB.DirectDatabaseQuery.NoCaching
-		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		// $where_clause is built from a static allowlist of column names;
+		// placeholders are passed via $where_values to wpdb->prepare().
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare
 		$id = $wpdb->get_var(
 			$wpdb->prepare(
 				"SELECT ID FROM `{$table}` WHERE {$where_clause} LIMIT 1",
@@ -354,15 +354,13 @@ final class DimensionService {
 		}
 
 		// Race condition fallback.
-		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$id = $wpdb->get_var(
 			$wpdb->prepare(
 				"SELECT ID FROM `{$table}` WHERE {$where_clause} LIMIT 1",
 				...$where_values
 			)
 		);
-		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery
-		// phpcs:enable WordPress.DB.DirectDatabaseQuery.NoCaching
+		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare
 
 		$resolved = ( null !== $id ) ? (int) $id : 0;
 		if ( $resolved > 0 ) {
