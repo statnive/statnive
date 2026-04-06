@@ -81,6 +81,24 @@ Statnive generates a daily visitor hash from the anonymized IP address and User-
 
 All data is stored in your WordPress database on your own server. Statnive creates its own tables (prefixed `statnive_`) and never sends data to external servers. When you uninstall the plugin, all tables are cleanly removed.
 
+= Which browsers does the tracker support? =
+
+The Statnive tracker uses standard browser APIs (`navigator.sendBeacon`, `fetch` with `keepalive`, `Intl.DateTimeFormat`) that ship in every modern browser. We test against the latest two major versions of Chrome, Firefox, Safari, and Edge, plus iOS WebKit. Older browsers will silently fall back to a no-op — analytics won't work, but your site is unaffected.
+
+= What can cause "no data" or partial data loss? =
+
+A few common things can prevent the tracker from reporting:
+
+* **Ad blockers and privacy extensions** filter requests to anything that looks like analytics. There is no way around this — it's intentional on the visitor's part.
+* **Aggressive page caching** can serve a stale HTML page that omits the tracker tag. If you use a custom cache, exclude the tracker endpoint (see the next FAQ).
+* **CSP (Content Security Policy) misconfiguration** can block `fetch()` / `sendBeacon()` to your own site. Ensure `connect-src 'self'` (or your site origin) is allowed.
+* **Strict privacy settings** like `Sec-GPC: 1` (Global Privacy Control) or `DNT: 1` cause Statnive to honour the opt-out and skip tracking — by design.
+* **WP-Cron disabled** (e.g., `DISABLE_WP_CRON`) does not stop tracking, but it prevents data retention cleanup and GeoIP updates from running on schedule. Add a system cron or run `wp statnive cron run` manually.
+
+= Do I need to exclude any URL from page caches? =
+
+Yes — exclude the tracking endpoint from page caches. The endpoint is `/wp-json/statnive/v1/hit` (REST) and `wp-admin/admin-ajax.php?action=statnive_hit` (AJAX fallback). Most caching plugins exclude REST endpoints and admin-ajax by default, but if you use a custom cache rule, add these to the exclusion list.
+
 == Screenshots ==
 
 1. All your key metrics in one view — visitors, events, and pageviews with trend comparison
@@ -112,59 +130,24 @@ No visitor data is ever sent to any external service. All analytics data remains
 == Changelog ==
 
 = 0.3.0 - 2026-04-06 =
-* Fix engagement-to-view correlation using pageview ID (pvid) token
-* Fix engagement updates matching by URI path instead of resource_id
-* Fix Avg Duration data pipeline — aggregate from views.duration
-* Fix dashboard importmap output for WP compatibility
-* Fix readme.txt WP.org compliance — remove false claims, fix URLs
-* Fix unescaped output in admin UI components
-* Fix email report numbers to use number_format_i18n() for locale-aware output
-* Remove P3TERX GeoIP mirror — MaxMind license key now required (EULA compliance)
-* Gate GeoIP download to opt-in (no auto-download)
-* Gate license API to explicit user action only
-* Make admin notices dismissible
-* Add ABSPATH guards to all src/ PHP files
-* Add date range persistence across all dashboard tabs via URL params
-* Add two-stage tracker loading for optimal Web Vitals
-* Add GPL v2 LICENSE file and THIRD-PARTY-LICENSES.md
-* Add External Services section in readme.txt (with MaxMind EULA link)
-* Add WP.org pre-submission CI workflow with 6 enforcement gates
-* Add i18n infrastructure: load_plugin_textdomain() and languages/statnive.pot
-* Add GeoIPNotice admin notices for missing MaxMind key and DISABLE_WP_CRON
-* Add translatable strings throughout email reports
-* Add MaxMind license key + GeoIP enable/disable settings in REST API
-* Harden tracking endpoints: strict payload schema, 8 KB size cap, Content-Type enforcement
-* Exclude unused premium stub modules from distribution ZIP
-* Bump Tested up to WordPress 6.9
+* WordPress.org submission compliance pass — see CHANGELOG.md for the full list.
+* Removed all bundled license validation per Guideline 6.
+* Hardened tracking endpoints: REST schema validation, 8 KB body cap, salted SHA-256 rate limit, GPC-first opt-out.
+* Added five privacy filter hooks (`statnive_should_track`, `statnive_require_consent`, `statnive_has_visitor_consent`, `statnive_respect_dnt`, `statnive_respect_gpc`).
+* Added MaxMind GeoLite EULA compliance (user-supplied key required, no bundled mmdb).
+* Added i18n infrastructure (`load_plugin_textdomain`, `wp_set_script_translations`, regenerated POT).
+* Bumped Tested up to WordPress 6.9.
 
 = 0.2.0 - 2026-04-05 =
-* Fix real-time dashboard showing 0 active visitors due to stale cache
-* Fix tracker not sending actual page URL (synthetic URIs like /page/0)
-* Fix Overview report dropping today's data when visitors is zero
-* Fix Pages report showing stale aggregated data over fresh numbers
-* Fix duplicate entries in Recent Pageviews feed
-* Fix GeoIP database never downloaded (broken CDN URL)
-* Add regex-based UA fallback parser for device detection
-* Add statnive_client_ip filter for local dev IP override
-* Add GeoIP database auto-download on plugin activation
-* Add 38 regression tests covering all fixed bugs
+* Fixed real-time dashboard, tracker URLs, Overview report, Recent Pageviews dedup, GeoIP download URL.
+* Added regex-based UA fallback parser, `statnive_client_ip` filter, 38 regression tests.
 
 = 0.1.1 - 2026-04-04 =
-* Fix zero-data Geography, Devices, and Real-time dashboard pages
-* Fix dashboard CSS, crash, and zero-data rendering bugs
-* Fix BotDetector regex and ExclusionMatcher regex patterns
-* Resolve 4 critical + 4 medium production integrity issues
-* Green Playwright E2E suite and integration tests
-* Add plugin distribution packaging (.distignore)
+* Fixed zero-data Geography/Devices/Real-time pages and dashboard CSS bugs.
+* Added `.distignore` for distribution packaging.
 
 = 0.1.0 - 2026-04-02 =
-* Initial release
-* Real-time analytics dashboard with 8 screens
-* Privacy-first tracking (no cookies, rotating salts)
-* GeoIP resolution, device detection, referrer classification
-* Custom events, engagement tracking, bot detection
-* Email reports, data import (WP Statistics, CSV)
-* Designed to support GDPR compliance (export, erase, policy generator)
+* Initial release: real-time dashboard, cookieless tracking with rotating salts, GeoIP, device detection, custom events, email reports, CSV/WP Statistics import, WordPress Privacy API support.
 
 == Upgrade Notice ==
 

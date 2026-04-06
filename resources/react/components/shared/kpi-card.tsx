@@ -32,7 +32,9 @@ export function KpiCard({ label, value, change, isLoading = false }: KpiCardProp
 								? 'bg-green-100 text-green-800'
 								: 'bg-red-100 text-red-800',
 						)}
+						aria-label={`Change ${change >= 0 ? 'up' : 'down'} ${formatPercentChange(Math.abs(change))} versus previous period`}
 					>
+						<span aria-hidden="true">{change >= 0 ? '↑ ' : '↓ '}</span>
 						{formatPercentChange(change)}
 					</span>
 				)}

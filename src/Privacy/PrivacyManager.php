@@ -118,9 +118,15 @@ final class PrivacyManager {
 	/**
 	 * Evaluate whether a request should be tracked.
 	 *
-	 * Checks: tracking enabled → DNT → GPC → consent mode.
+	 * Checks (in priority order): tracking enabled → GPC (primary) → DNT (legacy
+	 * fallback) → consent mode → final filter.
 	 *
-	 * @param array<string, string> $server_vars Subset of $_SERVER (HTTP_DNT, HTTP_SEC_GPC).
+	 * GPC (`Sec-GPC: 1`) is the W3C-track Global Privacy Control signal and is
+	 * the primary opt-out we honour. DNT (`DNT: 1`) is checked second for
+	 * legacy compatibility — it has no W3C standard status and is treated as
+	 * a best-effort fallback.
+	 *
+	 * @param array<string, string> $server_vars Subset of $_SERVER (HTTP_SEC_GPC, HTTP_DNT).
 	 * @param bool                  $consent_granted Whether consent was granted via banner.
 	 * @return PrivacyDecision
 	 */
@@ -133,33 +139,37 @@ final class PrivacyManager {
 		}
 
 		/**
-		 * Filter whether DNT (Do Not Track) should be honored for this request.
-		 *
-		 * Defaults to the `statnive_respect_dnt` option (true).
-		 *
-		 * @param bool                  $respect     Whether DNT should be honored.
-		 * @param array<string, string> $server_vars Subset of $_SERVER (HTTP_DNT, HTTP_SEC_GPC).
-		 */
-		$respect_dnt = (bool) apply_filters( 'statnive_respect_dnt', self::should_respect_dnt(), $server_vars );
-
-		// DNT header check.
-		if ( $respect_dnt && ! empty( $server_vars['HTTP_DNT'] ) && '1' === $server_vars['HTTP_DNT'] ) {
-			return PrivacyDecision::block( 'dnt', $mode );
-		}
-
-		/**
 		 * Filter whether GPC (Global Privacy Control) should be honored for this request.
 		 *
+		 * GPC is the primary opt-out signal — checked before DNT.
 		 * Defaults to the `statnive_respect_gpc` option (true).
 		 *
 		 * @param bool                  $respect     Whether GPC should be honored.
-		 * @param array<string, string> $server_vars Subset of $_SERVER (HTTP_DNT, HTTP_SEC_GPC).
+		 * @param array<string, string> $server_vars Subset of $_SERVER (HTTP_SEC_GPC, HTTP_DNT).
 		 */
 		$respect_gpc = (bool) apply_filters( 'statnive_respect_gpc', self::should_respect_gpc(), $server_vars );
 
-		// GPC header check.
+		// GPC header check (primary signal).
 		if ( $respect_gpc && ! empty( $server_vars['HTTP_SEC_GPC'] ) && '1' === $server_vars['HTTP_SEC_GPC'] ) {
 			return PrivacyDecision::block( 'gpc', $mode );
+		}
+
+		/**
+		 * Filter whether DNT (Do Not Track) should be honored for this request.
+		 *
+		 * DNT is treated as a legacy fallback after GPC. It has no W3C
+		 * standard status; honour it for backward compatibility but do not
+		 * rely on it for compliance — prefer GPC.
+		 * Defaults to the `statnive_respect_dnt` option (true).
+		 *
+		 * @param bool                  $respect     Whether DNT should be honored.
+		 * @param array<string, string> $server_vars Subset of $_SERVER (HTTP_SEC_GPC, HTTP_DNT).
+		 */
+		$respect_dnt = (bool) apply_filters( 'statnive_respect_dnt', self::should_respect_dnt(), $server_vars );
+
+		// DNT header check (legacy fallback).
+		if ( $respect_dnt && ! empty( $server_vars['HTTP_DNT'] ) && '1' === $server_vars['HTTP_DNT'] ) {
+			return PrivacyDecision::block( 'dnt', $mode );
 		}
 
 		// Consent mode logic.
