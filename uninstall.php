@@ -66,9 +66,31 @@ $wpdb->query(
 // phpcs:enable WordPress.DB.DirectDatabaseQuery.SchemaChange
 
 // Delete scheduled cron events.
+// statnive_weekly_license_check is retained for backward compatibility:
+// installs upgrading from <= 0.3.0 may still have this hook scheduled even
+// though the licensing code has been removed from the WordPress.org build.
 wp_clear_scheduled_hook( 'statnive_daily_salt_rotation' );
 wp_clear_scheduled_hook( 'statnive_daily_aggregation' );
 wp_clear_scheduled_hook( 'statnive_daily_data_purge' );
 wp_clear_scheduled_hook( 'statnive_email_report' );
 wp_clear_scheduled_hook( 'statnive_weekly_license_check' );
 wp_clear_scheduled_hook( 'statnive_weekly_geoip_update' );
+
+// Remove downloaded GeoIP database files and the upload directory.
+$statnive_upload_dir = wp_upload_dir();
+$statnive_geoip_dir  = trailingslashit( $statnive_upload_dir['basedir'] ) . 'statnive';
+if ( is_dir( $statnive_geoip_dir ) ) {
+	$statnive_files = glob( $statnive_geoip_dir . '/*' );
+	if ( is_array( $statnive_files ) ) {
+		foreach ( $statnive_files as $statnive_file ) {
+			if ( is_file( $statnive_file ) ) {
+				wp_delete_file( $statnive_file );
+			}
+		}
+	}
+	// uninstall.php runs in a minimal WP context — WP_Filesystem is not always
+	// available, and we are removing our own uploads subdirectory. Direct rmdir()
+	// with error suppression is the established WordPress core pattern here.
+	// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged,WordPress.WP.AlternativeFunctions.file_system_operations_rmdir
+	@rmdir( $statnive_geoip_dir );
+}

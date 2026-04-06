@@ -35,16 +35,6 @@ Statnive gives WordPress site owners fast, smart, and easy-to-understand analyti
 * **Privacy compliance** — DNT/GPC respect, configurable data retention, WordPress Privacy API (export/erase)
 * **Email reports** — Weekly or monthly email summaries delivered to your inbox
 
-= Pro Features (planned) =
-
-* WooCommerce revenue tracking with Revenue per Visitor (RPV) — coming soon
-* Unlimited custom events (free tier: 5 events) — coming soon
-* All form integrations (Contact Form 7, Gravity Forms, Elementor) — coming soon
-* Advanced reporting with PDF export — coming soon
-* Campaign manager with UTM URL builder — coming soon
-* External REST API with API key authentication — coming soon
-* Priority support with SLA — coming soon
-
 [Learn more at statnive.com](https://statnive.com)
 
 The full source code is available at [github.com/statnive/statnive](https://github.com/statnive/statnive).
@@ -65,7 +55,7 @@ No. Statnive is 100% cookie-free. It uses a daily rotating salt hash for visitor
 
 = Is Statnive GDPR compliant? =
 
-Yes. Statnive is designed for GDPR compliance from the ground up: no cookies, no PII storage, daily rotating hashes, configurable data retention (30 days to 2 years), and full support for WordPress Privacy API (data export and erasure requests).
+Statnive is **designed to support** GDPR, CCPA, and APPI compliance from the ground up: no cookies, no PII storage, daily rotating hashes, configurable data retention (30 days to 10 years), and full support for the WordPress Privacy API (data export and erasure requests). Compliance ultimately depends on how you configure and operate the plugin on your site.
 
 = Does it work with WooCommerce? =
 
@@ -115,15 +105,7 @@ Requires a free MaxMind account and license key (user must accept the GeoLite2 E
 * MaxMind Terms of Use: https://www.maxmind.com/en/terms-of-use
 * MaxMind GeoLite2 EULA: https://www.maxmind.com/en/geolite2/eula
 
-= StatNive License Validation (Optional) =
-If you enter a premium license key, the plugin connects to the StatNive API.
-
-* Service URL: https://api.statnive.com/v1/licenses
-* When: Only when you manually activate a license key, and weekly thereafter to verify status
-* Data sent: License key, site URL, plugin version
-* Purpose: Validate premium license subscriptions
-* StatNive Privacy Policy: https://statnive.com/privacy
-* StatNive Terms of Service: https://statnive.com/terms
+This product includes GeoLite Data created by MaxMind, available from https://www.maxmind.com.
 
 No visitor data is ever sent to any external service. All analytics data remains in your WordPress database.
 
@@ -182,8 +164,7 @@ No visitor data is ever sent to any external service. All analytics data remains
 * GeoIP resolution, device detection, referrer classification
 * Custom events, engagement tracking, bot detection
 * Email reports, data import (WP Statistics, CSV)
-* Full GDPR compliance (export, erase, policy generator)
-* 4-tier licensing system (Free, Starter, Professional, Agency)
+* Designed to support GDPR compliance (export, erase, policy generator)
 
 == Upgrade Notice ==
 
