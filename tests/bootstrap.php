@@ -46,3 +46,14 @@ if ( ! function_exists( 'absint' ) ) {
 		return abs( (int) $value );
 	}
 }
+
+if ( ! function_exists( 'apply_filters' ) ) {
+	function apply_filters( string $hook_name, $value ) {
+		return $value;
+	}
+}
+
+if ( ! function_exists( 'do_action' ) ) {
+	function do_action( string $hook_name ): void {
+	}
+}

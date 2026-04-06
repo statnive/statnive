@@ -93,6 +93,7 @@ final class CsvImporter extends ImportManager {
 		$processed     = 0;
 
 		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		// phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition.FoundInWhileCondition -- Intentional: assign $row and test for EOF in one step (standard fgetcsv loop).
 		while ( $processed < self::BATCH_SIZE && false !== ( $row = fgetcsv( $handle ) ) ) {
 			$date     = $row[ $col_map['date'] ?? 0 ] ?? '';
 			$visitors = absint( $row[ $col_map['visitors'] ?? 2 ] ?? 0 );
