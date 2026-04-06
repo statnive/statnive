@@ -61,6 +61,17 @@ $wpdb->query(
 	)
 );
 
+// Multisite: also drop network-wide options if we are on a network install.
+if ( is_multisite() ) {
+	$statnive_sitemeta = $wpdb->query(
+		$wpdb->prepare(
+			"DELETE FROM {$wpdb->sitemeta} WHERE meta_key LIKE %s",
+			$wpdb->esc_like( 'statnive_' ) . '%'
+		)
+	);
+	unset( $statnive_sitemeta );
+}
+
 // phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery
 // phpcs:enable WordPress.DB.DirectDatabaseQuery.NoCaching
 // phpcs:enable WordPress.DB.DirectDatabaseQuery.SchemaChange

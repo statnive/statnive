@@ -57,6 +57,9 @@ final class EventController extends WP_REST_Controller {
 
 	/**
 	 * Register the /event route.
+	 *
+	 * Schema-driven validation, same model as HitController. Public endpoint
+	 * protected by HMAC signature + transient rate limiting + DNT/GPC.
 	 */
 	public function register_routes(): void {
 		register_rest_route(
@@ -67,9 +70,44 @@ final class EventController extends WP_REST_Controller {
 					'methods'             => WP_REST_Server::CREATABLE,
 					'callback'            => [ $this, 'create_item' ],
 					'permission_callback' => '__return_true',
+					'args'                => self::get_route_args(),
 				],
 			]
 		);
+	}
+
+	/**
+	 * Argument schema for the /event route.
+	 *
+	 * @return array<string, array<string, mixed>>
+	 */
+	private static function get_route_args(): array {
+		return [
+			'event_name'      => [
+				'type'              => 'string',
+				'required'          => true,
+				'sanitize_callback' => 'sanitize_text_field',
+			],
+			'resource_type'   => [
+				'type'              => 'string',
+				'sanitize_callback' => 'sanitize_text_field',
+			],
+			'resource_id'     => [
+				'type'              => 'integer',
+				'sanitize_callback' => 'absint',
+			],
+			'signature'       => [
+				'type'              => 'string',
+				'required'          => true,
+				'sanitize_callback' => 'sanitize_text_field',
+			],
+			'properties'      => [
+				'type' => 'object',
+			],
+			'consent_granted' => [
+				'type' => 'boolean',
+			],
+		];
 	}
 
 	/**

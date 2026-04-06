@@ -61,9 +61,18 @@ final class ReactHandler {
 		wp_enqueue_script(
 			'statnive-dashboard',
 			$js_url,
-			[],
+			[ 'wp-i18n' ],
 			STATNIVE_VERSION,
 			true
+		);
+
+		// Wire up @wordpress/i18n translation loading for the React dashboard.
+		// JSON files generated via `wp i18n make-json languages/ --no-purge`
+		// after .po files are translated.
+		wp_set_script_translations(
+			'statnive-dashboard',
+			'statnive',
+			plugin_dir_path( STATNIVE_FILE ) . 'languages'
 		);
 
 		// Enqueue CSS if present.
