@@ -109,6 +109,15 @@ final class Plugin {
 	 * Runs version checks and sets default options.
 	 */
 	public static function activate(): void {
+		// Defensive capability check (WordPress core also enforces this).
+		if ( ! current_user_can( 'activate_plugins' ) ) {
+			wp_die(
+				esc_html__( 'You do not have permission to activate plugins.', 'statnive' ),
+				'Plugin Activation Error',
+				[ 'back_link' => true ]
+			);
+		}
+
 		if ( version_compare( PHP_VERSION, STATNIVE_MIN_PHP, '<' ) ) {
 			deactivate_plugins( plugin_basename( STATNIVE_FILE ) );
 			wp_die(

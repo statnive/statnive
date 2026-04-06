@@ -138,8 +138,9 @@ final class HitController extends WP_REST_Controller {
 		}
 
 		// Basic rate limiting via transient (60 req/min per IP).
+		// Key is salted SHA-256 of the raw IP — raw IP is never persisted.
 		$ip     = IpExtractor::extract();
-		$ip_key = 'statnive_rate_' . md5( $ip );
+		$ip_key = 'statnive_rate_' . hash( 'sha256', $ip . wp_salt( 'auth' ) );
 		$count  = (int) get_transient( $ip_key );
 		if ( $count >= 60 ) {
 			return self::error_response( [ 'rate_limited', 'Too many requests.', 429 ] );
