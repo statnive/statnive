@@ -34,7 +34,8 @@
 		"test:integration": "phpunit --testsuite integration",
 		"phpcs": "phpcs",
 		"phpcbf": "phpcbf",
-		"phpstan": "phpstan analyse"
+		"phpstan": "phpstan analyse",
+		"gate": "@test:unit"
 	},
 	"extra": {
 		"mozart": {

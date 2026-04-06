@@ -153,6 +153,24 @@ Contributions are welcome! Please:
 4. Ensure all tests pass (`composer test && npm run test`)
 5. Submit a pull request
 
+### Pre-commit hook
+
+Running `npm install` automatically sets `core.hooksPath=.githooks`, activating the pre-commit gate at `.githooks/pre-commit`. It runs:
+
+- `phpcs` on staged PHP files (scoped, fast)
+- `phpunit --testsuite unit` when PHP files are staged
+- `vitest run` when TS/JS files are staged
+
+`tsc --noEmit` is not run in the hook because of a pre-existing TS baseline that needs to be fixed separately. CI still runs the full gate (integration, Playwright, k6, typecheck).
+
+Expected runtime: 5–15 seconds. Emergency bypass: `git commit --no-verify`.
+
+Run the gate manually at any time:
+
+```bash
+composer gate && npm run gate
+```
+
 ## License
 
 Statnive is licensed under the [GPL-2.0-or-later](https://www.gnu.org/licenses/gpl-2.0.html).
