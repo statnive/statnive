@@ -129,22 +129,28 @@ No visitor data is ever sent to any external service. All analytics data remains
 
 == Changelog ==
 
-= 0.3.0 - 2026-04-05 =
+= 0.3.0 - 2026-04-06 =
 * Fix engagement-to-view correlation using pageview ID (pvid) token
 * Fix engagement updates matching by URI path instead of resource_id
 * Fix Avg Duration data pipeline — aggregate from views.duration
 * Fix dashboard importmap output for WP compatibility
 * Fix readme.txt WP.org compliance — remove false claims, fix URLs
-* Add ABSPATH guards to all src/ PHP files
 * Fix unescaped output in admin UI components
-* Make admin notices dismissible
+* Fix email report numbers to use number_format_i18n() for locale-aware output
+* Remove P3TERX GeoIP mirror — MaxMind license key now required (EULA compliance)
 * Gate GeoIP download to opt-in (no auto-download)
 * Gate license API to explicit user action only
+* Make admin notices dismissible
+* Add ABSPATH guards to all src/ PHP files
 * Add date range persistence across all dashboard tabs via URL params
 * Add two-stage tracker loading for optimal Web Vitals
 * Add GPL v2 LICENSE file and THIRD-PARTY-LICENSES.md
-* Add External Services section in readme.txt
+* Add External Services section in readme.txt (with MaxMind EULA link)
 * Add WP.org pre-submission CI workflow with 6 enforcement gates
+* Add i18n infrastructure: load_plugin_textdomain() and languages/statnive.pot
+* Add GeoIPNotice admin notices for missing MaxMind key and DISABLE_WP_CRON
+* Add translatable strings throughout email reports
+* Add MaxMind license key + GeoIP enable/disable settings in REST API
 
 = 0.2.0 - 2026-04-05 =
 * Fix real-time dashboard showing 0 active visitors due to stale cache
