@@ -21,6 +21,33 @@ use Statnive\Security\HmacValidator;
 final class AjaxFallback {
 
 	/**
+	 * Maximum accepted request body size in bytes.
+	 *
+	 * @var int
+	 */
+	private const MAX_BODY_BYTES = 8192;
+
+	/**
+	 * Allowed top-level payload keys. Mirrors HitController::ALLOWED_KEYS.
+	 *
+	 * @var array<int, string>
+	 */
+	private const ALLOWED_KEYS = [
+		'resource_type',
+		'resource_id',
+		'referrer',
+		'screen_width',
+		'screen_height',
+		'language',
+		'timezone',
+		'signature',
+		'page_url',
+		'page_query',
+		'pvid',
+		'consent_granted',
+	];
+
+	/**
 	 * Register AJAX action hooks.
 	 */
 	public static function init(): void {
@@ -38,16 +65,26 @@ final class AjaxFallback {
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Tracker uses HMAC, not nonces.
 		$body = file_get_contents( 'php://input' );
 
+		// All wp_send_json_* helpers call wp_die() internally, which terminates execution.
 		if ( false === $body ) {
 			wp_send_json_error( [ 'message' => 'Unable to read request body.' ], 400 );
-			return;
+		}
+
+		// Cap request size to prevent resource-exhaustion abuse.
+		if ( strlen( $body ) > self::MAX_BODY_BYTES ) {
+			wp_send_json_error( [ 'message' => 'Request body exceeds maximum size.' ], 413 );
 		}
 
 		$data = json_decode( $body, true );
 
 		if ( ! is_array( $data ) ) {
 			wp_send_json_error( [ 'message' => 'Invalid request body.' ], 400 );
-			return;
+		}
+
+		// Reject payloads with unknown top-level keys (strict schema).
+		$unknown = array_diff( array_keys( $data ), self::ALLOWED_KEYS );
+		if ( ! empty( $unknown ) ) {
+			wp_send_json_error( [ 'message' => 'Unknown fields in request.' ], 400 );
 		}
 
 		$resource_type = sanitize_text_field( $data['resource_type'] ?? '' );
@@ -56,7 +93,6 @@ final class AjaxFallback {
 
 		if ( empty( $resource_type ) || empty( $signature ) ) {
 			wp_send_json_error( [ 'message' => 'Required fields missing.' ], 400 );
-			return;
 		}
 
 		// Validate HMAC signature.
@@ -76,7 +112,6 @@ final class AjaxFallback {
 
 		if ( ! $privacy_check->allowed ) {
 			wp_send_json_success( null, 204 );
-			return;
 		}
 
 		// Create VisitorProfile, enrich with services, and persist.

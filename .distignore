@@ -18,6 +18,11 @@ playwright.config.ts
 # React source excluded — public repo link in readme.txt.
 /resources/react
 
+# Dead premium add-on stubs — not initialized, not functional.
+# Excluded to avoid Guideline 5 "trialware" confusion during WP.org review.
+# Code remains in the git repo for future Pro development.
+/src/Addon
+
 # PHP dev tooling
 composer.json
 composer.lock

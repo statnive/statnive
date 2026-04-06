@@ -27,6 +27,35 @@ final class EngagementController extends WP_REST_Controller {
 	protected $rest_base = 'engagement';
 
 	/**
+	 * Maximum accepted request body size in bytes.
+	 *
+	 * @var int
+	 */
+	private const MAX_BODY_BYTES = 8192;
+
+	/**
+	 * Allowed top-level payload keys.
+	 *
+	 * @var array<int, string>
+	 */
+	private const ALLOWED_KEYS = [
+		'signature',
+		'resource_type',
+		'resource_id',
+		'engagement_time',
+		'scroll_depth',
+		'pvid',
+		'page_url',
+	];
+
+	/**
+	 * Accepted Content-Type values.
+	 *
+	 * @var array<int, string>
+	 */
+	private const ALLOWED_CONTENT_TYPES = [ 'text/plain', 'application/json' ];
+
+	/**
 	 * Register routes.
 	 */
 	public function register_routes(): void {
@@ -50,11 +79,48 @@ final class EngagementController extends WP_REST_Controller {
 	 * @return WP_REST_Response
 	 */
 	public function create_item( $request ): WP_REST_Response {
+		// Enforce Content-Type.
+		$content_type = $request->get_content_type();
+		$ct_value     = is_array( $content_type ) ? ( $content_type['value'] ?? '' ) : '';
+		if ( ! in_array( $ct_value, self::ALLOWED_CONTENT_TYPES, true ) ) {
+			return new WP_REST_Response(
+				[
+					'code'    => 'unsupported_media_type',
+					'message' => 'Content-Type must be text/plain or application/json.',
+				],
+				415
+			);
+		}
+
 		$body = $request->get_body();
+
+		// Cap request size.
+		if ( strlen( $body ) > self::MAX_BODY_BYTES ) {
+			return new WP_REST_Response(
+				[
+					'code'    => 'payload_too_large',
+					'message' => 'Request body exceeds maximum size.',
+				],
+				413
+			);
+		}
+
 		$data = json_decode( $body, true );
 
 		if ( ! is_array( $data ) ) {
 			return new WP_REST_Response( null, 400 );
+		}
+
+		// Reject payloads with unknown top-level keys (strict schema).
+		$unknown = array_diff( array_keys( $data ), self::ALLOWED_KEYS );
+		if ( ! empty( $unknown ) ) {
+			return new WP_REST_Response(
+				[
+					'code'    => 'invalid_payload',
+					'message' => 'Unknown fields in request.',
+				],
+				400
+			);
 		}
 
 		$signature = sanitize_text_field( $data['signature'] ?? '' );

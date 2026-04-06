@@ -2,7 +2,7 @@
 Contributors: statnive
 Tags: analytics, statistics, privacy, tracking, dashboard
 Requires at least: 6.4
-Tested up to: 6.8
+Tested up to: 6.9
 Requires PHP: 8.1
 Stable tag: 0.3.0
 License: GPLv2 or later

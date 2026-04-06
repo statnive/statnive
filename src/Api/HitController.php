@@ -40,6 +40,43 @@ final class HitController extends WP_REST_Controller {
 	protected $rest_base = 'hit';
 
 	/**
+	 * Maximum accepted request body size in bytes.
+	 *
+	 * Tracking beacons are small; 8 KB is well above normal (~1 KB) and
+	 * prevents resource-exhaustion abuse on a public endpoint.
+	 *
+	 * @var int
+	 */
+	private const MAX_BODY_BYTES = 8192;
+
+	/**
+	 * Allowed top-level payload keys. Unknown keys are rejected.
+	 *
+	 * @var array<int, string>
+	 */
+	private const ALLOWED_KEYS = [
+		'resource_type',
+		'resource_id',
+		'referrer',
+		'screen_width',
+		'screen_height',
+		'language',
+		'timezone',
+		'signature',
+		'page_url',
+		'page_query',
+		'pvid',
+		'consent_granted',
+	];
+
+	/**
+	 * Accepted Content-Type values. Tracker uses text/plain to avoid CORS preflight (P-12).
+	 *
+	 * @var array<int, string>
+	 */
+	private const ALLOWED_CONTENT_TYPES = [ 'text/plain', 'application/json' ];
+
+	/**
 	 * Register the /hit route.
 	 */
 	public function register_routes(): void {
@@ -63,8 +100,33 @@ final class HitController extends WP_REST_Controller {
 	 * @return WP_REST_Response Response object.
 	 */
 	public function create_item( $request ): WP_REST_Response {
+		// Enforce Content-Type: tracker uses text/plain (avoids CORS preflight).
+		$content_type = $request->get_content_type();
+		$ct_value     = is_array( $content_type ) ? ( $content_type['value'] ?? '' ) : '';
+		if ( ! in_array( $ct_value, self::ALLOWED_CONTENT_TYPES, true ) ) {
+			return new WP_REST_Response(
+				[
+					'code'    => 'unsupported_media_type',
+					'message' => 'Content-Type must be text/plain or application/json.',
+				],
+				415
+			);
+		}
+
 		// Parse the body — may come as text/plain JSON.
 		$body = $request->get_body();
+
+		// Cap request size to prevent resource-exhaustion abuse.
+		if ( strlen( $body ) > self::MAX_BODY_BYTES ) {
+			return new WP_REST_Response(
+				[
+					'code'    => 'payload_too_large',
+					'message' => 'Request body exceeds maximum size.',
+				],
+				413
+			);
+		}
+
 		$data = json_decode( $body, true );
 
 		if ( ! is_array( $data ) ) {
@@ -72,6 +134,18 @@ final class HitController extends WP_REST_Controller {
 				[
 					'code'    => 'invalid_payload',
 					'message' => 'Invalid request body.',
+				],
+				400
+			);
+		}
+
+		// Reject payloads with unknown top-level keys (strict schema).
+		$unknown = array_diff( array_keys( $data ), self::ALLOWED_KEYS );
+		if ( ! empty( $unknown ) ) {
+			return new WP_REST_Response(
+				[
+					'code'    => 'invalid_payload',
+					'message' => 'Unknown fields in request.',
 				],
 				400
 			);
