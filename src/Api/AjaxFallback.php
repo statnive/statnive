@@ -9,6 +9,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 use Statnive\Entity\VisitorProfile;
+use Statnive\Http\PayloadValidator;
+use Statnive\Http\PayloadValidatorException;
 use Statnive\Privacy\PrivacyManager;
 use Statnive\Security\HmacValidator;
 
@@ -19,13 +21,6 @@ use Statnive\Security\HmacValidator;
  * Processes the same payload as HitController via admin-ajax.php.
  */
 final class AjaxFallback {
-
-	/**
-	 * Maximum accepted request body size in bytes.
-	 *
-	 * @var int
-	 */
-	private const MAX_BODY_BYTES = 8192;
 
 	/**
 	 * Allowed top-level payload keys. Mirrors HitController::ALLOWED_KEYS.
@@ -60,31 +55,49 @@ final class AjaxFallback {
 	 *
 	 * Reads the raw POST body (text/plain JSON), validates signature,
 	 * and records the hit via the same pipeline as the REST endpoint.
+	 *
+	 * Every short-circuit path ends with an explicit `return;` — do not
+	 * rely on `wp_send_json_*` exiting. Hosts and security plugins may
+	 * filter `wp_die_handler`, and unit tests stub the helpers to throw
+	 * instead of exit; an explicit return guarantees execution stops.
 	 */
 	public static function handle(): void {
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Tracker uses HMAC, not nonces.
 		$body = file_get_contents( 'php://input' );
 
-		// All wp_send_json_* helpers call wp_die() internally, which terminates execution.
 		if ( false === $body ) {
-			wp_send_json_error( [ 'message' => 'Unable to read request body.' ], 400 );
+			self::reject( 'invalid_body', 'Unable to read request body.', 400 );
+			return;
 		}
 
-		// Cap request size to prevent resource-exhaustion abuse.
-		if ( strlen( $body ) > self::MAX_BODY_BYTES ) {
-			wp_send_json_error( [ 'message' => 'Request body exceeds maximum size.' ], 413 );
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Same HMAC rationale.
+		$raw_ct = isset( $_SERVER['CONTENT_TYPE'] )
+			? sanitize_text_field( wp_unslash( $_SERVER['CONTENT_TYPE'] ) )
+			: '';
+
+		$ct_error = PayloadValidator::validate_content_type_string( $raw_ct );
+		if ( null !== $ct_error ) {
+			self::reject( $ct_error[0], $ct_error[1], $ct_error[2] );
+			return;
 		}
 
-		$data = json_decode( $body, true );
-
-		if ( ! is_array( $data ) ) {
-			wp_send_json_error( [ 'message' => 'Invalid request body.' ], 400 );
+		$size_error = PayloadValidator::validate_body_size( $body );
+		if ( null !== $size_error ) {
+			self::reject( $size_error[0], $size_error[1], $size_error[2] );
+			return;
 		}
 
-		// Reject payloads with unknown top-level keys (strict schema).
-		$unknown = array_diff( array_keys( $data ), self::ALLOWED_KEYS );
-		if ( ! empty( $unknown ) ) {
-			wp_send_json_error( [ 'message' => 'Unknown fields in request.' ], 400 );
+		try {
+			$data = PayloadValidator::decode_json_object( $body );
+		} catch ( PayloadValidatorException $e ) {
+			self::reject( $e->get_error_code(), $e->getMessage(), $e->get_status_code() );
+			return;
+		}
+
+		$keys_error = PayloadValidator::validate_allowed_keys( $data, self::ALLOWED_KEYS );
+		if ( null !== $keys_error ) {
+			self::reject( $keys_error[0], $keys_error[1], $keys_error[2] );
+			return;
 		}
 
 		$resource_type = sanitize_text_field( $data['resource_type'] ?? '' );
@@ -92,12 +105,14 @@ final class AjaxFallback {
 		$signature     = sanitize_text_field( $data['signature'] ?? '' );
 
 		if ( empty( $resource_type ) || empty( $signature ) ) {
-			wp_send_json_error( [ 'message' => 'Required fields missing.' ], 400 );
+			self::reject( 'missing_fields', 'Required fields missing.', 400 );
+			return;
 		}
 
 		// Validate HMAC signature.
 		if ( ! HmacValidator::verify( $signature, $resource_type, $resource_id ) ) {
-			wp_send_json_error( [ 'message' => 'Invalid signature.' ], 403 );
+			self::reject( 'invalid_signature', 'Request signature is invalid.', 403 );
+			return;
 		}
 
 		// Privacy enforcement: check consent mode, DNT, GPC headers.
@@ -112,6 +127,11 @@ final class AjaxFallback {
 
 		if ( ! $privacy_check->allowed ) {
 			wp_send_json_success( null, 204 );
+			// Defensive: wp_send_json_* normally calls wp_die(), but hosts
+			// and security plugins can filter wp_die_handler. The explicit
+			// return guarantees we never fall through to the persistence
+			// path on a privacy-blocked request. Do not remove.
+			return; // @phpstan-ignore-line deadCode.unreachable
 		}
 
 		// Create VisitorProfile, enrich with services, and persist.
@@ -119,5 +139,22 @@ final class AjaxFallback {
 		$profile->enrich();
 
 		wp_send_json_success( null, 204 );
+	}
+
+	/**
+	 * Send a structured JSON error and stop processing.
+	 *
+	 * @param string $code        Machine-readable error code.
+	 * @param string $message     Human-readable error message.
+	 * @param int    $status_code HTTP status code.
+	 */
+	private static function reject( string $code, string $message, int $status_code ): void {
+		wp_send_json_error(
+			[
+				'code'    => $code,
+				'message' => $message,
+			],
+			$status_code
+		);
 	}
 }

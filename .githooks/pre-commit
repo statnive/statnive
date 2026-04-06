@@ -1,0 +1,65 @@
+#!/bin/sh
+# Statnive pre-commit gate.
+#
+# Runs fast checks on staged files. Full integration + Playwright + k6 run
+# in CI, not here. Bypass only in emergencies with --no-verify.
+#
+# CLAUDE.md rule: Claude Code sessions must run /simplify BEFORE reaching
+# this hook. This hook enforces the test/lint half only.
+
+set -e
+
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+RESET='\033[0m'
+
+# Resolve repo root so the hook works whether invoked from a subdirectory.
+REPO_ROOT=$(git rev-parse --show-toplevel)
+cd "$REPO_ROOT"
+
+# --- Collect staged files by type ---
+STAGED_PHP=$(git diff --cached --name-only --diff-filter=ACMR | grep -E '\.php$' || true)
+STAGED_TS=$(git diff --cached --name-only --diff-filter=ACMR | grep -E '\.(ts|tsx|js|jsx)$' || true)
+
+if [ -z "$STAGED_PHP" ] && [ -z "$STAGED_TS" ]; then
+  printf "${GREEN}[pre-commit] No PHP/TS changes — skipping gate.${RESET}\n"
+  exit 0
+fi
+
+printf "${YELLOW}[pre-commit] Running fast gate…${RESET}\n"
+
+# --- PHP gate ---
+if [ -n "$STAGED_PHP" ]; then
+  PHP_COUNT=$(printf '%s\n' "$STAGED_PHP" | wc -l | tr -d ' ')
+  printf "${YELLOW}[pre-commit] phpcs on %s PHP file(s)…${RESET}\n" "$PHP_COUNT"
+  # Scoped phpcs: only staged files, uses repo .phpcs.xml.dist.
+  # shellcheck disable=SC2086
+  ./vendor/bin/phpcs --standard=.phpcs.xml.dist $STAGED_PHP || {
+    printf "${RED}[pre-commit] phpcs failed. Fix errors or run: composer phpcbf${RESET}\n"
+    exit 1
+  }
+
+  printf "${YELLOW}[pre-commit] phpunit unit tests…${RESET}\n"
+  ./vendor/bin/phpunit --testsuite unit --no-progress || {
+    printf "${RED}[pre-commit] PHPUnit unit tests failed.${RESET}\n"
+    exit 1
+  }
+fi
+
+# --- TypeScript / JS gate ---
+#
+# Note: `tsc --noEmit` is NOT run here because the repo has a pre-existing
+# TS baseline that fails on main (dashboard-layout.tsx, use-date-range.ts).
+# Fix that separately and re-enable the line below. CI still runs typecheck.
+if [ -n "$STAGED_TS" ]; then
+  TS_COUNT=$(printf '%s\n' "$STAGED_TS" | wc -l | tr -d ' ')
+  printf "${YELLOW}[pre-commit] vitest run (triggered by %s TS/JS file(s))…${RESET}\n" "$TS_COUNT"
+  npm run --silent test || {
+    printf "${RED}[pre-commit] Vitest tests failed.${RESET}\n"
+    exit 1
+  }
+fi
+
+printf "${GREEN}[pre-commit] Gate green. Committing.${RESET}\n"
+exit 0

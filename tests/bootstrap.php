@@ -57,3 +57,115 @@ if ( ! function_exists( 'do_action' ) ) {
 	function do_action( string $hook_name ): void {
 	}
 }
+
+if ( ! function_exists( 'get_option' ) ) {
+	/**
+	 * Stub that records call counts into $GLOBALS['statnive_test_get_option_calls']
+	 * so tests can assert memoisation behaviour without loading WordPress.
+	 *
+	 * @param mixed $default
+	 * @return mixed
+	 */
+	function get_option( string $option, $default = false ) {
+		if ( isset( $GLOBALS['statnive_test_get_option_calls'] ) && is_array( $GLOBALS['statnive_test_get_option_calls'] ) ) {
+			$GLOBALS['statnive_test_get_option_calls'][] = $option;
+		}
+
+		if ( isset( $GLOBALS['statnive_test_options'][ $option ] ) ) {
+			return $GLOBALS['statnive_test_options'][ $option ];
+		}
+
+		return $default;
+	}
+}
+
+/**
+ * Minimal WP_REST_Request stub for unit tests that touch REST helpers
+ * without loading the full WordPress REST stack.
+ *
+ * Only implements get_content_type() which is all PayloadValidator needs.
+ * Integration tests load real WordPress and this stub is never used there.
+ */
+if ( ! class_exists( 'WP_REST_Request' ) ) {
+	// phpcs:disable Squiz.Commenting.ClassComment.Missing, Squiz.Commenting.FunctionComment.Missing
+	class WP_REST_Request {
+		/** @var mixed */
+		private $content_type;
+
+		/**
+		 * @param mixed $content_type
+		 */
+		public function __construct( $content_type = null ) {
+			$this->content_type = $content_type;
+		}
+
+		/**
+		 * @return mixed
+		 */
+		public function get_content_type() {
+			return $this->content_type;
+		}
+	}
+	// phpcs:enable
+}
+
+/**
+ * Exception thrown by stubbed wp_die / wp_send_json_* under unit tests.
+ *
+ * In real WordPress these helpers call wp_die() which exits the script;
+ * under PHPUnit we throw this instead so tests can assert that execution
+ * short-circuited without killing the test runner.
+ */
+if ( ! class_exists( 'Statnive\\Tests\\Support\\WpDieException' ) ) {
+	// phpcs:disable Squiz.Commenting.ClassComment.Missing
+	final class WpDieException extends \RuntimeException {
+		/** @var mixed */
+		public $data;
+
+		/** @var int */
+		public $status_code;
+
+		/** @var bool */
+		public $success;
+
+		/**
+		 * @param mixed $data
+		 */
+		public function __construct( bool $success, $data, int $status_code ) {
+			parent::__construct( 'wp_die called under unit tests' );
+			$this->success     = $success;
+			$this->data        = $data;
+			$this->status_code = $status_code;
+		}
+	}
+	// phpcs:enable Squiz.Commenting.ClassComment.Missing
+	class_alias( 'WpDieException', 'Statnive\\Tests\\Support\\WpDieException' );
+}
+
+if ( ! function_exists( 'wp_send_json_success' ) ) {
+	/**
+	 * @param mixed $data
+	 */
+	function wp_send_json_success( $data = null, int $status_code = 200 ): void {
+		throw new WpDieException( true, $data, $status_code );
+	}
+}
+
+if ( ! function_exists( 'wp_send_json_error' ) ) {
+	/**
+	 * @param mixed $data
+	 */
+	function wp_send_json_error( $data = null, int $status_code = 200 ): void {
+		throw new WpDieException( false, $data, $status_code );
+	}
+}
+
+if ( ! function_exists( 'wp_die' ) ) {
+	/**
+	 * @param mixed $message
+	 */
+	function wp_die( $message = '', string $title = '', array $args = [] ): void {
+		$status = isset( $args['response'] ) ? (int) $args['response'] : 500;
+		throw new WpDieException( false, $message, $status );
+	}
+}

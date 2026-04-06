@@ -72,8 +72,9 @@ final class DatabaseFactory {
 		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery
 		// phpcs:disable WordPress.DB.DirectDatabaseQuery.NoCaching
 		foreach ( $expected as $table ) {
-			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-			$result = $wpdb->get_var( "SHOW TABLES LIKE '{$table}'" );
+			$result = $wpdb->get_var(
+				$wpdb->prepare( 'SHOW TABLES LIKE %s', $table )
+			);
 			if ( null === $result ) {
 				$missing[] = $table;
 			} else {

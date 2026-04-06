@@ -9,6 +9,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 use Statnive\Entity\VisitorProfile;
+use Statnive\Http\PayloadValidator;
+use Statnive\Http\PayloadValidatorException;
 use Statnive\Privacy\PrivacyManager;
 use Statnive\Security\HmacValidator;
 use Statnive\Service\IpExtractor;
@@ -40,16 +42,6 @@ final class HitController extends WP_REST_Controller {
 	protected $rest_base = 'hit';
 
 	/**
-	 * Maximum accepted request body size in bytes.
-	 *
-	 * Tracking beacons are small; 8 KB is well above normal (~1 KB) and
-	 * prevents resource-exhaustion abuse on a public endpoint.
-	 *
-	 * @var int
-	 */
-	private const MAX_BODY_BYTES = 8192;
-
-	/**
 	 * Allowed top-level payload keys. Unknown keys are rejected.
 	 *
 	 * @var array<int, string>
@@ -68,13 +60,6 @@ final class HitController extends WP_REST_Controller {
 		'pvid',
 		'consent_granted',
 	];
-
-	/**
-	 * Accepted Content-Type values. Tracker uses text/plain to avoid CORS preflight (P-12).
-	 *
-	 * @var array<int, string>
-	 */
-	private const ALLOWED_CONTENT_TYPES = [ 'text/plain', 'application/json' ];
 
 	/**
 	 * Register the /hit route.
@@ -100,55 +85,27 @@ final class HitController extends WP_REST_Controller {
 	 * @return WP_REST_Response Response object.
 	 */
 	public function create_item( $request ): WP_REST_Response {
-		// Enforce Content-Type: tracker uses text/plain (avoids CORS preflight).
-		$content_type = $request->get_content_type();
-		$ct_value     = is_array( $content_type ) ? ( $content_type['value'] ?? '' ) : '';
-		if ( ! in_array( $ct_value, self::ALLOWED_CONTENT_TYPES, true ) ) {
-			return new WP_REST_Response(
-				[
-					'code'    => 'unsupported_media_type',
-					'message' => 'Content-Type must be text/plain or application/json.',
-				],
-				415
-			);
+		$ct_error = PayloadValidator::validate_content_type( $request );
+		if ( null !== $ct_error ) {
+			return self::error_response( $ct_error );
 		}
 
-		// Parse the body — may come as text/plain JSON.
 		$body = $request->get_body();
 
-		// Cap request size to prevent resource-exhaustion abuse.
-		if ( strlen( $body ) > self::MAX_BODY_BYTES ) {
-			return new WP_REST_Response(
-				[
-					'code'    => 'payload_too_large',
-					'message' => 'Request body exceeds maximum size.',
-				],
-				413
-			);
+		$size_error = PayloadValidator::validate_body_size( $body );
+		if ( null !== $size_error ) {
+			return self::error_response( $size_error );
 		}
 
-		$data = json_decode( $body, true );
-
-		if ( ! is_array( $data ) ) {
-			return new WP_REST_Response(
-				[
-					'code'    => 'invalid_payload',
-					'message' => 'Invalid request body.',
-				],
-				400
-			);
+		try {
+			$data = PayloadValidator::decode_json_object( $body );
+		} catch ( PayloadValidatorException $e ) {
+			return self::error_response( $e->to_tuple() );
 		}
 
-		// Reject payloads with unknown top-level keys (strict schema).
-		$unknown = array_diff( array_keys( $data ), self::ALLOWED_KEYS );
-		if ( ! empty( $unknown ) ) {
-			return new WP_REST_Response(
-				[
-					'code'    => 'invalid_payload',
-					'message' => 'Unknown fields in request.',
-				],
-				400
-			);
+		$keys_error = PayloadValidator::validate_allowed_keys( $data, self::ALLOWED_KEYS );
+		if ( null !== $keys_error ) {
+			return self::error_response( $keys_error );
 		}
 
 		// Validate required fields.
@@ -157,24 +114,12 @@ final class HitController extends WP_REST_Controller {
 		$signature     = sanitize_text_field( $data['signature'] ?? '' );
 
 		if ( empty( $resource_type ) || empty( $signature ) ) {
-			return new WP_REST_Response(
-				[
-					'code'    => 'missing_fields',
-					'message' => 'Required fields missing.',
-				],
-				400
-			);
+			return self::error_response( [ 'missing_fields', 'Required fields missing.', 400 ] );
 		}
 
 		// Validate HMAC signature.
 		if ( ! HmacValidator::verify( $signature, $resource_type, $resource_id ) ) {
-			return new WP_REST_Response(
-				[
-					'code'    => 'invalid_signature',
-					'message' => 'Request signature is invalid.',
-				],
-				403
-			);
+			return self::error_response( [ 'invalid_signature', 'Request signature is invalid.', 403 ] );
 		}
 
 		// Privacy enforcement: check consent mode, DNT, GPC headers.
@@ -193,16 +138,11 @@ final class HitController extends WP_REST_Controller {
 		}
 
 		// Basic rate limiting via transient (60 req/min per IP).
-		$ip_key = 'statnive_rate_' . md5( IpExtractor::extract() );
+		$ip     = IpExtractor::extract();
+		$ip_key = 'statnive_rate_' . md5( $ip );
 		$count  = (int) get_transient( $ip_key );
 		if ( $count >= 60 ) {
-			return new WP_REST_Response(
-				[
-					'code'    => 'rate_limited',
-					'message' => 'Too many requests.',
-				],
-				429
-			);
+			return self::error_response( [ 'rate_limited', 'Too many requests.', 429 ] );
 		}
 		set_transient( $ip_key, $count + 1, MINUTE_IN_SECONDS );
 
@@ -214,5 +154,21 @@ final class HitController extends WP_REST_Controller {
 		delete_transient( 'statnive_realtime' );
 
 		return new WP_REST_Response( null, 204 );
+	}
+
+	/**
+	 * Translate an error tuple into a WP_REST_Response.
+	 *
+	 * @param array{0: string, 1: string, 2: int} $tuple [code, message, status].
+	 * @return WP_REST_Response
+	 */
+	private static function error_response( array $tuple ): WP_REST_Response {
+		return new WP_REST_Response(
+			[
+				'code'    => $tuple[0],
+				'message' => $tuple[1],
+			],
+			$tuple[2]
+		);
 	}
 }

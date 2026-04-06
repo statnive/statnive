@@ -9,6 +9,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 use Statnive\Database\TableRegistry;
+use Statnive\Http\PayloadValidator;
+use Statnive\Http\PayloadValidatorException;
 use Statnive\Security\HmacValidator;
 use WP_REST_Controller;
 use WP_REST_Request;
@@ -27,14 +29,11 @@ final class EngagementController extends WP_REST_Controller {
 	protected $rest_base = 'engagement';
 
 	/**
-	 * Maximum accepted request body size in bytes.
-	 *
-	 * @var int
-	 */
-	private const MAX_BODY_BYTES = 8192;
-
-	/**
 	 * Allowed top-level payload keys.
+	 *
+	 * Engagement intentionally omits 'consent_granted' — the tracker only
+	 * sends engagement updates after consent has already been granted and
+	 * a matching hit has been recorded.
 	 *
 	 * @var array<int, string>
 	 */
@@ -47,13 +46,6 @@ final class EngagementController extends WP_REST_Controller {
 		'pvid',
 		'page_url',
 	];
-
-	/**
-	 * Accepted Content-Type values.
-	 *
-	 * @var array<int, string>
-	 */
-	private const ALLOWED_CONTENT_TYPES = [ 'text/plain', 'application/json' ];
 
 	/**
 	 * Register routes.
@@ -79,48 +71,27 @@ final class EngagementController extends WP_REST_Controller {
 	 * @return WP_REST_Response
 	 */
 	public function create_item( $request ): WP_REST_Response {
-		// Enforce Content-Type.
-		$content_type = $request->get_content_type();
-		$ct_value     = is_array( $content_type ) ? ( $content_type['value'] ?? '' ) : '';
-		if ( ! in_array( $ct_value, self::ALLOWED_CONTENT_TYPES, true ) ) {
-			return new WP_REST_Response(
-				[
-					'code'    => 'unsupported_media_type',
-					'message' => 'Content-Type must be text/plain or application/json.',
-				],
-				415
-			);
+		$ct_error = PayloadValidator::validate_content_type( $request );
+		if ( null !== $ct_error ) {
+			return self::error_response( $ct_error );
 		}
 
 		$body = $request->get_body();
 
-		// Cap request size.
-		if ( strlen( $body ) > self::MAX_BODY_BYTES ) {
-			return new WP_REST_Response(
-				[
-					'code'    => 'payload_too_large',
-					'message' => 'Request body exceeds maximum size.',
-				],
-				413
-			);
+		$size_error = PayloadValidator::validate_body_size( $body );
+		if ( null !== $size_error ) {
+			return self::error_response( $size_error );
 		}
 
-		$data = json_decode( $body, true );
-
-		if ( ! is_array( $data ) ) {
-			return new WP_REST_Response( null, 400 );
+		try {
+			$data = PayloadValidator::decode_json_object( $body );
+		} catch ( PayloadValidatorException $e ) {
+			return self::error_response( $e->to_tuple() );
 		}
 
-		// Reject payloads with unknown top-level keys (strict schema).
-		$unknown = array_diff( array_keys( $data ), self::ALLOWED_KEYS );
-		if ( ! empty( $unknown ) ) {
-			return new WP_REST_Response(
-				[
-					'code'    => 'invalid_payload',
-					'message' => 'Unknown fields in request.',
-				],
-				400
-			);
+		$keys_error = PayloadValidator::validate_allowed_keys( $data, self::ALLOWED_KEYS );
+		if ( null !== $keys_error ) {
+			return self::error_response( $keys_error );
 		}
 
 		$signature = sanitize_text_field( $data['signature'] ?? '' );
@@ -128,7 +99,7 @@ final class EngagementController extends WP_REST_Controller {
 		$res_id    = absint( $data['resource_id'] ?? 0 );
 
 		if ( ! HmacValidator::verify( $signature, $res_type, $res_id ) ) {
-			return new WP_REST_Response( null, 403 );
+			return self::error_response( [ 'invalid_signature', 'Request signature is invalid.', 403 ] );
 		}
 
 		$engagement_time = absint( $data['engagement_time'] ?? 0 );
@@ -204,5 +175,21 @@ final class EngagementController extends WP_REST_Controller {
 		// phpcs:enable WordPress.DB.DirectDatabaseQuery.NoCaching
 
 		return new WP_REST_Response( null, 204 );
+	}
+
+	/**
+	 * Translate an error tuple into a WP_REST_Response.
+	 *
+	 * @param array{0: string, 1: string, 2: int} $tuple [code, message, status].
+	 * @return WP_REST_Response
+	 */
+	private static function error_response( array $tuple ): WP_REST_Response {
+		return new WP_REST_Response(
+			[
+				'code'    => $tuple[0],
+				'message' => $tuple[1],
+			],
+			$tuple[2]
+		);
 	}
 }
