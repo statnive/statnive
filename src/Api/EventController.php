@@ -193,10 +193,18 @@ final class EventController extends WP_REST_Controller {
 	/**
 	 * Translate an error tuple into a WP_REST_Response.
 	 *
+	 * Increments the `statnive_failed_requests` counter so the diagnostics
+	 * export (§29) and admin observability (§28.3.1) can surface the number
+	 * of dropped tracking events.
+	 *
 	 * @param array{0: string, 1: string, 2: int} $tuple [code, message, status].
 	 * @return WP_REST_Response
 	 */
 	private static function error_response( array $tuple ): WP_REST_Response {
+		if ( $tuple[2] >= 400 && 429 !== $tuple[2] ) {
+			update_option( 'statnive_failed_requests', (int) get_option( 'statnive_failed_requests', 0 ) + 1, false );
+		}
+
 		return new WP_REST_Response(
 			[
 				'code'    => $tuple[0],

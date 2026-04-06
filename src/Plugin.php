@@ -16,6 +16,7 @@ use Statnive\Container\ServiceContainer;
 use Statnive\Container\ServiceProvider;
 use Statnive\Cron\CronRegistrar;
 use Statnive\Database\DatabaseFactory;
+use Statnive\Database\Migrator;
 
 /**
  * Plugin bootstrap class.
@@ -61,6 +62,14 @@ final class Plugin {
 			false,
 			dirname( plugin_basename( STATNIVE_FILE ) ) . '/languages/'
 		);
+
+		// Database schema migrations (runs on plugins_loaded, bails fast when nothing pending).
+		Migrator::init();
+
+		// WP-CLI commands (loaded only when WP-CLI is the SAPI).
+		if ( defined( 'WP_CLI' ) && WP_CLI ) {
+			\WP_CLI::add_command( 'statnive cron', \Statnive\Cli\CronCommand::class );
+		}
 
 		self::register_hooks();
 		self::boot_container();

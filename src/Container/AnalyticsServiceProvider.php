@@ -65,6 +65,7 @@ final class AnalyticsServiceProvider implements ServiceProvider {
 					new \Statnive\Api\EngagementController(),
 					new \Statnive\Api\EventsStatsController(),
 					new \Statnive\Api\ImportController(),
+					new \Statnive\Api\DiagnosticsController(),
 				];
 
 				foreach ( $controllers as $controller ) {
