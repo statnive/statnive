@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 use Statnive\Service\GeoIPDownloader;
 
 /**
- * Unit tests for GeoIPDownloader constants and configuration (bugs #8, #9).
+ * Unit tests for GeoIPDownloader constants and configuration.
  *
  * Limited to what can be tested without WordPress functions.
  *
@@ -16,37 +16,12 @@ use Statnive\Service\GeoIPDownloader;
  */
 final class GeoIPDownloaderTest extends TestCase {
 
-	public function test_cdn_url_constant_is_valid_url(): void {
+	public function test_no_third_party_mirror_constant(): void {
 		$reflection = new \ReflectionClass( GeoIPDownloader::class );
-		$cdn_url    = $reflection->getConstant( 'CDN_URL' );
 
-		$this->assertIsString( $cdn_url, 'CDN_URL must be a string.' );
-		$this->assertNotEmpty( $cdn_url, 'CDN_URL must not be empty.' );
-		$this->assertNotFalse(
-			filter_var( $cdn_url, FILTER_VALIDATE_URL ),
-			"CDN_URL must be a valid URL, got: {$cdn_url}"
-		);
-	}
-
-	/**
-	 * Verify that the CDN URL is reachable via HTTP.
-	 *
-	 * @group network
-	 */
-	public function test_cdn_url_is_reachable(): void {
-		$reflection = new \ReflectionClass( GeoIPDownloader::class );
-		$cdn_url    = $reflection->getConstant( 'CDN_URL' );
-
-		$headers = @get_headers( $cdn_url );
-		$this->assertNotFalse( $headers, 'CDN URL must be reachable.' );
-		$this->assertNotEmpty( $headers, 'CDN URL must return headers.' );
-
-		// Accept 200, 301, or 302 as valid responses (GitHub redirects to release assets).
-		$status_line = $headers[0];
-		$this->assertMatchesRegularExpression(
-			'/HTTP\/[\d.]+ (200|301|302)/',
-			$status_line,
-			"CDN URL should return HTTP 200, 301, or 302. Got: {$status_line}"
+		$this->assertFalse(
+			$reflection->hasConstant( 'CDN_URL' ),
+			'CDN_URL constant must not exist — MaxMind is the only download source.'
 		);
 	}
 

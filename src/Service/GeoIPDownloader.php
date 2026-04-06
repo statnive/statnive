@@ -11,17 +11,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * GeoIP database downloader.
  *
- * Downloads MaxMind GeoLite2-City .mmdb file from CDN or MaxMind direct.
+ * Downloads MaxMind GeoLite2-City .mmdb file from MaxMind using a license key.
+ * Requires user to accept MaxMind GeoLite2 EULA and obtain a free license key.
  * Scheduled weekly via WP-Cron.
+ *
+ * @see https://www.maxmind.com/en/geolite2/eula
  */
 final class GeoIPDownloader {
-
-	/**
-	 * JsDelivr CDN URL (no API key needed).
-	 *
-	 * @var string
-	 */
-	private const CDN_URL = 'https://github.com/P3TERX/GeoLite.mmdb/releases/latest/download/GeoLite2-City.mmdb';
 
 	/**
 	 * WP-Cron hook name.
@@ -51,20 +47,22 @@ final class GeoIPDownloader {
 			file_put_contents( $htaccess, "Deny from all\n" );
 		}
 
-		// Try MaxMind direct first if license key is configured.
+		// MaxMind license key is required — no third-party mirrors.
 		$license_key = get_option( 'statnive_maxmind_license_key', '' );
-		if ( ! empty( $license_key ) ) {
-			$url = sprintf(
-				'https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City&license_key=%s&suffix=tar.gz',
-				rawurlencode( $license_key )
-			);
-			if ( self::download_and_extract_targz( $url, $target_path ) ) {
-				return true;
+		if ( empty( $license_key ) ) {
+			if ( defined( 'WP_DEBUG_LOG' ) && WP_DEBUG_LOG ) {
+				// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+				error_log( '[Statnive][GeoIP] Download skipped: no MaxMind license key configured.' );
 			}
+			return false;
 		}
 
-		// Fall back to jsDelivr CDN (serves raw .mmdb, no extraction needed).
-		return self::download_file( self::CDN_URL, $target_path );
+		$url = sprintf(
+			'https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City&license_key=%s&suffix=tar.gz',
+			rawurlencode( $license_key )
+		);
+
+		return self::download_and_extract_targz( $url, $target_path );
 	}
 
 	/**
@@ -134,40 +132,6 @@ final class GeoIPDownloader {
 	}
 
 	/**
-	 * Download a file using WordPress HTTP API.
-	 *
-	 * @param string $url    URL to download.
-	 * @param string $target Local file path.
-	 * @return bool True on success.
-	 */
-	private static function download_file( string $url, string $target ): bool {
-		$tmp_file = download_url( $url, 300 );
-
-		if ( is_wp_error( $tmp_file ) ) {
-			if ( defined( 'WP_DEBUG_LOG' ) && WP_DEBUG_LOG ) {
-				// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-				error_log( '[Statnive][GeoIP] Download failed: ' . $tmp_file->get_error_message() );
-			}
-			return false;
-		}
-
-		// Move to target location.
-		// phpcs:ignore WordPress.WP.AlternativeFunctions.rename_rename
-		$moved = rename( $tmp_file, $target );
-		if ( ! $moved ) {
-			// phpcs:ignore WordPress.WP.AlternativeFunctions.unlink_unlink
-			unlink( $tmp_file );
-			return false;
-		}
-
-		// Set restrictive permissions.
-		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_chmod
-		chmod( $target, 0640 );
-
-		return true;
-	}
-
-	/**
 	 * Check if GeoIP feature is enabled by the user.
 	 *
 	 * @return bool True if GeoIP downloads are enabled.
@@ -180,8 +144,15 @@ final class GeoIPDownloader {
 	 * Enable GeoIP feature: set option, schedule cron, trigger first download.
 	 *
 	 * Called when user enables GeoIP in Settings.
+	 * Requires a MaxMind license key to be configured first.
 	 */
 	public static function enable(): void {
+		$license_key = get_option( 'statnive_maxmind_license_key', '' );
+		if ( empty( $license_key ) ) {
+			update_option( 'statnive_geoip_enabled', false );
+			return;
+		}
+
 		update_option( 'statnive_geoip_enabled', true );
 		self::schedule();
 		self::download();

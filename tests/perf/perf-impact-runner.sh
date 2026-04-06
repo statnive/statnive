@@ -120,14 +120,15 @@ ANALYTICS_KEYWORDS=(
 discover_analytics_plugins() {
     echo "  Discovering analytics plugins via REST API..."
 
-    local all_plugins
-    all_plugins=$($CURL_BIN -s -H "X-WP-Nonce: $WP_NONCE" -b "$COOKIE_FILE" \
-        "${BASE_URL}/wp-json/wp/v2/plugins")
+    local plugins_file="/tmp/wp_plugins_$$.json"
+    $CURL_BIN -s -H "X-WP-Nonce: $WP_NONCE" -b "$COOKIE_FILE" \
+        "${BASE_URL}/wp-json/wp/v2/plugins" > "$plugins_file"
 
     for keyword in "${ANALYTICS_KEYWORDS[@]}"; do
-        p_slug=$(echo "$all_plugins" | $PYTHON_BIN -c "
+        p_slug=$($PYTHON_BIN -c "
 import json, sys
-plugins = json.load(sys.stdin)
+with open('${plugins_file}') as f:
+    plugins = json.load(f)
 for p in plugins:
     if p['plugin'].startswith('${keyword}/'):
         print(p['plugin'])
@@ -135,9 +136,10 @@ for p in plugins:
 " 2>/dev/null)
 
         if [ -n "$p_slug" ]; then
-            p_status=$(echo "$all_plugins" | $PYTHON_BIN -c "
+            p_status=$($PYTHON_BIN -c "
 import json, sys
-plugins = json.load(sys.stdin)
+with open('${plugins_file}') as f:
+    plugins = json.load(f)
 for p in plugins:
     if p['plugin'] == '${p_slug}':
         print(p['status'])
@@ -147,12 +149,13 @@ for p in plugins:
             PLUGIN_NAMES+=("$keyword")
             PLUGIN_SLUGS+=("$p_slug")
             PLUGIN_ORIG+=("$p_status")
-            echo "    ✓ $keyword → $p_slug ($p_status)"
+            echo "    [OK] $keyword = $p_slug ($p_status)"
         else
-            echo "    ✗ $keyword — not installed"
+            echo "    [--] $keyword - not installed"
         fi
     done
 
+    rm -f "$plugins_file"
     echo "  Found ${#PLUGIN_NAMES[@]} analytics plugins."
 }
 
@@ -190,12 +193,15 @@ restore_plugin_state() {
 }
 
 warmup() {
-    local pages=("/" "/sample-page/" "/hello-world/" "/shop/" "/wp-admin/")
-    for path in "${pages[@]}"; do
-        $CURL_BIN -s -o /dev/null "${BASE_URL}${path}" 2>/dev/null || true
+    local pages=("/" "/sample-page/" "/hello-world/" "/shop/" "/product/hoodie/" "/wp-admin/")
+    # Run 3 passes to fully warm OPcache + MySQL query cache.
+    for pass in 1 2 3; do
+        for path in "${pages[@]}"; do
+            $CURL_BIN -s -o /dev/null "${BASE_URL}${path}" 2>/dev/null || true
+        done
     done
     $CURL_BIN -s "${BASE_URL}/wp-cron.php?doing_wp_cron=1" > /dev/null 2>&1 || true
-    /bin/sleep 3
+    /bin/sleep 2
 }
 
 run_k6_vitals() {
@@ -261,6 +267,18 @@ echo ""
 trap restore_plugin_state EXIT
 
 CONFIG_NUM=0
+
+# --- Phase 0: CACHE PRIMING ---
+echo "  [0/$TOTAL_CONFIGS] CACHE PRIMING (warming OPcache + MySQL)"
+echo "    Running 5 passes across 8 pages..."
+for pass in 1 2 3 4 5; do
+    for path in "/" "/sample-page/" "/hello-world/" "/shop/" "/product/hoodie/" "/wp-admin/" "/cart/" "/my-account/"; do
+        $CURL_BIN -s -o /dev/null "${BASE_URL}${path}" 2>/dev/null || true
+    done
+done
+/bin/sleep 3
+echo "    Cache priming complete."
+echo ""
 
 # --- Phase 1: BASELINE ---
 CONFIG_NUM=$((CONFIG_NUM + 1))

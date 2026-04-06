@@ -3,7 +3,7 @@
  * Plugin Name: Statnive
  * Plugin URI:  https://statnive.com
  * Description: Simple stats, clear decisions. Privacy-first analytics for WordPress.
- * Version:     0.2.0
+ * Version:     0.3.0
  * Requires PHP: 8.1
  * Requires at least: 6.4
  * Author:      Statnive
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Plugin version.
  */
-define( 'STATNIVE_VERSION', '0.2.0' );
+define( 'STATNIVE_VERSION', '0.3.0' );
 
 /**
  * Plugin root directory path.

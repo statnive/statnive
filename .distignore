@@ -33,6 +33,7 @@ phpunit-integration.xml
 /vendor/*/*/tests
 /vendor/*/*/*/tests
 /vendor/*/ext/tests
+phpunit.xml
 /vendor/bin
 /vendor/coenjacobs
 /vendor/dealerdirect

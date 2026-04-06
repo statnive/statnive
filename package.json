@@ -1,6 +1,6 @@
 {
 	"name": "statnive",
-	"version": "0.2.0",
+	"version": "0.3.0",
 	"private": true,
 	"description": "Simple stats, clear decisions. Privacy-first analytics for WordPress.",
 	"scripts": {

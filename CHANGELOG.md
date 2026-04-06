@@ -5,6 +5,37 @@ All notable changes to Statnive are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.0] - 2026-04-06
+
+### Fixed
+
+- Fix engagement-to-view correlation using pageview ID (pvid) token for exact matching
+- Fix engagement updates matching by URI path instead of resource_id (fixes homepage/archive/404 pages)
+- Fix Avg Duration data pipeline — aggregate from views.duration instead of sessions.duration
+- Fix dashboard importmap output — revert to direct output (wp_get_inline_script_tag adds CDATA)
+- Fix readme.txt WP.org compliance — remove false Pro feature claims, fix URLs, remove woocommerce tag
+- Add ABSPATH guards to all 92 src/ PHP files for WP.org compliance
+- Fix unescaped output in AdminMenuManager, AdminBarWidget, ReactHandler
+- Make admin notices dismissible with `is-dismissible` class
+- Gate GeoIP download to opt-in (no auto-download on activation)
+- Gate license API to explicit user action only (no api.statnive.com contact on free installs)
+- Remove P3TERX GeoIP mirror — MaxMind license key is now required for GeoIP (EULA compliance)
+- Fix ReportBuilder email numbers to use `number_format_i18n()` for locale-aware formatting
+
+### Added
+
+- Date range persistence across all dashboard tabs via URL search params
+- Two-stage tracker loading for optimal Web Vitals (1.1KB inline core + deferred modules)
+- GPL v2 LICENSE file
+- THIRD-PARTY-LICENSES.md with all bundled dependency licenses
+- External Services section in readme.txt (GeoIP + license API documentation with MaxMind EULA link)
+- Ship unminified tracker source alongside minified builds
+- WP.org pre-submission CI workflow with 6 enforcement gates
+- i18n: `load_plugin_textdomain()` boot, `languages/statnive.pot` with 96 strings
+- GeoIPNotice admin notices for missing MaxMind license key and `DISABLE_WP_CRON` advisory
+- Translatable strings throughout email reports (Visitors, Sessions, Pageviews, Top Pages, etc.)
+- MaxMind license key + GeoIP enable/disable settings in Settings REST API with validation
+
 ## [0.2.0] - 2026-04-05
 
 ### Fixed

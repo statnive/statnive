@@ -1,0 +1,472 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the Statnive package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Statnive 0.3.0\n"
+"Report-Msgid-Bugs-To: https://github.com/statnive/statnive/issues\n"
+"POT-Creation-Date: 2026-04-06 00:17+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/Admin/AdminBarWidget.php:67
+msgid "Statnive — Today's visitors"
+msgstr ""
+
+#: src/Admin/AdminMenuManager.php:31 src/Privacy/PrivacyEraser.php:43
+#: src/Privacy/PrivacyExporter.php:43
+msgid "Statnive Analytics"
+msgstr ""
+
+#: src/Admin/AdminMenuManager.php:32
+msgid "Statnive"
+msgstr ""
+
+#: src/Admin/GeoIPNotice.php:55
+msgid ""
+"Statnive: GeoIP is enabled but no MaxMind license key is configured. Visitor "
+"geolocation will not work until a key is added."
+msgstr ""
+
+#. translators: 1: MaxMind signup URL, 2: MaxMind EULA URL
+#: src/Admin/GeoIPNotice.php:59
+#, php-format
+msgid ""
+"<a href=\"%1$s\" target=\"_blank\" rel=\"noopener\">Get a free MaxMind "
+"license key</a> (requires accepting the <a href=\"%2$s\" target=\"_blank\" "
+"rel=\"noopener\">GeoLite2 EULA</a>)."
+msgstr ""
+
+#: src/Admin/GeoIPNotice.php:84
+msgid ""
+"Statnive: WordPress cron is disabled on this site (DISABLE_WP_CRON). GeoIP "
+"database updates will not run automatically. Set up a system cron job or use "
+"WP-CLI to update the database manually."
+msgstr ""
+
+#. translators: %1$s: site name, %2$s: report frequency
+#: src/Cron/EmailReportJob.php:54
+#, php-format
+msgid "%1$s Analytics — %2$s Report"
+msgstr ""
+
+#. translators: %s: report frequency (e.g. Weekly, Monthly)
+#: src/Email/ReportBuilder.php:79
+#, php-format
+msgid "%s Report"
+msgstr ""
+
+#: src/Email/ReportBuilder.php:91 src/Email/ReportBuilder.php:109
+msgid "Visitors"
+msgstr ""
+
+#: src/Email/ReportBuilder.php:95
+msgid "Sessions"
+msgstr ""
+
+#: src/Email/ReportBuilder.php:99
+msgid "Pageviews"
+msgstr ""
+
+#: src/Email/ReportBuilder.php:105
+msgid "Top Pages"
+msgstr ""
+
+#: src/Email/ReportBuilder.php:108
+msgid "Page"
+msgstr ""
+
+#: src/Email/ReportBuilder.php:110
+msgid "Views"
+msgstr ""
+
+#: src/Email/ReportBuilder.php:123
+msgid "View Full Dashboard"
+msgstr ""
+
+#: src/Email/ReportBuilder.php:127
+msgid "Sent by Statnive — Privacy-first analytics for WordPress"
+msgstr ""
+
+#. translators: 1: Required PHP version, 2: Current PHP version
+#: src/Plugin.php:118 statnive.php:68
+#, php-format
+msgid "Statnive requires PHP %1$s or higher. You are running PHP %2$s."
+msgstr ""
+
+#. translators: 1: Required WordPress version, 2: Current WordPress version
+#: src/Plugin.php:134 statnive.php:93
+#, php-format
+msgid ""
+"Statnive requires WordPress %1$s or higher. You are running WordPress %2$s."
+msgstr ""
+
+#: src/Privacy/ComplianceAuditor.php:70
+msgid "Consent mode configured"
+msgstr ""
+
+#. translators: %s: consent mode name.
+#: src/Privacy/ComplianceAuditor.php:74
+#, php-format
+msgid "Consent mode: %s"
+msgstr ""
+
+#: src/Privacy/ComplianceAuditor.php:75
+msgid "No consent mode configured. Set one in Settings."
+msgstr ""
+
+#: src/Privacy/ComplianceAuditor.php:88
+msgid "Do Not Track honored"
+msgstr ""
+
+#: src/Privacy/ComplianceAuditor.php:91
+msgid "DNT header is respected."
+msgstr ""
+
+#: src/Privacy/ComplianceAuditor.php:92
+msgid "DNT header is not honored. Consider enabling for privacy compliance."
+msgstr ""
+
+#: src/Privacy/ComplianceAuditor.php:105
+msgid "Global Privacy Control honored"
+msgstr ""
+
+#: src/Privacy/ComplianceAuditor.php:108
+msgid "GPC header is respected."
+msgstr ""
+
+#: src/Privacy/ComplianceAuditor.php:109
+msgid "GPC header is not honored. Required under some US state laws."
+msgstr ""
+
+#: src/Privacy/ComplianceAuditor.php:123
+msgid "Data retention configured"
+msgstr ""
+
+#. translators: %1$d: number of days, %2$s: retention mode.
+#: src/Privacy/ComplianceAuditor.php:127
+#, php-format
+msgid "Data retained for %1$d days (%2$s mode)."
+msgstr ""
+
+#: src/Privacy/ComplianceAuditor.php:128
+msgid ""
+"Data retained forever. Consider setting a retention period for compliance."
+msgstr ""
+
+#: src/Privacy/ComplianceAuditor.php:142
+msgid "Privacy policy page published"
+msgstr ""
+
+#: src/Privacy/ComplianceAuditor.php:145
+msgid "Privacy policy page is published. Statnive content auto-generated."
+msgstr ""
+
+#: src/Privacy/ComplianceAuditor.php:146
+msgid ""
+"No published privacy policy page found. Create one in Settings → Privacy."
+msgstr ""
+
+#: src/Privacy/ComplianceAuditor.php:159
+msgid "No raw IP addresses stored"
+msgstr ""
+
+#: src/Privacy/ComplianceAuditor.php:161
+msgid "IP addresses are discarded immediately after hashing and GeoIP lookup."
+msgstr ""
+
+#: src/Privacy/ComplianceAuditor.php:181
+msgid "Daily salt rotation active"
+msgstr ""
+
+#. translators: %s: datetime of last salt rotation.
+#: src/Privacy/ComplianceAuditor.php:185
+#, php-format
+msgid "Last rotation: %s"
+msgstr ""
+
+#: src/Privacy/ComplianceAuditor.php:186
+msgid "Salt rotation may not be running. Check WP-Cron."
+msgstr ""
+
+#: src/Privacy/ComplianceAuditor.php:198
+msgid "Cookie-free tracking"
+msgstr ""
+
+#: src/Privacy/ComplianceAuditor.php:200
+msgid "Statnive uses no cookies, localStorage, or sessionStorage by design."
+msgstr ""
+
+#: src/Privacy/ComplianceAuditor.php:213 src/Privacy/ComplianceAuditor.php:222
+msgid "Data purge operational"
+msgstr ""
+
+#: src/Privacy/ComplianceAuditor.php:215
+msgid "Retention mode is \"forever\" — no purge needed."
+msgstr ""
+
+#: src/Privacy/ComplianceAuditor.php:225
+msgid "Data purge cron is scheduled."
+msgstr ""
+
+#: src/Privacy/ComplianceAuditor.php:226
+msgid "Data purge cron not scheduled. Deactivate and reactivate the plugin."
+msgstr ""
+
+#: src/Privacy/ComplianceAuditor.php:239
+msgid "HTTPS enabled"
+msgstr ""
+
+#: src/Privacy/ComplianceAuditor.php:242
+msgid "Site is served over HTTPS."
+msgstr ""
+
+#: src/Privacy/ComplianceAuditor.php:243
+msgid "Site not using HTTPS. Analytics data transmitted in plaintext."
+msgstr ""
+
+#. translators: %d: number of sessions anonymized
+#: src/Privacy/PrivacyEraser.php:119
+#, php-format
+msgid "Anonymized %d analytics session(s). Aggregate statistics preserved."
+msgstr ""
+
+#: src/Privacy/PrivacyExporter.php:101
+msgid "Session Start"
+msgstr ""
+
+#: src/Privacy/PrivacyExporter.php:105
+msgid "Session End"
+msgstr ""
+
+#: src/Privacy/PrivacyExporter.php:106
+msgid "Active"
+msgstr ""
+
+#: src/Privacy/PrivacyExporter.php:109
+msgid "Pages Viewed"
+msgstr ""
+
+#: src/Privacy/PrivacyExporter.php:113
+msgid "Duration (seconds)"
+msgstr ""
+
+#: src/Privacy/PrivacyExporter.php:136
+msgid "Pages Visited"
+msgstr ""
+
+#: src/Privacy/PrivacyExporter.php:143
+msgid "Statnive Analytics Sessions"
+msgstr ""
+
+#: src/Privacy/PrivacyExporter.php:144
+msgid ""
+"Analytics sessions recorded by Statnive. No IP addresses or cookies are "
+"stored."
+msgstr ""
+
+#: src/Privacy/PrivacyPolicyGenerator.php:55
+msgid "Analytics (Statnive)"
+msgstr ""
+
+#: src/Privacy/PrivacyPolicyGenerator.php:56
+msgid ""
+"This website uses Statnive, a privacy-first analytics plugin that runs "
+"entirely on our server. No data is shared with third-party services."
+msgstr ""
+
+#: src/Privacy/PrivacyPolicyGenerator.php:59
+msgid "Cookies & Tracking"
+msgstr ""
+
+#: src/Privacy/PrivacyPolicyGenerator.php:60
+msgid ""
+"Statnive does not use cookies, localStorage, sessionStorage, or any form of "
+"browser fingerprinting. Visitor identification uses a daily-rotating "
+"cryptographic hash that cannot be reversed or used to track individuals "
+"across days."
+msgstr ""
+
+#: src/Privacy/PrivacyPolicyGenerator.php:63
+msgid "Data Collected"
+msgstr ""
+
+#: src/Privacy/PrivacyPolicyGenerator.php:64
+msgid "We collect the following anonymized data for each page visit:"
+msgstr ""
+
+#: src/Privacy/PrivacyPolicyGenerator.php:66
+msgid "Page URL visited (without query parameters)"
+msgstr ""
+
+#: src/Privacy/PrivacyPolicyGenerator.php:67
+msgid "Referrer URL (domain only, query parameters stripped)"
+msgstr ""
+
+#: src/Privacy/PrivacyPolicyGenerator.php:68
+msgid "Country and city (derived from IP, which is immediately discarded)"
+msgstr ""
+
+#: src/Privacy/PrivacyPolicyGenerator.php:69
+msgid "Device type, browser, and operating system"
+msgstr ""
+
+#: src/Privacy/PrivacyPolicyGenerator.php:70
+msgid "Screen resolution, language, and timezone"
+msgstr ""
+
+#: src/Privacy/PrivacyPolicyGenerator.php:74
+msgid "IP Address Handling"
+msgstr ""
+
+#: src/Privacy/PrivacyPolicyGenerator.php:75
+msgid ""
+"Your IP address is never stored. It is used only momentarily to determine "
+"your approximate geographic location and to generate a one-way cryptographic "
+"hash for visit counting. The IP is discarded immediately after processing "
+"and cannot be recovered from the stored hash."
+msgstr ""
+
+#: src/Privacy/PrivacyPolicyGenerator.php:78
+msgid "Consent"
+msgstr ""
+
+#: src/Privacy/PrivacyPolicyGenerator.php:80
+msgid ""
+"Because Statnive uses no cookies and stores no personal data, analytics run "
+"in cookieless mode without requiring consent under most privacy regulations."
+msgstr ""
+
+#: src/Privacy/PrivacyPolicyGenerator.php:82
+msgid ""
+"Analytics are disabled until you provide explicit consent through our cookie/"
+"consent banner. No data is collected before consent is granted."
+msgstr ""
+
+#: src/Privacy/PrivacyPolicyGenerator.php:84
+msgid ""
+"Analytics are active for all visitors. You may opt out using your browser's "
+"Do Not Track or Global Privacy Control settings."
+msgstr ""
+
+#: src/Privacy/PrivacyPolicyGenerator.php:89
+msgid "Do Not Track & Global Privacy Control"
+msgstr ""
+
+#: src/Privacy/PrivacyPolicyGenerator.php:92
+msgid "Do Not Track (DNT)"
+msgstr ""
+
+#: src/Privacy/PrivacyPolicyGenerator.php:95
+msgid "Global Privacy Control (GPC)"
+msgstr ""
+
+#. translators: %s: comma-separated list of privacy signals
+#: src/Privacy/PrivacyPolicyGenerator.php:99
+#, php-format
+msgid ""
+"We honor the following browser privacy signals: %s. When enabled, no "
+"analytics data is collected."
+msgstr ""
+
+#: src/Privacy/PrivacyPolicyGenerator.php:105
+msgid "Data Retention"
+msgstr ""
+
+#: src/Privacy/PrivacyPolicyGenerator.php:107
+msgid ""
+"Aggregated analytics data is retained indefinitely. No personal data is "
+"stored."
+msgstr ""
+
+#. translators: %d: number of days
+#: src/Privacy/PrivacyPolicyGenerator.php:111
+#, php-format
+msgid ""
+"Raw analytics data is automatically deleted after %d days. Only aggregated "
+"statistics are retained for historical reporting."
+msgstr ""
+
+#: src/Privacy/PrivacyPolicyGenerator.php:117
+msgid "Your Rights"
+msgstr ""
+
+#: src/Privacy/PrivacyPolicyGenerator.php:118
+msgid ""
+"You may request export or deletion of any analytics data associated with "
+"your user account through the WordPress personal data tools. Anonymous "
+"visitor data cannot be attributed to individuals due to the cookieless, hash-"
+"based architecture."
+msgstr ""
+
+#: src/Privacy/SiteHealthIntegration.php:33
+msgid "Statnive Privacy Compliance"
+msgstr ""
+
+#: src/Privacy/SiteHealthIntegration.php:38
+msgid "Statnive Data Retention"
+msgstr ""
+
+#: src/Privacy/SiteHealthIntegration.php:55
+msgid "Statnive privacy compliance is strong."
+msgstr ""
+
+#: src/Privacy/SiteHealthIntegration.php:58
+msgid ""
+"Statnive privacy settings could be improved. Review the Privacy Audit in "
+"your dashboard."
+msgstr ""
+
+#: src/Privacy/SiteHealthIntegration.php:61
+msgid ""
+"Statnive privacy compliance needs attention. Open Settings to configure "
+"privacy options."
+msgstr ""
+
+#. translators: %d: compliance score
+#: src/Privacy/SiteHealthIntegration.php:67
+#, php-format
+msgid "Statnive Privacy Score: %d/100"
+msgstr ""
+
+#: src/Privacy/SiteHealthIntegration.php:79
+msgid "Review Privacy Settings"
+msgstr ""
+
+#: src/Privacy/SiteHealthIntegration.php:96
+msgid "Statnive: Data retained indefinitely"
+msgstr ""
+
+#: src/Privacy/SiteHealthIntegration.php:102
+msgid ""
+"Analytics data is retained forever. Consider setting a retention period for "
+"GDPR compliance."
+msgstr ""
+
+#: src/Privacy/SiteHealthIntegration.php:106
+msgid "Configure Retention"
+msgstr ""
+
+#. translators: %1$d: days, %2$s: mode
+#: src/Privacy/SiteHealthIntegration.php:115
+#, php-format
+msgid "Statnive: %1$d-day retention (%2$s)"
+msgstr ""
+
+#: src/Privacy/SiteHealthIntegration.php:124
+msgid "Data retention is configured with automatic cleanup."
+msgstr ""
+
+#: statnive.php:111
+msgid ""
+"Statnive: Composer autoloader not found. Please run \"composer install\" in "
+"the plugin directory."
+msgstr ""

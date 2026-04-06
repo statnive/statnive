@@ -4,7 +4,7 @@ Tags: analytics, statistics, privacy, tracking, dashboard
 Requires at least: 6.4
 Tested up to: 6.8
 Requires PHP: 8.1
-Stable tag: 0.2.0
+Stable tag: 0.3.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -103,17 +103,17 @@ All data is stored in your WordPress database on your own server. Statnive creat
 This plugin connects to the following third-party services under specific conditions:
 
 = GeoIP Database Downloads =
-This plugin can download GeoLite2 GeoIP databases to enable visitor geolocation.
+This plugin can download MaxMind GeoLite2 GeoIP databases to enable visitor geolocation.
+Requires a free MaxMind account and license key (user must accept the GeoLite2 EULA).
 
-* Primary source: GitHub (https://github.com/P3TERX/GeoLite.mmdb)
-* Alternative source: MaxMind (https://www.maxmind.com)
-* When: Weekly via WordPress Cron, only when GeoIP feature is enabled in Settings
-* Data sent: Standard HTTP request headers only (no visitor data is transmitted)
+* Source: MaxMind (https://www.maxmind.com)
+* When: Weekly via WordPress Cron, only when GeoIP feature is enabled in Settings and a license key is configured
+* Data sent: License key and standard HTTP request headers (no visitor data is transmitted)
 * Data received: GeoIP database file, stored locally in your uploads directory
 * Purpose: Determine approximate geographic location of visitors from anonymized IP addresses
-* GitHub Privacy Policy: https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement
 * MaxMind Privacy Policy: https://www.maxmind.com/en/privacy-policy
 * MaxMind Terms of Use: https://www.maxmind.com/en/terms-of-use
+* MaxMind GeoLite2 EULA: https://www.maxmind.com/en/geolite2/eula
 
 = StatNive License Validation (Optional) =
 If you enter a premium license key, the plugin connects to the StatNive API.
@@ -128,6 +128,23 @@ If you enter a premium license key, the plugin connects to the StatNive API.
 No visitor data is ever sent to any external service. All analytics data remains in your WordPress database.
 
 == Changelog ==
+
+= 0.3.0 - 2026-04-05 =
+* Fix engagement-to-view correlation using pageview ID (pvid) token
+* Fix engagement updates matching by URI path instead of resource_id
+* Fix Avg Duration data pipeline — aggregate from views.duration
+* Fix dashboard importmap output for WP compatibility
+* Fix readme.txt WP.org compliance — remove false claims, fix URLs
+* Add ABSPATH guards to all src/ PHP files
+* Fix unescaped output in admin UI components
+* Make admin notices dismissible
+* Gate GeoIP download to opt-in (no auto-download)
+* Gate license API to explicit user action only
+* Add date range persistence across all dashboard tabs via URL params
+* Add two-stage tracker loading for optimal Web Vitals
+* Add GPL v2 LICENSE file and THIRD-PARTY-LICENSES.md
+* Add External Services section in readme.txt
+* Add WP.org pre-submission CI workflow with 6 enforcement gates
 
 = 0.2.0 - 2026-04-05 =
 * Fix real-time dashboard showing 0 active visitors due to stale cache
@@ -160,6 +177,12 @@ No visitor data is ever sent to any external service. All analytics data remains
 * 4-tier licensing system (Free, Starter, Professional, Agency)
 
 == Upgrade Notice ==
+
+= 0.3.0 =
+GeoIP now requires a MaxMind license key (free). Adds full i18n support and WordPress.org compliance fixes.
+
+= 0.2.0 =
+Critical bug fixes for real-time dashboard, tracker URLs, and overview reports. Adds 38 regression tests.
 
 = 0.1.1 =
 Fixes zero-data display on Geography, Devices, and Real-time pages. All dashboard screens now show data correctly.

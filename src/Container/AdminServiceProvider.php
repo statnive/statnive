@@ -10,6 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 use Statnive\Admin\AdminBarWidget;
 use Statnive\Admin\AdminMenuManager;
+use Statnive\Admin\GeoIPNotice;
 use Statnive\Admin\ReactHandler;
 
 /**
@@ -44,5 +45,6 @@ final class AdminServiceProvider implements ServiceProvider {
 		AdminMenuManager::init();
 		ReactHandler::init();
 		AdminBarWidget::init();
+		GeoIPNotice::init();
 	}
 }

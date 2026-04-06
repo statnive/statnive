@@ -58,6 +58,12 @@ final class Plugin {
 
 		self::$initialized = true;
 
+		load_plugin_textdomain(
+			'statnive',
+			false,
+			dirname( plugin_basename( STATNIVE_FILE ) ) . '/languages/'
+		);
+
 		self::register_hooks();
 		self::boot_container();
 	}
