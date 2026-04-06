@@ -1,55 +1,59 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the Statnive package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
-#, fuzzy
+# Copyright (C) 2026 Statnive
+# This file is distributed under the GPL-2.0-or-later.
 msgid ""
 msgstr ""
 "Project-Id-Version: Statnive 0.3.0\n"
-"Report-Msgid-Bugs-To: https://github.com/statnive/statnive/issues\n"
-"POT-Creation-Date: 2026-04-06 00:17+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/statnive\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-04-06T10:26:20+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: statnive\n"
+
+#. Plugin Name of the plugin
+#. Author of the plugin
+#: statnive.php
+#: src/Admin/AdminMenuManager.php:32
+msgid "Statnive"
+msgstr ""
+
+#. Plugin URI of the plugin
+#. Author URI of the plugin
+#: statnive.php
+msgid "https://statnive.com"
+msgstr ""
+
+#. Description of the plugin
+#: statnive.php
+msgid "Simple stats, clear decisions. Privacy-first analytics for WordPress."
+msgstr ""
 
 #: src/Admin/AdminBarWidget.php:67
 msgid "Statnive — Today's visitors"
 msgstr ""
 
-#: src/Admin/AdminMenuManager.php:31 src/Privacy/PrivacyEraser.php:43
+#: src/Admin/AdminMenuManager.php:31
+#: src/Privacy/PrivacyEraser.php:43
 #: src/Privacy/PrivacyExporter.php:43
 msgid "Statnive Analytics"
 msgstr ""
 
-#: src/Admin/AdminMenuManager.php:32
-msgid "Statnive"
-msgstr ""
-
 #: src/Admin/GeoIPNotice.php:55
-msgid ""
-"Statnive: GeoIP is enabled but no MaxMind license key is configured. Visitor "
-"geolocation will not work until a key is added."
+msgid "Statnive: GeoIP is enabled but no MaxMind license key is configured. Visitor geolocation will not work until a key is added."
 msgstr ""
 
 #. translators: 1: MaxMind signup URL, 2: MaxMind EULA URL
 #: src/Admin/GeoIPNotice.php:59
 #, php-format
-msgid ""
-"<a href=\"%1$s\" target=\"_blank\" rel=\"noopener\">Get a free MaxMind "
-"license key</a> (requires accepting the <a href=\"%2$s\" target=\"_blank\" "
-"rel=\"noopener\">GeoLite2 EULA</a>)."
+msgid "<a href=\"%1$s\" target=\"_blank\" rel=\"noopener\">Get a free MaxMind license key</a> (requires accepting the <a href=\"%2$s\" target=\"_blank\" rel=\"noopener\">GeoLite2 EULA</a>)."
 msgstr ""
 
 #: src/Admin/GeoIPNotice.php:84
-msgid ""
-"Statnive: WordPress cron is disabled on this site (DISABLE_WP_CRON). GeoIP "
-"database updates will not run automatically. Set up a system cron job or use "
-"WP-CLI to update the database manually."
+msgid "Statnive: WordPress cron is disabled on this site (DISABLE_WP_CRON). GeoIP database updates will not run automatically. Set up a system cron job or use WP-CLI to update the database manually."
 msgstr ""
 
 #. translators: %1$s: site name, %2$s: report frequency
@@ -59,54 +63,60 @@ msgid "%1$s Analytics — %2$s Report"
 msgstr ""
 
 #. translators: %s: report frequency (e.g. Weekly, Monthly)
-#: src/Email/ReportBuilder.php:79
+#: src/Email/ReportBuilder.php:78
 #, php-format
 msgid "%s Report"
 msgstr ""
 
-#: src/Email/ReportBuilder.php:91 src/Email/ReportBuilder.php:109
+#: src/Email/ReportBuilder.php:90
+#: src/Email/ReportBuilder.php:108
 msgid "Visitors"
 msgstr ""
 
-#: src/Email/ReportBuilder.php:95
+#: src/Email/ReportBuilder.php:94
 msgid "Sessions"
 msgstr ""
 
-#: src/Email/ReportBuilder.php:99
+#: src/Email/ReportBuilder.php:98
 msgid "Pageviews"
 msgstr ""
 
-#: src/Email/ReportBuilder.php:105
+#: src/Email/ReportBuilder.php:104
 msgid "Top Pages"
 msgstr ""
 
-#: src/Email/ReportBuilder.php:108
+#: src/Email/ReportBuilder.php:107
 msgid "Page"
 msgstr ""
 
-#: src/Email/ReportBuilder.php:110
+#: src/Email/ReportBuilder.php:109
 msgid "Views"
 msgstr ""
 
-#: src/Email/ReportBuilder.php:123
+#: src/Email/ReportBuilder.php:122
 msgid "View Full Dashboard"
 msgstr ""
 
-#: src/Email/ReportBuilder.php:127
+#: src/Email/ReportBuilder.php:126
 msgid "Sent by Statnive — Privacy-first analytics for WordPress"
 msgstr ""
 
+#: src/Plugin.php:113
+msgid "You do not have permission to activate plugins."
+msgstr ""
+
 #. translators: 1: Required PHP version, 2: Current PHP version
-#: src/Plugin.php:118 statnive.php:68
+#: src/Plugin.php:125
+#: statnive.php:68
 #, php-format
 msgid "Statnive requires PHP %1$s or higher. You are running PHP %2$s."
 msgstr ""
 
 #. translators: 1: Required WordPress version, 2: Current WordPress version
-#: src/Plugin.php:134 statnive.php:93
+#: src/Plugin.php:141
+#: statnive.php:93
 #, php-format
-msgid ""
-"Statnive requires WordPress %1$s or higher. You are running WordPress %2$s."
+msgid "Statnive requires WordPress %1$s or higher. You are running WordPress %2$s."
 msgstr ""
 
 #: src/Privacy/ComplianceAuditor.php:70
@@ -158,8 +168,7 @@ msgid "Data retained for %1$d days (%2$s mode)."
 msgstr ""
 
 #: src/Privacy/ComplianceAuditor.php:128
-msgid ""
-"Data retained forever. Consider setting a retention period for compliance."
+msgid "Data retained forever. Consider setting a retention period for compliance."
 msgstr ""
 
 #: src/Privacy/ComplianceAuditor.php:142
@@ -171,8 +180,7 @@ msgid "Privacy policy page is published. Statnive content auto-generated."
 msgstr ""
 
 #: src/Privacy/ComplianceAuditor.php:146
-msgid ""
-"No published privacy policy page found. Create one in Settings → Privacy."
+msgid "No published privacy policy page found. Create one in Settings → Privacy."
 msgstr ""
 
 #: src/Privacy/ComplianceAuditor.php:159
@@ -205,7 +213,8 @@ msgstr ""
 msgid "Statnive uses no cookies, localStorage, or sessionStorage by design."
 msgstr ""
 
-#: src/Privacy/ComplianceAuditor.php:213 src/Privacy/ComplianceAuditor.php:222
+#: src/Privacy/ComplianceAuditor.php:213
+#: src/Privacy/ComplianceAuditor.php:222
 msgid "Data purge operational"
 msgstr ""
 
@@ -268,9 +277,7 @@ msgid "Statnive Analytics Sessions"
 msgstr ""
 
 #: src/Privacy/PrivacyExporter.php:144
-msgid ""
-"Analytics sessions recorded by Statnive. No IP addresses or cookies are "
-"stored."
+msgid "Analytics sessions recorded by Statnive. No IP addresses or cookies are stored."
 msgstr ""
 
 #: src/Privacy/PrivacyPolicyGenerator.php:55
@@ -278,9 +285,7 @@ msgid "Analytics (Statnive)"
 msgstr ""
 
 #: src/Privacy/PrivacyPolicyGenerator.php:56
-msgid ""
-"This website uses Statnive, a privacy-first analytics plugin that runs "
-"entirely on our server. No data is shared with third-party services."
+msgid "This website uses Statnive, a privacy-first analytics plugin that runs entirely on our server. No data is shared with third-party services."
 msgstr ""
 
 #: src/Privacy/PrivacyPolicyGenerator.php:59
@@ -288,11 +293,7 @@ msgid "Cookies & Tracking"
 msgstr ""
 
 #: src/Privacy/PrivacyPolicyGenerator.php:60
-msgid ""
-"Statnive does not use cookies, localStorage, sessionStorage, or any form of "
-"browser fingerprinting. Visitor identification uses a daily-rotating "
-"cryptographic hash that cannot be reversed or used to track individuals "
-"across days."
+msgid "Statnive does not use cookies, localStorage, sessionStorage, or any form of browser fingerprinting. Visitor identification uses a daily-rotating cryptographic hash that cannot be reversed or used to track individuals across days."
 msgstr ""
 
 #: src/Privacy/PrivacyPolicyGenerator.php:63
@@ -328,11 +329,7 @@ msgid "IP Address Handling"
 msgstr ""
 
 #: src/Privacy/PrivacyPolicyGenerator.php:75
-msgid ""
-"Your IP address is never stored. It is used only momentarily to determine "
-"your approximate geographic location and to generate a one-way cryptographic "
-"hash for visit counting. The IP is discarded immediately after processing "
-"and cannot be recovered from the stored hash."
+msgid "Your IP address is never stored. It is used only momentarily to determine your approximate geographic location and to generate a one-way cryptographic hash for visit counting. The IP is discarded immediately after processing and cannot be recovered from the stored hash."
 msgstr ""
 
 #: src/Privacy/PrivacyPolicyGenerator.php:78
@@ -340,21 +337,15 @@ msgid "Consent"
 msgstr ""
 
 #: src/Privacy/PrivacyPolicyGenerator.php:80
-msgid ""
-"Because Statnive uses no cookies and stores no personal data, analytics run "
-"in cookieless mode without requiring consent under most privacy regulations."
+msgid "Because Statnive uses no cookies and stores no personal data, analytics run in cookieless mode without requiring consent under most privacy regulations."
 msgstr ""
 
 #: src/Privacy/PrivacyPolicyGenerator.php:82
-msgid ""
-"Analytics are disabled until you provide explicit consent through our cookie/"
-"consent banner. No data is collected before consent is granted."
+msgid "Analytics are disabled until you provide explicit consent through our cookie/consent banner. No data is collected before consent is granted."
 msgstr ""
 
 #: src/Privacy/PrivacyPolicyGenerator.php:84
-msgid ""
-"Analytics are active for all visitors. You may opt out using your browser's "
-"Do Not Track or Global Privacy Control settings."
+msgid "Analytics are active for all visitors. You may opt out using your browser's Do Not Track or Global Privacy Control settings."
 msgstr ""
 
 #: src/Privacy/PrivacyPolicyGenerator.php:89
@@ -372,9 +363,7 @@ msgstr ""
 #. translators: %s: comma-separated list of privacy signals
 #: src/Privacy/PrivacyPolicyGenerator.php:99
 #, php-format
-msgid ""
-"We honor the following browser privacy signals: %s. When enabled, no "
-"analytics data is collected."
+msgid "We honor the following browser privacy signals: %s. When enabled, no analytics data is collected."
 msgstr ""
 
 #: src/Privacy/PrivacyPolicyGenerator.php:105
@@ -382,17 +371,13 @@ msgid "Data Retention"
 msgstr ""
 
 #: src/Privacy/PrivacyPolicyGenerator.php:107
-msgid ""
-"Aggregated analytics data is retained indefinitely. No personal data is "
-"stored."
+msgid "Aggregated analytics data is retained indefinitely. No personal data is stored."
 msgstr ""
 
 #. translators: %d: number of days
 #: src/Privacy/PrivacyPolicyGenerator.php:111
 #, php-format
-msgid ""
-"Raw analytics data is automatically deleted after %d days. Only aggregated "
-"statistics are retained for historical reporting."
+msgid "Raw analytics data is automatically deleted after %d days. Only aggregated statistics are retained for historical reporting."
 msgstr ""
 
 #: src/Privacy/PrivacyPolicyGenerator.php:117
@@ -400,11 +385,7 @@ msgid "Your Rights"
 msgstr ""
 
 #: src/Privacy/PrivacyPolicyGenerator.php:118
-msgid ""
-"You may request export or deletion of any analytics data associated with "
-"your user account through the WordPress personal data tools. Anonymous "
-"visitor data cannot be attributed to individuals due to the cookieless, hash-"
-"based architecture."
+msgid "You may request export or deletion of any analytics data associated with your user account through the WordPress personal data tools. Anonymous visitor data cannot be attributed to individuals due to the cookieless, hash-based architecture."
 msgstr ""
 
 #: src/Privacy/SiteHealthIntegration.php:33
@@ -420,15 +401,11 @@ msgid "Statnive privacy compliance is strong."
 msgstr ""
 
 #: src/Privacy/SiteHealthIntegration.php:58
-msgid ""
-"Statnive privacy settings could be improved. Review the Privacy Audit in "
-"your dashboard."
+msgid "Statnive privacy settings could be improved. Review the Privacy Audit in your dashboard."
 msgstr ""
 
 #: src/Privacy/SiteHealthIntegration.php:61
-msgid ""
-"Statnive privacy compliance needs attention. Open Settings to configure "
-"privacy options."
+msgid "Statnive privacy compliance needs attention. Open Settings to configure privacy options."
 msgstr ""
 
 #. translators: %d: compliance score
@@ -446,9 +423,7 @@ msgid "Statnive: Data retained indefinitely"
 msgstr ""
 
 #: src/Privacy/SiteHealthIntegration.php:102
-msgid ""
-"Analytics data is retained forever. Consider setting a retention period for "
-"GDPR compliance."
+msgid "Analytics data is retained forever. Consider setting a retention period for GDPR compliance."
 msgstr ""
 
 #: src/Privacy/SiteHealthIntegration.php:106
@@ -466,7 +441,5 @@ msgid "Data retention is configured with automatic cleanup."
 msgstr ""
 
 #: statnive.php:111
-msgid ""
-"Statnive: Composer autoloader not found. Please run \"composer install\" in "
-"the plugin directory."
+msgid "Statnive: Composer autoloader not found. Please run \"composer install\" in the plugin directory."
 msgstr ""
