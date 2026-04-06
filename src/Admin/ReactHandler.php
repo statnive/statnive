@@ -86,7 +86,7 @@ final class ReactHandler {
 		// Add module type + import map to script tag.
 		add_filter(
 			'script_loader_tag',
-			static function ( string $tag, string $handle ) use ( $js_url, $import_map ): string {
+			static function ( string $tag, string $handle ) use ( $import_map ): string {
 				if ( 'statnive-dashboard' !== $handle ) {
 					return $tag;
 				}
@@ -129,8 +129,8 @@ final class ReactHandler {
 			}
 
 			// Map both relative (./) and bare chunk references to full URLs.
-			$filename        = basename( $file );
-			$full_url        = $base_url . $file;
+			$filename                = basename( $file );
+			$full_url                = $base_url . $file;
 			$map[ './' . $filename ] = $full_url;
 		}
 
@@ -148,6 +148,7 @@ final class ReactHandler {
 			return [];
 		}
 
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- reading a local Vite manifest, not a remote URL.
 		$content = file_get_contents( $manifest_path );
 		if ( false === $content ) {
 			return [];

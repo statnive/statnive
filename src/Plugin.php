@@ -11,7 +11,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 use Statnive\Container\AdminServiceProvider;
 use Statnive\Container\AnalyticsServiceProvider;
 use Statnive\Container\CoreServiceProvider;
-use Statnive\Container\LicensingServiceProvider;
 use Statnive\Container\PrivacyServiceProvider;
 use Statnive\Container\ServiceContainer;
 use Statnive\Container\ServiceProvider;
@@ -41,7 +40,6 @@ final class Plugin {
 		CoreServiceProvider::class,
 		AnalyticsServiceProvider::class,
 		PrivacyServiceProvider::class,
-		LicensingServiceProvider::class,
 		AdminServiceProvider::class,
 	];
 
