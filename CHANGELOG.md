@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Gate license API to explicit user action only (no api.statnive.com contact on free installs)
 - Remove P3TERX GeoIP mirror — MaxMind license key is now required for GeoIP (EULA compliance)
 - Fix ReportBuilder email numbers to use `number_format_i18n()` for locale-aware formatting
+- Harden public tracking endpoints: strict payload schema (reject unknown keys → 400), 8 KB body size cap (413), Content-Type enforcement for REST (text/plain or application/json → 415)
 
 ### Added
 
@@ -35,6 +36,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - GeoIPNotice admin notices for missing MaxMind license key and `DISABLE_WP_CRON` advisory
 - Translatable strings throughout email reports (Visitors, Sessions, Pageviews, Top Pages, etc.)
 - MaxMind license key + GeoIP enable/disable settings in Settings REST API with validation
+
+### Changed
+
+- Exclude dead `/src/Addon` premium stub modules from .org ZIP via `.distignore` (prevents Guideline 5 trialware confusion during review)
+- Bump "Tested up to" to WordPress 6.9 (current stable, April 2026)
 
 ## [0.2.0] - 2026-04-05
 

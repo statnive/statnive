@@ -151,6 +151,9 @@ No visitor data is ever sent to any external service. All analytics data remains
 * Add GeoIPNotice admin notices for missing MaxMind key and DISABLE_WP_CRON
 * Add translatable strings throughout email reports
 * Add MaxMind license key + GeoIP enable/disable settings in REST API
+* Harden tracking endpoints: strict payload schema, 8 KB size cap, Content-Type enforcement
+* Exclude unused premium stub modules from distribution ZIP
+* Bump Tested up to WordPress 6.9
 
 = 0.2.0 - 2026-04-05 =
 * Fix real-time dashboard showing 0 active visitors due to stale cache
