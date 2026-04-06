@@ -68,7 +68,6 @@
 		<exclude-pattern>./src/Data/*</exclude-pattern>
 		<exclude-pattern>./src/Feature/*</exclude-pattern>
 		<exclude-pattern>./src/Licensing/*</exclude-pattern>
-		<exclude-pattern>./src/Addon/*</exclude-pattern>
 	</rule>
 
 	<!-- Show colors and progress -->
