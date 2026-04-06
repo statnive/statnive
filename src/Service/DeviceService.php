@@ -52,8 +52,8 @@ final class DeviceService {
 		try {
 			// Use matomo/device-detector (Mozart-scoped).
 			if ( ! class_exists( '\DeviceDetector\DeviceDetector' ) ) {
-				$result                        = self::parse_basic( $user_agent );
-				self::$cache[ $cache_key ]     = $result;
+				$result                    = self::parse_basic( $user_agent );
+				self::$cache[ $cache_key ] = $result;
 				return $result;
 			}
 

@@ -96,7 +96,7 @@ final class ReactHandler {
 		// Add module type + import map to script tag.
 		add_filter(
 			'script_loader_tag',
-			static function ( string $tag, string $handle ) use ( $js_url, $import_map ): string {
+			static function ( string $tag, string $handle ) use ( $import_map ): string {
 				if ( 'statnive-dashboard' !== $handle ) {
 					return $tag;
 				}
