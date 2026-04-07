@@ -81,6 +81,10 @@ CHANGELOG.md
 .gitignore
 .editorconfig
 
+# Repo-only artifacts (SVN assets staged separately, evidence packs per release)
+.wordpress-org
+/releases
+
 # IDE / OS
 .idea/
 .vscode/
