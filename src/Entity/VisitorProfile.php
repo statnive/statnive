@@ -251,5 +251,16 @@ final class VisitorProfile {
 		Visitor::record( $this );
 		Session::record( $this );
 		View::record( $this );
+
+		/**
+		 * Fires after Visitor → Session → View have been persisted.
+		 *
+		 * At this point `session_id`, `view_id`, and `resource_uri_id` are
+		 * guaranteed to be set on the profile. Hook here for any side-effects
+		 * that depend on those IDs (e.g. UTM parameter persistence).
+		 *
+		 * @param VisitorProfile $profile The persisted visitor profile.
+		 */
+		do_action( 'statnive_profile_persisted', $this );
 	}
 }

@@ -45,6 +45,9 @@ final class AnalyticsServiceProvider implements ServiceProvider {
 		// Wire the enrichment pipeline.
 		add_action( 'statnive_enrich_profile', [ self::class, 'enrich_profile' ] );
 
+		// Persist UTM parameters once session_id / view_id exist.
+		add_action( 'statnive_profile_persisted', [ self::class, 'persist_utm' ] );
+
 		// Register cron jobs.
 		CronRegistrar::register_all();
 
@@ -115,6 +118,15 @@ final class AnalyticsServiceProvider implements ServiceProvider {
 			self::log_error( 'Device', $e );
 		}
 
+		// UTM parse-only — must run BEFORE referrer classification so
+		// SourceDetector can use utm_medium / utm_source as overrides.
+		// DB persistence happens later in persist_utm() (post-persist hook).
+		try {
+			ParameterService::apply_to_profile( $profile );
+		} catch ( \Exception $e ) {
+			self::log_error( 'UTM', $e );
+		}
+
 		// Referrer classification.
 		try {
 			$referrer_url = $profile->get( 'referrer', '' );
@@ -127,14 +139,36 @@ final class AnalyticsServiceProvider implements ServiceProvider {
 					$profile->with_referrer_data( $source['channel'], $source['name'], $domain );
 				}
 			} else {
-				// Direct traffic or self-referral.
-				$profile->with_referrer_data( 'Direct', '', '' );
+				// No HTTP referrer (or self-referral). If the URL carried UTM
+				// tags, surface them as the source so the visit doesn't get
+				// silently bucketed as Direct in the All Sources report.
+				$utm_source = (string) $profile->get( 'utm_source', '' );
+				$utm_medium = (string) $profile->get( 'utm_medium', '' );
+				if ( '' !== $utm_source || '' !== $utm_medium ) {
+					$source = SourceDetector::classify( strtolower( $utm_source ), '', $utm_medium );
+					$profile->with_referrer_data(
+						$source['channel'],
+						'' !== $source['name'] ? $source['name'] : $utm_source,
+						$utm_source
+					);
+				} else {
+					$profile->with_referrer_data( 'Direct', '', '' );
+				}
 			}
 		} catch ( \Exception $e ) {
 			self::log_error( 'Referrer', $e );
 		}
+	}
 
-		// UTM parameter extraction (stores on profile for SourceDetector).
+	/**
+	 * Persist UTM parameters into the parameters table.
+	 *
+	 * Hooked into 'statnive_profile_persisted' — runs after Visitor → Session →
+	 * View have been recorded so `session_id` / `view_id` are available.
+	 *
+	 * @param VisitorProfile $profile The persisted profile.
+	 */
+	public static function persist_utm( VisitorProfile $profile ): void {
 		try {
 			ParameterService::record( $profile );
 		} catch ( \Exception $e ) {
