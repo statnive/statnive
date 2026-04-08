@@ -29,12 +29,11 @@ export function OverviewPage() {
 		prevTotals && prevTotals.sessions > 0 ? prevTotals.total_duration / prevTotals.sessions : 0;
 
 	// Source table columns.
-	const maxVisitors = useMemo(
-		() => Math.max(...(sources ?? []).map((s) => s.visitors), 1),
-		[sources],
-	);
-	const maxSessions = useMemo(
-		() => Math.max(...(sources ?? []).map((s) => s.sessions), 1),
+	const max = useMemo(
+		() => Math.max(
+			...(sources ?? []).map((s) => Math.max(s.visitors, s.sessions)),
+			1,
+		),
 		[sources],
 	);
 
@@ -60,13 +59,12 @@ export function OverviewPage() {
 					<DualBarCell
 						visitors={row.visitors}
 						secondaryValue={row.sessions}
-						maxVisitors={maxVisitors}
-						maxSecondary={maxSessions}
+						max={max}
 					/>
 				),
 			},
 		],
-		[maxVisitors, maxSessions],
+		[max],
 	);
 
 	const pageColumns: Column<PageRow>[] = useMemo(

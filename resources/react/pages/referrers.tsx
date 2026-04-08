@@ -26,8 +26,13 @@ export function ReferrersPage() {
 		});
 	}, [sources]);
 
-	const maxV = useMemo(() => Math.max(...(sources ?? []).map((s) => s.visitors), 1), [sources]);
-	const maxS = useMemo(() => Math.max(...(sources ?? []).map((s) => s.sessions), 1), [sources]);
+	const max = useMemo(
+		() => Math.max(
+			...(sources ?? []).map((s) => Math.max(s.visitors, s.sessions)),
+			1,
+		),
+		[sources],
+	);
 
 	const sourceColumns: Column<SourceRow>[] = useMemo(
 		() => [
@@ -41,10 +46,10 @@ export function ReferrersPage() {
 				),
 			},
 			{ key: 'visitors', header: 'Visitors / Sessions', sortable: true,
-				render: (row) => <DualBarCell visitors={row.visitors} secondaryValue={row.sessions} maxVisitors={maxV} maxSecondary={maxS} />,
+				render: (row) => <DualBarCell visitors={row.visitors} secondaryValue={row.sessions} max={max} />,
 			},
 		],
-		[maxV, maxS],
+		[max],
 	);
 
 	const utmColumns: Column<UtmRow>[] = useMemo(
