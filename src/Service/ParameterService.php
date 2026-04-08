@@ -56,11 +56,14 @@ final class ParameterService {
 	}
 
 	/**
-	 * Record UTM parameters from the visitor profile into the parameters table.
+	 * Parse UTM parameters from the profile's `page_query` and stash them on
+	 * the profile for downstream consumers (e.g. SourceDetector). No DB writes.
 	 *
-	 * @param VisitorProfile $profile The visitor profile with session_id and view_id.
+	 * Safe to call before persistence — `session_id` / `view_id` are not needed.
+	 *
+	 * @param VisitorProfile $profile The visitor profile being enriched.
 	 */
-	public static function record( VisitorProfile $profile ): void {
+	public static function apply_to_profile( VisitorProfile $profile ): void {
 		$query_string = $profile->get( 'page_query', '' );
 		$utm_params   = self::extract_utm( $query_string );
 
@@ -68,13 +71,45 @@ final class ParameterService {
 			return;
 		}
 
-		$session_id      = $profile->get( 'session_id', 0 );
-		$view_id         = $profile->get( 'view_id', 0 );
-		$resource_uri_id = $profile->get( 'resource_uri_id', 0 );
+		foreach ( $utm_params as $key => $value ) {
+			// Mirror each UTM param onto the profile (utm_source, utm_medium, ...).
+			$profile->set( $key, $value );
+		}
+	}
 
+	/**
+	 * Persist UTM parameters from the visitor profile into the parameters table.
+	 *
+	 * Must be called AFTER persist() — requires `session_id` (and prefers
+	 * `view_id` / `resource_uri_id`) on the profile. Hook this to the
+	 * `statnive_profile_persisted` action.
+	 *
+	 * Reads UTMs directly from the profile (already mirrored there by
+	 * `apply_to_profile()` during enrichment) — avoids reparsing `page_query`
+	 * a second time on the tracking hot path.
+	 *
+	 * @param VisitorProfile $profile The visitor profile with session_id and view_id.
+	 */
+	public static function record( VisitorProfile $profile ): void {
+		$session_id = $profile->get( 'session_id', 0 );
 		if ( 0 === $session_id ) {
 			return;
 		}
+
+		$utm_params = [];
+		foreach ( self::UTM_KEYS as $key ) {
+			$value = (string) $profile->get( $key, '' );
+			if ( '' !== $value ) {
+				$utm_params[ $key ] = $value;
+			}
+		}
+
+		if ( empty( $utm_params ) ) {
+			return;
+		}
+
+		$view_id         = $profile->get( 'view_id', 0 );
+		$resource_uri_id = $profile->get( 'resource_uri_id', 0 );
 
 		global $wpdb;
 		$table = TableRegistry::get( 'parameters' );
@@ -96,13 +131,5 @@ final class ParameterService {
 		}
 		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery
 		// phpcs:enable WordPress.DB.DirectDatabaseQuery.NoCaching
-
-		// Store utm_medium on the profile for SourceDetector UTM override.
-		if ( ! empty( $utm_params['utm_medium'] ) ) {
-			$profile->set( 'utm_medium', $utm_params['utm_medium'] );
-		}
-		if ( ! empty( $utm_params['utm_source'] ) ) {
-			$profile->set( 'utm_source', $utm_params['utm_source'] );
-		}
 	}
 }
