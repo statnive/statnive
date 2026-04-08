@@ -4,19 +4,17 @@ interface DualBarCellProps {
 	visitors: number;
 	secondaryValue: number;
 	secondaryLabel?: string;
-	maxVisitors: number;
-	maxSecondary: number;
+	max: number;
 }
 
 export function DualBarCell({
 	visitors,
 	secondaryValue,
 	secondaryLabel = '',
-	maxVisitors,
-	maxSecondary,
+	max,
 }: DualBarCellProps) {
-	const visitorWidth = maxVisitors > 0 ? (visitors / maxVisitors) * 100 : 0;
-	const secondaryWidth = maxSecondary > 0 ? (secondaryValue / maxSecondary) * 100 : 0;
+	const visitorWidth = max > 0 ? (visitors / max) * 100 : 0;
+	const secondaryWidth = max > 0 ? (secondaryValue / max) * 100 : 0;
 
 	return (
 		<div className="flex min-w-[120px] flex-col gap-1">
