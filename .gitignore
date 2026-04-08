@@ -28,9 +28,3 @@ Thumbs.db
 # Environment
 .env
 .env.local
-
-# Composer
-composer.lock
-
-# NPM
-package-lock.json

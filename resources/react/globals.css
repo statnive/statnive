@@ -1,4 +1,22 @@
-@import "tailwindcss" source("../..");
+/*
+ * Statnive admin dashboard styles.
+ *
+ * Scoped under #statnive-app so that loading this stylesheet on the
+ * Statnive admin page never affects the rest of the WordPress admin chrome
+ * (admin bar, sidebar, notices, footer, screen options).
+ *
+ * Tailwind v4's default preflight targets bare `html`, `body`, `*`,
+ * `button`, `input`, `a`, `table`, `h1..h6`, `hr`, etc. Those selectors
+ * would override WP admin chrome when this file is loaded, so we skip the
+ * default `tailwindcss/preflight.css` import and ship a #statnive-app
+ * scoped copy below instead. Theme tokens and utilities still come from
+ * Tailwind unchanged.
+ */
+
+@layer theme, base, components, utilities;
+
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities) source("../..");
 
 @theme {
 	--color-primary: #2271b1;
@@ -21,17 +39,235 @@
 	--radius-lg: 0.5rem;
 }
 
-#statnive-app {
-	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
-	font-size: 14px;
-	line-height: 1.5;
-	color: var(--color-foreground);
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
-}
+/*
+ * Scoped preflight — mirrors tailwindcss/preflight.css v4.2.2 but every
+ * selector descends from #statnive-app. Keep rule order identical to the
+ * upstream file so behaviour stays predictable on version bumps.
+ */
+@layer base {
+	#statnive-app,
+	#statnive-app *,
+	#statnive-app ::before,
+	#statnive-app ::after,
+	#statnive-app ::backdrop,
+	#statnive-app ::file-selector-button {
+		box-sizing: border-box;
+		margin: 0;
+		padding: 0;
+		border: 0 solid;
+	}
 
-#statnive-app *,
-#statnive-app *::before,
-#statnive-app *::after {
-	border-color: var(--color-border);
+	#statnive-app {
+		line-height: 1.5;
+		-webkit-text-size-adjust: 100%;
+		tab-size: 4;
+		font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+		font-size: 14px;
+		color: var(--color-foreground);
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+		-webkit-tap-highlight-color: transparent;
+	}
+
+	#statnive-app hr {
+		height: 0;
+		color: inherit;
+		border-top-width: 1px;
+	}
+
+	#statnive-app abbr:where([title]) {
+		-webkit-text-decoration: underline dotted;
+		text-decoration: underline dotted;
+	}
+
+	#statnive-app h1,
+	#statnive-app h2,
+	#statnive-app h3,
+	#statnive-app h4,
+	#statnive-app h5,
+	#statnive-app h6 {
+		font-size: inherit;
+		font-weight: inherit;
+	}
+
+	#statnive-app a {
+		color: inherit;
+		-webkit-text-decoration: inherit;
+		text-decoration: inherit;
+	}
+
+	#statnive-app b,
+	#statnive-app strong {
+		font-weight: bolder;
+	}
+
+	#statnive-app code,
+	#statnive-app kbd,
+	#statnive-app samp,
+	#statnive-app pre {
+		font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+		font-size: 1em;
+	}
+
+	#statnive-app small {
+		font-size: 80%;
+	}
+
+	#statnive-app sub,
+	#statnive-app sup {
+		font-size: 75%;
+		line-height: 0;
+		position: relative;
+		vertical-align: baseline;
+	}
+
+	#statnive-app sub {
+		bottom: -0.25em;
+	}
+
+	#statnive-app sup {
+		top: -0.5em;
+	}
+
+	#statnive-app table {
+		text-indent: 0;
+		border-color: inherit;
+		border-collapse: collapse;
+	}
+
+	#statnive-app :-moz-focusring {
+		outline: auto;
+	}
+
+	#statnive-app progress {
+		vertical-align: baseline;
+	}
+
+	#statnive-app summary {
+		display: list-item;
+	}
+
+	#statnive-app ol,
+	#statnive-app ul,
+	#statnive-app menu {
+		list-style: none;
+	}
+
+	#statnive-app img,
+	#statnive-app svg,
+	#statnive-app video,
+	#statnive-app canvas,
+	#statnive-app audio,
+	#statnive-app iframe,
+	#statnive-app embed,
+	#statnive-app object {
+		display: block;
+		vertical-align: middle;
+	}
+
+	#statnive-app img,
+	#statnive-app video {
+		max-width: 100%;
+		height: auto;
+	}
+
+	#statnive-app button,
+	#statnive-app input,
+	#statnive-app select,
+	#statnive-app optgroup,
+	#statnive-app textarea,
+	#statnive-app ::file-selector-button {
+		font: inherit;
+		font-feature-settings: inherit;
+		font-variation-settings: inherit;
+		letter-spacing: inherit;
+		color: inherit;
+		border-radius: 0;
+		background-color: transparent;
+		opacity: 1;
+	}
+
+	#statnive-app :where(select:is([multiple], [size])) optgroup {
+		font-weight: bolder;
+	}
+
+	#statnive-app :where(select:is([multiple], [size])) optgroup option {
+		padding-inline-start: 20px;
+	}
+
+	#statnive-app ::file-selector-button {
+		margin-inline-end: 4px;
+	}
+
+	#statnive-app ::placeholder {
+		opacity: 1;
+	}
+
+	@supports (not (-webkit-appearance: -apple-pay-button)) or (contain-intrinsic-size: 1px) {
+		#statnive-app ::placeholder {
+			color: color-mix(in oklab, currentcolor 50%, transparent);
+		}
+	}
+
+	#statnive-app textarea {
+		resize: vertical;
+	}
+
+	#statnive-app ::-webkit-search-decoration {
+		-webkit-appearance: none;
+	}
+
+	#statnive-app ::-webkit-date-and-time-value {
+		min-height: 1lh;
+		text-align: inherit;
+	}
+
+	#statnive-app ::-webkit-datetime-edit {
+		display: inline-flex;
+	}
+
+	#statnive-app ::-webkit-datetime-edit-fields-wrapper {
+		padding: 0;
+	}
+
+	#statnive-app ::-webkit-datetime-edit,
+	#statnive-app ::-webkit-datetime-edit-year-field,
+	#statnive-app ::-webkit-datetime-edit-month-field,
+	#statnive-app ::-webkit-datetime-edit-day-field,
+	#statnive-app ::-webkit-datetime-edit-hour-field,
+	#statnive-app ::-webkit-datetime-edit-minute-field,
+	#statnive-app ::-webkit-datetime-edit-second-field,
+	#statnive-app ::-webkit-datetime-edit-millisecond-field,
+	#statnive-app ::-webkit-datetime-edit-meridiem-field {
+		padding-block: 0;
+	}
+
+	#statnive-app ::-webkit-calendar-picker-indicator {
+		line-height: 1;
+	}
+
+	#statnive-app :-moz-ui-invalid {
+		box-shadow: none;
+	}
+
+	#statnive-app button,
+	#statnive-app input:where([type='button'], [type='reset'], [type='submit']),
+	#statnive-app ::file-selector-button {
+		appearance: button;
+	}
+
+	#statnive-app ::-webkit-inner-spin-button,
+	#statnive-app ::-webkit-outer-spin-button {
+		height: auto;
+	}
+
+	#statnive-app [hidden]:where(:not([hidden='until-found'])) {
+		display: none !important;
+	}
+
+	#statnive-app *,
+	#statnive-app *::before,
+	#statnive-app *::after {
+		border-color: var(--color-border);
+	}
 }

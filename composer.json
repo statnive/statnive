@@ -31,10 +31,10 @@
 	"scripts": {
 		"test": "phpunit",
 		"test:unit": "phpunit --testsuite unit",
-		"test:integration": "phpunit --testsuite integration",
+		"test:integration": "phpunit -c phpunit-integration.xml",
 		"phpcs": "phpcs",
 		"phpcbf": "phpcbf",
-		"phpstan": "phpstan analyse",
+		"phpstan": "phpstan analyse --memory-limit=1G",
 		"gate": "@test:unit"
 	},
 	"extra": {
