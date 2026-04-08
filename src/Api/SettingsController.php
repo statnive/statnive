@@ -155,7 +155,10 @@ final class SettingsController extends WP_REST_Controller {
 			$key = get_option( 'statnive_maxmind_license_key', '' );
 			if ( '' === $key ) {
 				return new WP_REST_Response(
-					[ 'code' => 'missing_license_key', 'message' => 'A MaxMind license key is required to enable GeoIP.' ],
+					[
+						'code'    => 'missing_license_key',
+						'message' => 'A MaxMind license key is required to enable GeoIP.',
+					],
 					400
 				);
 			}

@@ -106,7 +106,7 @@ This plugin connects to the following third-party services under specific condit
 This plugin can download MaxMind GeoLite2 GeoIP databases to enable visitor geolocation.
 Requires a free MaxMind account and license key (user must accept the GeoLite2 EULA).
 
-* Source: MaxMind (https://www.maxmind.com)
+* Source: MaxMind (https://www.maxmind.com), downloaded from https://download.maxmind.com/
 * When: Weekly via WordPress Cron, only when GeoIP feature is enabled in Settings and a license key is configured
 * Data sent: License key and standard HTTP request headers (no visitor data is transmitted)
 * Data received: GeoIP database file, stored locally in your uploads directory
