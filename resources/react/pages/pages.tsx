@@ -74,7 +74,7 @@ export function PagesPage() {
 					placeholder="Search pages..."
 					value={search}
 					onChange={(e) => setSearch(e.target.value)}
-					className="w-full rounded-md border border-border bg-card py-[3px] pl-[30px] pr-[10px] text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+					className="w-full rounded-md border border-border bg-card !py-[3px] !pl-[30px] !pr-[10px] text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
 				/>
 			</div>
 
