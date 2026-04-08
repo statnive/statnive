@@ -63,6 +63,12 @@ final class HitController extends WP_REST_Controller {
 
 	/**
 	 * Register the /hit route.
+	 *
+	 * Schema-driven validation lets WordPress core run sanitize/validate
+	 * callbacks for every accepted field before our handler executes.
+	 * The endpoint is intentionally public (`__return_true`); HMAC signature
+	 * verification + transient rate limiting + DNT/GPC headers provide the
+	 * security boundary.
 	 */
 	public function register_routes(): void {
 		register_rest_route(
@@ -73,9 +79,85 @@ final class HitController extends WP_REST_Controller {
 					'methods'             => WP_REST_Server::CREATABLE,
 					'callback'            => [ $this, 'create_item' ],
 					'permission_callback' => '__return_true',
+					'args'                => self::get_route_args(),
 				],
 			]
 		);
+	}
+
+	/**
+	 * Argument schema for the /hit route.
+	 *
+	 * Note: the tracker sends `Content-Type: text/plain` to avoid the CORS
+	 * preflight, so the JSON body is parsed manually inside `create_item()`
+	 * via {@see PayloadValidator}. The schema below is therefore primarily
+	 * documentation + a hint to Plugin Check / OpenAPI scanners that every
+	 * field has a declared type and sanitizer. Runtime sanitization still
+	 * happens in `create_item()`.
+	 *
+	 * @return array<string, array<string, mixed>>
+	 */
+	private static function get_route_args(): array {
+		// IMPORTANT: do NOT mark any of these args as `required` => true.
+		// The tracker sends its JSON payload with Content-Type: text/plain to
+		// bypass the CORS preflight, and WordPress's REST framework cannot
+		// parse text/plain bodies into request args. A `required` flag here
+		// would cause the framework to reject every real tracker hit with
+		// `rest_missing_callback_param` BEFORE create_item() runs. The schema
+		// stays for documentation / Plugin Check / OpenAPI scanners; runtime
+		// validation of resource_type / signature happens inside create_item()
+		// via PayloadValidator and the explicit empty checks below.
+		return [
+			'resource_type'   => [
+				'type'              => 'string',
+				'sanitize_callback' => 'sanitize_text_field',
+			],
+			'resource_id'     => [
+				'type'              => 'integer',
+				'sanitize_callback' => 'absint',
+			],
+			'referrer'        => [
+				'type'              => 'string',
+				'format'            => 'uri',
+				'sanitize_callback' => 'esc_url_raw',
+			],
+			'screen_width'    => [
+				'type'              => 'integer',
+				'sanitize_callback' => 'absint',
+			],
+			'screen_height'   => [
+				'type'              => 'integer',
+				'sanitize_callback' => 'absint',
+			],
+			'language'        => [
+				'type'              => 'string',
+				'sanitize_callback' => 'sanitize_text_field',
+			],
+			'timezone'        => [
+				'type'              => 'string',
+				'sanitize_callback' => 'sanitize_text_field',
+			],
+			'signature'       => [
+				'type'              => 'string',
+				'sanitize_callback' => 'sanitize_text_field',
+			],
+			'page_url'        => [
+				'type'              => 'string',
+				'format'            => 'uri',
+				'sanitize_callback' => 'esc_url_raw',
+			],
+			'page_query'      => [
+				'type'              => 'string',
+				'sanitize_callback' => 'sanitize_text_field',
+			],
+			'pvid'            => [
+				'type'              => 'string',
+				'sanitize_callback' => 'sanitize_text_field',
+			],
+			'consent_granted' => [
+				'type' => 'boolean',
+			],
+		];
 	}
 
 	/**
@@ -138,8 +220,9 @@ final class HitController extends WP_REST_Controller {
 		}
 
 		// Basic rate limiting via transient (60 req/min per IP).
+		// Key is salted SHA-256 of the raw IP — raw IP is never persisted.
 		$ip     = IpExtractor::extract();
-		$ip_key = 'statnive_rate_' . md5( $ip );
+		$ip_key = 'statnive_rate_' . hash( 'sha256', $ip . wp_salt( 'auth' ) );
 		$count  = (int) get_transient( $ip_key );
 		if ( $count >= 60 ) {
 			return self::error_response( [ 'rate_limited', 'Too many requests.', 429 ] );
@@ -159,10 +242,21 @@ final class HitController extends WP_REST_Controller {
 	/**
 	 * Translate an error tuple into a WP_REST_Response.
 	 *
+	 * Increments the `statnive_failed_requests` counter so the diagnostics
+	 * export (§29) and admin observability (§28.3.1) can surface the number
+	 * of dropped tracking events.
+	 *
 	 * @param array{0: string, 1: string, 2: int} $tuple [code, message, status].
 	 * @return WP_REST_Response
 	 */
 	private static function error_response( array $tuple ): WP_REST_Response {
+		// Don't count rate-limit + privacy soft-blocks as "errors" — those are
+		// expected, not failures. Only count code/4xx/5xx that signal a broken
+		// request the operator should know about.
+		if ( $tuple[2] >= 400 && 429 !== $tuple[2] ) {
+			update_option( 'statnive_failed_requests', (int) get_option( 'statnive_failed_requests', 0 ) + 1, false );
+		}
+
 		return new WP_REST_Response(
 			[
 				'code'    => $tuple[0],

@@ -11,12 +11,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 use Statnive\Container\AdminServiceProvider;
 use Statnive\Container\AnalyticsServiceProvider;
 use Statnive\Container\CoreServiceProvider;
-use Statnive\Container\LicensingServiceProvider;
 use Statnive\Container\PrivacyServiceProvider;
 use Statnive\Container\ServiceContainer;
 use Statnive\Container\ServiceProvider;
 use Statnive\Cron\CronRegistrar;
 use Statnive\Database\DatabaseFactory;
+use Statnive\Database\Migrator;
 
 /**
  * Plugin bootstrap class.
@@ -41,7 +41,6 @@ final class Plugin {
 		CoreServiceProvider::class,
 		AnalyticsServiceProvider::class,
 		PrivacyServiceProvider::class,
-		LicensingServiceProvider::class,
 		AdminServiceProvider::class,
 	];
 
@@ -63,6 +62,14 @@ final class Plugin {
 			false,
 			dirname( plugin_basename( STATNIVE_FILE ) ) . '/languages/'
 		);
+
+		// Database schema migrations (runs on plugins_loaded, bails fast when nothing pending).
+		Migrator::init();
+
+		// WP-CLI commands (loaded only when WP-CLI is the SAPI).
+		if ( defined( 'WP_CLI' ) && WP_CLI ) {
+			\WP_CLI::add_command( 'statnive cron', \Statnive\Cli\CronCommand::class );
+		}
 
 		self::register_hooks();
 		self::boot_container();
@@ -109,6 +116,19 @@ final class Plugin {
 	 * Runs version checks and sets default options.
 	 */
 	public static function activate(): void {
+		// Defensive capability check for web-request activations (WordPress core
+		// also enforces this on the wp-admin Plugins screen). Skipped under
+		// WP-CLI / WP_CLI test runs because there is no current user in those
+		// contexts and the operator is already trusted by definition — the
+		// official Plugin Check Action triggers exactly this path.
+		if ( ! ( defined( 'WP_CLI' ) && WP_CLI ) && ! current_user_can( 'activate_plugins' ) ) {
+			wp_die(
+				esc_html__( 'You do not have permission to activate plugins.', 'statnive' ),
+				'Plugin Activation Error',
+				[ 'back_link' => true ]
+			);
+		}
+
 		if ( version_compare( PHP_VERSION, STATNIVE_MIN_PHP, '<' ) ) {
 			deactivate_plugins( plugin_basename( STATNIVE_FILE ) );
 			wp_die(

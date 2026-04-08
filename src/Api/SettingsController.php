@@ -212,9 +212,9 @@ final class SettingsController extends WP_REST_Controller {
 			'retention_days' => max( 30, min( absint( $value ), 3650 ) ),
 			'excluded_ips' => sanitize_textarea_field( (string) $value ),
 			'excluded_roles' => is_array( $value ) ? array_map( 'sanitize_text_field', $value ) : [],
-			'consent_mode' => in_array( $value, [ 'full', 'cookieless', 'disabled-until-consent' ], true ) ? $value : 'cookieless',
-			'retention_mode' => in_array( $value, [ 'forever', 'delete', 'archive' ], true ) ? $value : 'delete',
-			'email_frequency' => in_array( $value, [ 'weekly', 'monthly' ], true ) ? $value : 'weekly',
+			'consent_mode' => ( in_array( $value, [ 'full', 'cookieless', 'disabled-until-consent' ], true ) ? $value : 'cookieless' ),
+			'retention_mode' => ( in_array( $value, [ 'forever', 'delete', 'archive' ], true ) ? $value : 'delete' ),
+			'email_frequency' => ( in_array( $value, [ 'weekly', 'monthly' ], true ) ? $value : 'weekly' ),
 			'maxmind_license_key' => sanitize_text_field( (string) $value ),
 			default => sanitize_text_field( (string) $value ),
 		};

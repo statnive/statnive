@@ -435,15 +435,12 @@ jobs:
           # 'statnive_maxmind_license_key' which is legitimate in the .org build.
           PATTERN='isPro\(|checkLicense|Addon\\Pro|trial_expires|statnive_license_key|premium_only'
 
-          # TODO(wporg-submission): remove this allowlist once Pro plumbing is relocated
-          # to src/Addon/ (already .distignore'd). Until then these files live in
-          # development for the Pro product but must not ship in the WP.org ZIP.
+          # The Licensing/Feature/LicenseCheckJob plumbing was removed in the
+          # WP.org submission v2 work (PR #9) per Detailed Guideline 6. Only
+          # CronRegistrar.php remains on the allowlist because it carries a
+          # historical comment referencing the removed cron event name; the
+          # comment matches the pattern but is not gating code.
           PRO_ALLOWLIST=(
-            'src/Licensing/ApiCommunicator.php'
-            'src/Licensing/LicenseHelper.php'
-            'src/Cron/LicenseCheckJob.php'
-            'src/Container/LicensingServiceProvider.php'
-            'src/Api/LicenseController.php'
             'src/Cron/CronRegistrar.php'
           )
           # Stale-path guard: a typo'd or renamed entry would silently disable the
@@ -521,7 +518,9 @@ jobs:
             exit 1
           fi
 
-          ALLOWLIST='^(schema\.org|www\.w3\.org|wordpress\.org|api\.wordpress\.org|www\.gnu\.org)$'
+          # statnive.com is the plugin's own homepage/author URI in the
+          # statnive.php header — it's metadata, not an external service call.
+          ALLOWLIST='^(schema\.org|www\.w3\.org|wordpress\.org|api\.wordpress\.org|www\.gnu\.org|statnive\.com)$'
           for host in $CODE_HOSTS; do
             if echo "$host" | grep -qE "$ALLOWLIST"; then
               continue

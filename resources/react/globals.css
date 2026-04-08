@@ -271,3 +271,30 @@
 		border-color: var(--color-border);
 	}
 }
+
+/*
+ * WCAG 2.2 — focus visibility (Pass 2 audit B8 / §24.2)
+ * Every interactive element gets a high-contrast focus ring whenever the
+ * user reaches it via keyboard. Mouse focus is suppressed via :focus-visible
+ * so the ring only shows for tab navigation.
+ */
+#statnive-app a:focus-visible,
+#statnive-app button:focus-visible,
+#statnive-app [role="button"]:focus-visible,
+#statnive-app [role="tab"]:focus-visible,
+#statnive-app [role="menuitem"]:focus-visible,
+#statnive-app input:focus-visible,
+#statnive-app select:focus-visible,
+#statnive-app textarea:focus-visible,
+#statnive-app summary:focus-visible {
+	outline: 2px solid var(--color-primary);
+	outline-offset: 2px;
+	border-radius: var(--radius-sm);
+}
+
+/* Sortable/clickable table headers (DataTable) get the same treatment. */
+#statnive-app th[aria-sort]:focus-visible,
+#statnive-app th[scope="col"]:focus-visible {
+	outline: 2px solid var(--color-primary);
+	outline-offset: -2px;
+}

@@ -29,12 +29,11 @@ export function OverviewPage() {
 		prevTotals && prevTotals.sessions > 0 ? prevTotals.total_duration / prevTotals.sessions : 0;
 
 	// Source table columns.
-	const maxVisitors = useMemo(
-		() => Math.max(...(sources ?? []).map((s) => s.visitors), 1),
-		[sources],
-	);
-	const maxSessions = useMemo(
-		() => Math.max(...(sources ?? []).map((s) => s.sessions), 1),
+	const max = useMemo(
+		() => Math.max(
+			...(sources ?? []).map((s) => Math.max(s.visitors, s.sessions)),
+			1,
+		),
 		[sources],
 	);
 
@@ -60,13 +59,12 @@ export function OverviewPage() {
 					<DualBarCell
 						visitors={row.visitors}
 						secondaryValue={row.sessions}
-						maxVisitors={maxVisitors}
-						maxSecondary={maxSessions}
+						max={max}
 					/>
 				),
 			},
 		],
-		[maxVisitors, maxSessions],
+		[max],
 	);
 
 	const pageColumns: Column<PageRow>[] = useMemo(
@@ -152,7 +150,7 @@ export function OverviewPage() {
 						isLoading={loadingSources}
 						defaultSortKey="visitors"
 						getRowKey={(row, i) => `${row.channel}-${row.name}-${i}`}
-						emptyMessage="No traffic sources recorded yet"
+						emptyMessage="No traffic sources recorded yet. New visits will appear within a few minutes — if nothing shows after 10 minutes, run the self-test under Settings → Diagnostics or check Settings → Tracking is enabled."
 					/>
 				</div>
 				<div className="rounded-lg border border-border bg-card p-4">
@@ -163,7 +161,7 @@ export function OverviewPage() {
 						isLoading={loadingPages}
 						defaultSortKey="visitors"
 						getRowKey={(row) => row.uri}
-						emptyMessage="No page data recorded yet"
+						emptyMessage="No page data recorded yet. Tracking is active — pageviews will appear after the next visit. If nothing shows after 10 minutes, run the self-test under Settings → Diagnostics."
 					/>
 				</div>
 			</div>

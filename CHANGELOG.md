@@ -5,6 +5,22 @@ All notable changes to Statnive are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Removed
+
+- **WordPress.org Guideline 6 compliance:** removed all license validation
+  code from the WordPress.org build (`src/Licensing/`, `src/Feature/`,
+  `src/Cron/LicenseCheckJob.php`, `src/Container/LicensingServiceProvider.php`,
+  `src/Api/LicenseController.php`, `src/Api/CapabilitiesController.php` and
+  the corresponding test suites). Premium features now ship via a separate
+  Pro add-on distributed from statnive.com — never from wordpress.org.
+- Removed the `statnive_weekly_license_check` cron schedule registration
+  (the hook is still cleared in `uninstall.php` for sites upgrading from
+  earlier versions).
+- Removed the `statnive_dashboard_config` filter that injected plan
+  capabilities into the React admin (no longer needed without tiers).
+
 ## [0.3.0] - 2026-04-06
 
 ### Fixed

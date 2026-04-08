@@ -32,9 +32,6 @@ final class DataArchiver {
 		}
 
 		$key = self::get_encryption_key();
-		if ( null === $key ) {
-			return false;
-		}
 
 		$plaintext = wp_json_encode( $aggregates );
 		if ( false === $plaintext ) {
@@ -49,7 +46,9 @@ final class DataArchiver {
 		$hmac = hash_hmac( 'sha256', $ciphertext, $key );
 
 		$archive = [
+			// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode -- binary nonce must be base64 encoded for safe DB storage.
 			'nonce'      => base64_encode( $nonce ),
+			// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode -- libsodium ciphertext must be base64 encoded for safe DB storage.
 			'ciphertext' => base64_encode( $ciphertext ),
 			'hmac'       => $hmac,
 			'created_at' => gmdate( 'Y-m-d H:i:s' ),
@@ -92,12 +91,13 @@ final class DataArchiver {
 	/**
 	 * Get or create the archive encryption key.
 	 *
-	 * @return string|null 32-byte key or null on failure.
+	 * @return string 32-byte key.
 	 */
-	private static function get_encryption_key(): ?string {
+	private static function get_encryption_key(): string {
 		$stored = get_option( 'statnive_archive_key', '' );
 
 		if ( ! empty( $stored ) ) {
+			// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode -- decoding our own base64-encoded encryption key.
 			$decoded = base64_decode( $stored, true );
 			if ( false !== $decoded && SODIUM_CRYPTO_SECRETBOX_KEYBYTES === strlen( $decoded ) ) {
 				return $decoded;

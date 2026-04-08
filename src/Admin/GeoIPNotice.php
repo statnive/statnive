@@ -51,21 +51,24 @@ final class GeoIPNotice {
 		}
 
 		printf(
-			'<div class="notice notice-warning is-dismissible"><p>%s</p><p>%s</p></div>',
-			esc_html__( 'Statnive: GeoIP is enabled but no MaxMind license key is configured. Visitor geolocation will not work until a key is added.', 'statnive' ),
+			'<div class="notice notice-warning is-dismissible"><p><strong>%s</strong></p><p>%s</p><p><em>%s</em></p><p>%s</p></div>',
+			esc_html__( 'Statnive: GeoIP is enabled but no MaxMind license key is configured.', 'statnive' ),
+			esc_html__( 'Impact: visitor country/region data will not appear in your reports. Page tracking, sources, devices and all other metrics continue to work normally.', 'statnive' ),
+			esc_html__( 'What Statnive will do: retry the GeoIP database download every week. No additional alerts will be raised until the key is added or GeoIP is disabled.', 'statnive' ),
 			wp_kses(
 				sprintf(
 					/* translators: 1: MaxMind signup URL, 2: MaxMind EULA URL */
-					__( '<a href="%1$s" target="_blank" rel="noopener">Get a free MaxMind license key</a> (requires accepting the <a href="%2$s" target="_blank" rel="noopener">GeoLite2 EULA</a>).', 'statnive' ),
+					__( '<strong>To fix:</strong> <a href="%1$s" target="_blank" rel="noopener">get a free MaxMind license key</a> (requires accepting the <a href="%2$s" target="_blank" rel="noopener">GeoLite2 EULA</a>) and paste it into Settings → GeoIP. Or disable GeoIP in Settings to dismiss this notice.', 'statnive' ),
 					'https://www.maxmind.com/en/geolite2/signup',
 					'https://www.maxmind.com/en/geolite2/eula'
 				),
 				[
-					'a' => [
+					'a'      => [
 						'href'   => [],
 						'target' => [],
 						'rel'    => [],
 					],
+					'strong' => [],
 				]
 			)
 		);
