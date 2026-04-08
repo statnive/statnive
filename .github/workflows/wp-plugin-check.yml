@@ -46,14 +46,20 @@ jobs:
           npm ci
           npm run build
 
+      # Plugin Check derives the plugin slug from the build directory name,
+      # which then drives the expected text-domain. The directory MUST be
+      # named `statnive` so the i18n text-domain check matches the plugin's
+      # declared `Text Domain: statnive`. (Previously this was `dist-statnive`
+      # which produced TextDomainMismatch errors against the live `statnive`
+      # text domain.)
       - name: Build distribution directory
         run: |
-          rsync -rc --exclude-from=.distignore ./ ../dist-statnive/
-          ls -la ../dist-statnive/
+          rsync -rc --exclude-from=.distignore ./ ../statnive-dist/statnive/
+          ls -la ../statnive-dist/statnive/
 
       - name: Run official Plugin Check (plugin_repo category)
         uses: wordpress/plugin-check-action@6f5a57e173c065a394b78688f75df543e4011902 # v1
         with:
-          build-dir: ../dist-statnive
+          build-dir: ../statnive-dist/statnive
           categories: plugin_repo
           exclude-directories: vendor,node_modules,tests,src/Dependencies
