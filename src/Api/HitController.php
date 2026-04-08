@@ -98,10 +98,18 @@ final class HitController extends WP_REST_Controller {
 	 * @return array<string, array<string, mixed>>
 	 */
 	private static function get_route_args(): array {
+		// IMPORTANT: do NOT mark any of these args as `required` => true.
+		// The tracker sends its JSON payload with Content-Type: text/plain to
+		// bypass the CORS preflight, and WordPress's REST framework cannot
+		// parse text/plain bodies into request args. A `required` flag here
+		// would cause the framework to reject every real tracker hit with
+		// `rest_missing_callback_param` BEFORE create_item() runs. The schema
+		// stays for documentation / Plugin Check / OpenAPI scanners; runtime
+		// validation of resource_type / signature happens inside create_item()
+		// via PayloadValidator and the explicit empty checks below.
 		return [
 			'resource_type'   => [
 				'type'              => 'string',
-				'required'          => true,
 				'sanitize_callback' => 'sanitize_text_field',
 			],
 			'resource_id'     => [
@@ -131,7 +139,6 @@ final class HitController extends WP_REST_Controller {
 			],
 			'signature'       => [
 				'type'              => 'string',
-				'required'          => true,
 				'sanitize_callback' => 'sanitize_text_field',
 			],
 			'page_url'        => [
