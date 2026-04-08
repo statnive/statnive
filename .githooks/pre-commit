@@ -50,7 +50,7 @@ fi
 # --- TypeScript / JS gate ---
 #
 # Note: `tsc --noEmit` is NOT run here because the repo has a pre-existing
-# TS baseline that fails on main (dashboard-layout.tsx, use-date-range.ts).
+# TS baseline that fails on master (dashboard-layout.tsx, use-date-range.ts).
 # Fix that separately and re-enable the line below. CI still runs typecheck.
 if [ -n "$STAGED_TS" ]; then
   TS_COUNT=$(printf '%s\n' "$STAGED_TS" | wc -l | tr -d ' ')

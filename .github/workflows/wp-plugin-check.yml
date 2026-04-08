@@ -1,0 +1,59 @@
+name: WP Plugin Check
+
+# Checklist §18 — Plugin Check (PCP) pre-submission gate.
+# Runs the official wordpress/plugin-check-action against the built dist directory
+# on every PR + nightly, failing on any plugin_repo category error.
+
+on:
+  push:
+    branches: [master, development]
+  pull_request:
+    branches: [master, development]
+  schedule:
+    - cron: '0 6 * * *'  # Nightly 06:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  plugin-check:
+    name: PCP — plugin_repo category (§18)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@c541c155eee45413f5b09a52248675b1a2575231 # v2.31.1
+        with:
+          php-version: '8.1'
+          tools: composer:v2
+          coverage: none
+
+      - name: Setup Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Install PHP production dependencies
+        run: composer install --no-dev --no-interaction --prefer-dist
+
+      - name: Install Node dependencies and build
+        run: |
+          npm ci
+          npm run build
+
+      - name: Build distribution directory
+        run: |
+          rsync -rc --exclude-from=.distignore ./ ../dist-statnive/
+          ls -la ../dist-statnive/
+
+      - name: Run official Plugin Check (plugin_repo category)
+        uses: wordpress/plugin-check-action@6f5a57e173c065a394b78688f75df543e4011902 # v1
+        with:
+          build-dir: ../dist-statnive
+          categories: plugin_repo
+          exclude-directories: vendor,node_modules,tests,src/Dependencies
