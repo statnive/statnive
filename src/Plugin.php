@@ -116,8 +116,12 @@ final class Plugin {
 	 * Runs version checks and sets default options.
 	 */
 	public static function activate(): void {
-		// Defensive capability check (WordPress core also enforces this).
-		if ( ! current_user_can( 'activate_plugins' ) ) {
+		// Defensive capability check for web-request activations (WordPress core
+		// also enforces this on the wp-admin Plugins screen). Skipped under
+		// WP-CLI / WP_CLI test runs because there is no current user in those
+		// contexts and the operator is already trusted by definition — the
+		// official Plugin Check Action triggers exactly this path.
+		if ( ! ( defined( 'WP_CLI' ) && WP_CLI ) && ! current_user_can( 'activate_plugins' ) ) {
 			wp_die(
 				esc_html__( 'You do not have permission to activate plugins.', 'statnive' ),
 				'Plugin Activation Error',
