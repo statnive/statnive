@@ -37,8 +37,8 @@ final class PrivacyHeadersTest extends WP_UnitTestCase {
 			false
 		);
 
-		$this->assertFalse( $decision->allowed, 'DNT header should block tracking when DNT respect is enabled' );
-		$this->assertSame( 'dnt', $decision->reason, 'Block reason should be "dnt"' );
+		$this->assertFalse( $decision->allowed(), 'DNT header should block tracking when DNT respect is enabled' );
+		$this->assertSame( 'dnt', $decision->reason(), 'Block reason should be "dnt"' );
 	}
 
 	/**
@@ -52,8 +52,8 @@ final class PrivacyHeadersTest extends WP_UnitTestCase {
 			false
 		);
 
-		$this->assertFalse( $decision->allowed, 'GPC header should block tracking when GPC respect is enabled' );
-		$this->assertSame( 'gpc', $decision->reason, 'Block reason should be "gpc"' );
+		$this->assertFalse( $decision->allowed(), 'GPC header should block tracking when GPC respect is enabled' );
+		$this->assertSame( 'gpc', $decision->reason(), 'Block reason should be "gpc"' );
 	}
 
 	/**
@@ -70,7 +70,7 @@ final class PrivacyHeadersTest extends WP_UnitTestCase {
 			false
 		);
 
-		$this->assertTrue( $decision->allowed, 'DNT header should not block when DNT respect is disabled' );
+		$this->assertTrue( $decision->allowed(), 'DNT header should not block when DNT respect is disabled' );
 	}
 
 	/**
@@ -87,6 +87,6 @@ final class PrivacyHeadersTest extends WP_UnitTestCase {
 			false
 		);
 
-		$this->assertTrue( $decision->allowed, 'GPC header should not block when GPC respect is disabled' );
+		$this->assertTrue( $decision->allowed(), 'GPC header should not block when GPC respect is disabled' );
 	}
 }

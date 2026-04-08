@@ -10,11 +10,12 @@ permissions:
   contents: read
 
 jobs:
-  # PHP 8.1 is the runtime floor declared in statnive.php / readme.txt / composer.json
+  # PHP 8.0 is the runtime floor declared in statnive.php / readme.txt / composer.json
   # but is intentionally absent from these test matrices: phpunit ^11.5 (the dev
-  # dependency) requires PHP >= 8.2. The 8.1 install path is still verified by the
+  # dependency) requires PHP >= 8.2. The 8.0 install path is still verified by the
+  # `minimum-floor-smoke` job below (source lint + autoload boot) and by the
   # `dist-zip-validation` job in wporg-compliance.yml, which runs `composer install
-  # --no-dev` on PHP 8.1 to prove the runtime ZIP is installable on the declared floor.
+  # --no-dev` on PHP 8.0 to prove the runtime ZIP is installable on the declared floor.
   lint:
     name: Lint (PHP ${{ matrix.php }})
     runs-on: ubuntu-latest
@@ -85,6 +86,48 @@ jobs:
 
       - name: Run unit tests
         run: composer test:unit
+
+  # Verifies that the production code parses and the production autoloader boots
+  # on the declared runtime floor (PHP 8.0). PHPUnit is intentionally NOT run here
+  # because phpunit ^11.5 requires PHP >= 8.2; the unit-test job above covers that
+  # side of the matrix. This job is the canonical "does the code still run on the
+  # Requires PHP value" check.
+  minimum-floor-smoke:
+    name: Minimum Floor Smoke (PHP ${{ matrix.php }})
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php: ['8.0']
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@c541c155eee45413f5b09a52248675b1a2575231 # v2.31.1
+        with:
+          php-version: ${{ matrix.php }}
+          tools: composer:v2
+          coverage: none
+
+      - name: Get Composer cache directory
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> "$GITHUB_OUTPUT"
+
+      - name: Cache Composer production dependencies
+        uses: actions/cache@1bd1e32a3bdc45362d1e726936510720a7c30a57 # v4.2.0
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: composer-prod-${{ matrix.php }}-${{ hashFiles('composer.json') }}
+          restore-keys: composer-prod-${{ matrix.php }}-
+
+      - name: Install production dependencies
+        run: composer install --no-dev --no-interaction --prefer-dist
+
+      - name: Lint plugin PHP sources (statnive.php + src/)
+        run: find statnive.php src -name '*.php' -print0 | xargs -0 -n20 php -l
+
+      - name: Boot production autoloader
+        run: php -r "require __DIR__ . '/vendor/autoload.php';"
 
   # TODO(integration-tests): the WordPress test framework
   # (/tmp/wordpress-tests-lib/includes/abstract-testcase.php) still calls

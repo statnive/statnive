@@ -20,21 +20,21 @@ final class PrivacyDecision {
 	 *
 	 * @var bool
 	 */
-	public readonly bool $allowed;
+	private bool $allowed;
 
 	/**
 	 * Reason for blocking (empty if allowed).
 	 *
 	 * @var string
 	 */
-	public readonly string $reason;
+	private string $reason;
 
 	/**
 	 * The consent mode that was active.
 	 *
 	 * @var string
 	 */
-	public readonly string $mode;
+	private string $mode;
 
 	/**
 	 * Constructor.
@@ -47,6 +47,33 @@ final class PrivacyDecision {
 		$this->allowed = $allowed;
 		$this->reason  = $reason;
 		$this->mode    = $mode;
+	}
+
+	/**
+	 * Whether tracking is allowed.
+	 *
+	 * @return bool
+	 */
+	public function allowed(): bool {
+		return $this->allowed;
+	}
+
+	/**
+	 * Reason for blocking (empty if allowed).
+	 *
+	 * @return string
+	 */
+	public function reason(): string {
+		return $this->reason;
+	}
+
+	/**
+	 * The consent mode that was active.
+	 *
+	 * @return string
+	 */
+	public function mode(): string {
+		return $this->mode;
 	}
 
 	/**
