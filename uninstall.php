@@ -11,6 +11,8 @@
 declare(strict_types=1);
 
 // Prevent direct access — must be called by WordPress.
+// ABSPATH guard satisfies WP.org compliance check for all PHP files at plugin root.
+defined( 'ABSPATH' ) || exit;
 if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	exit;
 }
