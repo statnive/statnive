@@ -7,6 +7,19 @@ import { formatNumber, formatDuration } from '@/lib/utils';
 import type { PageRow, EntryExitPage } from '@/types/api';
 import { Search } from 'lucide-react';
 
+const EMPTY: never[] = [];
+
+function filterByQuery<T extends { uri: string; title: string | null }>(
+	rows: T[] | undefined,
+	q: string,
+): T[] {
+	const src = rows ?? EMPTY;
+	if (!q) return src;
+	return src.filter(
+		(r) => r.uri.toLowerCase().includes(q) || (r.title ?? '').toLowerCase().includes(q),
+	);
+}
+
 export function PagesPage() {
 	const { params } = useDateRange();
 	const { data: pages, isLoading: loadingPages } = usePages(params.from, params.to, 50);
@@ -16,16 +29,10 @@ export function PagesPage() {
 	const [search, setSearch] = useState('');
 	const deferredSearch = useDeferredValue(search);
 
-	const filteredPages = useMemo(() => {
-		if (!pages) return [];
-		if (!deferredSearch) return pages;
-		const q = deferredSearch.toLowerCase();
-		return pages.filter(
-			(p) =>
-				p.uri.toLowerCase().includes(q) ||
-				(p.title ?? '').toLowerCase().includes(q),
-		);
-	}, [pages, deferredSearch]);
+	const q = useMemo(() => deferredSearch.trim().toLowerCase(), [deferredSearch]);
+	const filteredPages = useMemo(() => filterByQuery(pages, q), [pages, q]);
+	const filteredEntry = useMemo(() => filterByQuery(entry, q), [entry, q]);
+	const filteredExit = useMemo(() => filterByQuery(exit, q), [exit, q]);
 
 	const pageColumns: Column<PageRow>[] = useMemo(
 		() => [
@@ -67,7 +74,7 @@ export function PagesPage() {
 					placeholder="Search pages..."
 					value={search}
 					onChange={(e) => setSearch(e.target.value)}
-					className="w-full rounded-md border border-border bg-card py-2 pl-9 pr-3 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+					className="w-full rounded-md border border-border bg-card !py-[3px] !pl-[30px] !pr-[10px] text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
 				/>
 			</div>
 
@@ -88,7 +95,7 @@ export function PagesPage() {
 				<div className="rounded-lg border border-border bg-card p-4">
 					<DataTable
 						title="Entry Pages"
-						data={entry ?? []}
+						data={filteredEntry}
 						columns={entryColumns}
 						isLoading={loadingEntry}
 						defaultSortKey="count"
@@ -98,7 +105,7 @@ export function PagesPage() {
 				<div className="rounded-lg border border-border bg-card p-4">
 					<DataTable
 						title="Exit Pages"
-						data={exit ?? []}
+						data={filteredExit}
 						columns={entryColumns}
 						isLoading={loadingExit}
 						defaultSortKey="count"
