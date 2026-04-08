@@ -82,10 +82,14 @@ final class EventController extends WP_REST_Controller {
 	 * @return array<string, array<string, mixed>>
 	 */
 	private static function get_route_args(): array {
+		// IMPORTANT: do NOT mark any of these args as `required` => true.
+		// See HitController::get_route_args() for the full rationale —
+		// text/plain payloads cannot be parsed by WP REST args validation,
+		// so any `required` flag breaks the tracker. Runtime validation of
+		// event_name / signature happens inside create_item().
 		return [
 			'event_name'      => [
 				'type'              => 'string',
-				'required'          => true,
 				'sanitize_callback' => 'sanitize_text_field',
 			],
 			'resource_type'   => [
@@ -98,7 +102,6 @@ final class EventController extends WP_REST_Controller {
 			],
 			'signature'       => [
 				'type'              => 'string',
-				'required'          => true,
 				'sanitize_callback' => 'sanitize_text_field',
 			],
 			'properties'      => [
