@@ -6,9 +6,9 @@ name: WP Plugin Check
 
 on:
   push:
-    branches: [main]
+    branches: [master, development]
   pull_request:
-    branches: [main]
+    branches: [master, development]
   schedule:
     - cron: '0 6 * * *'  # Nightly 06:00 UTC
   workflow_dispatch:
