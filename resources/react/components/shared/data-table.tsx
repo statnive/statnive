@@ -84,6 +84,9 @@ export function DataTable<T>({
 							{columns.map((col) => (
 								<th
 									key={col.key}
+									scope="col"
+									tabIndex={col.sortable ? 0 : undefined}
+									role={col.sortable ? 'button' : undefined}
 									className={cn(
 										'px-3 py-2 text-xs font-medium uppercase tracking-wider text-muted-foreground',
 										col.align === 'right' ? 'text-right' : 'text-left',
@@ -91,12 +94,24 @@ export function DataTable<T>({
 										col.className,
 									)}
 									onClick={col.sortable ? () => handleSort(col.key) : undefined}
+									onKeyDown={
+										col.sortable
+											? (e) => {
+													if (e.key === 'Enter' || e.key === ' ') {
+														e.preventDefault();
+														handleSort(col.key);
+													}
+												}
+											: undefined
+									}
 									aria-sort={
 										sortKey === col.key
 											? sortDir === 'asc'
 												? 'ascending'
 												: 'descending'
-											: undefined
+											: col.sortable
+												? 'none'
+												: undefined
 									}
 								>
 									<span className="inline-flex items-center gap-1">

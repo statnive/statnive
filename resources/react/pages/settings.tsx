@@ -34,7 +34,7 @@ export function SettingsPage() {
 						<div>
 							<span className="text-sm font-medium">Cookieless</span>
 							<span className="ml-2 rounded-full bg-green-100 px-2 py-0.5 text-xs text-green-800">Recommended</span>
-							<p className="text-xs text-muted-foreground">No cookies, privacy-first. GDPR compliant by default.</p>
+							<p className="text-xs text-muted-foreground">No cookies, privacy-first. Designed to support GDPR/CCPA/APPI compliance.</p>
 						</div>
 					</label>
 					<label className="flex cursor-pointer items-center gap-3">
@@ -75,6 +75,7 @@ export function SettingsPage() {
 				>
 					<option value={30}>30 days</option>
 					<option value={90}>90 days</option>
+					<option value={180}>180 days</option>
 					<option value={365}>1 year</option>
 					<option value={3650}>Forever</option>
 				</select>

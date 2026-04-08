@@ -96,15 +96,18 @@ final class PrivacyEraser {
 
 		// Anonymize: NULL-ify user_id and visitor_id to preserve aggregates.
 		$ids_placeholder = implode( ',', array_fill( 0, count( $session_ids ), '%d' ) );
-		$updated         = $wpdb->query(
+		// $ids_placeholder is built from a count of validated integer IDs;
+		// $sessions_table is from TableRegistry. Both safe to interpolate.
+		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare
+		$updated = $wpdb->query(
 			$wpdb->prepare(
-				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 				"UPDATE `{$sessions_table}`
 				SET user_id = NULL, visitor_id = NULL, ip_hash = ''
 				WHERE ID IN ({$ids_placeholder})",
 				...$session_ids
 			)
 		);
+		// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare
 		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery
 		// phpcs:enable WordPress.DB.DirectDatabaseQuery.NoCaching
 

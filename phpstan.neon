@@ -6,7 +6,17 @@ parameters:
         - uninstall.php
     scanDirectories:
         - vendor
-    ignoreErrors: []
+    bootstrapFiles:
+        - tests/phpstan-bootstrap.php
+    ignoreErrors:
+        # WP_CLI is only available when the WP-CLI SAPI is loaded; the
+        # src/Cli/* commands and the registration in src/Plugin.php are
+        # gated behind defined('WP_CLI') && WP_CLI.
+        -
+            message: "#Call to static method (.*) on an unknown class WP_CLI\\.#"
+            paths:
+                - src/Cli/*
+                - src/Plugin.php
 
 includes:
     - vendor/szepeviktor/phpstan-wordpress/extension.neon

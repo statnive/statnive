@@ -8,15 +8,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use Statnive\Licensing\LicenseHelper;
 use Statnive\Service\GeoIPDownloader;
 
 /**
  * Centralized cron job scheduler.
  *
  * Registers and deregisters all Statnive WP-Cron events.
- * GeoIP and license cron jobs are conditional — they only fire
- * when explicitly enabled by the user (WP.org Guideline 6 & 7).
+ * The GeoIP cron job is conditional — it only fires when the user
+ * has explicitly opted in (WP.org Guideline 7).
  */
 final class CronRegistrar {
 
@@ -29,8 +28,12 @@ final class CronRegistrar {
 		DailyAggregationJob::init();
 		DataPurgeJob::init();
 		EmailReportJob::init();
-		LicenseCheckJob::init();
-		add_action( GeoIPDownloader::CRON_HOOK, [ GeoIPDownloader::class, 'download' ] );
+		add_action(
+			GeoIPDownloader::CRON_HOOK,
+			static function (): void {
+				GeoIPDownloader::download();
+			}
+		);
 
 		// Schedule core events (always active).
 		SaltRotationJob::schedule();
@@ -41,9 +44,6 @@ final class CronRegistrar {
 		// Conditional: only schedule if user has opted in.
 		if ( get_option( 'statnive_geoip_enabled', false ) ) {
 			GeoIPDownloader::schedule();
-		}
-		if ( LicenseHelper::has_license() ) {
-			LicenseCheckJob::schedule();
 		}
 	}
 
@@ -57,7 +57,6 @@ final class CronRegistrar {
 		DailyAggregationJob::unschedule();
 		DataPurgeJob::unschedule();
 		EmailReportJob::unschedule();
-		LicenseCheckJob::unschedule();
 		GeoIPDownloader::unschedule();
 	}
 }

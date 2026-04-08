@@ -150,7 +150,7 @@ export function OverviewPage() {
 						isLoading={loadingSources}
 						defaultSortKey="visitors"
 						getRowKey={(row, i) => `${row.channel}-${row.name}-${i}`}
-						emptyMessage="No traffic sources recorded yet"
+						emptyMessage="No traffic sources recorded yet. New visits will appear within a few minutes — if nothing shows after 10 minutes, run the self-test under Settings → Diagnostics or check Settings → Tracking is enabled."
 					/>
 				</div>
 				<div className="rounded-lg border border-border bg-card p-4">
@@ -161,7 +161,7 @@ export function OverviewPage() {
 						isLoading={loadingPages}
 						defaultSortKey="visitors"
 						getRowKey={(row) => row.uri}
-						emptyMessage="No page data recorded yet"
+						emptyMessage="No page data recorded yet. Tracking is active — pageviews will appear after the next visit. If nothing shows after 10 minutes, run the self-test under Settings → Diagnostics."
 					/>
 				</div>
 			</div>

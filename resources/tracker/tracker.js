@@ -45,17 +45,24 @@ window.statnive = window.statnive || function() {
 	}
 
 	/**
-	 * Check if tracking should be blocked by Do Not Track or Global Privacy Control.
+	 * Check if tracking should be blocked by Global Privacy Control or Do Not Track.
+	 *
+	 * GPC (`navigator.globalPrivacyControl === true`) is the W3C-track Global
+	 * Privacy Control signal and is the primary opt-out we honour. DNT
+	 * (`navigator.doNotTrack === '1'`) is checked second as a legacy fallback;
+	 * it has no W3C standard status and is treated as best-effort.
 	 */
 	function isTrackingBlocked() {
+		// GPC (primary signal — W3C track).
+		if (options.gpcEnabled && navigator.globalPrivacyControl) {
+			return true;
+		}
+		// DNT (legacy fallback).
 		if (options.dntEnabled) {
 			var dnt = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
 			if (dnt === '1' || dnt === 'yes') {
 				return true;
 			}
-		}
-		if (options.gpcEnabled && navigator.globalPrivacyControl) {
-			return true;
 		}
 		return false;
 	}

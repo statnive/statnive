@@ -57,6 +57,9 @@ final class EventController extends WP_REST_Controller {
 
 	/**
 	 * Register the /event route.
+	 *
+	 * Schema-driven validation, same model as HitController. Public endpoint
+	 * protected by HMAC signature + transient rate limiting + DNT/GPC.
 	 */
 	public function register_routes(): void {
 		register_rest_route(
@@ -67,9 +70,44 @@ final class EventController extends WP_REST_Controller {
 					'methods'             => WP_REST_Server::CREATABLE,
 					'callback'            => [ $this, 'create_item' ],
 					'permission_callback' => '__return_true',
+					'args'                => self::get_route_args(),
 				],
 			]
 		);
+	}
+
+	/**
+	 * Argument schema for the /event route.
+	 *
+	 * @return array<string, array<string, mixed>>
+	 */
+	private static function get_route_args(): array {
+		return [
+			'event_name'      => [
+				'type'              => 'string',
+				'required'          => true,
+				'sanitize_callback' => 'sanitize_text_field',
+			],
+			'resource_type'   => [
+				'type'              => 'string',
+				'sanitize_callback' => 'sanitize_text_field',
+			],
+			'resource_id'     => [
+				'type'              => 'integer',
+				'sanitize_callback' => 'absint',
+			],
+			'signature'       => [
+				'type'              => 'string',
+				'required'          => true,
+				'sanitize_callback' => 'sanitize_text_field',
+			],
+			'properties'      => [
+				'type' => 'object',
+			],
+			'consent_granted' => [
+				'type' => 'boolean',
+			],
+		];
 	}
 
 	/**
@@ -132,7 +170,8 @@ final class EventController extends WP_REST_Controller {
 		}
 
 		// Rate limiting (60 req/min per IP).
-		$ip_key = 'statnive_rate_' . md5( IpExtractor::extract() );
+		// Key is salted SHA-256 of the raw IP — raw IP is never persisted.
+		$ip_key = 'statnive_rate_' . hash( 'sha256', IpExtractor::extract() . wp_salt( 'auth' ) );
 		$count  = (int) get_transient( $ip_key );
 		if ( $count >= 60 ) {
 			return self::error_response( [ 'rate_limited', 'Too many requests.', 429 ] );
@@ -154,10 +193,18 @@ final class EventController extends WP_REST_Controller {
 	/**
 	 * Translate an error tuple into a WP_REST_Response.
 	 *
+	 * Increments the `statnive_failed_requests` counter so the diagnostics
+	 * export (§29) and admin observability (§28.3.1) can surface the number
+	 * of dropped tracking events.
+	 *
 	 * @param array{0: string, 1: string, 2: int} $tuple [code, message, status].
 	 * @return WP_REST_Response
 	 */
 	private static function error_response( array $tuple ): WP_REST_Response {
+		if ( $tuple[2] >= 400 && 429 !== $tuple[2] ) {
+			update_option( 'statnive_failed_requests', (int) get_option( 'statnive_failed_requests', 0 ) + 1, false );
+		}
+
 		return new WP_REST_Response(
 			[
 				'code'    => $tuple[0],

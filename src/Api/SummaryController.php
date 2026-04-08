@@ -136,7 +136,7 @@ final class SummaryController extends WP_REST_Controller {
 					$rows = [];
 				}
 				// Remove any stale aggregated row for today to prevent duplication.
-				$rows = array_values( array_filter( $rows, fn( $r ) => ( $r['date'] ?? '' ) !== $today ) );
+				$rows   = array_values( array_filter( $rows, fn( $r ) => ( $r['date'] ?? '' ) !== $today ) );
 				$rows[] = $today_row;
 				// Re-sort by date.
 				usort( $rows, fn( $a, $b ) => strcmp( $a['date'], $b['date'] ) );

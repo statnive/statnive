@@ -141,6 +141,7 @@ final class FrontendHandler {
 			if ( false === $content ) {
 				return $tag;
 			}
+			// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode -- Subresource Integrity hashes must be base64 encoded per the SRI spec.
 			$hash = 'sha256-' . base64_encode( hash( 'sha256', $content, true ) );
 			set_transient( $cache_key, $hash, MONTH_IN_SECONDS );
 		}

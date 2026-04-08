@@ -227,8 +227,8 @@ describe('OverviewPage', () => {
 
 		// Multiple KPI cards show "0", so check at least one exists
 		expect(screen.getAllByText('0').length).toBeGreaterThanOrEqual(1);
-		expect(screen.getByText('No traffic sources recorded yet')).toBeInTheDocument();
-		expect(screen.getByText('No page data recorded yet')).toBeInTheDocument();
+		expect(screen.getByText(/No traffic sources recorded yet/)).toBeInTheDocument();
+		expect(screen.getByText(/No page data recorded yet/)).toBeInTheDocument();
 	});
 
 	// REQ-1.9 — Skeleton loading shimmer displays while data is fetching
