@@ -1,0 +1,548 @@
+name: WP.org Compliance
+
+on:
+  push:
+    branches: [master, development]
+  pull_request:
+    branches: [master, development]
+
+permissions:
+  contents: read
+
+jobs:
+  # ---------------------------------------------------------------------------
+  # Job 1: ABSPATH guard regression prevention (Checklist §3/§6)
+  # Every PHP file in src/ must have defined('ABSPATH') guard
+  # ---------------------------------------------------------------------------
+  php-file-guards:
+    name: ABSPATH Guards (§3)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Check ABSPATH guards in all PHP files
+        run: |
+          FAILED=0
+
+          ABSPATH_RE="defined\s*\(\s*['\"]ABSPATH['\"]"
+
+          while IFS= read -r file; do
+            if ! grep -qE "$ABSPATH_RE" "$file"; then
+              echo "::error file=$file::Missing ABSPATH guard: $file"
+              FAILED=1
+            fi
+          done < <(find src -type d -name Dependencies -prune -o -name '*.php' -type f -print)
+
+          for file in statnive.php uninstall.php; do
+            if [ -f "$file" ] && ! grep -qE "$ABSPATH_RE" "$file"; then
+              echo "::error file=$file::Missing ABSPATH guard: $file"
+              FAILED=1
+            fi
+          done
+
+          if [ "$FAILED" -eq 1 ]; then
+            echo "::error::One or more PHP files are missing ABSPATH guards (WP.org Guideline)"
+            exit 1
+          fi
+          echo "✓ All PHP files have ABSPATH guards"
+
+  # ---------------------------------------------------------------------------
+  # Job 2: Forbidden code patterns (Checklist §2/§6)
+  # ---------------------------------------------------------------------------
+  forbidden-patterns:
+    name: Forbidden Patterns (§2/§6)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Check for forbidden PHP patterns
+        run: |
+          FAILED=0
+
+          # Dangerous functions — WP.org auto-reject
+          for func in eval exec shell_exec system passthru; do
+            if grep -rn --include='*.php' -P "\b${func}\s*\(" src/ statnive.php | grep -v 'src/Dependencies/'; then
+              echo "::error::Forbidden function '${func}()' found — WP.org will reject"
+              FAILED=1
+            fi
+          done
+
+          # curl_init — must use wp_remote_*
+          if grep -rn --include='*.php' 'curl_init' src/ statnive.php | grep -v 'src/Dependencies/'; then
+            echo "::error::curl_init found — use wp_remote_get/wp_remote_post instead"
+            FAILED=1
+          fi
+
+          # PHP short tags (<?= or <? without php/xml)
+          if grep -rn --include='*.php' -P '<\?(?!php|xml)' src/ statnive.php | grep -v 'src/Dependencies/'; then
+            echo "::error::PHP short tags found — use <?php (WP.org Guideline)"
+            FAILED=1
+          fi
+
+          # json_encode without wp_ prefix
+          if grep -rn --include='*.php' -P '(?<!wp_)json_encode\s*\(' src/ statnive.php | grep -v 'src/Dependencies/'; then
+            echo "::error::json_encode() found — use wp_json_encode() instead"
+            FAILED=1
+          fi
+
+          # Hardcoded wp-content paths (warning — may have false positives in comments)
+          if grep -rn --include='*.php' 'wp-content/' src/ statnive.php | grep -v 'src/Dependencies/' | grep -v '^\s*//' | grep -v '^\s*\*'; then
+            echo "::warning::Possible hardcoded wp-content path — use plugin_dir_path() or WP_CONTENT_DIR"
+          fi
+
+          if [ "$FAILED" -eq 1 ]; then
+            exit 1
+          fi
+          echo "✓ No forbidden patterns found"
+
+  # ---------------------------------------------------------------------------
+  # Job 3: readme.txt structural validation (Checklist §12)
+  # ---------------------------------------------------------------------------
+  readme-validation:
+    name: Readme & Version (§12)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Validate readme.txt and version consistency
+        run: |
+          FAILED=0
+
+          # 1. Tag count (max 5)
+          TAGS=$(grep -m1 '^Tags:' readme.txt | sed 's/^Tags:\s*//')
+          TAG_COUNT=$(echo "$TAGS" | tr ',' '\n' | sed 's/^ *//' | grep -c '.')
+          if [ "$TAG_COUNT" -gt 5 ]; then
+            echo "::error::readme.txt has $TAG_COUNT tags (max 5): $TAGS"
+            FAILED=1
+          else
+            echo "✓ Tags OK: $TAG_COUNT/5"
+          fi
+
+          # 2. Stable tag matches plugin header Version
+          README_VERSION=$(grep -m1 '^Stable tag:' readme.txt | sed 's/^Stable tag:\s*//' | tr -d '[:space:]')
+          PLUGIN_VERSION=$(grep -m1 '^ \* Version:' statnive.php | sed 's/.*Version:\s*//' | tr -d '[:space:]')
+          if [ "$README_VERSION" != "$PLUGIN_VERSION" ]; then
+            echo "::error::Version mismatch — readme.txt Stable tag: $README_VERSION vs statnive.php Version: $PLUGIN_VERSION"
+            FAILED=1
+          else
+            echo "✓ Version consistent: $README_VERSION"
+          fi
+
+          # 3. STATNIVE_VERSION constant must also match
+          CONST_VERSION=$(grep -m1 "define.*STATNIVE_VERSION" statnive.php | grep -oP "'[^']+'" | tail -1 | tr -d "'")
+          if [ -n "$CONST_VERSION" ] && [ "$CONST_VERSION" != "$PLUGIN_VERSION" ]; then
+            echo "::error::STATNIVE_VERSION constant ($CONST_VERSION) does not match header Version ($PLUGIN_VERSION)"
+            FAILED=1
+          else
+            echo "✓ STATNIVE_VERSION constant matches"
+          fi
+
+          # 4. External Services section exists (WP.org Guideline 7)
+          if ! grep -q '== External Services ==' readme.txt; then
+            echo "::error::readme.txt missing '== External Services ==' section (WP.org Guideline 7)"
+            FAILED=1
+          else
+            echo "✓ External Services section present"
+          fi
+
+          # 5. Short description <= 150 chars
+          SHORT_DESC=$(awk '/^$/{if(seen_header){getline; print; exit} seen_header=1}' readme.txt)
+          DESC_LEN=${#SHORT_DESC}
+          if [ "$DESC_LEN" -gt 150 ]; then
+            echo "::error::Short description is $DESC_LEN chars (max 150)"
+            FAILED=1
+          else
+            echo "✓ Short description OK: $DESC_LEN/150 chars"
+          fi
+
+          # 6. LICENSE file exists at plugin root
+          if [ ! -f "LICENSE" ]; then
+            echo "::error::LICENSE file missing from plugin root (WP.org Guideline 1)"
+            FAILED=1
+          else
+            echo "✓ LICENSE file present"
+          fi
+
+          if [ "$FAILED" -eq 1 ]; then
+            exit 1
+          fi
+          echo "✓ readme.txt validation passed"
+
+  # ---------------------------------------------------------------------------
+  # Job 4: WordPress API compliance (Checklist §6/§8)
+  # ---------------------------------------------------------------------------
+  wp-function-compliance:
+    name: WP API Compliance (§6/§8)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Check WordPress API usage patterns
+        run: |
+          FAILED=0
+
+          # Hardcoded <script> tags in PHP
+          SCRIPT_HITS=$(grep -rn --include='*.php' '<script' src/ statnive.php | grep -v 'src/Dependencies/' | grep -v 'wp_print_inline_script_tag' | grep -v '^\s*//' | grep -v '^\s*\*' || true)
+          if [ -n "$SCRIPT_HITS" ]; then
+            echo "::error::Hardcoded <script> tag found — use wp_enqueue_script() or wp_print_inline_script_tag()"
+            echo "$SCRIPT_HITS"
+            FAILED=1
+          fi
+
+          # Hardcoded <link> stylesheet tags
+          LINK_HITS=$(grep -rn --include='*.php' -P '<link[^>]+stylesheet' src/ statnive.php | grep -v 'src/Dependencies/' | grep -v '^\s*//' | grep -v '^\s*\*' || true)
+          if [ -n "$LINK_HITS" ]; then
+            echo "::error::Hardcoded <link> stylesheet found — use wp_enqueue_style()"
+            echo "$LINK_HITS"
+            FAILED=1
+          fi
+
+          # Raw superglobal access without sanitization (Checklist §6 Big Four — ERROR)
+          RAW_ACCESS=$(grep -rn --include='*.php' -P '\$_(GET|POST|REQUEST)\[' src/ statnive.php | grep -v 'src/Dependencies/' | grep -v 'sanitize_' | grep -v 'wp_unslash' | grep -v 'absint' | grep -v 'intval' | grep -v '^\s*//' | grep -v '^\s*\*' || true)
+          if [ -n "$RAW_ACCESS" ]; then
+            echo "::error::Unsanitized superglobal access — WP.org rejection killer (Checklist §6)"
+            echo "$RAW_ACCESS"
+            FAILED=1
+          fi
+
+          if [ "$FAILED" -eq 1 ]; then
+            exit 1
+          fi
+          echo "✓ WordPress API compliance checks passed"
+
+  # ---------------------------------------------------------------------------
+  # Job 5: Frontend quality gate (Checklist §19)
+  # ---------------------------------------------------------------------------
+  frontend-quality:
+    name: Frontend Quality (§19)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: TypeScript strict check
+        run: npm run typecheck
+
+      - name: Run Vitest component tests
+        run: npm run test
+
+  # ---------------------------------------------------------------------------
+  # Job 6: Distribution ZIP validation (Checklist §15/§16)
+  # ---------------------------------------------------------------------------
+  dist-zip-validation:
+    name: Dist ZIP (§15/§16)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@c541c155eee45413f5b09a52248675b1a2575231 # v2.31.1
+        with:
+          php-version: '8.1'
+          tools: composer:v2
+          coverage: none
+
+      - name: Setup Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Get Composer cache directory
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> "$GITHUB_OUTPUT"
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@1bd1e32a3bdc45362d1e726936510720a7c30a57 # v4.2.0
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: composer-8.1-${{ hashFiles('composer.json') }}
+          restore-keys: composer-8.1-
+
+      - name: Install PHP production dependencies
+        run: composer install --no-dev --no-interaction --prefer-dist
+
+      - name: Install Node dependencies and build
+        run: |
+          npm ci
+          npm run build
+
+      - name: Build distribution ZIP
+        run: |
+          rsync -rc --exclude-from=.distignore ./ ../dist-statnive/
+          cd ../dist-statnive && zip -rq ../statnive.zip . && cd -
+          echo "ZIP built"
+
+      - name: Validate ZIP contents
+        run: |
+          FAILED=0
+
+          unzip -l ../statnive.zip > /tmp/zip-contents.txt
+
+          echo "=== ZIP Contents ==="
+          cat /tmp/zip-contents.txt
+          echo "===================="
+
+          # Must contain these required files
+          for required in "statnive.php" "readme.txt" "LICENSE" "src/Plugin.php"; do
+            if ! grep -q "$required" /tmp/zip-contents.txt; then
+              echo "::error::ZIP missing required file: $required"
+              FAILED=1
+            else
+              echo "✓ Found: $required"
+            fi
+          done
+
+          # Must contain unminified tracker source (WP.org Guideline 4)
+          if ! grep -q "resources/tracker/" /tmp/zip-contents.txt; then
+            echo "::error::ZIP missing unminified tracker source (WP.org Guideline 4)"
+            FAILED=1
+          else
+            echo "✓ Found: unminified tracker source"
+          fi
+
+          # Must contain built tracker
+          if ! grep -q "public/tracker/statnive.js" /tmp/zip-contents.txt; then
+            echo "::error::ZIP missing built tracker file"
+            FAILED=1
+          else
+            echo "✓ Found: built tracker"
+          fi
+
+          # Must NOT contain dev files
+          for forbidden in "node_modules/" ".git/" "composer.json" "package.json" "phpstan.neon" ".phpcs.xml.dist" "tests/" "phpunit"; do
+            if grep -q "$forbidden" /tmp/zip-contents.txt; then
+              echo "::error::ZIP contains forbidden path: $forbidden"
+              FAILED=1
+            fi
+          done
+
+          # Check ZIP size
+          ZIP_SIZE=$(wc -c < ../statnive.zip | tr -d ' ')
+          ZIP_MB=$(( ZIP_SIZE / 1024 / 1024 ))
+          echo "ZIP size: ${ZIP_SIZE} bytes (${ZIP_MB}MB)"
+          if [ "$ZIP_SIZE" -gt 26214400 ]; then
+            echo "::error::ZIP exceeds 25MB"
+            FAILED=1
+          elif [ "$ZIP_SIZE" -gt 10485760 ]; then
+            echo "::warning::ZIP is over 10MB — review for unnecessary files"
+          fi
+
+          if [ "$FAILED" -eq 1 ]; then
+            exit 1
+          fi
+          echo "✓ Distribution ZIP validation passed"
+
+  # ---------------------------------------------------------------------------
+  # Job 7: Architecture blockers (Checklist §2/§8/§13)
+  # Activation phone-home, custom updater, bundled core libs, MaxMind bundling
+  # ---------------------------------------------------------------------------
+  architecture-blockers:
+    name: Architecture Blockers (§2/§8/§13)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Scan for architectural rejection triggers
+        run: |
+          FAILED=0
+
+          # §2 Guideline 7 — no phone-home inside activation callbacks.
+          # Best-effort heuristic: any file that calls register_activation_hook()
+          # and also contains an external HTTP call. Will miss activation callbacks
+          # defined in a different file from the hook registration.
+          while IFS= read -r f; do
+            [ -z "$f" ] && continue
+            if grep -nE 'wp_remote_(get|post|request|head)|fsockopen|file_get_contents\s*\(\s*[^)]*https?://' "$f" >/dev/null; then
+              echo "::error file=$f::External HTTP call in a file that defines an activation hook (Checklist §2, Guideline 7)"
+              FAILED=1
+            fi
+          done < <(grep -rln --include='*.php' --exclude-dir=Dependencies \
+            'register_activation_hook' src/ statnive.php 2>/dev/null || true)
+
+          # §2 Guideline 8 — no custom auto-updater
+          if grep -rn --include='*.php' -E "pre_set_site_transient_update_plugins|site_transient_update_plugins|auto_update_plugin" src/ statnive.php | grep -v 'src/Dependencies/' | grep -v '^\s*//' | grep -v '^\s*\*'; then
+            echo "::error::Custom auto-updater filter found — WP.org handles updates (Checklist §2, Guideline 8)"
+            FAILED=1
+          fi
+
+          # §13 — MaxMind bundled database or P3TERX mirror
+          if find . -type f \( -name '*.mmdb' -o -name 'GeoLite2*' \) ! -path './node_modules/*' ! -path './vendor/*' | grep -q .; then
+            echo "::error::Bundled MaxMind GeoLite .mmdb found — user must provide key (Checklist §13)"
+            FAILED=1
+          fi
+          if grep -rn --include='*.php' --include='*.js' 'P3TERX' src/ resources/ statnive.php 2>/dev/null | grep -v 'src/Dependencies/'; then
+            echo "::error::P3TERX GeoLite mirror referenced — circumvents MaxMind account requirement (Checklist §13)"
+            FAILED=1
+          fi
+
+          if [ "$FAILED" -eq 1 ]; then
+            exit 1
+          fi
+          echo "✓ Architectural blocker scan passed"
+
+  # ---------------------------------------------------------------------------
+  # Job 8: Freemium boundary (Checklist §16, §2 Guideline 5)
+  # ---------------------------------------------------------------------------
+  freemium-boundary:
+    name: Freemium Boundary (§16)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Scan source for license/trial/Pro gating
+        run: |
+          FAILED=0
+
+          # Note: PHP namespace 'Addon\Pro' needs grep regex 'Addon\\Pro'
+          # (single backslash escaped to literal) which in single-quoted bash is 'Addon\\Pro'.
+          PATTERN='isPro\(|checkLicense|Addon\\Pro|trial_expires|license_key|premium_only|ApiCommunicator|LicenseCheckJob|LicensingServiceProvider'
+          HITS=$(grep -rnE --include='*.php' "$PATTERN" src/ statnive.php 2>/dev/null | grep -v 'src/Dependencies/' | grep -v '^\s*//' | grep -v '^\s*\*' || true)
+          if [ -n "$HITS" ]; then
+            echo "::error::Freemium/license gating code found in .org build (Checklist §16, Guidelines 5 & 6)"
+            echo "$HITS"
+            FAILED=1
+          fi
+
+          # Ensure src/Addon/ is absent or excluded from dist
+          if [ -d "src/Addon" ]; then
+            if ! grep -q '^/src/Addon' .distignore 2>/dev/null && ! grep -q '^src/Addon' .distignore 2>/dev/null; then
+              echo "::error::src/Addon/ exists but is not excluded in .distignore (Checklist §16)"
+              FAILED=1
+            fi
+          fi
+
+          if [ "$FAILED" -eq 1 ]; then
+            exit 1
+          fi
+          echo "✓ Freemium boundary scan passed"
+
+  # ---------------------------------------------------------------------------
+  # Job 9: External Services semantic validator (Checklist §13/§7)
+  # ---------------------------------------------------------------------------
+  external-services-semantic:
+    name: External Services Semantic Diff (§13)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Extract and diff external service domains
+        run: |
+          set -e
+          FAILED=0
+
+          # --exclude-dir needed because grep -rh strips filenames, so a post-pipeline
+          # path filter would be a no-op.
+          CODE_HOSTS=$(grep -rhoE --include='*.php' --exclude-dir=Dependencies \
+            "https?://[A-Za-z0-9._-]+" src/ statnive.php 2>/dev/null \
+            | sed -E 's#https?://##; s#[/"'"'"'].*##' \
+            | sort -u || true)
+
+          if [ -z "$CODE_HOSTS" ]; then
+            echo "✓ No external hosts referenced in source"
+            exit 0
+          fi
+
+          README_BLOCK=$(awk '/^== External Services ==/{flag=1; next} /^== /{flag=0} flag' readme.txt 2>/dev/null || true)
+
+          if [ -z "$README_BLOCK" ]; then
+            echo "::error::readme.txt has no == External Services == section but source references external hosts (Checklist §13)"
+            echo "Referenced hosts:"
+            echo "$CODE_HOSTS"
+            exit 1
+          fi
+
+          ALLOWLIST='^(schema\.org|www\.w3\.org|wordpress\.org|api\.wordpress\.org|www\.gnu\.org)$'
+          for host in $CODE_HOSTS; do
+            if echo "$host" | grep -qE "$ALLOWLIST"; then
+              continue
+            fi
+            if ! echo "$README_BLOCK" | grep -q "$host"; then
+              echo "::error::External host '$host' referenced in source but not documented in readme.txt == External Services == (Checklist §13)"
+              FAILED=1
+            fi
+          done
+
+          if [ "$FAILED" -eq 1 ]; then
+            exit 1
+          fi
+          echo "✓ External Services semantic diff passed"
+          echo "Hosts verified:"
+          echo "$CODE_HOSTS"
+
+  # ---------------------------------------------------------------------------
+  # Job 10: Header parity + Tested-up-to freshness (Checklist §3/§12)
+  # ---------------------------------------------------------------------------
+  header-parity:
+    name: Header Parity & Tested-up-to (§3/§12)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Validate full header matrix + WP core freshness
+        run: |
+          FAILED=0
+
+          for field in "Plugin Name" "Plugin URI" "Description" "Version" "Requires at least" "Requires PHP" "Author" "License" "License URI" "Text Domain" "Domain Path"; do
+            if ! grep -qE "^\s*\*\s*${field}\s*:" statnive.php; then
+              echo "::error::statnive.php header missing required field: ${field} (Checklist §3)"
+              FAILED=1
+            fi
+          done
+
+          TEXT_DOMAIN=$(grep -m1 -E '^\s*\*\s*Text Domain\s*:' statnive.php | sed -E 's/.*Text Domain\s*:\s*//; s/\s+$//')
+          if [ "$TEXT_DOMAIN" != "statnive" ]; then
+            echo "::error::Text Domain must equal 'statnive' (got: '$TEXT_DOMAIN') (Checklist §3)"
+            FAILED=1
+          fi
+
+          TESTED_UP_TO=$(grep -m1 '^Tested up to:' readme.txt | sed 's/^Tested up to:\s*//' | tr -d '[:space:]')
+          WP_LATEST=$(curl -sSf --retry 3 --retry-delay 2 --max-time 15 \
+            https://api.wordpress.org/core/version-check/1.7/ 2>/dev/null \
+            | grep -oE '"current":"[0-9.]+"' | head -1 | sed 's/"current":"//; s/"//' || true)
+          if [ -n "$WP_LATEST" ] && [ -n "$TESTED_UP_TO" ]; then
+            echo "WordPress latest stable: $WP_LATEST"
+            echo "readme Tested up to: $TESTED_UP_TO"
+            LATEST_MAJOR=$(echo "$WP_LATEST" | cut -d. -f1)
+            LATEST_MINOR=$(echo "$WP_LATEST" | cut -d. -f2)
+            TESTED_MAJOR=$(echo "$TESTED_UP_TO" | cut -d. -f1)
+            TESTED_MINOR=$(echo "$TESTED_UP_TO" | cut -d. -f2)
+            TESTED_SCORE=$(( TESTED_MAJOR * 100 + TESTED_MINOR ))
+            LATEST_SCORE=$(( LATEST_MAJOR * 100 + LATEST_MINOR ))
+            DIFF=$(( LATEST_SCORE - TESTED_SCORE ))
+            if [ "$DIFF" -gt 2 ]; then
+              echo "::error::readme 'Tested up to: $TESTED_UP_TO' is more than 2 minor versions behind stable WP $WP_LATEST (Checklist §12)"
+              FAILED=1
+            elif [ "$DIFF" -lt -1 ]; then
+              echo "::warning::readme 'Tested up to: $TESTED_UP_TO' exceeds current stable WP $WP_LATEST — do not exceed current RC"
+            else
+              echo "✓ Tested up to within acceptable window"
+            fi
+          else
+            echo "::warning::Could not resolve WP latest stable or Tested-up-to — skipping freshness check"
+          fi
+
+          if [ "$FAILED" -eq 1 ]; then
+            exit 1
+          fi
+          echo "✓ Header parity + Tested-up-to freshness passed"
