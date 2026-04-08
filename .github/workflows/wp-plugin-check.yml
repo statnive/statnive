@@ -54,6 +54,7 @@ jobs:
       # text domain.)
       - name: Build distribution directory
         run: |
+          mkdir -p ../statnive-dist/statnive
           rsync -rc --exclude-from=.distignore ./ ../statnive-dist/statnive/
           ls -la ../statnive-dist/statnive/
 
