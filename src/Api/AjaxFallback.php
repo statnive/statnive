@@ -125,7 +125,7 @@ final class AjaxFallback {
 			$consent_granted
 		);
 
-		if ( ! $privacy_check->allowed ) {
+		if ( ! $privacy_check->allowed() ) {
 			wp_send_json_success( null, 204 );
 			// Defensive: wp_send_json_* normally calls wp_die(), but hosts
 			// and security plugins can filter wp_die_handler. The explicit

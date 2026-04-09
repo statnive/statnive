@@ -1,0 +1,64 @@
+Statnive v0.3.1 — /statnive-release-zip compliance gate
+Run: 2026-04-09
+Branch: release/v0.3.1 (off development)
+
+Severity model (release build):
+  CRITICAL → stop
+  HIGH → stop unless waived
+  MEDIUM → ask user
+
+S-1 PHPCS                       CRITICAL  PASS  (composer phpcs, exit 0)
+S-2 PHPStan                     CRITICAL  PASS  ([OK] No errors, 80/80)
+S-3 PHPUnit (unit)              CRITICAL  PASS  (103 tests, 187 assertions)
+S-3 PHPUnit (integration)       CRITICAL  DEFERRED → CI
+                                          (no local WP test scaffold; CI runs
+                                           composer test:integration on PR)
+S-4 Vitest                      CRITICAL  PASS  (102 passed, 6 skipped, 22 files)
+S-5 Plugin Check (PCP)          HIGH      SKIPPED  (wp-env not running locally;
+                                                    must run before WP.org submission)
+
+C-1  ABSPATH guard              CRITICAL  PASS  (zero unguarded files)
+C-2  LICENSE / TPL              CRITICAL  PASS  (LICENSE GPL OK, THIRD-PARTY-LICENSES.md OK,
+                                                 device-detector regexes OK)
+C-3  No phone-home in activate  CRITICAL  PASS
+C-4  No api.statnive.com        CRITICAL  PASS  (zero matches in src/, root, resources/)
+C-5  readme.txt                 CRITICAL  PASS
+     C-5a External Services section present
+     C-5b MaxMind verbatim attribution present
+     C-5c Tags <=5, no competitor names
+     C-5d Stable tag matches Version (0.3.1)
+     C-5e Tested up to: 6.9 (major-only per WP.org Plugin Check)
+     C-5f Requires PHP / WP consistent
+     C-5h Size 10036 bytes (limit 10240) — within budget after trim
+     C-5i Stable tag is not "trunk"
+     C-5j No License Validation / api.statnive.com entries
+C-6  Output escaping            CRITICAL  PASS  (heuristic; authoritative S-1 also green)
+C-7  MaxMind hygiene            CRITICAL  PASS  (no .mmdb, no P3TERX)
+C-8  No custom updater          CRITICAL  PASS
+C-9  No bundled core libs       CRITICAL  PASS
+C-10 No external CDN enqueue    CRITICAL  PASS
+C-11 Cron cleanup               CRITICAL  PASS
+     Recurring hooks scheduled and cleared:
+       statnive_daily_aggregation       (DailyAggregationJob)
+       statnive_daily_data_purge        (DataPurgeJob)
+       statnive_daily_salt_rotation     (SaltRotationJob)
+       statnive_email_report            (EmailReportJob)
+       statnive_weekly_geoip_update     (GeoIPDownloader)
+     Single-event hooks (no clear required):
+       statnive_import_batch
+C-12 uninstall.php              CRITICAL  PASS
+     WP_UNINSTALL_PLUGIN guard, delete_option, DROP TABLE, multisite-aware
+C-13 SVN assets                 HIGH      WARN  (icon, banners, screenshots not designed yet —
+                                                 known backlog item, waived for 0.3.1 since
+                                                 the WP.org listing assets predate this release)
+C-14 ZIP integrity              CRITICAL  PASS
+     Top folder: statnive/
+     Required files all present (statnive.php, readme.txt, uninstall.php,
+       vendor/autoload.php, LICENSE, THIRD-PARTY-LICENSES.md)
+     No forbidden patterns (node_modules, tests, phpunit, composer files,
+       .git/, .github/, vite/vitest configs, /releases/, etc.)
+     Size: 1,146,091 bytes (limit 5 MB warn / 10 MB fail)
+     Files: 326 (limit 1500)
+     Embedded Version matches: "Version: 0.3.1"
+
+Artifact: statnive-dist/statnive-0.3.1.zip

@@ -168,7 +168,7 @@ final class EventController extends WP_REST_Controller {
 			$consent_granted
 		);
 
-		if ( ! $privacy_check->allowed ) {
+		if ( ! $privacy_check->allowed() ) {
 			return new WP_REST_Response( null, 204 );
 		}
 

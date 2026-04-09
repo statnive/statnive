@@ -1,0 +1,16 @@
+Statnive v0.3.1 — composer release-gate + npm gate
+Run: 2026-04-09
+
+composer phpcs                  PASS  (80/80, 5.27s, 0 errors)
+composer phpstan                PASS  (80/80, [OK] No errors)
+composer test (full)            ENV-FAIL  (Class "WP_UnitTestCase" not found —
+                                            local environment lacks WP test
+                                            scaffold; integration suite requires
+                                            wp-env or equivalent)
+composer test:unit              PASS  (103 tests, 187 assertions, 0.385s)
+
+npm run gate (vitest)           PASS  (102 passed, 6 skipped, 22 test files, 6.35s)
+
+Note: integration tests run in CI on the PR via `composer test:integration`.
+The full release-gate target should be re-run inside CI / wp-env before tagging
+v0.3.1 on master.

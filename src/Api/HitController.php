@@ -214,7 +214,7 @@ final class HitController extends WP_REST_Controller {
 			$consent_granted
 		);
 
-		if ( ! $privacy_check->allowed ) {
+		if ( ! $privacy_check->allowed() ) {
 			// Silent drop — return 204 so tracker doesn't retry.
 			return new WP_REST_Response( null, 204 );
 		}
