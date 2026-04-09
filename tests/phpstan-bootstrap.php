@@ -20,8 +20,8 @@ if ( ! defined( 'STATNIVE_FILE' ) ) {
 	define( 'STATNIVE_FILE', __DIR__ . '/../statnive.php' );
 }
 if ( ! defined( 'STATNIVE_MIN_PHP' ) ) {
-	define( 'STATNIVE_MIN_PHP', '8.1' );
+	define( 'STATNIVE_MIN_PHP', '8.0' );
 }
 if ( ! defined( 'STATNIVE_MIN_WP' ) ) {
-	define( 'STATNIVE_MIN_WP', '6.4' );
+	define( 'STATNIVE_MIN_WP', '5.6' );
 }

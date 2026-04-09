@@ -39,12 +39,12 @@
 	</rule>
 
 	<!-- Minimum WordPress and PHP versions -->
-	<config name="minimum_wp_version" value="6.4"/>
-	<config name="minimum_supported_wp_version" value="6.4"/>
+	<config name="minimum_wp_version" value="5.6"/>
+	<config name="minimum_supported_wp_version" value="5.6"/>
 
-	<!-- PHP compatibility (matches Requires PHP: 8.1 in statnive.php) -->
+	<!-- PHP compatibility (matches Requires PHP: 8.0 in statnive.php) -->
 	<rule ref="PHPCompatibilityWP"/>
-	<config name="testVersion" value="8.1-"/>
+	<config name="testVersion" value="8.0-"/>
 
 	<!-- PHP compatibility -->
 	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">

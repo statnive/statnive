@@ -4,8 +4,8 @@
  * Plugin URI:  https://statnive.com
  * Description: Simple stats, clear decisions. Privacy-first analytics for WordPress.
  * Version:     0.3.0
- * Requires PHP: 8.1
- * Requires at least: 6.4
+ * Requires PHP: 8.0
+ * Requires at least: 5.6
  * Author:      Statnive
  * Author URI:  https://statnive.com
  * License:     GPL-2.0-or-later
@@ -41,12 +41,12 @@ define( 'STATNIVE_FILE', __FILE__ );
 /**
  * Minimum required PHP version.
  */
-define( 'STATNIVE_MIN_PHP', '8.1' );
+define( 'STATNIVE_MIN_PHP', '8.0' );
 
 /**
  * Minimum required WordPress version.
  */
-define( 'STATNIVE_MIN_WP', '6.4' );
+define( 'STATNIVE_MIN_WP', '5.6' );
 
 /**
  * Check PHP version before proceeding.

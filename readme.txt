@@ -1,9 +1,9 @@
 === Statnive ===
 Contributors: statnive
 Tags: analytics, statistics, privacy, tracking, dashboard
-Requires at least: 6.4
+Requires at least: 5.6
 Tested up to: 6.9
-Requires PHP: 8.1
+Requires PHP: 8.0
 Stable tag: 0.3.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
