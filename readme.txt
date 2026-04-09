@@ -4,7 +4,7 @@ Tags: analytics, statistics, privacy, tracking, dashboard
 Requires at least: 5.6
 Tested up to: 6.9
 Requires PHP: 8.0
-Stable tag: 0.3.0
+Stable tag: 0.3.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -129,6 +129,15 @@ No visitor data is ever sent to any external service. All analytics data remains
 
 == Changelog ==
 
+= 0.3.1 - 2026-04-09 =
+* Lowered runtime floor to WordPress 5.6 / PHP 8.0; PHPCompatibilityWP ruleset enforces it.
+* Fixed UTM persistence and tuple-based campaign aggregation in referrers.
+* Fixed `/hit` and `/event` REST args incorrectly marked required (regression from 0.3.0).
+* Fixed dual-bar charts to use a shared scale across visitors and sessions.
+* Fixed dashboard CSS leaking into WP admin chrome (now scoped under `#statnive-app`).
+* Fixed Pages search input padding and wired search to entry/exit tables.
+* Refactored API layer: extracted PayloadValidator, hardened privacy fall-through.
+
 = 0.3.0 - 2026-04-06 =
 * WordPress.org submission compliance pass — see CHANGELOG.md for the full list.
 * Removed all bundled license validation per Guideline 6.
@@ -142,23 +151,12 @@ No visitor data is ever sent to any external service. All analytics data remains
 * Fixed real-time dashboard, tracker URLs, Overview report, Recent Pageviews dedup, GeoIP download URL.
 * Added regex-based UA fallback parser, `statnive_client_ip` filter, 38 regression tests.
 
-= 0.1.1 - 2026-04-04 =
-* Fixed zero-data Geography/Devices/Real-time pages and dashboard CSS bugs.
-* Added `.distignore` for distribution packaging.
-
-= 0.1.0 - 2026-04-02 =
-* Initial release: real-time dashboard, cookieless tracking with rotating salts, GeoIP, device detection, custom events, email reports, CSV/WP Statistics import, WordPress Privacy API support.
+For older releases (0.1.x), see CHANGELOG.md in the plugin source.
 
 == Upgrade Notice ==
 
+= 0.3.1 =
+Fixes UTM persistence, REST `/hit` regression from 0.3.0, dashboard CSS leak into WP admin, dual-bar scaling, and Pages search wiring. Lowers runtime floor to WP 5.6 / PHP 8.0.
+
 = 0.3.0 =
 GeoIP now requires a MaxMind license key (free). Adds full i18n support and WordPress.org compliance fixes.
-
-= 0.2.0 =
-Critical bug fixes for real-time dashboard, tracker URLs, and overview reports. Adds 38 regression tests.
-
-= 0.1.1 =
-Fixes zero-data display on Geography, Devices, and Real-time pages. All dashboard screens now show data correctly.
-
-= 0.1.0 =
-Initial release of Statnive — privacy-first WordPress analytics.

@@ -7,8 +7,41 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.1] - 2026-04-09
+
+### Changed
+
+- Lowered runtime floor to WordPress 5.6 / PHP 8.0. Wired the
+  `PHPCompatibilityWP` ruleset into PHPCS so the floor is enforced in CI (#15).
+  `Tested up to` remains the major-only `6.9` per WP.org Plugin Check policy.
+- Refactored the tracking REST layer: extracted `PayloadValidator` from the
+  `/hit` and `/event` controllers and hardened the privacy fall-through path
+  so consent / DNT / GPC checks run before any payload work.
+- Wired a fast pre-commit hook at `.githooks/pre-commit` that runs the
+  `composer gate` + `npm run gate` quick suites on staged files.
+
+### Fixed
+
+- Fixed UTM parameter persistence and tuple-based campaign aggregation in
+  the referrers report — campaigns with the same `utm_source` but different
+  `utm_medium`/`utm_campaign` are now grouped correctly (#13).
+- Fixed `/hit` and `/event` REST args being incorrectly marked
+  `required: true`, which caused legitimate payloads with optional fields
+  omitted to 400 (regression from 0.3.0, #11). Added a regression guard
+  test (#12).
+- Fixed dual-bar visualization on the referrers and channels reports to
+  use a shared scale across visitors and sessions so the bars are visually
+  comparable (#3).
+- Fixed dashboard CSS leaking into WordPress admin chrome by scoping every
+  rule in `globals.css` under `#statnive-app` and removing the unscoped
+  Tailwind preflight import (#6).
+- Fixed Pages report search input padding (`!important` to beat WP admin
+  CSS) and wired the search box to the entry-page and exit-page tables (#4).
+
 ### Removed
 
+- Removed unused `src/Addon` premium scaffolding and stale container
+  configuration that survived the Guideline 6 license cleanup.
 - **WordPress.org Guideline 6 compliance:** removed all license validation
   code from the WordPress.org build (`src/Licensing/`, `src/Feature/`,
   `src/Cron/LicenseCheckJob.php`, `src/Container/LicensingServiceProvider.php`,

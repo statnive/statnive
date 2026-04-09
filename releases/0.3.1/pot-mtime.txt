@@ -1,0 +1,13 @@
+POT regeneration: SKIPPED for this run (wp-env not available locally).
+
+languages/statnive.pot mtime: 2026-04-08 19:49 (last regen on 0.3.0 release)
+statnive.php mtime:           2026-04-09 07:34 (this release)
+
+Action required before WordPress.org submission:
+  npx wp-env run cli wp i18n make-pot \
+    /var/www/html/wp-content/plugins/statnive \
+    languages/statnive.pot
+
+The translatable surface in 0.3.1 is unchanged versus 0.3.0 — no new
+__()/_e()/_n() strings were added. The POT is functionally up to date,
+but it must still be regenerated and the mtime bumped before SVN tag.
