@@ -54,13 +54,28 @@ ADMIN_USER="${WP_ADMIN_USER:-root}"
 ADMIN_PASS="${WP_ADMIN_PASS:-q1w2e3}"
 HMAC_SECRET="${HMAC_SECRET:-}"
 LOAD_TIER="${1:-medium}"
+RUNS="${RUNS:-1}"
+
+if ! [[ "$RUNS" =~ ^[0-9]+$ ]] || [ "$RUNS" -lt 1 ]; then
+    echo "ERROR: RUNS must be a positive integer (got: $RUNS)"
+    exit 1
+fi
 
 # Results directory.
 RESULTS_DIR="$SCRIPT_DIR/results/perf-impact"
 mkdir -p "$RESULTS_DIR"
 
-RUN_TS=$(date +%s)
+BATCH_TS=$(/bin/date +%s)
 COOKIE_FILE="/tmp/wp_perf_impact_cookies_$$.txt"
+
+# Collected run directories for this batch (populated inside the outer loop).
+typeset -a BATCH_RUN_DIRS
+
+# Per-run state (reset inside the outer loop).
+RUN_INDEX=0
+RUN_TS=""
+RUN_DIR=""
+CONFIG_ORDER_CSV=""
 
 # ---------------------------------------------------------------------------
 # WordPress REST API helpers
@@ -155,7 +170,7 @@ for p in plugins:
         fi
     done
 
-    rm -f "$plugins_file"
+    /bin/rm -f "$plugins_file"
     echo "  Found ${#PLUGIN_NAMES[@]} analytics plugins."
 }
 
@@ -189,7 +204,7 @@ restore_plugin_state() {
         set_plugin_status "${PLUGIN_SLUGS[$i]}" "${PLUGIN_ORIG[$i]}"
     done
     echo "  Plugin state restored."
-    rm -f "$COOKIE_FILE"
+    /bin/rm -f "$COOKIE_FILE"
 }
 
 warmup() {
@@ -216,8 +231,46 @@ run_k6_vitals() {
         -e "HMAC_SECRET=${HMAC_SECRET}" \
         -e "CONFIG_LABEL=${config_label}" \
         -e "LOAD_TIER=${LOAD_TIER}" \
+        -e "RESULTS_DIR=${RUN_DIR}" \
+        -e "RUN_INDEX=${RUN_INDEX}" \
+        -e "RUN_TS=${RUN_TS}" \
+        -e "CONFIG_ORDER=${CONFIG_ORDER_CSV}" \
         "$SCRIPT_DIR/perf-impact-test.js" \
         2>&1 || true
+}
+
+# Fisher-Yates shuffle of PLUGIN_NAMES / PLUGIN_SLUGS / PLUGIN_ORIG arrays in
+# place, seeded from the argument for run-to-run reproducibility. Baseline
+# and all-plugins are handled separately outside the for-loop, so only the
+# middle 8 plugins actually randomize here.
+shuffle_plugin_order() {
+    local seed="$1"
+    local count=${#PLUGIN_NAMES[@]}
+
+    # Use awk for the shuffle — portable and deterministic given a seed.
+    # Absolute path used because something in the k6 browser teardown has
+    # been observed to strip PATH between outer-loop iterations on macOS.
+    local shuffled_indices
+    shuffled_indices=$(/usr/bin/awk -v n="$count" -v seed="$seed" 'BEGIN {
+        srand(seed);
+        for (i = 0; i < n; i++) a[i] = i;
+        for (i = n - 1; i > 0; i--) {
+            j = int(rand() * (i + 1));
+            tmp = a[i]; a[i] = a[j]; a[j] = tmp;
+        }
+        for (i = 0; i < n; i++) printf "%d ", a[i];
+    }')
+
+    typeset -a new_names new_slugs new_orig
+    for idx in ${=shuffled_indices}; do
+        # zsh arrays are 1-indexed; awk emits 0-indexed.
+        new_names+=("${PLUGIN_NAMES[$((idx + 1))]}")
+        new_slugs+=("${PLUGIN_SLUGS[$((idx + 1))]}")
+        new_orig+=("${PLUGIN_ORIG[$((idx + 1))]}")
+    done
+    PLUGIN_NAMES=("${new_names[@]}")
+    PLUGIN_SLUGS=("${new_slugs[@]}")
+    PLUGIN_ORIG=("${new_orig[@]}")
 }
 
 # ---------------------------------------------------------------------------
@@ -230,6 +283,7 @@ echo "╚═══════════════════════�
 echo ""
 echo "  Site:       $BASE_URL"
 echo "  Load Tier:  $LOAD_TIER"
+echo "  Runs:       $RUNS"
 echo "  Results:    $RESULTS_DIR"
 echo ""
 
@@ -261,159 +315,102 @@ case "$LOAD_TIER" in
     heavy)  per_config=8 ;;
     *)      per_config=5 ;;
 esac
-echo "  Est. Time:  ~$(( (per_config + 1) * TOTAL_CONFIGS )) minutes"
+echo "  Est. Time:  ~$(( (per_config + 1) * TOTAL_CONFIGS * RUNS )) minutes (${RUNS} run(s) x ${TOTAL_CONFIGS} configs)"
 echo ""
 
 trap restore_plugin_state EXIT
 
-CONFIG_NUM=0
+# ===========================================================================
+# OUTER LOOP: run the full matrix RUNS times for variance reporting
+# ===========================================================================
+for run_num in $(seq 1 "$RUNS"); do
+    # Re-export PATH at the start of every iteration. Something in the k6
+    # browser module subprocess teardown (observed on macOS between runs)
+    # was stripping PATH so that basic commands like `date`, `mkdir`, and
+    # `rm` became unfindable on the second iteration. Re-setting here is
+    # cheap and guarantees every iteration starts with a known-good PATH.
+    export PATH="/opt/homebrew/bin:/opt/homebrew/opt/node@22/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:${HOME}/.pyenv/shims:${HOME}/bin:${PATH}"
 
-# --- Phase 0: CACHE PRIMING ---
-echo "  [0/$TOTAL_CONFIGS] CACHE PRIMING (warming OPcache + MySQL)"
-echo "    Running 5 passes across 8 pages..."
-for pass in 1 2 3 4 5; do
-    for path in "/" "/sample-page/" "/hello-world/" "/shop/" "/product/hoodie/" "/wp-admin/" "/cart/" "/my-account/"; do
-        $CURL_BIN -s -o /dev/null "${BASE_URL}${path}" 2>/dev/null || true
+    RUN_INDEX="$run_num"
+    RUN_TS=$(/bin/date +%s)
+    RUN_DIR="$RESULTS_DIR/run-${RUN_TS}"
+    /bin/mkdir -p "$RUN_DIR"
+    BATCH_RUN_DIRS+=("$RUN_DIR")
+
+    echo ""
+    echo "  ╔══════════════════════════════════════════════════════════════╗"
+    echo "  ║  RUN ${run_num} / ${RUNS}  (dir: run-${RUN_TS})"
+    echo "  ╚══════════════════════════════════════════════════════════════╝"
+    echo ""
+
+    # Shuffle the middle plugins for this run (baseline + all-plugins stay in
+    # fixed positions — they are handled outside the for-loop below).
+    shuffle_plugin_order "$RUN_TS"
+    CONFIG_ORDER_CSV="baseline,$(IFS=,; echo "${PLUGIN_NAMES[*]}"),all-plugins"
+    echo "  Plugin order: ${PLUGIN_NAMES[*]}"
+    echo ""
+
+    CONFIG_NUM=0
+
+    # --- Phase 0: CACHE PRIMING (each run starts with identical cache state) ---
+    echo "  [0/$TOTAL_CONFIGS] CACHE PRIMING (warming OPcache + MySQL)"
+    echo "    Running 5 passes across 8 pages..."
+    for pass in 1 2 3 4 5; do
+        for path in "/" "/sample-page/" "/hello-world/" "/shop/" "/product/hoodie/" "/wp-admin/" "/cart/" "/my-account/"; do
+            $CURL_BIN -s -o /dev/null "${BASE_URL}${path}" 2>/dev/null || true
+        done
     done
-done
-/bin/sleep 3
-echo "    Cache priming complete."
-echo ""
+    /bin/sleep 3
+    echo "    Cache priming complete."
+    echo ""
 
-# --- Phase 1: BASELINE ---
-CONFIG_NUM=$((CONFIG_NUM + 1))
-echo "  [$CONFIG_NUM/$TOTAL_CONFIGS] BASELINE (all analytics OFF)"
-echo "    Deactivating all analytics plugins..."
-deactivate_all_analytics
-echo "    Warming up..."
-warmup
-run_k6_vitals "baseline"
-echo ""
-
-# --- Phase 2: INDIVIDUAL ---
-for name in "${PLUGIN_NAMES[@]}"; do
+    # --- Phase 1: BASELINE ---
     CONFIG_NUM=$((CONFIG_NUM + 1))
-    echo "  [$CONFIG_NUM/$TOTAL_CONFIGS] $name (isolated)"
+    echo "  [$CONFIG_NUM/$TOTAL_CONFIGS] BASELINE (all analytics OFF)"
     refresh_auth
     echo "    Deactivating all analytics plugins..."
     deactivate_all_analytics
-    echo "    Activating $name..."
-    activate_one_plugin "$name"
     echo "    Warming up..."
     warmup
-    run_k6_vitals "$name"
+    run_k6_vitals "baseline"
+    echo ""
+
+    # --- Phase 2: INDIVIDUAL (randomized order via shuffle_plugin_order) ---
+    for name in "${PLUGIN_NAMES[@]}"; do
+        CONFIG_NUM=$((CONFIG_NUM + 1))
+        echo "  [$CONFIG_NUM/$TOTAL_CONFIGS] $name (isolated)"
+        refresh_auth
+        echo "    Deactivating all analytics plugins..."
+        deactivate_all_analytics
+        echo "    Activating $name..."
+        activate_one_plugin "$name"
+        echo "    Warming up..."
+        warmup
+        run_k6_vitals "$name"
+        echo ""
+    done
+
+    # --- Phase 3: ALL PLUGINS ---
+    CONFIG_NUM=$((CONFIG_NUM + 1))
+    echo "  [$CONFIG_NUM/$TOTAL_CONFIGS] ALL PLUGINS (combined)"
+    refresh_auth
+    echo "    Activating all analytics plugins..."
+    activate_all_analytics
+    echo "    Warming up..."
+    warmup
+    run_k6_vitals "all-plugins"
     echo ""
 done
 
-# --- Phase 3: ALL PLUGINS ---
-CONFIG_NUM=$((CONFIG_NUM + 1))
-echo "  [$CONFIG_NUM/$TOTAL_CONFIGS] ALL PLUGINS (combined)"
-refresh_auth
-echo "    Activating all analytics plugins..."
-activate_all_analytics
-echo "    Warming up..."
-warmup
-run_k6_vitals "all-plugins"
-echo ""
-
-# --- Phase 4: REPORT ---
+# ===========================================================================
+# Aggregation: compute median-of-medians, IQR, and noise floor across all runs
+# ===========================================================================
 echo "  ════════════════════════════════════════════════════"
-echo "  Generating comparison report..."
+echo "  Aggregating ${RUNS} run(s) into summary report..."
 echo ""
 
-$NODE_BIN -e "
-const fs = require('fs');
-const path = require('path');
-
-const dir = '${RESULTS_DIR}';
-const files = fs.readdirSync(dir).filter(f => f.endsWith('.json') && !f.startsWith('summary')).sort();
-
-if (files.length === 0) {
-    console.error('No result files found in ' + dir);
-    process.exit(1);
-}
-
-const results = {};
-for (const f of files) {
-    const data = JSON.parse(fs.readFileSync(path.join(dir, f), 'utf8'));
-    results[data.config] = data;
-}
-
-const baseline = results['baseline'];
-if (!baseline) {
-    console.error('No baseline result found!');
-    process.exit(1);
-}
-
-const plugins = {};
-const round = (v, d = 1) => Math.round(v * Math.pow(10, d)) / Math.pow(10, d);
-
-for (const [name, data] of Object.entries(results)) {
-    if (name === 'baseline') continue;
-    const delta = {};
-    const deltaPct = {};
-    for (const vital of ['ttfb', 'fcp', 'lcp', 'cls', 'inp']) {
-        const bVal = baseline.vitals[vital].p50;
-        const pVal = data.vitals[vital].p50;
-        const diff = pVal - bVal;
-        delta[vital] = round(diff, vital === 'cls' ? 4 : 1);
-        deltaPct[vital] = bVal > 0 ? round((diff / bVal) * 100, 1) : 0;
-    }
-    const bTTFB = Math.max(baseline.vitals.ttfb.p50, 1);
-    const bLCP = Math.max(baseline.vitals.lcp.p50, 1);
-    const bFCP = Math.max(baseline.vitals.fcp.p50, 1);
-    const score = round((
-        (Math.max(0, delta.ttfb) / bTTFB) * 0.25 +
-        (Math.max(0, delta.lcp) / bLCP) * 0.30 +
-        (Math.max(0, delta.fcp) / bFCP) * 0.20 +
-        (Math.max(0, delta.cls) / 0.1) * 0.15 +
-        (Math.max(0, delta.inp) / 200) * 0.10
-    ) * 100, 1);
-    plugins[name] = { vitals: data.vitals, delta, deltaPct, impact_score: score, samples: data.samples };
-}
-
-const ranking = Object.entries(plugins).sort((a, b) => a[1].impact_score - b[1].impact_score);
-
-console.log('');
-console.log('  ╔══════════════════════════════════════════════════════════════════════════════════╗');
-console.log('  ║                      PERFORMANCE IMPACT COMPARISON                              ║');
-console.log('  ╚══════════════════════════════════════════════════════════════════════════════════╝');
-console.log('');
-console.log('  Load Tier:   ${LOAD_TIER}');
-console.log('  Baseline:    TTFB ' + baseline.vitals.ttfb.p50 + 'ms | FCP ' + baseline.vitals.fcp.p50 + 'ms | LCP ' + baseline.vitals.lcp.p50 + 'ms');
-console.log('');
-console.log('  ┌───────────────────────────┬────────┬────────┬────────┬────────┬────────┬───────┐');
-console.log('  │ Plugin                    │ TTFB   │  FCP   │  LCP   │  CLS   │  INP   │Impact │');
-console.log('  │                           │ Δ ms   │ Δ ms   │ Δ ms   │  Δ     │ Δ ms   │ Score │');
-console.log('  ├───────────────────────────┼────────┼────────┼────────┼────────┼────────┼───────┤');
-console.log('  │ baseline                  │   ---  │   ---  │   ---  │  ---   │   ---  │  0.0  │');
-
-for (const [name, p] of ranking) {
-    const d = p.delta;
-    const fmtMs = (v) => ((v >= 0 ? '+' : '') + Math.round(v) + 'ms').padStart(6);
-    const fmtCls = (v) => ((v >= 0 ? '+' : '') + v.toFixed(3)).padStart(6);
-    const fmtScore = (v) => v.toFixed(1).padStart(5);
-    console.log('  │ ' + name.padEnd(25) + ' │ ' + fmtMs(d.ttfb) + ' │ ' + fmtMs(d.fcp) + ' │ ' + fmtMs(d.lcp) + ' │ ' + fmtCls(d.cls) + ' │ ' + fmtMs(d.inp) + ' │ ' + fmtScore(p.impact_score) + ' │');
-}
-
-console.log('  └───────────────────────────┴────────┴────────┴────────┴────────┴────────┴───────┘');
-console.log('');
-if (ranking.length > 0) {
-    console.log('  Lowest impact:  ' + ranking[0][0] + ' (score: ' + ranking[0][1].impact_score + ')');
-    console.log('  Highest impact: ' + ranking[ranking.length - 1][0] + ' (score: ' + ranking[ranking.length - 1][1].impact_score + ')');
-    console.log('');
-}
-
-const summary = {
-    timestamp: new Date().toISOString(),
-    load_tier: '${LOAD_TIER}',
-    baseline, plugins,
-    ranking: ranking.map(([n]) => n),
-};
-fs.writeFileSync(path.join(dir, 'summary-${RUN_TS}.json'), JSON.stringify(summary, null, 2));
-console.log('  Summary saved to: results/perf-impact/summary-${RUN_TS}.json');
-console.log('');
-" || echo "  Report generation failed. Check results/perf-impact/ for raw data."
+$NODE_BIN "$SCRIPT_DIR/aggregate-runs.mjs" "$RESULTS_DIR" "$LOAD_TIER" "$BATCH_TS" "${BATCH_RUN_DIRS[@]}" \
+    || echo "  Aggregation failed. Raw per-run data is in $RESULTS_DIR/run-*/"
 
 echo ""
 echo "  Done! Plugin state will be restored automatically."

@@ -30,9 +30,10 @@ function extractPercentiles(metric) {
  *
  * @param {object} k6Data - k6 handleSummary data object.
  * @param {string} configLabel - Configuration label (e.g. 'baseline', 'statnive').
+ * @param {object} [runMeta] - Optional run metadata (run_index, run_ts, config_order).
  * @returns {object} Structured vitals object.
  */
-export function extractVitalsSummary(k6Data, configLabel) {
+export function extractVitalsSummary(k6Data, configLabel, runMeta = {}) {
 	const metrics = k6Data.metrics || {};
 
 	const ttfb = extractPercentiles(metrics.web_vital_ttfb);
@@ -47,6 +48,7 @@ export function extractVitalsSummary(k6Data, configLabel) {
 	return {
 		config: configLabel,
 		timestamp: new Date().toISOString(),
+		run_meta: runMeta,
 		vitals: {
 			ttfb: { p50: round(ttfb.p50), p95: round(ttfb.p95), avg: round(ttfb.avg) },
 			fcp: { p50: round(fcp.p50), p95: round(fcp.p95), avg: round(fcp.avg) },
@@ -236,16 +238,104 @@ export function consolePerfReport(report) {
  *
  * @param {object} k6Data - k6 summary data.
  * @param {string} configLabel - Config label (e.g. 'baseline', 'statnive').
+ * @param {string} [resultsDir] - Directory to write the JSON file (default: ./results/perf-impact).
+ * @param {object} [runMeta] - Optional run metadata (run_index, run_ts, config_order).
  * @returns {object} k6 handleSummary return value.
  */
-export function generatePerfSummaryOutput(k6Data, configLabel) {
-	const summary = extractVitalsSummary(k6Data, configLabel);
+export function generatePerfSummaryOutput(k6Data, configLabel, resultsDir = './results/perf-impact', runMeta = {}) {
+	const summary = extractVitalsSummary(k6Data, configLabel, runMeta);
 	const timestamp = Date.now();
 
 	return {
 		stdout: `\n  Config: ${configLabel} | TTFB p50: ${summary.vitals.ttfb.p50}ms | LCP p50: ${summary.vitals.lcp.p50}ms | Samples: ${summary.samples}\n`,
-		[`./results/perf-impact/${configLabel}-${timestamp}.json`]: JSON.stringify(summary, null, 2),
+		[`${resultsDir}/${configLabel}-${timestamp}.json`]: JSON.stringify(summary, null, 2),
 	};
+}
+
+// ---------------------------------------------------------------------------
+// Multi-run aggregation (Phase 1 of ROADMAP-PERFORMANCE.md)
+// ---------------------------------------------------------------------------
+
+/**
+ * Aggregate N per-run summary files for a single config into one stats object.
+ * Computes median-of-medians, median-of-p95s, IQR, standard deviation,
+ * min, and max across the N runs' p50 values.
+ *
+ * @param {object[]} runs - Array of per-run vitals summaries for the same config.
+ * @returns {object|null} Aggregate stats, or null if runs is empty.
+ */
+export function aggregateRuns(runs) {
+	if (!runs || runs.length === 0) return null;
+
+	const vitals = {};
+	for (const vital of ['ttfb', 'fcp', 'lcp', 'cls', 'inp']) {
+		const p50s = runs.map((r) => r.vitals[vital].p50).sort((a, b) => a - b);
+		const p95s = runs.map((r) => r.vitals[vital].p95).sort((a, b) => a - b);
+		const dec = vital === 'cls' ? 4 : 1;
+		vitals[vital] = {
+			median: round(median(p50s), dec),
+			p95_median: round(median(p95s), dec),
+			iqr: round(iqr(p50s), dec),
+			std_dev: round(stdDev(p50s), dec),
+			min: round(p50s[0], dec),
+			max: round(p50s[p50s.length - 1], dec),
+			runs_p50: p50s.map((v) => round(v, dec)),
+		};
+	}
+
+	return {
+		config: runs[0].config,
+		vitals,
+		samples_total: runs.reduce((s, r) => s + (r.samples || 0), 0),
+		runs_count: runs.length,
+	};
+}
+
+/**
+ * Compute the "noise floor" from N baseline runs: the maximum |delta| between
+ * any two baseline runs' p50 values for each vital. Differences between plugin
+ * configurations smaller than the noise floor are within measurement noise
+ * and should not be interpreted as real differences.
+ *
+ * @param {object[]} baselineRuns - Array of per-run baseline summaries.
+ * @returns {object} Noise floor per vital { lcp, ttfb, fcp, runs }.
+ */
+export function computeNoiseFloor(baselineRuns) {
+	if (!baselineRuns || baselineRuns.length < 2) {
+		return { lcp: 0, ttfb: 0, fcp: 0, runs: baselineRuns?.length || 0 };
+	}
+	const floor = {};
+	for (const vital of ['lcp', 'ttfb', 'fcp']) {
+		const vals = baselineRuns.map((r) => r.vitals[vital].p50);
+		floor[vital] = round(Math.max(...vals) - Math.min(...vals), 1);
+	}
+	floor.runs = baselineRuns.length;
+	return floor;
+}
+
+/** Median of a pre-sorted array. */
+function median(sorted) {
+	if (sorted.length === 0) return 0;
+	const mid = Math.floor(sorted.length / 2);
+	return sorted.length % 2 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
+}
+
+/** Interquartile range (Q3 - Q1) of a pre-sorted array. */
+function iqr(sorted) {
+	if (sorted.length < 4) {
+		return sorted.length > 0 ? sorted[sorted.length - 1] - sorted[0] : 0;
+	}
+	const q1 = sorted[Math.floor(sorted.length * 0.25)];
+	const q3 = sorted[Math.floor(sorted.length * 0.75)];
+	return q3 - q1;
+}
+
+/** Population standard deviation. */
+function stdDev(values) {
+	if (values.length < 2) return 0;
+	const mean = values.reduce((a, b) => a + b, 0) / values.length;
+	const variance = values.reduce((a, b) => a + (b - mean) ** 2, 0) / values.length;
+	return Math.sqrt(variance);
 }
 
 /** Round to N decimal places. */

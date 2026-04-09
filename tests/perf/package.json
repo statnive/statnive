@@ -1,0 +1,5 @@
+{
+  "type": "module",
+  "private": true,
+  "description": "Scoped package.json to declare ESM for perf test scripts (aggregate-runs.mjs + lib/perf-reporter.js). Does not affect the main statnive package."
+}

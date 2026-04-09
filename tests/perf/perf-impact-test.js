@@ -29,6 +29,15 @@ const CONFIG_LABEL = __ENV.CONFIG_LABEL || 'unknown';
 const LOAD_TIER = __ENV.LOAD_TIER || 'medium';
 const ITERATIONS_PER_VU = parseInt(__ENV.ITERATIONS_PER_VU || '3', 10);
 
+// Multi-run metadata (Phase 1 + 2 of ROADMAP-PERFORMANCE.md).
+// When invoked by perf-impact-runner.sh with RUNS > 1, each run passes its own
+// RESULTS_DIR so per-run JSON files are isolated under results/perf-impact/run-<ts>/.
+// RUN_INDEX, RUN_TS, and CONFIG_ORDER are recorded in each JSON's run_meta field.
+const RESULTS_DIR = __ENV.RESULTS_DIR || './results/perf-impact';
+const RUN_INDEX = parseInt(__ENV.RUN_INDEX || '1', 10);
+const RUN_TS = __ENV.RUN_TS || '';
+const CONFIG_ORDER = (__ENV.CONFIG_ORDER || '').split(',').filter(Boolean);
+
 // Load tier presets.
 const TIERS = {
 	light:  { browserVUs: 3,  protocolVUs: 10, duration: '2m', browserIterations: 2 },
@@ -244,7 +253,11 @@ export function protocolTest(data) {
 // Summary
 // ---------------------------------------------------------------------------
 export function handleSummary(data) {
-	return generatePerfSummaryOutput(data, CONFIG_LABEL);
+	return generatePerfSummaryOutput(data, CONFIG_LABEL, RESULTS_DIR, {
+		run_index: RUN_INDEX,
+		run_ts: RUN_TS,
+		config_order: CONFIG_ORDER,
+	});
 }
 
 // ---------------------------------------------------------------------------
