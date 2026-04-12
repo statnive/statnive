@@ -1,3 +1,4 @@
+import { __, sprintf } from '@wordpress/i18n';
 import { cn, formatPercentChange } from '@/lib/utils';
 
 interface KpiCardProps {
@@ -32,7 +33,12 @@ export function KpiCard({ label, value, change, isLoading = false }: KpiCardProp
 								? 'bg-green-100 text-green-800'
 								: 'bg-red-100 text-red-800',
 						)}
-						aria-label={`Change ${change >= 0 ? 'up' : 'down'} ${formatPercentChange(Math.abs(change))} versus previous period`}
+						aria-label={sprintf(
+							/* translators: 1: "up" or "down", 2: percentage change */
+							__('Change %1$s %2$s versus previous period', 'statnive'),
+							change >= 0 ? __('up', 'statnive') : __('down', 'statnive'),
+							formatPercentChange(Math.abs(change)),
+						)}
 					>
 						<span aria-hidden="true">{change >= 0 ? '↑ ' : '↓ '}</span>
 						{formatPercentChange(change)}

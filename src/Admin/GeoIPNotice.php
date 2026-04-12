@@ -9,11 +9,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Admin notices for GeoIP configuration.
+ * Admin notices for GeoIP configuration and cron health.
  *
  * Shows dismissible notices when:
  * - GeoIP is enabled but no MaxMind license key is configured.
- * - WP-Cron is disabled while GeoIP is active.
+ * - WP-Cron is disabled (affects all 5 Statnive cron jobs).
  */
 final class GeoIPNotice {
 
@@ -25,7 +25,7 @@ final class GeoIPNotice {
 	}
 
 	/**
-	 * Display GeoIP-related admin notices on Statnive pages only.
+	 * Display admin notices on Statnive pages only.
 	 */
 	public static function maybe_show_notices(): void {
 		$screen = get_current_screen();
@@ -33,12 +33,14 @@ final class GeoIPNotice {
 			return;
 		}
 
+		// Cron health warning applies regardless of GeoIP state.
+		self::maybe_show_cron_notice();
+
 		if ( ! (bool) get_option( 'statnive_geoip_enabled', false ) ) {
 			return;
 		}
 
 		self::maybe_show_license_notice();
-		self::maybe_show_cron_notice();
 	}
 
 	/**
@@ -75,7 +77,10 @@ final class GeoIPNotice {
 	}
 
 	/**
-	 * Show notice when WP-Cron is disabled and GeoIP is active.
+	 * Show notice when WP-Cron is disabled.
+	 *
+	 * Affects all 5 Statnive cron jobs: salt rotation, daily aggregation,
+	 * data purge, email reports, and GeoIP updates.
 	 */
 	private static function maybe_show_cron_notice(): void {
 		if ( ! defined( 'DISABLE_WP_CRON' ) || ! DISABLE_WP_CRON ) {
@@ -83,8 +88,10 @@ final class GeoIPNotice {
 		}
 
 		printf(
-			'<div class="notice notice-info is-dismissible"><p>%s</p></div>',
-			esc_html__( 'Statnive: WordPress cron is disabled on this site (DISABLE_WP_CRON). GeoIP database updates will not run automatically. Set up a system cron job or use WP-CLI to update the database manually.', 'statnive' )
+			'<div class="notice notice-warning is-dismissible"><p><strong>%s</strong></p><p>%s</p><p>%s</p></div>',
+			esc_html__( 'Statnive: WordPress cron is disabled on this site (DISABLE_WP_CRON).', 'statnive' ),
+			esc_html__( 'This affects all Statnive background jobs: daily salt rotation, data aggregation, retention cleanup, email reports, and GeoIP updates. Without cron, analytics data will not be summarized and old data will not be purged.', 'statnive' ),
+			esc_html__( 'To fix: set up a system cron job (recommended) or run "wp statnive cron run" via WP-CLI.', 'statnive' )
 		);
 	}
 }

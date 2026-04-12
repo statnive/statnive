@@ -1,3 +1,4 @@
+import { __ } from '@wordpress/i18n';
 import { cn } from '@/lib/utils';
 import type { DateRange } from '@/types/api';
 
@@ -16,7 +17,7 @@ interface DateRangePickerProps {
 
 export function DateRangePicker({ value, onChange }: DateRangePickerProps) {
 	return (
-		<div className="flex gap-1" role="group" aria-label="Date range">
+		<div className="flex gap-1" role="group" aria-label={__('Date range', 'statnive')}>
 			{presets.map((preset) => (
 				<button
 					key={preset.value}
@@ -29,7 +30,7 @@ export function DateRangePicker({ value, onChange }: DateRangePickerProps) {
 							: 'text-muted-foreground hover:bg-muted hover:text-foreground',
 					)}
 				>
-					{preset.label}
+					{__(preset.label, 'statnive')}
 				</button>
 			))}
 		</div>

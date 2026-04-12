@@ -65,7 +65,12 @@ export function useDateRange() {
 
 	const setDateRange = useCallback(
 		(newRange: DateRange) => {
-			navigate({ search: (prev) => ({ ...prev, range: newRange }) });
+			// TanStack Router's ParamsReducerFn resolves to `never` from an
+			// unscoped useNavigate(). The cast through `unknown` is safe because
+			// the root route's validateSearch returns `{ range: DateRange }`.
+			void navigate({
+				search: (() => ({ range: newRange })) as unknown as undefined,
+			});
 		},
 		[navigate],
 	);

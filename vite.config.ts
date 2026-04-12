@@ -92,10 +92,14 @@ export default defineConfig(({ mode }) => {
 			manifest: true,
 			rollupOptions: {
 				input: resolve(__dirname, 'resources/react/main.tsx'),
+				external: ['@wordpress/i18n'],
 				output: {
 					entryFileNames: 'assets/[name]-[hash].js',
 					chunkFileNames: 'assets/[name]-[hash].js',
 					assetFileNames: 'assets/[name]-[hash].[ext]',
+					globals: {
+						'@wordpress/i18n': 'wp.i18n',
+					},
 				},
 			},
 		},

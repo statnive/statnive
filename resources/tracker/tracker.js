@@ -267,6 +267,15 @@ window.statnive = window.statnive || function() {
 		// Will wrap history.pushState/replaceState + popstate.
 	}
 
+	// Handle bfcache (back/forward cache) restoration.
+	// When a page is restored from bfcache, the pageshow event fires with
+	// event.persisted === true. We re-send the pageview to count the visit.
+	window.addEventListener('pageshow', function(e) {
+		if (e.persisted && !isTrackingBlocked()) {
+			sendHit(buildPayload());
+		}
+	});
+
 	// Consent mode: deferred init or immediate.
 	// With async strategy, the script executes as soon as downloaded.
 	// No DOMContentLoaded wait needed — the tracker reads window/navigator

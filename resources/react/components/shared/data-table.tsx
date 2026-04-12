@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react';
+import { __ } from '@wordpress/i18n';
 import { cn } from '@/lib/utils';
 import { ArrowUp, ArrowDown, ArrowUpDown } from 'lucide-react';
 
@@ -27,13 +28,15 @@ export function DataTable<T>({
 	columns,
 	title,
 	isLoading = false,
-	emptyMessage = 'No data available',
+	emptyMessage,
 	defaultSortKey,
 	defaultSortDir = 'desc',
 	getRowKey,
 }: DataTableProps<T>) {
 	const [sortKey, setSortKey] = useState(defaultSortKey);
 	const [sortDir, setSortDir] = useState<'asc' | 'desc'>(defaultSortDir);
+
+	const resolvedEmptyMessage = emptyMessage ?? __('No data available', 'statnive');
 
 	const sortedData = useMemo(() => {
 		if (!sortKey) return data;
@@ -137,7 +140,7 @@ export function DataTable<T>({
 									colSpan={columns.length}
 									className="px-3 py-8 text-center text-muted-foreground"
 								>
-									{emptyMessage}
+									{resolvedEmptyMessage}
 								</td>
 							</tr>
 						) : (
