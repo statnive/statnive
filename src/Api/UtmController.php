@@ -8,6 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+use Statnive\Api\Concerns\CachesResponses;
 use Statnive\Database\TableRegistry;
 use WP_REST_Controller;
 use WP_REST_Request;
@@ -20,6 +21,8 @@ use WP_REST_Server;
  * Endpoint: GET /wp-json/statnive/v1/utm
  */
 final class UtmController extends WP_REST_Controller {
+
+	use CachesResponses;
 
 	/**
 	 * Route namespace.
@@ -83,11 +86,21 @@ final class UtmController extends WP_REST_Controller {
 	 * @return WP_REST_Response
 	 */
 	public function get_items( $request ): WP_REST_Response {
-		global $wpdb;
+		$from   = $request->get_param( 'from' );
+		$to     = $request->get_param( 'to' );
+		$limit  = min( (int) $request->get_param( 'limit' ), 100 );
+		$params = [
+			'from'  => $from,
+			'to'    => $to,
+			'limit' => $limit,
+		];
 
-		$from  = $request->get_param( 'from' );
-		$to    = $request->get_param( 'to' );
-		$limit = min( (int) $request->get_param( 'limit' ), 100 );
+		$cached = $this->get_cached_response( 'utm', $params );
+		if ( null !== $cached ) {
+			return new WP_REST_Response( $cached, 200 );
+		}
+
+		global $wpdb;
 
 		$sessions   = TableRegistry::get( 'sessions' );
 		$parameters = TableRegistry::get( 'parameters' );
@@ -146,6 +159,8 @@ final class UtmController extends WP_REST_Controller {
 			$row['sessions'] = (int) $row['sessions'];
 			$payload[]       = $row;
 		}
+
+		$this->set_cached_response( 'utm', $params, $payload, $from, $to );
 
 		return new WP_REST_Response( $payload, 200 );
 	}

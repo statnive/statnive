@@ -47,6 +47,62 @@ if ( ! function_exists( 'absint' ) ) {
 	}
 }
 
+if ( ! defined( 'MINUTE_IN_SECONDS' ) ) {
+	define( 'MINUTE_IN_SECONDS', 60 );
+}
+
+if ( ! function_exists( 'wp_hash' ) ) {
+	function wp_hash( string $data, string $scheme = 'auth' ): string {
+		// Stub: use hash_hmac with a fixed salt for deterministic unit tests.
+		return hash_hmac( 'md5', $data, 'statnive-unit-test-salt' );
+	}
+}
+
+if ( ! function_exists( 'wp_json_encode' ) ) {
+	/**
+	 * @param mixed $data
+	 */
+	function wp_json_encode( $data, int $options = 0, int $depth = 512 ) {
+		return json_encode( $data, $options, $depth );
+	}
+}
+
+if ( ! function_exists( 'update_option' ) ) {
+	/**
+	 * @param mixed $value
+	 */
+	function update_option( string $option, $value, $autoload = null ): bool {
+		$GLOBALS['statnive_test_options'][ $option ] = $value;
+		return true;
+	}
+}
+
+if ( ! function_exists( 'get_transient' ) ) {
+	/**
+	 * @return mixed
+	 */
+	function get_transient( string $transient ) {
+		return $GLOBALS['statnive_test_transients'][ $transient ] ?? false;
+	}
+}
+
+if ( ! function_exists( 'set_transient' ) ) {
+	/**
+	 * @param mixed $value
+	 */
+	function set_transient( string $transient, $value, int $expiration = 0 ): bool {
+		$GLOBALS['statnive_test_transients'][ $transient ] = $value;
+		return true;
+	}
+}
+
+if ( ! function_exists( 'delete_transient' ) ) {
+	function delete_transient( string $transient ): bool {
+		unset( $GLOBALS['statnive_test_transients'][ $transient ] );
+		return true;
+	}
+}
+
 if ( ! function_exists( 'apply_filters' ) ) {
 	function apply_filters( string $hook_name, $value ) {
 		return $value;

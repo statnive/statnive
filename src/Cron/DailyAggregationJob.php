@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Statnive\Cron;
 
+use Statnive\Api\Concerns\CacheVersion;
 use Statnive\Service\AggregationService;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -46,6 +47,9 @@ final class DailyAggregationJob {
 
 		// Backfill check: find un-aggregated days.
 		self::backfill();
+
+		// Invalidate dashboard caches after all aggregation is complete.
+		CacheVersion::increment();
 	}
 
 	/**

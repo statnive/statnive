@@ -8,6 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+use Statnive\Api\Concerns\CachesResponses;
 use Statnive\Database\TableRegistry;
 use WP_REST_Controller;
 use WP_REST_Request;
@@ -21,6 +22,8 @@ use WP_REST_Server;
  * Returns visitors, sessions, views, bounces for a date range.
  */
 final class SummaryController extends WP_REST_Controller {
+
+	use CachesResponses;
 
 	/**
 	 * Route namespace.
@@ -84,10 +87,19 @@ final class SummaryController extends WP_REST_Controller {
 	 * @return WP_REST_Response
 	 */
 	public function get_items( $request ): WP_REST_Response {
-		global $wpdb;
+		$from   = $request->get_param( 'from' );
+		$to     = $request->get_param( 'to' );
+		$params = [
+			'from' => $from,
+			'to'   => $to,
+		];
 
-		$from = $request->get_param( 'from' );
-		$to   = $request->get_param( 'to' );
+		$cached = $this->get_cached_response( 'summary', $params );
+		if ( null !== $cached ) {
+			return new WP_REST_Response( $cached, 200 );
+		}
+
+		global $wpdb;
 
 		$table = TableRegistry::get( 'summary_totals' );
 
@@ -164,13 +176,14 @@ final class SummaryController extends WP_REST_Controller {
 			}
 		}
 
-		return new WP_REST_Response(
-			[
-				'totals' => $totals,
-				'daily'  => is_array( $rows ) ? $rows : [],
-			],
-			200
-		);
+		$result = [
+			'totals' => $totals,
+			'daily'  => is_array( $rows ) ? $rows : [],
+		];
+
+		$this->set_cached_response( 'summary', $params, $result, $from, $to );
+
+		return new WP_REST_Response( $result, 200 );
 	}
 
 	/**
