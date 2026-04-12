@@ -187,6 +187,11 @@ final class EventController extends WP_REST_Controller {
 		}
 		set_transient( $ip_key, $count + 1, MINUTE_IN_SECONDS );
 
+		// Circuit-breaker: stop writes if too many recent failures (§28.3.2).
+		if ( HitController::is_circuit_open() ) {
+			return self::error_response( [ 'circuit_open', 'Tracking temporarily paused due to repeated errors.', 503 ] );
+		}
+
 		// Record the event.
 		EventService::record(
 			$event_name,

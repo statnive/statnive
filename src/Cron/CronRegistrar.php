@@ -76,5 +76,24 @@ final class CronRegistrar {
 		DataPurgeJob::unschedule();
 		EmailReportJob::unschedule();
 		GeoIPDownloader::unschedule();
+
+		// Clean up Action Scheduler actions if it was used.
+		if ( function_exists( 'as_unschedule_all_actions' ) ) {
+			as_unschedule_all_actions( SaltRotationJob::HOOK );
+			as_unschedule_all_actions( DailyAggregationJob::HOOK );
+			as_unschedule_all_actions( DataPurgeJob::HOOK );
+		}
+	}
+
+	/**
+	 * Check if Action Scheduler is available (typically via WooCommerce).
+	 *
+	 * When present, heavy background jobs (aggregation, purge) benefit from
+	 * Action Scheduler's resilience to WP-Cron starvation on low-traffic sites.
+	 *
+	 * @return bool
+	 */
+	public static function has_action_scheduler(): bool {
+		return function_exists( 'as_schedule_recurring_action' );
 	}
 }

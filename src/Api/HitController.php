@@ -246,6 +246,11 @@ final class HitController extends WP_REST_Controller {
 		}
 		set_transient( $ip_key, $count + 1, MINUTE_IN_SECONDS );
 
+		// Circuit-breaker: stop writes if too many recent failures (§28.3.2).
+		if ( self::is_circuit_open() ) {
+			return self::error_response( [ 'circuit_open', 'Tracking temporarily paused due to repeated errors.', 503 ] );
+		}
+
 		// Create VisitorProfile, enrich with services, and persist.
 		$profile = VisitorProfile::from_request( $data );
 		$profile->enrich();
@@ -270,11 +275,34 @@ final class HitController extends WP_REST_Controller {
 	}
 
 	/**
-	 * Validate that a page_url host matches the site origin.
+	 * Check if the circuit-breaker is tripped (too many recent failures).
 	 *
-	 * Rejects URLs with external or malformed hosts. Allows relative URLs
-	 * (no host component) and URLs matching the site host. Multi-domain
-	 * setups can extend the allow-list via the `statnive_allowed_hosts` filter.
+	 * Trips when `statnive_failed_requests` exceeds 50 within a 5-minute
+	 * window. Resets automatically when the window expires.
+	 *
+	 * @return bool True if writes should be blocked.
+	 */
+	public static function is_circuit_open(): bool {
+		$failures   = (int) get_option( 'statnive_failed_requests', 0 );
+		$window_set = (int) get_option( 'statnive_failed_window', 0 );
+
+		// No failures — circuit closed.
+		if ( $failures < 1 ) {
+			return false;
+		}
+
+		// Window expired — reset counter.
+		if ( $window_set > 0 && ( time() - $window_set ) > 5 * MINUTE_IN_SECONDS ) {
+			update_option( 'statnive_failed_requests', 0, false );
+			update_option( 'statnive_failed_window', 0, false );
+			return false;
+		}
+
+		return $failures >= 50;
+	}
+
+	/**
+	 * Validate that a page_url host matches the site origin.
 	 *
 	 * @param string $url URL to validate.
 	 * @return bool True if valid.
@@ -308,8 +336,13 @@ final class HitController extends WP_REST_Controller {
 		// Don't count rate-limit + privacy soft-blocks as "errors" — those are
 		// expected, not failures. Only count code/4xx/5xx that signal a broken
 		// request the operator should know about.
-		if ( $tuple[2] >= 400 && 429 !== $tuple[2] ) {
-			update_option( 'statnive_failed_requests', (int) get_option( 'statnive_failed_requests', 0 ) + 1, false );
+		if ( $tuple[2] >= 400 && 429 !== $tuple[2] && 503 !== $tuple[2] ) {
+			$count = (int) get_option( 'statnive_failed_requests', 0 );
+			update_option( 'statnive_failed_requests', $count + 1, false );
+			// Start the circuit-breaker window on first failure.
+			if ( 0 === $count ) {
+				update_option( 'statnive_failed_window', time(), false );
+			}
 		}
 
 		return new WP_REST_Response(
