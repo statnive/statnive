@@ -37,7 +37,9 @@ final class WPStatisticsImporter extends ImportManager {
 	public static function is_available(): bool {
 		global $wpdb;
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-		$result = $wpdb->get_var( "SHOW TABLES LIKE '{$wpdb->prefix}statistics_visits'" );
+		$result = $wpdb->get_var(
+			$wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( $wpdb->prefix . 'statistics_visits' ) )
+		);
 		return null !== $result;
 	}
 

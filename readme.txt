@@ -21,7 +21,7 @@ Statnive gives WordPress site owners fast, smart, and easy-to-understand analyti
 = Why Statnive? =
 
 * **Channel intelligence** — Automatically groups traffic into Organic Search, Social Media, Direct, Referral, and Email so you see which channels drive real results.
-* **Privacy by default** — No cookies, no localStorage, no fingerprinting. GDPR, CCPA, and APPI compliant out of the box. Daily rotating salts make cross-day tracking impossible.
+* **Privacy by default** — No cookies, no localStorage, no fingerprinting. Designed to support GDPR, CCPA, and APPI compliance. Daily rotating salts make cross-day tracking impossible.
 * **Zero-config setup** — Install, activate, done. No tracking code to paste, no account to create, no external service to connect.
 
 = Key Features =
@@ -127,6 +127,10 @@ This product includes GeoLite Data created by MaxMind, available from https://ww
 
 No visitor data is ever sent to any external service. All analytics data remains in your WordPress database.
 
+== Privacy Policy ==
+
+All analytics data stays in your WordPress database. No cookies, no fingerprinting, no external transfers. Daily-rotating salted hashes prevent cross-day tracking. Raw IPs are used only for GeoIP lookup and never stored. Integrates with the WordPress Privacy API for data export and erasure.
+
 == Changelog ==
 
 = 0.3.1 - 2026-04-09 =
@@ -139,13 +143,10 @@ No visitor data is ever sent to any external service. All analytics data remains
 * Refactored API layer: extracted PayloadValidator, hardened privacy fall-through.
 
 = 0.3.0 - 2026-04-06 =
-* WordPress.org submission compliance pass — see CHANGELOG.md for the full list.
-* Removed all bundled license validation per Guideline 6.
-* Hardened tracking endpoints: REST schema validation, 8 KB body cap, salted SHA-256 rate limit, GPC-first opt-out.
-* Added five privacy filter hooks (`statnive_should_track`, `statnive_require_consent`, `statnive_has_visitor_consent`, `statnive_respect_dnt`, `statnive_respect_gpc`).
-* Added MaxMind GeoLite EULA compliance (user-supplied key required, no bundled mmdb).
-* Added i18n infrastructure (`load_plugin_textdomain`, `wp_set_script_translations`, regenerated POT).
-* Bumped Tested up to WordPress 6.9.
+* WordPress.org submission compliance pass — see CHANGELOG.md for full details.
+* Removed bundled license validation (Guideline 6). Hardened tracking endpoints.
+* Added privacy filter hooks and MaxMind GeoLite EULA compliance.
+* Added i18n infrastructure. Bumped Tested up to WordPress 6.9.
 
 = 0.2.0 - 2026-04-05 =
 * Fixed real-time dashboard, tracker URLs, Overview report, Recent Pageviews dedup, GeoIP download URL.
