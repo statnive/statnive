@@ -236,6 +236,19 @@ final class HitController extends WP_REST_Controller {
 		// Invalidate realtime cache so new data appears immediately.
 		delete_transient( 'statnive_realtime' );
 
+		/**
+		 * Fires after a tracking hit has been processed and persisted.
+		 *
+		 * Dashboard transient caches use a short TTL (30s for today-ranges)
+		 * so they expire naturally without per-hit DB writes. The realtime
+		 * transient is deleted explicitly above for instant feedback.
+		 *
+		 * @since 0.4.0
+		 *
+		 * @param VisitorProfile $profile The enriched visitor profile.
+		 */
+		do_action( 'statnive_hit_processed', $profile );
+
 		return new WP_REST_Response( null, 204 );
 	}
 

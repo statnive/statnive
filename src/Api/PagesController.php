@@ -8,6 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+use Statnive\Api\Concerns\CachesResponses;
 use Statnive\Database\TableRegistry;
 use WP_REST_Controller;
 use WP_REST_Request;
@@ -21,6 +22,8 @@ use WP_REST_Server;
  * Returns per-page metrics sorted by visitors (not pageviews — vanity metric rejection).
  */
 final class PagesController extends WP_REST_Controller {
+
+	use CachesResponses;
 
 	/**
 	 * Route namespace.
@@ -88,12 +91,23 @@ final class PagesController extends WP_REST_Controller {
 	 * @return WP_REST_Response
 	 */
 	public function get_items( $request ): WP_REST_Response {
-		global $wpdb;
-
 		$from   = $request->get_param( 'from' );
 		$to     = $request->get_param( 'to' );
 		$limit  = min( (int) $request->get_param( 'limit' ), 100 );
 		$offset = (int) $request->get_param( 'offset' );
+		$params = [
+			'from'   => $from,
+			'to'     => $to,
+			'limit'  => $limit,
+			'offset' => $offset,
+		];
+
+		$cached = $this->get_cached_response( 'pages', $params );
+		if ( null !== $cached ) {
+			return new WP_REST_Response( $cached, 200 );
+		}
+
+		global $wpdb;
 
 		$summary       = TableRegistry::get( 'summary' );
 		$resource_uris = TableRegistry::get( 'resource_uris' );
@@ -165,7 +179,10 @@ final class PagesController extends WP_REST_Controller {
 		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery
 		// phpcs:enable WordPress.DB.DirectDatabaseQuery.NoCaching
 
-		return new WP_REST_Response( is_array( $rows ) ? $rows : [], 200 );
+		$result = is_array( $rows ) ? $rows : [];
+		$this->set_cached_response( 'pages', $params, $result, $from, $to );
+
+		return new WP_REST_Response( $result, 200 );
 	}
 
 	/**
