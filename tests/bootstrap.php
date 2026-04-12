@@ -142,6 +142,18 @@ if ( ! function_exists( 'get_option' ) ) {
  * Only implements get_content_type() which is all PayloadValidator needs.
  * Integration tests load real WordPress and this stub is never used there.
  */
+if ( ! class_exists( 'WP_REST_Controller' ) ) {
+	// phpcs:disable Squiz.Commenting.ClassComment.Missing, Squiz.Commenting.FunctionComment.Missing
+	class WP_REST_Controller {
+		/** @var string */
+		protected $namespace = '';
+
+		/** @var string */
+		protected $rest_base = '';
+	}
+	// phpcs:enable
+}
+
 if ( ! class_exists( 'WP_REST_Request' ) ) {
 	// phpcs:disable Squiz.Commenting.ClassComment.Missing, Squiz.Commenting.FunctionComment.Missing
 	class WP_REST_Request {
@@ -224,4 +236,160 @@ if ( ! function_exists( 'wp_die' ) ) {
 		$status = isset( $args['response'] ) ? (int) $args['response'] : 500;
 		throw new WpDieException( false, $message, $status );
 	}
+}
+
+/*
+ * Additional WordPress function stubs for unit tests.
+ */
+
+if ( ! function_exists( 'is_admin' ) ) {
+	function is_admin(): bool {
+		return false;
+	}
+}
+
+if ( ! function_exists( 'add_action' ) ) {
+	function add_action( string $hook_name, $callback, int $priority = 10, int $accepted_args = 1 ): bool {
+		return true;
+	}
+}
+
+if ( ! function_exists( '__' ) ) {
+	function __( string $text, string $domain = 'default' ): string {
+		return $text;
+	}
+}
+
+if ( ! function_exists( 'wp_schedule_single_event' ) ) {
+	function wp_schedule_single_event( int $timestamp, string $hook, array $args = [] ): bool {
+		return true;
+	}
+}
+
+if ( ! function_exists( 'wp_schedule_event' ) ) {
+	function wp_schedule_event( int $timestamp, string $recurrence, string $hook, array $args = [] ): bool {
+		return true;
+	}
+}
+
+if ( ! function_exists( 'wp_next_scheduled' ) ) {
+	/**
+	 * @return false
+	 */
+	function wp_next_scheduled( string $hook, array $args = [] ) {
+		return false;
+	}
+}
+
+if ( ! function_exists( 'wp_clear_scheduled_hook' ) ) {
+	function wp_clear_scheduled_hook( string $hook, array $args = [] ): int {
+		return 0;
+	}
+}
+
+if ( ! function_exists( 'add_option' ) ) {
+	/**
+	 * @param mixed $value
+	 */
+	function add_option( string $option, $value = '', string $deprecated = '', $autoload = 'yes' ): bool {
+		return update_option( $option, $value );
+	}
+}
+
+if ( ! function_exists( 'current_user_can' ) ) {
+	function current_user_can( string $capability, ...$args ): bool {
+		return true;
+	}
+}
+
+if ( ! function_exists( 'register_activation_hook' ) ) {
+	function register_activation_hook( string $file, $callback ): void {
+	}
+}
+
+if ( ! function_exists( 'register_deactivation_hook' ) ) {
+	function register_deactivation_hook( string $file, $callback ): void {
+	}
+}
+
+if ( ! function_exists( 'get_bloginfo' ) ) {
+	/**
+	 * @return string
+	 */
+	function get_bloginfo( string $show = '' ) {
+		if ( 'version' === $show ) {
+			return '6.9';
+		}
+		return '';
+	}
+}
+
+if ( ! function_exists( 'flush_rewrite_rules' ) ) {
+	function flush_rewrite_rules( bool $hard = true ): void {
+	}
+}
+
+if ( ! function_exists( 'load_plugin_textdomain' ) ) {
+	function load_plugin_textdomain( string $domain, $deprecated = false, string $plugin_rel_path = '' ): bool {
+		return true;
+	}
+}
+
+if ( ! function_exists( 'plugin_basename' ) ) {
+	function plugin_basename( string $file ): string {
+		return basename( $file );
+	}
+}
+
+if ( ! function_exists( 'esc_html' ) ) {
+	function esc_html( string $text ): string {
+		return $text;
+	}
+}
+
+if ( ! function_exists( 'esc_html__' ) ) {
+	function esc_html__( string $text, string $domain = 'default' ): string {
+		return $text;
+	}
+}
+
+if ( ! function_exists( 'sanitize_textarea_field' ) ) {
+	function sanitize_textarea_field( string $str ): string {
+		return trim( strip_tags( $str ) );
+	}
+}
+
+if ( ! function_exists( 'wp_generate_password' ) ) {
+	function wp_generate_password( int $length = 24, bool $special_chars = true, bool $extra_special_chars = false ): string {
+		return 'test_password_' . $length;
+	}
+}
+
+if ( ! function_exists( 'deactivate_plugins' ) ) {
+	function deactivate_plugins( $plugins, bool $silent = false, $network_wide = null ): void {
+	}
+}
+
+/*
+ * Statnive constants for unit tests.
+ */
+
+if ( ! defined( 'STATNIVE_VERSION' ) ) {
+	define( 'STATNIVE_VERSION', '0.3.1' );
+}
+
+if ( ! defined( 'STATNIVE_FILE' ) ) {
+	define( 'STATNIVE_FILE', __DIR__ . '/../statnive.php' );
+}
+
+if ( ! defined( 'STATNIVE_PATH' ) ) {
+	define( 'STATNIVE_PATH', __DIR__ . '/../' );
+}
+
+if ( ! defined( 'STATNIVE_MIN_PHP' ) ) {
+	define( 'STATNIVE_MIN_PHP', '8.0' );
+}
+
+if ( ! defined( 'STATNIVE_MIN_WP' ) ) {
+	define( 'STATNIVE_MIN_WP', '5.6' );
 }
