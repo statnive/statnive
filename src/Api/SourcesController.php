@@ -54,10 +54,14 @@ final class SourcesController extends WP_REST_Controller {
 					'args'                => [
 						'from'  => [
 							'required'          => true,
+							'type'              => 'string',
+							'validate_callback' => [ $this, 'validate_date' ],
 							'sanitize_callback' => 'sanitize_text_field',
 						],
 						'to'    => [
 							'required'          => true,
+							'type'              => 'string',
+							'validate_callback' => [ $this, 'validate_date' ],
 							'sanitize_callback' => 'sanitize_text_field',
 						],
 						'limit' => [

@@ -12,7 +12,7 @@ Privacy-first analytics for WordPress. No cookies, no third-party transfers, no 
 - **Cookieless by design** — No cookies, localStorage, or fingerprinting. Ever.
 - **Real-time dashboard** — See what's happening on your site right now.
 - **Revenue attribution** — Track WooCommerce revenue per traffic source.
-- **Self-hosted** — All data stays on your server. GDPR/APPI compliant by default.
+- **Self-hosted** — All data stays on your server. Designed to support GDPR/APPI compliance.
 
 ![Statnive Dashboard](screenshot.png)
 

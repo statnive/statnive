@@ -53,10 +53,14 @@ final class UtmController extends WP_REST_Controller {
 					'args'                => [
 						'from'  => [
 							'required'          => true,
+							'type'              => 'string',
+							'validate_callback' => [ $this, 'validate_date' ],
 							'sanitize_callback' => 'sanitize_text_field',
 						],
 						'to'    => [
 							'required'          => true,
+							'type'              => 'string',
+							'validate_callback' => [ $this, 'validate_date' ],
 							'sanitize_callback' => 'sanitize_text_field',
 						],
 						'limit' => [
@@ -163,5 +167,15 @@ final class UtmController extends WP_REST_Controller {
 		$this->set_cached_response( 'utm', $params, $payload, $from, $to );
 
 		return new WP_REST_Response( $payload, 200 );
+	}
+
+	/**
+	 * Validate a date string (YYYY-MM-DD).
+	 *
+	 * @param mixed $value Value to validate.
+	 * @return bool
+	 */
+	public function validate_date( $value ): bool {
+		return (bool) preg_match( '/^\d{4}-\d{2}-\d{2}$/', $value );
 	}
 }

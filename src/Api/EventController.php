@@ -90,25 +90,31 @@ final class EventController extends WP_REST_Controller {
 		return [
 			'event_name'      => [
 				'type'              => 'string',
+				'validate_callback' => 'rest_validate_request_arg',
 				'sanitize_callback' => 'sanitize_text_field',
 			],
 			'resource_type'   => [
 				'type'              => 'string',
+				'validate_callback' => 'rest_validate_request_arg',
 				'sanitize_callback' => 'sanitize_text_field',
 			],
 			'resource_id'     => [
 				'type'              => 'integer',
+				'validate_callback' => 'rest_validate_request_arg',
 				'sanitize_callback' => 'absint',
 			],
 			'signature'       => [
 				'type'              => 'string',
+				'validate_callback' => 'rest_validate_request_arg',
 				'sanitize_callback' => 'sanitize_text_field',
 			],
 			'properties'      => [
-				'type' => 'object',
+				'type'              => 'object',
+				'validate_callback' => 'rest_validate_request_arg',
 			],
 			'consent_granted' => [
-				'type' => 'boolean',
+				'type'              => 'boolean',
+				'validate_callback' => 'rest_validate_request_arg',
 			],
 		];
 	}

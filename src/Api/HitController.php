@@ -110,52 +110,64 @@ final class HitController extends WP_REST_Controller {
 		return [
 			'resource_type'   => [
 				'type'              => 'string',
+				'validate_callback' => 'rest_validate_request_arg',
 				'sanitize_callback' => 'sanitize_text_field',
 			],
 			'resource_id'     => [
 				'type'              => 'integer',
+				'validate_callback' => 'rest_validate_request_arg',
 				'sanitize_callback' => 'absint',
 			],
 			'referrer'        => [
 				'type'              => 'string',
 				'format'            => 'uri',
+				'validate_callback' => 'rest_validate_request_arg',
 				'sanitize_callback' => 'esc_url_raw',
 			],
 			'screen_width'    => [
 				'type'              => 'integer',
+				'validate_callback' => 'rest_validate_request_arg',
 				'sanitize_callback' => 'absint',
 			],
 			'screen_height'   => [
 				'type'              => 'integer',
+				'validate_callback' => 'rest_validate_request_arg',
 				'sanitize_callback' => 'absint',
 			],
 			'language'        => [
 				'type'              => 'string',
+				'validate_callback' => 'rest_validate_request_arg',
 				'sanitize_callback' => 'sanitize_text_field',
 			],
 			'timezone'        => [
 				'type'              => 'string',
+				'validate_callback' => 'rest_validate_request_arg',
 				'sanitize_callback' => 'sanitize_text_field',
 			],
 			'signature'       => [
 				'type'              => 'string',
+				'validate_callback' => 'rest_validate_request_arg',
 				'sanitize_callback' => 'sanitize_text_field',
 			],
 			'page_url'        => [
 				'type'              => 'string',
 				'format'            => 'uri',
+				'validate_callback' => 'rest_validate_request_arg',
 				'sanitize_callback' => 'esc_url_raw',
 			],
 			'page_query'      => [
 				'type'              => 'string',
+				'validate_callback' => 'rest_validate_request_arg',
 				'sanitize_callback' => 'sanitize_text_field',
 			],
 			'pvid'            => [
 				'type'              => 'string',
+				'validate_callback' => 'rest_validate_request_arg',
 				'sanitize_callback' => 'sanitize_text_field',
 			],
 			'consent_granted' => [
-				'type' => 'boolean',
+				'type'              => 'boolean',
+				'validate_callback' => 'rest_validate_request_arg',
 			],
 		];
 	}
@@ -188,6 +200,11 @@ final class HitController extends WP_REST_Controller {
 		$keys_error = PayloadValidator::validate_allowed_keys( $data, self::ALLOWED_KEYS );
 		if ( null !== $keys_error ) {
 			return self::error_response( $keys_error );
+		}
+
+		// Validate page_url host against site origin.
+		if ( ! empty( $data['page_url'] ) && ! self::validate_page_url_host( (string) $data['page_url'] ) ) {
+			return self::error_response( [ 'invalid_host', 'page_url host does not match this site.', 400 ] );
 		}
 
 		// Validate required fields.
@@ -250,6 +267,31 @@ final class HitController extends WP_REST_Controller {
 		do_action( 'statnive_hit_processed', $profile );
 
 		return new WP_REST_Response( null, 204 );
+	}
+
+	/**
+	 * Validate that a page_url host matches the site origin.
+	 *
+	 * Rejects URLs with external or malformed hosts. Allows relative URLs
+	 * (no host component) and URLs matching the site host. Multi-domain
+	 * setups can extend the allow-list via the `statnive_allowed_hosts` filter.
+	 *
+	 * @param string $url URL to validate.
+	 * @return bool True if valid.
+	 */
+	public static function validate_page_url_host( string $url ): bool {
+		$host = wp_parse_url( $url, PHP_URL_HOST );
+		if ( false === $host ) {
+			return false; // Malformed URL.
+		}
+		if ( null === $host ) {
+			return true; // Relative URL (no host component) — always valid.
+		}
+		$allowed = (array) apply_filters(
+			'statnive_allowed_hosts',
+			[ wp_parse_url( home_url(), PHP_URL_HOST ) ]
+		);
+		return in_array( $host, $allowed, true );
 	}
 
 	/**

@@ -57,6 +57,9 @@ phpunit.xml
 /vendor/wp-coding-standards
 /vendor/yoast
 /vendor/symfony
+/vendor/phpcompatibility
+/vendor/*/examples
+/vendor/*/*/examples
 
 # Tests
 /tests
