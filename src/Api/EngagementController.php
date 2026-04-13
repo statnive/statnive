@@ -59,6 +59,44 @@ final class EngagementController extends WP_REST_Controller {
 					'methods'             => WP_REST_Server::CREATABLE,
 					'callback'            => [ $this, 'create_item' ],
 					'permission_callback' => '__return_true',
+					'args'                => [
+						'signature'       => [
+							'type'              => 'string',
+							'validate_callback' => 'rest_validate_request_arg',
+							'sanitize_callback' => 'sanitize_text_field',
+						],
+						'resource_type'   => [
+							'type'              => 'string',
+							'validate_callback' => 'rest_validate_request_arg',
+							'sanitize_callback' => 'sanitize_text_field',
+						],
+						'resource_id'     => [
+							'type'              => 'integer',
+							'validate_callback' => 'rest_validate_request_arg',
+							'sanitize_callback' => 'absint',
+						],
+						'engagement_time' => [
+							'type'              => 'integer',
+							'validate_callback' => 'rest_validate_request_arg',
+							'sanitize_callback' => 'absint',
+						],
+						'scroll_depth'    => [
+							'type'              => 'integer',
+							'validate_callback' => 'rest_validate_request_arg',
+							'sanitize_callback' => 'absint',
+						],
+						'pvid'            => [
+							'type'              => 'string',
+							'validate_callback' => 'rest_validate_request_arg',
+							'sanitize_callback' => 'sanitize_text_field',
+						],
+						'page_url'        => [
+							'type'              => 'string',
+							'format'            => 'uri',
+							'validate_callback' => 'rest_validate_request_arg',
+							'sanitize_callback' => 'esc_url_raw',
+						],
+					],
 				],
 			]
 		);
@@ -92,6 +130,11 @@ final class EngagementController extends WP_REST_Controller {
 		$keys_error = PayloadValidator::validate_allowed_keys( $data, self::ALLOWED_KEYS );
 		if ( null !== $keys_error ) {
 			return self::error_response( $keys_error );
+		}
+
+		// Validate page_url host against site origin.
+		if ( ! empty( $data['page_url'] ) && ! HitController::validate_page_url_host( (string) $data['page_url'] ) ) {
+			return self::error_response( [ 'invalid_host', 'page_url host does not match this site.', 400 ] );
 		}
 
 		$signature = sanitize_text_field( $data['signature'] ?? '' );

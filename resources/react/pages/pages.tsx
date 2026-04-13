@@ -1,4 +1,5 @@
 import { useMemo, useDeferredValue, useState } from 'react';
+import { __ } from '@wordpress/i18n';
 import { useDateRange } from '@/hooks/use-date-range';
 import { usePages } from '@/hooks/use-pages';
 import { useEntryPages, useExitPages } from '@/hooks/use-entry-exit-pages';
@@ -38,7 +39,7 @@ export function PagesPage() {
 		() => [
 			{
 				key: 'uri',
-				header: 'Page',
+				header: __('Page', 'statnive'),
 				render: (row) => (
 					<div className="max-w-[300px] truncate" title={row.uri}>
 						<span className="font-medium">{row.title ?? row.uri}</span>
@@ -46,32 +47,34 @@ export function PagesPage() {
 					</div>
 				),
 			},
-			{ key: 'visitors', header: 'Visitors', sortable: true, align: 'right' as const, render: (row) => <span className="tabular-nums">{formatNumber(row.visitors)}</span> },
-			{ key: 'views', header: 'Views', sortable: true, align: 'right' as const, render: (row) => <span className="tabular-nums">{formatNumber(row.views)}</span> },
-			{ key: 'total_duration', header: 'Avg Duration', align: 'right' as const, render: (row) => <span className="tabular-nums">{row.visitors > 0 ? formatDuration(row.total_duration / row.visitors) : '—'}</span> },
+			{ key: 'visitors', header: __('Visitors', 'statnive'), sortable: true, align: 'right' as const, render: (row) => <span className="tabular-nums">{formatNumber(row.visitors)}</span> },
+			{ key: 'views', header: __('Views', 'statnive'), sortable: true, align: 'right' as const, render: (row) => <span className="tabular-nums">{formatNumber(row.views)}</span> },
+			{ key: 'total_duration', header: __('Avg Duration', 'statnive'), align: 'right' as const, render: (row) => <span className="tabular-nums">{row.visitors > 0 ? formatDuration(row.total_duration / row.visitors) : '—'}</span> },
 		],
 		[],
 	);
 
 	const entryColumns: Column<EntryExitPage>[] = useMemo(
 		() => [
-			{ key: 'uri', header: 'Page', render: (row) => <span className="font-medium" title={row.uri}>{row.title ?? row.uri}</span> },
-			{ key: 'count', header: 'Entries', sortable: true, align: 'right' as const, render: (row) => <span className="tabular-nums">{formatNumber(row.count)}</span> },
-			{ key: 'visitors', header: 'Visitors', sortable: true, align: 'right' as const, render: (row) => <span className="tabular-nums">{formatNumber(row.visitors)}</span> },
+			{ key: 'uri', header: __('Page', 'statnive'), render: (row) => <span className="font-medium" title={row.uri}>{row.title ?? row.uri}</span> },
+			{ key: 'count', header: __('Entries', 'statnive'), sortable: true, align: 'right' as const, render: (row) => <span className="tabular-nums">{formatNumber(row.count)}</span> },
+			{ key: 'visitors', header: __('Visitors', 'statnive'), sortable: true, align: 'right' as const, render: (row) => <span className="tabular-nums">{formatNumber(row.visitors)}</span> },
 		],
 		[],
 	);
 
+	const emptyPageMessage = __('No page data for this period. If your site has traffic, data should appear within minutes. If nothing shows after 10 minutes, check Settings → Diagnostics.', 'statnive');
+
 	return (
 		<div className="space-y-6">
-			<h2 className="text-lg font-semibold">Pages</h2>
+			<h2 className="text-lg font-semibold">{__('Pages', 'statnive')}</h2>
 
 			{/* Search */}
 			<div className="relative max-w-sm">
 				<Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
 				<input
 					type="text"
-					placeholder="Search pages..."
+					placeholder={__('Search pages...', 'statnive')}
 					value={search}
 					onChange={(e) => setSearch(e.target.value)}
 					className="w-full rounded-md border border-border bg-card !py-[3px] !pl-[30px] !pr-[10px] text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
@@ -81,12 +84,13 @@ export function PagesPage() {
 			{/* Top Content */}
 			<div className="rounded-lg border border-border bg-card p-4">
 				<DataTable
-					title="Top Content"
+					title={__('Top Content', 'statnive')}
 					data={filteredPages}
 					columns={pageColumns}
 					isLoading={loadingPages}
 					defaultSortKey="visitors"
 					getRowKey={(row) => row.uri}
+					emptyMessage={emptyPageMessage}
 				/>
 			</div>
 
@@ -94,22 +98,24 @@ export function PagesPage() {
 			<div className="grid grid-cols-1 gap-6 md:grid-cols-2">
 				<div className="rounded-lg border border-border bg-card p-4">
 					<DataTable
-						title="Entry Pages"
+						title={__('Entry Pages', 'statnive')}
 						data={filteredEntry}
 						columns={entryColumns}
 						isLoading={loadingEntry}
 						defaultSortKey="count"
 						getRowKey={(row) => `entry-${row.uri}`}
+						emptyMessage={emptyPageMessage}
 					/>
 				</div>
 				<div className="rounded-lg border border-border bg-card p-4">
 					<DataTable
-						title="Exit Pages"
+						title={__('Exit Pages', 'statnive')}
 						data={filteredExit}
 						columns={entryColumns}
 						isLoading={loadingExit}
 						defaultSortKey="count"
 						getRowKey={(row) => `exit-${row.uri}`}
+						emptyMessage={emptyPageMessage}
 					/>
 				</div>
 			</div>

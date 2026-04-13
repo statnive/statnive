@@ -107,6 +107,6 @@ describe('ReferrersPage', () => {
 
 		render(<ReferrersPage />);
 
-		expect(screen.getByText('No UTM parameters tracked yet')).toBeInTheDocument();
+		expect(screen.getByText('No UTM parameters tracked yet. UTM-tagged links will appear here once visitors arrive through them.')).toBeInTheDocument();
 	});
 });

@@ -52,6 +52,13 @@ final class Migrator {
 		$current = (string) get_option( self::OPTION, '0.0.0' );
 		$target  = STATNIVE_VERSION;
 
+		// Downgrade detection (§27): warn if the stored schema version is
+		// newer than the running plugin version (user downgraded).
+		if ( version_compare( $current, $target, '>' ) ) {
+			add_action( 'admin_notices', [ self::class, 'downgrade_notice' ] );
+			return;
+		}
+
 		if ( version_compare( $current, $target, '>=' ) ) {
 			return;
 		}
@@ -90,5 +97,24 @@ final class Migrator {
 		// Example for the next schema bump (intentionally commented out).
 		// '0.4.0' => [ self::class, 'migrate_0_4_0' ].
 		return [];
+	}
+
+	/**
+	 * Show admin notice when a downgrade is detected.
+	 */
+	public static function downgrade_notice(): void {
+		$current = (string) get_option( self::OPTION, '0.0.0' );
+		printf(
+			'<div class="notice notice-error is-dismissible"><p><strong>%s</strong></p><p>%s</p></div>',
+			esc_html__( 'Statnive: plugin version mismatch detected.', 'statnive' ),
+			esc_html(
+				sprintf(
+					/* translators: 1: stored schema version, 2: running plugin version */
+					__( 'Your database schema is at version %1$s but the running plugin is version %2$s. This may happen if you downgraded the plugin. Please re-install the latest version to avoid data inconsistencies.', 'statnive' ),
+					$current,
+					STATNIVE_VERSION
+				)
+			)
+		);
 	}
 }

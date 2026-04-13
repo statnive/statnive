@@ -1,13 +1,20 @@
 import { defineConfig } from 'vite';
 import { resolve } from 'path';
+import { readFileSync } from 'fs';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
+
+const pkg = JSON.parse(readFileSync(resolve(__dirname, 'package.json'), 'utf-8'));
+const licenseBanner = `/*! Statnive v${pkg.version} | GPL-2.0-or-later | https://statnive.com */`;
 
 // Shared Terser options for all tracker builds.
 const trackerTerserOptions = {
 	compress: {
 		drop_console: true,
 		passes: 2,
+	},
+	output: {
+		preamble: licenseBanner,
 	},
 };
 
@@ -79,16 +86,25 @@ export default defineConfig(({ mode }) => {
 				'@': resolve(__dirname, 'resources/react'),
 			},
 		},
+		esbuild: {
+			legalComments: 'inline',
+			banner: licenseBanner,
+		},
 		build: {
 			outDir: resolve(__dirname, 'public/react'),
 			emptyOutDir: true,
 			manifest: true,
 			rollupOptions: {
 				input: resolve(__dirname, 'resources/react/main.tsx'),
+				external: ['@wordpress/i18n'],
 				output: {
+					banner: licenseBanner,
 					entryFileNames: 'assets/[name]-[hash].js',
 					chunkFileNames: 'assets/[name]-[hash].js',
 					assetFileNames: 'assets/[name]-[hash].[ext]',
+					globals: {
+						'@wordpress/i18n': 'wp.i18n',
+					},
 				},
 			},
 		},

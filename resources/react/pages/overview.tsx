@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { __, sprintf } from '@wordpress/i18n';
 import { useDateRange } from '@/hooks/use-date-range';
 import { useSummary } from '@/hooks/use-summary';
 import { useSources } from '@/hooks/use-sources';
@@ -41,19 +42,19 @@ export function OverviewPage() {
 		() => [
 			{
 				key: 'source',
-				header: 'Source',
+				header: __('Source', 'statnive'),
 				render: (row) => (
 					<div>
-						<span className="font-medium">{row.name ?? 'Direct'}</span>
+						<span className="font-medium">{row.name ?? __('Direct', 'statnive')}</span>
 						<span className="ml-2 text-xs text-muted-foreground">
-							{row.channel ?? 'Direct'}
+							{row.channel ?? __('Direct', 'statnive')}
 						</span>
 					</div>
 				),
 			},
 			{
 				key: 'visitors',
-				header: 'Visitors / Sessions',
+				header: __('Visitors / Sessions', 'statnive'),
 				sortable: true,
 				render: (row) => (
 					<DualBarCell
@@ -71,7 +72,7 @@ export function OverviewPage() {
 		() => [
 			{
 				key: 'uri',
-				header: 'Page',
+				header: __('Page', 'statnive'),
 				render: (row) => (
 					<div className="max-w-[200px] truncate" title={row.uri}>
 						<span className="font-medium">{row.title ?? row.uri}</span>
@@ -80,7 +81,7 @@ export function OverviewPage() {
 			},
 			{
 				key: 'visitors',
-				header: 'Visitors',
+				header: __('Visitors', 'statnive'),
 				sortable: true,
 				align: 'right' as const,
 				render: (row) => (
@@ -89,7 +90,7 @@ export function OverviewPage() {
 			},
 			{
 				key: 'views',
-				header: 'Views',
+				header: __('Views', 'statnive'),
 				sortable: true,
 				align: 'right' as const,
 				render: (row) => (
@@ -100,32 +101,40 @@ export function OverviewPage() {
 		[],
 	);
 
+	const chartSubtitle = range === 'today'
+		? __('Today', 'statnive')
+		: sprintf(
+			/* translators: %s: date range label such as "7d" or "30d" */
+			__('Last %s', 'statnive'),
+			range,
+		);
+
 	return (
 		<div className="space-y-6">
-			<h2 className="text-lg font-semibold">Overview</h2>
+			<h2 className="text-lg font-semibold">{__('Overview', 'statnive')}</h2>
 
 			{/* KPI Cards */}
 			<div className="grid grid-cols-2 gap-4 md:grid-cols-4">
 				<KpiCard
-					label="Visitors"
+					label={__('Visitors', 'statnive')}
 					value={totals ? formatNumber(totals.visitors) : '0'}
 					change={totals && prevTotals ? percentChange(totals.visitors, prevTotals.visitors) : undefined}
 					isLoading={isLoading}
 				/>
 				<KpiCard
-					label="Sessions"
+					label={__('Sessions', 'statnive')}
 					value={totals ? formatNumber(totals.sessions) : '0'}
 					change={totals && prevTotals ? percentChange(totals.sessions, prevTotals.sessions) : undefined}
 					isLoading={isLoading}
 				/>
 				<KpiCard
-					label="Pageviews"
+					label={__('Pageviews', 'statnive')}
 					value={totals ? formatNumber(totals.views) : '0'}
 					change={totals && prevTotals ? percentChange(totals.views, prevTotals.views) : undefined}
 					isLoading={isLoading}
 				/>
 				<KpiCard
-					label="Avg Duration"
+					label={__('Avg Duration', 'statnive')}
 					value={formatDuration(avgDuration)}
 					change={prevAvgDuration > 0 ? percentChange(avgDuration, prevAvgDuration) : undefined}
 					isLoading={isLoading}
@@ -135,7 +144,11 @@ export function OverviewPage() {
 			{/* Time Series Chart */}
 			<div className="rounded-lg border border-border bg-card p-4">
 				<h3 className="mb-4 text-sm font-medium text-muted-foreground">
-					Visitors & Sessions — {range === 'today' ? 'Today' : `Last ${range}`}
+					{sprintf(
+						/* translators: %s: date range label (e.g. "Today" or "Last 7d") */
+						__('Visitors & Sessions — %s', 'statnive'),
+						chartSubtitle,
+					)}
 				</h3>
 				<TimeSeriesChart data={current?.daily ?? []} />
 			</div>
@@ -144,24 +157,24 @@ export function OverviewPage() {
 			<div className="grid grid-cols-1 gap-6 md:grid-cols-2">
 				<div className="rounded-lg border border-border bg-card p-4">
 					<DataTable
-						title="Top Sources"
+						title={__('Top Sources', 'statnive')}
 						data={sources ?? []}
 						columns={sourceColumns}
 						isLoading={loadingSources}
 						defaultSortKey="visitors"
 						getRowKey={(row, i) => `${row.channel}-${row.name}-${i}`}
-						emptyMessage="No traffic sources recorded yet. New visits will appear within a few minutes — if nothing shows after 10 minutes, run the self-test under Settings → Diagnostics or check Settings → Tracking is enabled."
+						emptyMessage={__('No traffic sources recorded yet. New visits will appear within a few minutes — if nothing shows after 10 minutes, run the self-test under Settings → Diagnostics or check Settings → Tracking is enabled.', 'statnive')}
 					/>
 				</div>
 				<div className="rounded-lg border border-border bg-card p-4">
 					<DataTable
-						title="Top Pages"
+						title={__('Top Pages', 'statnive')}
 						data={pages ?? []}
 						columns={pageColumns}
 						isLoading={loadingPages}
 						defaultSortKey="visitors"
 						getRowKey={(row) => row.uri}
-						emptyMessage="No page data recorded yet. Tracking is active — pageviews will appear after the next visit. If nothing shows after 10 minutes, run the self-test under Settings → Diagnostics."
+						emptyMessage={__('No page data recorded yet. Tracking is active — pageviews will appear after the next visit. If nothing shows after 10 minutes, run the self-test under Settings → Diagnostics.', 'statnive')}
 					/>
 				</div>
 			</div>

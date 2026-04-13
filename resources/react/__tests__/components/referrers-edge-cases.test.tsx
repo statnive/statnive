@@ -52,13 +52,13 @@ describe('ReferrersPage edge cases', () => {
 		vi.restoreAllMocks();
 	});
 
-	it('shows "No UTM parameters tracked yet" when UTM data is empty', () => {
+	it('shows UTM empty-state message when UTM data is empty', () => {
 		mockUseSources.mockReturnValue({ data: [], isLoading: false });
 		mockUseUtm.mockReturnValue({ data: [], isLoading: false });
 
 		render(<ReferrersPage />);
 
-		expect(screen.getByText('No UTM parameters tracked yet')).toBeInTheDocument();
+		expect(screen.getByText('No UTM parameters tracked yet. UTM-tagged links will appear here once visitors arrive through them.')).toBeInTheDocument();
 	});
 
 	it('shows fallback "Direct" for source with null name', () => {

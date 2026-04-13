@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { __, sprintf } from '@wordpress/i18n';
 import { useDateRange } from '@/hooks/use-date-range';
 import { useSources } from '@/hooks/use-sources';
 import { useUtm } from '@/hooks/use-utm';
@@ -37,15 +38,15 @@ export function ReferrersPage() {
 	const sourceColumns: Column<SourceRow>[] = useMemo(
 		() => [
 			{
-				key: 'name', header: 'Source',
+				key: 'name', header: __('Source', 'statnive'),
 				render: (row) => (
 					<div>
-						<span className="font-medium">{row.name ?? 'Direct'}</span>
+						<span className="font-medium">{row.name ?? __('Direct', 'statnive')}</span>
 						<span className="ml-2 text-xs text-muted-foreground">{row.channel ?? ''}</span>
 					</div>
 				),
 			},
-			{ key: 'visitors', header: 'Visitors / Sessions', sortable: true,
+			{ key: 'visitors', header: __('Visitors / Sessions', 'statnive'), sortable: true,
 				render: (row) => <DualBarCell visitors={row.visitors} secondaryValue={row.sessions} max={max} />,
 			},
 		],
@@ -54,37 +55,45 @@ export function ReferrersPage() {
 
 	const utmColumns: Column<UtmRow>[] = useMemo(
 		() => [
-			{ key: 'campaign', header: 'Campaign', render: (row) => <span className="font-medium">{row.campaign ?? '—'}</span> },
-			{ key: 'source', header: 'Source', render: (row) => <span>{row.source ?? '—'}</span> },
-			{ key: 'medium', header: 'Medium', render: (row) => <span>{row.medium ?? '—'}</span> },
-			{ key: 'visitors', header: 'Visitors', sortable: true, align: 'right' as const, render: (row) => <span className="tabular-nums">{formatNumber(row.visitors)}</span> },
+			{ key: 'campaign', header: __('Campaign', 'statnive'), render: (row) => <span className="font-medium">{row.campaign ?? '—'}</span> },
+			{ key: 'source', header: __('Source', 'statnive'), render: (row) => <span>{row.source ?? '—'}</span> },
+			{ key: 'medium', header: __('Medium', 'statnive'), render: (row) => <span>{row.medium ?? '—'}</span> },
+			{ key: 'visitors', header: __('Visitors', 'statnive'), sortable: true, align: 'right' as const, render: (row) => <span className="tabular-nums">{formatNumber(row.visitors)}</span> },
 		],
 		[],
 	);
 
+	const emptyReferrerMessage = __('No referrer data for this period. If your site has traffic, data should appear within minutes. If nothing shows after 10 minutes, check Settings → Diagnostics.', 'statnive');
+
 	return (
 		<div className="space-y-6">
-			<h2 className="text-lg font-semibold">Referrers</h2>
+			<h2 className="text-lg font-semibold">{__('Referrers', 'statnive')}</h2>
 
 			{/* Channel Summary Cards */}
 			<div className="grid grid-cols-2 gap-4 md:grid-cols-5">
 				{channelSummary.map((ch) => (
 					<div key={ch.channel} className="rounded-lg border border-border bg-card p-3">
-						<p className="text-xs font-medium text-muted-foreground">{ch.channel}</p>
+						<p className="text-xs font-medium text-muted-foreground">{__(ch.channel, 'statnive')}</p>
 						<p className="mt-1 text-xl font-bold tabular-nums">{formatNumber(ch.visitors)}</p>
-						<p className="text-xs text-muted-foreground">{formatNumber(ch.sessions)} sessions</p>
+						<p className="text-xs text-muted-foreground">
+							{sprintf(
+								/* translators: %s: formatted session count */
+								__('%s sessions', 'statnive'),
+								formatNumber(ch.sessions),
+							)}
+						</p>
 					</div>
 				))}
 			</div>
 
 			{/* All Sources */}
 			<div className="rounded-lg border border-border bg-card p-4">
-				<DataTable title="All Sources" data={sources ?? []} columns={sourceColumns} isLoading={loadingSources} defaultSortKey="visitors" getRowKey={(row, i) => `${row.channel}-${row.name}-${i}`} />
+				<DataTable title={__('All Sources', 'statnive')} data={sources ?? []} columns={sourceColumns} isLoading={loadingSources} defaultSortKey="visitors" getRowKey={(row, i) => `${row.channel}-${row.name}-${i}`} emptyMessage={emptyReferrerMessage} />
 			</div>
 
 			{/* UTM Campaigns */}
 			<div className="rounded-lg border border-border bg-card p-4">
-				<DataTable title="UTM Campaigns" data={utm ?? []} columns={utmColumns} isLoading={loadingUtm} defaultSortKey="visitors" getRowKey={(row, i) => `utm-${row.campaign}-${i}`} emptyMessage="No UTM parameters tracked yet" />
+				<DataTable title={__('UTM Campaigns', 'statnive')} data={utm ?? []} columns={utmColumns} isLoading={loadingUtm} defaultSortKey="visitors" getRowKey={(row, i) => `utm-${row.campaign}-${i}`} emptyMessage={__('No UTM parameters tracked yet. UTM-tagged links will appear here once visitors arrive through them.', 'statnive')} />
 			</div>
 		</div>
 	);

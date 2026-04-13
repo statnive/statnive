@@ -249,11 +249,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      # NOTE: `tsc --noEmit` is intentionally skipped here because the repo
-      # currently carries a small baseline of TanStack Router type-narrowing
-      # errors in dashboard-layout.tsx + use-date-range.ts that are tracked
-      # for cleanup separately. CLAUDE.md documents this baseline. Vitest is
-      # the gate that must always pass.
+      - name: Run TypeScript strict typecheck
+        run: npx tsc --noEmit
+
       - name: Run Vitest component tests
         run: npm run test
 
