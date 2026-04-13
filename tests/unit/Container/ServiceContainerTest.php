@@ -9,6 +9,8 @@ use PHPUnit\Framework\TestCase;
 use Statnive\Container\ServiceContainer;
 use stdClass;
 
+defined( 'ABSPATH' ) || define( 'ABSPATH' , dirname( __DIR__, 6 ) . '/' );
+
 #[CoversClass(ServiceContainer::class)]
 final class ServiceContainerTest extends TestCase {
 

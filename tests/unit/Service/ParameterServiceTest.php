@@ -9,6 +9,8 @@ use PHPUnit\Framework\TestCase;
 use Statnive\Entity\VisitorProfile;
 use Statnive\Service\ParameterService;
 
+defined( 'ABSPATH' ) || define( 'ABSPATH' , dirname( __DIR__, 6 ) . '/' );
+
 /**
  * Unit tests for ParameterService UTM extraction + profile mirroring.
  *

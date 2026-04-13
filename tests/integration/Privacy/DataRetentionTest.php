@@ -13,6 +13,8 @@ use Statnive\Privacy\DataPurger;
 use Statnive\Privacy\RetentionManager;
 use WP_UnitTestCase;
 
+defined( 'ABSPATH' ) || define( 'ABSPATH' , dirname( __DIR__, 6 ) . '/' );
+
 /**
  * Integration tests for data retention purge thresholds.
  *

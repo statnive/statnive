@@ -13,6 +13,8 @@ use Statnive\Privacy\PrivacyDecision;
 use Statnive\Privacy\PrivacyManager;
 use WP_UnitTestCase;
 
+defined( 'ABSPATH' ) || define( 'ABSPATH' , dirname( __DIR__, 6 ) . '/' );
+
 /**
  * Integration tests for DNT and GPC header handling.
  *

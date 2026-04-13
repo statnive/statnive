@@ -9,6 +9,8 @@ use PHPUnit\Framework\TestCase;
 use Statnive\Http\PayloadValidator;
 use Statnive\Http\PayloadValidatorException;
 
+defined( 'ABSPATH' ) || define( 'ABSPATH' , dirname( __DIR__, 6 ) . '/' );
+
 /**
  * Edge-case tests for PayloadValidator.
  *

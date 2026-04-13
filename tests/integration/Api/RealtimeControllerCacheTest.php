@@ -12,6 +12,8 @@ use Statnive\Security\HmacValidator;
 use WP_REST_Request;
 use WP_UnitTestCase;
 
+defined( 'ABSPATH' ) || define( 'ABSPATH' , dirname( __DIR__, 6 ) . '/' );
+
 /**
  * Integration tests for realtime cache invalidation and deduplication.
  *

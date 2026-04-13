@@ -9,6 +9,8 @@ use Statnive\Database\SchemaMaintainer;
 use Statnive\Database\TableRegistry;
 use WP_UnitTestCase;
 
+defined( 'ABSPATH' ) || define( 'ABSPATH' , dirname( __DIR__, 6 ) . '/' );
+
 /**
  * Integration tests for SchemaMaintainer drift detection.
  *

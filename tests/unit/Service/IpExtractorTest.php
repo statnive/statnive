@@ -9,6 +9,8 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Statnive\Service\IpExtractor;
 
+defined( 'ABSPATH' ) || define( 'ABSPATH' , dirname( __DIR__, 6 ) . '/' );
+
 #[CoversClass(IpExtractor::class)]
 final class IpExtractorTest extends TestCase {
 

@@ -14,6 +14,8 @@ use Statnive\Service\ReferrerService;
 use Statnive\Service\SourceDetector;
 use WP_UnitTestCase;
 
+defined( 'ABSPATH' ) || define( 'ABSPATH' , dirname( __DIR__, 6 ) . '/' );
+
 /**
  * Integration tests for traffic source classification.
  *

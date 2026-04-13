@@ -7,6 +7,8 @@ namespace Statnive\Tests\Integration\Frontend;
 use Statnive\Frontend\FrontendHandler;
 use WP_UnitTestCase;
 
+defined( 'ABSPATH' ) || define( 'ABSPATH' , dirname( __DIR__, 6 ) . '/' );
+
 /**
  * Integration tests for the FrontendHandler tracker loading.
  *

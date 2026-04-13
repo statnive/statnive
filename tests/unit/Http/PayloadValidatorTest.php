@@ -10,6 +10,8 @@ use Statnive\Http\PayloadValidator;
 use Statnive\Http\PayloadValidatorException;
 use WP_REST_Request;
 
+defined( 'ABSPATH' ) || define( 'ABSPATH' , dirname( __DIR__, 6 ) . '/' );
+
 #[CoversClass( PayloadValidator::class )]
 #[CoversClass( PayloadValidatorException::class )]
 final class PayloadValidatorTest extends TestCase {

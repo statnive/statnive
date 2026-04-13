@@ -11,6 +11,8 @@ use Statnive\Service\AggregationService;
 use WP_REST_Request;
 use WP_UnitTestCase;
 
+defined( 'ABSPATH' ) || define( 'ABSPATH' , dirname( __DIR__, 6 ) . '/' );
+
 /**
  * Integration tests for the SummaryController REST endpoint.
  *

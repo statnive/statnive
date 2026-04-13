@@ -12,6 +12,8 @@ use Statnive\Database\TableRegistry;
 use Statnive\Privacy\PrivacyEraser;
 use WP_UnitTestCase;
 
+defined( 'ABSPATH' ) || define( 'ABSPATH' , dirname( __DIR__, 6 ) . '/' );
+
 /**
  * Integration tests for the WordPress privacy data eraser.
  *
