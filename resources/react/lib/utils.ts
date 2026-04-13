@@ -19,8 +19,7 @@ export function formatDuration(seconds: number): string {
 }
 
 export function formatPercentChange(change: number): string {
-	const sign = change >= 0 ? '↑' : '↓';
-	return `${sign} ${Math.abs(change).toFixed(1)}%`;
+	return `${Math.abs(change).toFixed(1)}%`;
 }
 
 export function percentChange(current: number, previous: number): number {

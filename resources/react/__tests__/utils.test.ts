@@ -27,16 +27,16 @@ describe('formatDuration', () => {
 });
 
 describe('formatPercentChange', () => {
-	it('shows up arrow for positive', () => {
-		expect(formatPercentChange(12.5)).toBe('↑ 12.5%');
+	it('formats positive change as percentage', () => {
+		expect(formatPercentChange(12.5)).toBe('12.5%');
 	});
 
-	it('shows down arrow for negative', () => {
-		expect(formatPercentChange(-5.3)).toBe('↓ 5.3%');
+	it('formats negative change as absolute percentage', () => {
+		expect(formatPercentChange(-5.3)).toBe('5.3%');
 	});
 
-	it('shows up arrow for zero', () => {
-		expect(formatPercentChange(0)).toBe('↑ 0.0%');
+	it('formats zero as percentage', () => {
+		expect(formatPercentChange(0)).toBe('0.0%');
 	});
 });
 
