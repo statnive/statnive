@@ -77,8 +77,26 @@ export default defineConfig(({ mode }) => {
 	}
 
 	// React SPA build for WordPress admin dashboard.
+	// Rewrite @wordpress/i18n imports to use the wp.i18n global provided by
+	// WordPress core. Rollup `globals` only works with IIFE/UMD output, but
+	// we need ESM for code splitting + manifest. This plugin rewrites the
+	// bare import to a virtual module that re-exports the global.
+	const wpExternals = {
+		name: 'wp-externals',
+		resolveId(id: string) {
+			if (id === '@wordpress/i18n') return '\0wp-i18n';
+			return null;
+		},
+		load(id: string) {
+			if (id === '\0wp-i18n') {
+				return 'const { __, sprintf, _n, _x } = window.wp.i18n; export { __, sprintf, _n, _x };';
+			}
+			return null;
+		},
+	};
+
 	return {
-		plugins: [react(), tailwindcss()],
+		plugins: [wpExternals, react(), tailwindcss()],
 		publicDir: false,
 		base: './',
 		resolve: {
@@ -96,15 +114,10 @@ export default defineConfig(({ mode }) => {
 			manifest: true,
 			rollupOptions: {
 				input: resolve(__dirname, 'resources/react/main.tsx'),
-				external: ['@wordpress/i18n'],
 				output: {
-					banner: licenseBanner,
 					entryFileNames: 'assets/[name]-[hash].js',
 					chunkFileNames: 'assets/[name]-[hash].js',
 					assetFileNames: 'assets/[name]-[hash].[ext]',
-					globals: {
-						'@wordpress/i18n': 'wp.i18n',
-					},
 				},
 			},
 		},

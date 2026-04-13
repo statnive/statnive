@@ -4,7 +4,7 @@ Tags: analytics, statistics, privacy, tracking, dashboard
 Requires at least: 5.6
 Tested up to: 6.9
 Requires PHP: 8.0
-Stable tag: 0.3.1
+Stable tag: 0.4.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -133,6 +133,12 @@ All analytics data stays in your WordPress database. No cookies, no fingerprinti
 
 == Changelog ==
 
+= 0.4.0 - 2026-04-13 =
+* WordPress.org submission readiness: 24 audit items resolved.
+* Dashboard fully translatable (~130 strings). Chart a11y, empty states, bfcache handler.
+* Circuit-breaker, GeoIP backoff, host allow-list, AJAX rate limiting, downgrade detection.
+* See CHANGELOG.md for full details.
+
 = 0.3.1 - 2026-04-09 =
 * Lowered runtime floor to WordPress 5.6 / PHP 8.0; PHPCompatibilityWP ruleset enforces it.
 * Fixed UTM persistence and tuple-based campaign aggregation in referrers.
@@ -143,18 +149,14 @@ All analytics data stays in your WordPress database. No cookies, no fingerprinti
 * Refactored API layer: extracted PayloadValidator, hardened privacy fall-through.
 
 = 0.3.0 - 2026-04-06 =
-* WordPress.org submission compliance pass — see CHANGELOG.md for full details.
-* Removed bundled license validation (Guideline 6). Hardened tracking endpoints.
-* Added privacy filter hooks and MaxMind GeoLite EULA compliance.
-* Added i18n infrastructure. Bumped Tested up to WordPress 6.9.
+* WordPress.org compliance pass. Removed license validation (Guideline 6). Added privacy hooks, MaxMind EULA compliance, i18n.
 
-= 0.2.0 - 2026-04-05 =
-* Fixed real-time dashboard, tracker URLs, Overview report, Recent Pageviews dedup, GeoIP download URL.
-* Added regex-based UA fallback parser, `statnive_client_ip` filter, 38 regression tests.
-
-For older releases (0.1.x), see CHANGELOG.md in the plugin source.
+For older releases, see CHANGELOG.md in the plugin source.
 
 == Upgrade Notice ==
+
+= 0.4.0 =
+Full WordPress.org submission readiness. Dashboard now translatable. Adds circuit-breaker, GeoIP backoff, bfcache support, chart accessibility, and automated a11y testing.
 
 = 0.3.1 =
 Fixes UTM persistence, REST `/hit` regression from 0.3.0, dashboard CSS leak into WP admin, dual-bar scaling, and Pages search wiring. Lowers runtime floor to WP 5.6 / PHP 8.0.

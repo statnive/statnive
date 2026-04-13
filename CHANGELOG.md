@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-04-13
+
 ### Added
 
 - **React i18n**: wrapped ~130 user-visible strings with `@wordpress/i18n` `__()` across 14 component/page files. Dashboard is now translatable.
