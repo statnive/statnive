@@ -33,9 +33,10 @@ final class ReportBuilder {
 		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$totals = $wpdb->get_row(
 			$wpdb->prepare(
-				"SELECT SUM(visitors) AS visitors, SUM(sessions) AS sessions,
+				'SELECT SUM(visitors) AS visitors, SUM(sessions) AS sessions,
 				SUM(views) AS views, SUM(bounces) AS bounces
-				FROM `{$summary_table}` WHERE date BETWEEN %s AND %s",
+				FROM %i WHERE date BETWEEN %s AND %s',
+				$summary_table,
 				$from,
 				$to
 			)
@@ -46,11 +47,13 @@ final class ReportBuilder {
 
 		$top_pages = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT ru.uri, SUM(s.visitors) AS visitors, SUM(s.views) AS views
-				FROM `{$pages_table}` s
-				JOIN `{$uris_table}` ru ON s.resource_uri_id = ru.ID
+				'SELECT ru.uri, SUM(s.visitors) AS visitors, SUM(s.views) AS views
+				FROM %i s
+				JOIN %i ru ON s.resource_uri_id = ru.ID
 				WHERE s.date BETWEEN %s AND %s
-				GROUP BY ru.uri ORDER BY visitors DESC LIMIT 10",
+				GROUP BY ru.uri ORDER BY visitors DESC LIMIT 10',
+				$pages_table,
+				$uris_table,
 				$from,
 				$to
 			)

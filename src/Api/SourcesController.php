@@ -52,19 +52,19 @@ final class SourcesController extends WP_REST_Controller {
 					'callback'            => [ $this, 'get_items' ],
 					'permission_callback' => [ $this, 'get_items_permissions_check' ],
 					'args'                => [
-						'from'  => [
+						'from'        => [
 							'required'          => true,
 							'type'              => 'string',
 							'validate_callback' => [ $this, 'validate_date' ],
 							'sanitize_callback' => 'sanitize_text_field',
 						],
-						'to'    => [
+						'to'          => [
 							'required'          => true,
 							'type'              => 'string',
 							'validate_callback' => [ $this, 'validate_date' ],
 							'sanitize_callback' => 'sanitize_text_field',
 						],
-						'limit' => [
+						'limit'       => [
 							'default'           => 20,
 							'sanitize_callback' => 'absint',
 						],
@@ -102,10 +102,10 @@ final class SourcesController extends WP_REST_Controller {
 	 * @return WP_REST_Response
 	 */
 	public function get_items( $request ): WP_REST_Response {
-		$from      = $request->get_param( 'from' );
-		$to        = $request->get_param( 'to' );
-		$limit     = min( (int) $request->get_param( 'limit' ), 100 );
-		$group_by  = $request->get_param( 'group_by' );
+		$from     = $request->get_param( 'from' );
+		$to       = $request->get_param( 'to' );
+		$limit    = min( (int) $request->get_param( 'limit' ), 100 );
+		$group_by = $request->get_param( 'group_by' );
 
 		if ( 'channel' === $group_by ) {
 			return $this->get_items_grouped_by_channel( $request );
@@ -135,12 +135,14 @@ final class SourcesController extends WP_REST_Controller {
 					COUNT(DISTINCT s.visitor_id) AS visitors,
 					COUNT(DISTINCT s.ID) AS sessions,
 					SUM(s.total_views) AS views
-				FROM `{$sessions}` s
-				LEFT JOIN `{$referrers}` r ON s.referrer_id = r.ID
+				FROM %i s
+				LEFT JOIN %i r ON s.referrer_id = r.ID
 				WHERE s.started_at BETWEEN %s AND %s
 				GROUP BY r.channel, r.name, r.domain
 				ORDER BY visitors DESC
 				LIMIT %d",
+				$sessions,
+				$referrers,
 				$from . ' 00:00:00',
 				$to . ' 23:59:59',
 				$limit
@@ -199,11 +201,13 @@ final class SourcesController extends WP_REST_Controller {
 					COUNT(DISTINCT s.visitor_id) AS visitors,
 					COUNT(DISTINCT s.ID) AS sessions,
 					SUM(s.total_views) AS views
-				FROM `{$sessions}` s
-				LEFT JOIN `{$referrers}` r ON s.referrer_id = r.ID
+				FROM %i s
+				LEFT JOIN %i r ON s.referrer_id = r.ID
 				WHERE s.started_at BETWEEN %s AND %s
 				GROUP BY r.channel
 				ORDER BY visitors DESC",
+				$sessions,
+				$referrers,
 				$start,
 				$end
 			),
@@ -218,12 +222,14 @@ final class SourcesController extends WP_REST_Controller {
 					COUNT(DISTINCT s.visitor_id) AS visitors,
 					COUNT(DISTINCT s.ID) AS sessions,
 					SUM(s.total_views) AS views
-				FROM `{$sessions}` s
-				LEFT JOIN `{$referrers}` r ON s.referrer_id = r.ID
+				FROM %i s
+				LEFT JOIN %i r ON s.referrer_id = r.ID
 				WHERE s.started_at BETWEEN %s AND %s
 				GROUP BY r.channel, r.name, r.domain
 				ORDER BY r.channel, visitors DESC
 				LIMIT 500",
+				$sessions,
+				$referrers,
 				$start,
 				$end
 			),
@@ -272,7 +278,7 @@ final class SourcesController extends WP_REST_Controller {
 
 		$result = [];
 		foreach ( $channel_rows as $ch_row ) {
-			$channel = $ch_row['channel'];
+			$channel  = $ch_row['channel'];
 			$result[] = [
 				'channel'  => $channel,
 				'visitors' => (int) $ch_row['visitors'],

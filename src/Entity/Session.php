@@ -50,11 +50,12 @@ final class Session {
 		// phpcs:disable WordPress.DB.DirectDatabaseQuery.NoCaching
 		$existing = $wpdb->get_row(
 			$wpdb->prepare(
-				"SELECT ID, total_views FROM `{$table}`
+				'SELECT ID, total_views FROM %i
 				WHERE visitor_id = %d
 				AND started_at >= DATE_SUB(%s, INTERVAL %d SECOND)
 				ORDER BY started_at DESC
-				LIMIT 1",
+				LIMIT 1',
+				$table,
 				$visitor_id,
 				$timestamp,
 				self::SESSION_TIMEOUT
@@ -65,7 +66,8 @@ final class Session {
 			// Reuse existing session — increment view count and update end time.
 			$wpdb->query(
 				$wpdb->prepare(
-					"UPDATE `{$table}` SET total_views = total_views + 1, ended_at = %s WHERE ID = %d",
+					'UPDATE %i SET total_views = total_views + 1, ended_at = %s WHERE ID = %d',
+					$table,
 					$timestamp,
 					$existing->ID
 				)

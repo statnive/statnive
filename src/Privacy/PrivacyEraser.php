@@ -75,10 +75,11 @@ final class PrivacyEraser {
 		// phpcs:disable WordPress.DB.DirectDatabaseQuery.NoCaching
 		$session_ids = $wpdb->get_col(
 			$wpdb->prepare(
-				"SELECT ID FROM `{$sessions_table}`
+				'SELECT ID FROM %i
 				WHERE user_id = %d
 				ORDER BY ID ASC
-				LIMIT %d OFFSET %d",
+				LIMIT %d OFFSET %d',
+				$sessions_table,
 				$user->ID,
 				self::BATCH_SIZE,
 				$offset
@@ -98,16 +99,17 @@ final class PrivacyEraser {
 		$ids_placeholder = implode( ',', array_fill( 0, count( $session_ids ), '%d' ) );
 		// $ids_placeholder is built from a count of validated integer IDs;
 		// $sessions_table is from TableRegistry. Both safe to interpolate.
-		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare
+		// phpcs:disable WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare,WordPress.DB.PreparedSQLPlaceholders.ReplacementsWrongNumber,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$updated = $wpdb->query(
 			$wpdb->prepare(
-				"UPDATE `{$sessions_table}`
+				"UPDATE %i
 				SET user_id = NULL, visitor_id = NULL, ip_hash = ''
 				WHERE ID IN ({$ids_placeholder})",
+				$sessions_table,
 				...$session_ids
 			)
 		);
-		// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare
+		// phpcs:enable WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare,WordPress.DB.PreparedSQLPlaceholders.ReplacementsWrongNumber,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery
 		// phpcs:enable WordPress.DB.DirectDatabaseQuery.NoCaching
 

@@ -114,12 +114,13 @@ final class EventsStatsController extends WP_REST_Controller {
 		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$rows = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT event_name, COUNT(*) AS total, COUNT(DISTINCT session_id) AS sessions
-				FROM `{$table}`
+				'SELECT event_name, COUNT(*) AS total, COUNT(DISTINCT session_id) AS sessions
+				FROM %i
 				WHERE created_at BETWEEN %s AND %s
 				GROUP BY event_name
 				ORDER BY total DESC
-				LIMIT %d",
+				LIMIT %d',
+				$table,
 				$from . ' 00:00:00',
 				$to . ' 23:59:59',
 				$limit
@@ -149,11 +150,12 @@ final class EventsStatsController extends WP_REST_Controller {
 		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$daily = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT DATE(created_at) AS date, COUNT(*) AS total
-				FROM `{$table}`
+				'SELECT DATE(created_at) AS date, COUNT(*) AS total
+				FROM %i
 				WHERE event_name = %s AND created_at BETWEEN %s AND %s
 				GROUP BY DATE(created_at)
-				ORDER BY date ASC",
+				ORDER BY date ASC',
+				$table,
 				$name,
 				$from . ' 00:00:00',
 				$to . ' 23:59:59'
@@ -164,10 +166,11 @@ final class EventsStatsController extends WP_REST_Controller {
 		// Property breakdown (sample last 1000 events).
 		$props = $wpdb->get_col(
 			$wpdb->prepare(
-				"SELECT event_data FROM `{$table}`
+				'SELECT event_data FROM %i
 				WHERE event_name = %s AND event_data IS NOT NULL
 				AND created_at BETWEEN %s AND %s
-				ORDER BY created_at DESC LIMIT 1000",
+				ORDER BY created_at DESC LIMIT 1000',
+				$table,
 				$name,
 				$from . ' 00:00:00',
 				$to . ' 23:59:59'

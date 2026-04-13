@@ -39,7 +39,7 @@
 	</rule>
 
 	<!-- Minimum WordPress and PHP versions -->
-	<config name="minimum_wp_version" value="5.6"/>
+	<config name="minimum_wp_version" value="6.2"/>
 	<config name="minimum_supported_wp_version" value="5.6"/>
 
 	<!-- PHP compatibility (matches Requires PHP: 8.0 in statnive.php) -->
@@ -55,23 +55,6 @@
 				<element value="STATNIVE"/>
 			</property>
 		</properties>
-	</rule>
-
-	<!-- Allow interpolated table names in prepared SQL.
-	     All table names come from TableRegistry (internal code, not user input). -->
-	<rule ref="WordPress.DB.PreparedSQL.InterpolatedNotPrepared">
-		<exclude-pattern>./src/Entity/*</exclude-pattern>
-		<exclude-pattern>./src/Database/*</exclude-pattern>
-		<exclude-pattern>./src/Service/*</exclude-pattern>
-		<exclude-pattern>./src/Api/*</exclude-pattern>
-		<exclude-pattern>./src/Admin/*</exclude-pattern>
-		<exclude-pattern>./src/Cron/*</exclude-pattern>
-		<exclude-pattern>./src/Privacy/*</exclude-pattern>
-		<exclude-pattern>./src/Import/*</exclude-pattern>
-		<exclude-pattern>./src/Email/*</exclude-pattern>
-		<exclude-pattern>./src/Data/*</exclude-pattern>
-		<exclude-pattern>./src/Feature/*</exclude-pattern>
-		<exclude-pattern>./src/Licensing/*</exclude-pattern>
 	</rule>
 
 	<!-- Show colors and progress -->
