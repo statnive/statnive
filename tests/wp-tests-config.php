@@ -5,6 +5,8 @@
  * Used by the WordPress PHPUnit test suite bootstrap.
  */
 
+defined( 'ABSPATH' ) || define( 'ABSPATH', getenv( 'WP_TESTS_ABSPATH' ) ?: '/tmp/wordpress/' );
+
 define( 'DB_NAME', getenv( 'WP_DB_NAME' ) ?: 'wordpress_test' );
 define( 'DB_USER', getenv( 'WP_DB_USER' ) ?: 'root' );
 define( 'DB_PASSWORD', getenv( 'WP_DB_PASSWORD' ) ?: '' );
