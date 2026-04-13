@@ -61,7 +61,7 @@ final class ReactHandler {
 		wp_enqueue_script(
 			'statnive-dashboard',
 			$js_url,
-			[ 'wp-i18n' ],
+			[ 'wp-element', 'wp-i18n' ],
 			STATNIVE_VERSION,
 			true
 		);

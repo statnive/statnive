@@ -44,7 +44,8 @@
 		timezone: w.Intl && Intl.DateTimeFormat ? Intl.DateTimeFormat().resolvedOptions().timeZone : '',
 		signature: h.signature || '',
 		page_url: w.location.pathname || '/',
-		page_query: w.location.search ? w.location.search.substring(1) : ''
+		page_query: w.location.search ? w.location.search.substring(1) : '',
+		_statnonce: c.nonce || ''
 	};
 
 	// Send via sendBeacon (preferred) or fetch(keepalive).

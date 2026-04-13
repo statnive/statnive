@@ -41,6 +41,7 @@ final class AjaxFallback {
 		'page_query',
 		'pvid',
 		'consent_granted',
+		'_statnonce',
 	];
 
 	/**
@@ -119,6 +120,14 @@ final class AjaxFallback {
 		// Validate HMAC signature.
 		if ( ! HmacValidator::verify( $signature, $resource_type, $resource_id ) ) {
 			self::reject( 'invalid_signature', 'Request signature is invalid.', 403 );
+			return;
+		}
+
+		// CSRF nonce — hardening layer alongside HMAC (Checklist §7).
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce IS verified via PayloadValidator::validate_nonce(); ignore suppresses the check_ajax_referer suggestion.
+		$nonce_error = PayloadValidator::validate_nonce( $data );
+		if ( null !== $nonce_error ) {
+			self::reject( $nonce_error[0], $nonce_error[1], $nonce_error[2] );
 			return;
 		}
 

@@ -77,26 +77,114 @@ export default defineConfig(({ mode }) => {
 	}
 
 	// React SPA build for WordPress admin dashboard.
-	// Rewrite @wordpress/i18n imports to use the wp.i18n global provided by
-	// WordPress core. Rollup `globals` only works with IIFE/UMD output, but
-	// we need ESM for code splitting + manifest. This plugin rewrites the
-	// bare import to a virtual module that re-exports the global.
+	// Rewrite WordPress-provided packages (React, ReactDOM, @wordpress/i18n) to
+	// their window globals so they are NOT bundled. wp-element ships React 18 as
+	// window.React / window.ReactDOM. Every named export is enumerated for
+	// tree-shaking; the plugin runs with enforce:'pre' so it resolves before
+	// @vitejs/plugin-react.
+	const wpExternalMap: Record<string, { id: string; code: string }> = {
+		'@wordpress/i18n': {
+			id: '\0wp-i18n',
+			code: 'const { __, sprintf, _n, _x } = window.wp.i18n; export { __, sprintf, _n, _x };',
+		},
+		'react': {
+			id: '\0wp-react',
+			code: [
+				'const R = window.React;',
+				'export default R;',
+				'export const Children = R.Children;',
+				'export const Component = R.Component;',
+				'export const Fragment = R.Fragment;',
+				'export const Profiler = R.Profiler;',
+				'export const PureComponent = R.PureComponent;',
+				'export const StrictMode = R.StrictMode;',
+				'export const Suspense = R.Suspense;',
+				'export const cloneElement = R.cloneElement;',
+				'export const createContext = R.createContext;',
+				'export const createElement = R.createElement;',
+				'export const createFactory = R.createFactory;',
+				'export const createRef = R.createRef;',
+				'export const forwardRef = R.forwardRef;',
+				'export const isValidElement = R.isValidElement;',
+				'export const lazy = R.lazy;',
+				'export const memo = R.memo;',
+				'export const startTransition = R.startTransition;',
+				'export const useCallback = R.useCallback;',
+				'export const useContext = R.useContext;',
+				'export const useDebugValue = R.useDebugValue;',
+				'export const useDeferredValue = R.useDeferredValue;',
+				'export const useEffect = R.useEffect;',
+				'export const useId = R.useId;',
+				'export const useImperativeHandle = R.useImperativeHandle;',
+				'export const useInsertionEffect = R.useInsertionEffect;',
+				'export const useLayoutEffect = R.useLayoutEffect;',
+				'export const useMemo = R.useMemo;',
+				'export const useReducer = R.useReducer;',
+				'export const useRef = R.useRef;',
+				'export const useState = R.useState;',
+				'export const useSyncExternalStore = R.useSyncExternalStore;',
+				'export const useTransition = R.useTransition;',
+				'export const version = R.version;',
+				// React 19 API used by @tanstack/react-router — provide a shim.
+				'export const use = R.use || function use(p) { throw new Error("React.use is not available in React 18"); };',
+				'export const act = R.act;',
+			].join('\n'),
+		},
+		'react-dom': {
+			id: '\0wp-react-dom',
+			code: [
+				'const RD = window.ReactDOM;',
+				'export default RD;',
+				'export const createPortal = RD.createPortal;',
+				'export const flushSync = RD.flushSync;',
+				'export const unmountComponentAtNode = RD.unmountComponentAtNode;',
+				'export const version = RD.version;',
+				'export const render = RD.render;',
+				'export const hydrate = RD.hydrate;',
+				'export const findDOMNode = RD.findDOMNode;',
+			].join('\n'),
+		},
+		'react-dom/client': {
+			id: '\0wp-react-dom-client',
+			code: 'const RD = window.ReactDOM; export const createRoot = RD.createRoot; export const hydrateRoot = RD.hydrateRoot;',
+		},
+		'react/jsx-runtime': {
+			id: '\0wp-react-jsx',
+			code: 'const R = window.React; export const jsx = R.createElement; export const jsxs = R.createElement; export const Fragment = R.Fragment; export const jsxDEV = R.createElement;',
+		},
+		'react-is': {
+			id: '\0wp-react-is',
+			code: [
+				'const RI = window.ReactIs || {};',
+				'export default RI;',
+				'export const isElement = RI.isElement;',
+				'export const isValidElementType = RI.isValidElementType;',
+				'export const ForwardRef = RI.ForwardRef;',
+				'export const Memo = RI.Memo;',
+				'export const isFragment = RI.isFragment;',
+				'export const isMemo = RI.isMemo;',
+				'export const isForwardRef = RI.isForwardRef;',
+				'export const typeOf = RI.typeOf;',
+			].join('\n'),
+		},
+	};
+
 	const wpExternals = {
 		name: 'wp-externals',
+		enforce: 'pre' as const,
 		resolveId(id: string) {
-			if (id === '@wordpress/i18n') return '\0wp-i18n';
-			return null;
+			return wpExternalMap[id]?.id ?? null;
 		},
 		load(id: string) {
-			if (id === '\0wp-i18n') {
-				return 'const { __, sprintf, _n, _x } = window.wp.i18n; export { __, sprintf, _n, _x };';
+			for (const entry of Object.values(wpExternalMap)) {
+				if (entry.id === id) return entry.code;
 			}
 			return null;
 		},
 	};
 
 	return {
-		plugins: [wpExternals, react(), tailwindcss()],
+		plugins: [wpExternals, react({ jsxRuntime: 'classic' }), tailwindcss()],
 		publicDir: false,
 		base: './',
 		resolve: {

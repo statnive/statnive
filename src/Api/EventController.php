@@ -53,6 +53,7 @@ final class EventController extends WP_REST_Controller {
 		'signature',
 		'properties',
 		'consent_granted',
+		'_statnonce',
 	];
 
 	/**
@@ -162,6 +163,12 @@ final class EventController extends WP_REST_Controller {
 		// Validate HMAC signature.
 		if ( ! HmacValidator::verify( $signature, $resource_type, $resource_id ) ) {
 			return self::error_response( [ 'invalid_signature', 'Request signature is invalid.', 403 ] );
+		}
+
+		// CSRF nonce — hardening layer alongside HMAC (Checklist §7).
+		$nonce_error = PayloadValidator::validate_nonce( $data );
+		if ( null !== $nonce_error ) {
+			return self::error_response( $nonce_error );
 		}
 
 		// Privacy enforcement.

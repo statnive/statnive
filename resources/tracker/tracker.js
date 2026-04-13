@@ -108,6 +108,11 @@ window.statnive = window.statnive || function() {
 	 */
 	function sendToUrl(url, payload) {
 		payload = applyTransform(payload);
+		// CSRF nonce — minted server-side, sent as body field (not header)
+		// because text/plain content-type avoids CORS preflight.
+		if (config.nonce) {
+			payload._statnonce = config.nonce;
+		}
 		var body = JSON.stringify(payload);
 
 		if (navigator.sendBeacon) {

@@ -45,6 +45,7 @@ final class EngagementController extends WP_REST_Controller {
 		'scroll_depth',
 		'pvid',
 		'page_url',
+		'_statnonce',
 	];
 
 	/**
@@ -143,6 +144,12 @@ final class EngagementController extends WP_REST_Controller {
 
 		if ( ! HmacValidator::verify( $signature, $res_type, $res_id ) ) {
 			return self::error_response( [ 'invalid_signature', 'Request signature is invalid.', 403 ] );
+		}
+
+		// CSRF nonce — hardening layer alongside HMAC (Checklist §7).
+		$nonce_error = PayloadValidator::validate_nonce( $data );
+		if ( null !== $nonce_error ) {
+			return self::error_response( $nonce_error );
 		}
 
 		$engagement_time = absint( $data['engagement_time'] ?? 0 );
