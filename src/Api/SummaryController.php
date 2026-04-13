@@ -107,7 +107,8 @@ final class SummaryController extends WP_REST_Controller {
 		// phpcs:disable WordPress.DB.DirectDatabaseQuery.NoCaching
 		$rows = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT date, visitors, sessions, views, total_duration, bounces FROM `{$table}` WHERE date BETWEEN %s AND %s ORDER BY date ASC",
+				'SELECT date, visitors, sessions, views, total_duration, bounces FROM %i WHERE date BETWEEN %s AND %s ORDER BY date ASC',
+				$table,
 				$from,
 				$to
 			),
@@ -127,15 +128,17 @@ final class SummaryController extends WP_REST_Controller {
 			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 			$today_row = $wpdb->get_row(
 				$wpdb->prepare(
-					"SELECT
+					'SELECT
 						COUNT(DISTINCT s.visitor_id) AS visitors,
 						COUNT(DISTINCT s.ID) AS sessions,
 						COUNT(v.ID) AS views,
 						COALESCE(SUM(v.duration), 0) AS total_duration,
 						SUM(CASE WHEN s.total_views = 1 THEN 1 ELSE 0 END) AS bounces
-					FROM `{$sessions_table}` s
-					LEFT JOIN `{$views_table}` v ON v.session_id = s.ID AND DATE(v.viewed_at) = %s
-					WHERE DATE(s.started_at) = %s",
+					FROM %i s
+					LEFT JOIN %i v ON v.session_id = s.ID AND DATE(v.viewed_at) = %s
+					WHERE DATE(s.started_at) = %s',
+					$sessions_table,
+					$views_table,
 					$today,
 					$today
 				),

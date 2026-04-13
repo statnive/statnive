@@ -39,10 +39,10 @@ final class Visitor {
 		// Lookup existing visitor by hash.
 		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery
 		// phpcs:disable WordPress.DB.DirectDatabaseQuery.NoCaching
-		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$visitor_id = $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT ID FROM `{$table}` WHERE hash = %s LIMIT 1",
+				'SELECT ID FROM %i WHERE hash = %s LIMIT 1',
+				$table,
 				$hash
 			)
 		);
@@ -53,10 +53,10 @@ final class Visitor {
 		}
 
 		// Insert new visitor.
-		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$wpdb->query(
 			$wpdb->prepare(
-				"INSERT INTO `{$table}` (hash, created_at) VALUES (%s, %s)",
+				'INSERT INTO %i (hash, created_at) VALUES (%s, %s)',
+				$table,
 				$hash,
 				$profile->get( 'timestamp' )
 			)

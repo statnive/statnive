@@ -166,7 +166,8 @@ final class EngagementController extends WP_REST_Controller {
 			// Exact match via page visit ID — each pageview gets its own duration.
 			$wpdb->query(
 				$wpdb->prepare(
-					"UPDATE `{$views_table}` SET duration = %d, scroll_depth = %d WHERE pvid = %s",
+					'UPDATE %i SET duration = %d, scroll_depth = %d WHERE pvid = %s',
+					$views_table,
 					$engagement_time,
 					$scroll_depth,
 					$pvid
@@ -177,18 +178,21 @@ final class EngagementController extends WP_REST_Controller {
 			$uri_hash = crc32( $page_url );
 			$wpdb->query(
 				$wpdb->prepare(
-					"UPDATE `{$views_table}`
+					'UPDATE %i
 					SET duration = %d, scroll_depth = %d
 					WHERE ID = (
 						SELECT max_id FROM (
 							SELECT MAX(v.ID) AS max_id
-							FROM `{$views_table}` v
-							INNER JOIN `{$uris_table}` ru ON v.resource_uri_id = ru.ID
+							FROM %i v
+							INNER JOIN %i ru ON v.resource_uri_id = ru.ID
 							WHERE ru.uri_hash = %d AND ru.uri = %s
 						) AS subq
-					)",
+					)',
+					$views_table,
 					$engagement_time,
 					$scroll_depth,
+					$views_table,
+					$uris_table,
 					$uri_hash,
 					$page_url
 				)
@@ -197,18 +201,21 @@ final class EngagementController extends WP_REST_Controller {
 			// Legacy fallback: resource_id lookup.
 			$wpdb->query(
 				$wpdb->prepare(
-					"UPDATE `{$views_table}`
+					'UPDATE %i
 					SET duration = %d, scroll_depth = %d
 					WHERE ID = (
 						SELECT max_id FROM (
-							SELECT MAX(ID) AS max_id FROM `{$views_table}`
+							SELECT MAX(ID) AS max_id FROM %i
 							WHERE resource_uri_id = (
-								SELECT ID FROM `{$uris_table}` WHERE resource_id = %d LIMIT 1
+								SELECT ID FROM %i WHERE resource_id = %d LIMIT 1
 							)
 						) AS subq
-					)",
+					)',
+					$views_table,
 					$engagement_time,
 					$scroll_depth,
+					$views_table,
+					$uris_table,
 					$res_id
 				)
 			);

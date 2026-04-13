@@ -23,5 +23,5 @@ if ( ! defined( 'STATNIVE_MIN_PHP' ) ) {
 	define( 'STATNIVE_MIN_PHP', '8.0' );
 }
 if ( ! defined( 'STATNIVE_MIN_WP' ) ) {
-	define( 'STATNIVE_MIN_WP', '5.6' );
+	define( 'STATNIVE_MIN_WP', '6.2' );
 }

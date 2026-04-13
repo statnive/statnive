@@ -391,5 +391,5 @@ if ( ! defined( 'STATNIVE_MIN_PHP' ) ) {
 }
 
 if ( ! defined( 'STATNIVE_MIN_WP' ) ) {
-	define( 'STATNIVE_MIN_WP', '5.6' );
+	define( 'STATNIVE_MIN_WP', '6.2' );
 }

@@ -106,11 +106,12 @@ final class CsvImporter extends ImportManager {
 
 			$wpdb->query(
 				$wpdb->prepare(
-					"INSERT INTO `{$summary_table}` (date, visitors, sessions, views, total_duration, bounces)
+					'INSERT INTO %i (date, visitors, sessions, views, total_duration, bounces)
 					VALUES (%s, %d, %d, %d, 0, 0)
 					ON DUPLICATE KEY UPDATE
 					visitors = visitors + VALUES(visitors),
-					views = views + VALUES(views)",
+					views = views + VALUES(views)',
+					$summary_table,
 					$date,
 					$visitors,
 					$visitors,

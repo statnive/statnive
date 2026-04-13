@@ -63,10 +63,11 @@ final class WPStatisticsImporter extends ImportManager {
 		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$rows = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT last_counter AS date, visit AS views
-				FROM `{$source_table}`
+				'SELECT last_counter AS date, visit AS views
+				FROM %i
 				ORDER BY last_counter ASC
-				LIMIT %d OFFSET %d",
+				LIMIT %d OFFSET %d',
+				$source_table,
 				self::BATCH_SIZE,
 				$offset
 			)
@@ -80,9 +81,10 @@ final class WPStatisticsImporter extends ImportManager {
 		foreach ( $rows as $row ) {
 			$wpdb->query(
 				$wpdb->prepare(
-					"INSERT INTO `{$summary_table}` (date, visitors, sessions, views, total_duration, bounces)
+					'INSERT INTO %i (date, visitors, sessions, views, total_duration, bounces)
 					VALUES (%s, %d, %d, %d, 0, 0)
-					ON DUPLICATE KEY UPDATE views = views + VALUES(views)",
+					ON DUPLICATE KEY UPDATE views = views + VALUES(views)',
+					$summary_table,
 					$row->date,
 					(int) $row->views,
 					(int) $row->views,

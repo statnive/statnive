@@ -147,14 +147,16 @@ final class DimensionsController extends WP_REST_Controller {
 				$dim = TableRegistry::get( 'countries' );
 				return $wpdb->get_results(
 					$wpdb->prepare(
-						"SELECT d.code, d.name, d.continent_code,
+						'SELECT d.code, d.name, d.continent_code,
 							COUNT(DISTINCT s.visitor_id) AS visitors,
 							COUNT(DISTINCT s.ID) AS sessions
-						FROM `{$sessions}` s
-						INNER JOIN `{$dim}` d ON s.country_id = d.ID
+						FROM %i s
+						INNER JOIN %i d ON s.country_id = d.ID
 						WHERE s.started_at BETWEEN %s AND %s
 						GROUP BY d.code, d.name, d.continent_code
-						ORDER BY visitors DESC LIMIT %d",
+						ORDER BY visitors DESC LIMIT %d',
+						$sessions,
+						$dim,
 						$from . ' 00:00:00',
 						$to . ' 23:59:59',
 						$limit
@@ -167,15 +169,18 @@ final class DimensionsController extends WP_REST_Controller {
 				$country = TableRegistry::get( 'countries' );
 				return $wpdb->get_results(
 					$wpdb->prepare(
-						"SELECT d.city_name, c.name AS country,
+						'SELECT d.city_name, c.name AS country,
 							COUNT(DISTINCT s.visitor_id) AS visitors,
 							COUNT(DISTINCT s.ID) AS sessions
-						FROM `{$sessions}` s
-						INNER JOIN `{$dim}` d ON s.city_id = d.ID
-						LEFT JOIN `{$country}` c ON d.country_id = c.ID
+						FROM %i s
+						INNER JOIN %i d ON s.city_id = d.ID
+						LEFT JOIN %i c ON d.country_id = c.ID
 						WHERE s.started_at BETWEEN %s AND %s
 						GROUP BY d.city_name, c.name
-						ORDER BY visitors DESC LIMIT %d",
+						ORDER BY visitors DESC LIMIT %d',
+						$sessions,
+						$dim,
+						$country,
 						$from . ' 00:00:00',
 						$to . ' 23:59:59',
 						$limit
@@ -187,14 +192,16 @@ final class DimensionsController extends WP_REST_Controller {
 				$dim = TableRegistry::get( 'device_browsers' );
 				return $wpdb->get_results(
 					$wpdb->prepare(
-						"SELECT d.name,
+						'SELECT d.name,
 							COUNT(DISTINCT s.visitor_id) AS visitors,
 							COUNT(DISTINCT s.ID) AS sessions
-						FROM `{$sessions}` s
-						INNER JOIN `{$dim}` d ON s.device_browser_id = d.ID
+						FROM %i s
+						INNER JOIN %i d ON s.device_browser_id = d.ID
 						WHERE s.started_at BETWEEN %s AND %s
 						GROUP BY d.name
-						ORDER BY visitors DESC LIMIT %d",
+						ORDER BY visitors DESC LIMIT %d',
+						$sessions,
+						$dim,
 						$from . ' 00:00:00',
 						$to . ' 23:59:59',
 						$limit
@@ -206,14 +213,16 @@ final class DimensionsController extends WP_REST_Controller {
 				$dim = TableRegistry::get( 'device_oss' );
 				return $wpdb->get_results(
 					$wpdb->prepare(
-						"SELECT d.name,
+						'SELECT d.name,
 							COUNT(DISTINCT s.visitor_id) AS visitors,
 							COUNT(DISTINCT s.ID) AS sessions
-						FROM `{$sessions}` s
-						INNER JOIN `{$dim}` d ON s.device_os_id = d.ID
+						FROM %i s
+						INNER JOIN %i d ON s.device_os_id = d.ID
 						WHERE s.started_at BETWEEN %s AND %s
 						GROUP BY d.name
-						ORDER BY visitors DESC LIMIT %d",
+						ORDER BY visitors DESC LIMIT %d',
+						$sessions,
+						$dim,
 						$from . ' 00:00:00',
 						$to . ' 23:59:59',
 						$limit
@@ -225,14 +234,16 @@ final class DimensionsController extends WP_REST_Controller {
 				$dim = TableRegistry::get( 'device_types' );
 				return $wpdb->get_results(
 					$wpdb->prepare(
-						"SELECT d.name,
+						'SELECT d.name,
 							COUNT(DISTINCT s.visitor_id) AS visitors,
 							COUNT(DISTINCT s.ID) AS sessions
-						FROM `{$sessions}` s
-						INNER JOIN `{$dim}` d ON s.device_type_id = d.ID
+						FROM %i s
+						INNER JOIN %i d ON s.device_type_id = d.ID
 						WHERE s.started_at BETWEEN %s AND %s
 						GROUP BY d.name
-						ORDER BY visitors DESC LIMIT %d",
+						ORDER BY visitors DESC LIMIT %d',
+						$sessions,
+						$dim,
 						$from . ' 00:00:00',
 						$to . ' 23:59:59',
 						$limit
@@ -244,14 +255,16 @@ final class DimensionsController extends WP_REST_Controller {
 				$dim = TableRegistry::get( 'languages' );
 				return $wpdb->get_results(
 					$wpdb->prepare(
-						"SELECT d.code AS name,
+						'SELECT d.code AS name,
 							COUNT(DISTINCT s.visitor_id) AS visitors,
 							COUNT(DISTINCT s.ID) AS sessions
-						FROM `{$sessions}` s
-						INNER JOIN `{$dim}` d ON s.language_id = d.ID
+						FROM %i s
+						INNER JOIN %i d ON s.language_id = d.ID
 						WHERE s.started_at BETWEEN %s AND %s
 						GROUP BY d.code
-						ORDER BY visitors DESC LIMIT %d",
+						ORDER BY visitors DESC LIMIT %d',
+						$sessions,
+						$dim,
 						$from . ' 00:00:00',
 						$to . ' 23:59:59',
 						$limit

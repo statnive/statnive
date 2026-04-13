@@ -46,10 +46,10 @@ final class View {
 
 		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery
 		// phpcs:disable WordPress.DB.DirectDatabaseQuery.NoCaching
-		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$wpdb->query(
 			$wpdb->prepare(
-				"INSERT INTO `{$view_table}` (session_id, resource_uri_id, resource_id, viewed_at, pvid) VALUES (%d, %d, %d, %s, %s)",
+				'INSERT INTO %i (session_id, resource_uri_id, resource_id, viewed_at, pvid) VALUES (%d, %d, %d, %s, %s)',
+				$view_table,
 				$session_id,
 				$resource_uri_id,
 				$resource_id,
@@ -64,10 +64,10 @@ final class View {
 
 		// Update session's last_view_id and initial_view_id if first view.
 		$session_table = TableRegistry::get( 'sessions' );
-		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$wpdb->query(
 			$wpdb->prepare(
-				"UPDATE `{$session_table}` SET last_view_id = %d, initial_view_id = COALESCE(initial_view_id, %d) WHERE ID = %d",
+				'UPDATE %i SET last_view_id = %d, initial_view_id = COALESCE(initial_view_id, %d) WHERE ID = %d',
+				$session_table,
 				$view_id,
 				$view_id,
 				$session_id
@@ -100,10 +100,10 @@ final class View {
 
 		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery
 		// phpcs:disable WordPress.DB.DirectDatabaseQuery.NoCaching
-		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$existing_id = $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT ID FROM `{$table}` WHERE uri_hash = %d AND uri = %s LIMIT 1",
+				'SELECT ID FROM %i WHERE uri_hash = %d AND uri = %s LIMIT 1',
+				$table,
 				$uri_hash,
 				$uri
 			)
@@ -113,10 +113,10 @@ final class View {
 			return (int) $existing_id;
 		}
 
-		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$wpdb->query(
 			$wpdb->prepare(
-				"INSERT INTO `{$table}` (uri, uri_hash, resource_id) VALUES (%s, %d, %d)",
+				'INSERT INTO %i (uri, uri_hash, resource_id) VALUES (%s, %d, %d)',
+				$table,
 				$uri,
 				$uri_hash,
 				$resource_id
@@ -144,10 +144,10 @@ final class View {
 
 		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery
 		// phpcs:disable WordPress.DB.DirectDatabaseQuery.NoCaching
-		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$existing_id = $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT ID FROM `{$table}` WHERE resource_type = %s AND resource_id = %d LIMIT 1",
+				'SELECT ID FROM %i WHERE resource_type = %s AND resource_id = %d LIMIT 1',
+				$table,
 				$resource_type,
 				$resource_id
 			)
@@ -162,10 +162,10 @@ final class View {
 		$title = ( null !== $post ) ? $post->post_title : '';
 
 		// Use INSERT IGNORE to prevent duplicate rows from concurrent requests.
-		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$wpdb->query(
 			$wpdb->prepare(
-				"INSERT IGNORE INTO `{$table}` (resource_type, resource_id, cached_title) VALUES (%s, %d, %s)",
+				'INSERT IGNORE INTO %i (resource_type, resource_id, cached_title) VALUES (%s, %d, %s)',
+				$table,
 				$resource_type,
 				$resource_id,
 				$title
@@ -176,10 +176,10 @@ final class View {
 
 		// Race condition: another request inserted first. Re-query to get the ID.
 		if ( 0 === $new_id ) {
-			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 			$new_id = (int) $wpdb->get_var(
 				$wpdb->prepare(
-					"SELECT ID FROM `{$table}` WHERE resource_type = %s AND resource_id = %d LIMIT 1",
+					'SELECT ID FROM %i WHERE resource_type = %s AND resource_id = %d LIMIT 1',
+					$table,
 					$resource_type,
 					$resource_id
 				)
