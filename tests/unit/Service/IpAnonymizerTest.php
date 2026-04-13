@@ -9,6 +9,8 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Statnive\Service\IpAnonymizer;
 
+defined( 'ABSPATH' ) || define( 'ABSPATH' , dirname( __DIR__, 6 ) . '/' );
+
 #[CoversClass(IpAnonymizer::class)]
 final class IpAnonymizerTest extends TestCase {
 

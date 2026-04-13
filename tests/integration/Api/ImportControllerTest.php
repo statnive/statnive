@@ -13,6 +13,8 @@ use Statnive\Database\TableRegistry;
 use WP_REST_Request;
 use WP_UnitTestCase;
 
+defined( 'ABSPATH' ) || define( 'ABSPATH' , dirname( __DIR__, 6 ) . '/' );
+
 /**
  * Integration tests for the data import REST endpoints.
  *
@@ -46,7 +48,7 @@ final class ImportControllerTest extends WP_UnitTestCase {
 		];
 		foreach ( $files as $file ) {
 			if ( file_exists( $file ) ) {
-				unlink( $file );
+				wp_delete_file( $file );
 			}
 		}
 

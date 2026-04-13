@@ -9,6 +9,8 @@ use Statnive\Service\GeoIPService;
 use Statnive\Service\IpExtractor;
 use WP_UnitTestCase;
 
+defined( 'ABSPATH' ) || define( 'ABSPATH', dirname( __DIR__, 6 ) . '/' );
+
 /**
  * Integration tests for IpExtractor filter and GeoIPService private IP handling.
  *

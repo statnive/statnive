@@ -31,7 +31,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 if ( ! function_exists( 'sanitize_text_field' ) ) {
 	function sanitize_text_field( string $str ): string {
-		return trim( strip_tags( $str ) );
+		return trim( strip_tags( $str ) ); // phpcs:ignore WordPress.WP.AlternativeFunctions.strip_tags_strip_tags -- unit test stub, WP not loaded.
 	}
 }
 
@@ -215,7 +215,7 @@ if ( ! function_exists( 'wp_send_json_success' ) ) {
 	 * @param mixed $data
 	 */
 	function wp_send_json_success( $data = null, int $status_code = 200 ): void {
-		throw new WpDieException( true, $data, $status_code );
+		throw new WpDieException( true, $data, $status_code ); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped -- test stub, throws not outputs.
 	}
 }
 
@@ -224,7 +224,7 @@ if ( ! function_exists( 'wp_send_json_error' ) ) {
 	 * @param mixed $data
 	 */
 	function wp_send_json_error( $data = null, int $status_code = 200 ): void {
-		throw new WpDieException( false, $data, $status_code );
+		throw new WpDieException( false, $data, $status_code ); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped -- test stub, throws not outputs.
 	}
 }
 
@@ -234,7 +234,7 @@ if ( ! function_exists( 'wp_die' ) ) {
 	 */
 	function wp_die( $message = '', string $title = '', array $args = [] ): void {
 		$status = isset( $args['response'] ) ? (int) $args['response'] : 500;
-		throw new WpDieException( false, $message, $status );
+		throw new WpDieException( false, $message, $status ); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped -- test stub, throws not outputs.
 	}
 }
 
@@ -355,7 +355,7 @@ if ( ! function_exists( 'esc_html__' ) ) {
 
 if ( ! function_exists( 'sanitize_textarea_field' ) ) {
 	function sanitize_textarea_field( string $str ): string {
-		return trim( strip_tags( $str ) );
+		return trim( strip_tags( $str ) ); // phpcs:ignore WordPress.WP.AlternativeFunctions.strip_tags_strip_tags -- unit test stub, WP not loaded.
 	}
 }
 

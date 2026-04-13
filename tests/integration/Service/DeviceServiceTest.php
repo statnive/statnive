@@ -11,6 +11,8 @@ use Statnive\Database\DatabaseFactory;
 use Statnive\Service\DeviceService;
 use WP_UnitTestCase;
 
+defined( 'ABSPATH' ) || define( 'ABSPATH' , dirname( __DIR__, 6 ) . '/' );
+
 /**
  * Integration tests for device detection service.
  *

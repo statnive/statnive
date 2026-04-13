@@ -10,6 +10,8 @@ use Statnive\Database\TableRegistry;
 use Statnive\Security\HmacValidator;
 use WP_UnitTestCase;
 
+defined( 'ABSPATH' ) || define( 'ABSPATH' , dirname( __DIR__, 6 ) . '/' );
+
 /**
  * Integration tests for the AJAX fallback endpoint.
  *

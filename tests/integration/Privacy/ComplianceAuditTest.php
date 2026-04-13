@@ -11,6 +11,8 @@ use Statnive\Database\DatabaseFactory;
 use Statnive\Privacy\ComplianceAuditor;
 use WP_UnitTestCase;
 
+defined( 'ABSPATH' ) || define( 'ABSPATH' , dirname( __DIR__, 6 ) . '/' );
+
 /**
  * Integration tests for the privacy compliance audit engine.
  *

@@ -7,6 +7,8 @@ namespace Statnive\Tests\Unit;
 use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
 
+defined( 'ABSPATH' ) || define( 'ABSPATH' , dirname( __DIR__, 6 ) . '/' );
+
 /**
  * Ensures version numbers stay in sync across all project files (bug #11).
  *
