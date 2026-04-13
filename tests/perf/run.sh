@@ -6,16 +6,18 @@
 # and dispatches to the appropriate k6 test script.
 #
 # Usage:
-#   ./tests/perf/run.sh [continuous|accuracy|compare|browser|burst|perf-impact|all]
+#   ./tests/perf/run.sh [continuous|accuracy|compare|browser|burst|perf-impact|baseline-variance|compare-runs|all]
 #
 # Modes:
-#   continuous   — Low-rate always-on traffic (runs until Ctrl+C)
-#   accuracy     — Deterministic 100-hit validation test
-#   compare      — Cross-plugin accuracy comparison
-#   browser      — Real browser simulation (k6 browser module)
-#   burst        — Default 3-minute burst test
-#   perf-impact  — Web Vitals overhead comparison (toggles plugins via WP-CLI)
-#   all          — Runs accuracy, then continuous with periodic comparison
+#   continuous         — Low-rate always-on traffic (runs until Ctrl+C)
+#   accuracy           — Deterministic 100-hit validation test
+#   compare            — Cross-plugin accuracy comparison
+#   browser            — Real browser simulation (k6 browser module)
+#   burst              — Default 3-minute burst test
+#   perf-impact        — Web Vitals overhead comparison (supports RUNS=N env var)
+#   baseline-variance  — Run baseline N times to characterize test env noise floor
+#   compare-runs       — Diff two perf-impact summary JSONs with significance check
+#   all                — Runs accuracy, then continuous with periodic comparison
 #
 
 set -euo pipefail
@@ -125,8 +127,32 @@ case "$MODE" in
         echo "Running performance impact comparison..."
         echo "This toggles plugins via WP-CLI and measures Web Vitals overhead."
         echo "Estimated time: ~30-80 minutes depending on load tier."
+        echo "Set RUNS=N env var to run the full matrix N times for variance reporting."
         echo ""
         exec "$SCRIPT_DIR/perf-impact-runner.sh" "${2:-medium}"
+        ;;
+
+    baseline-variance)
+        # Characterize test environment noise floor by running the baseline
+        # config N times back-to-back. See ROADMAP-PERFORMANCE.md Phase 2 P2.
+        echo "Running baseline variance study..."
+        echo "This runs the baseline (no plugin changes) N times back-to-back"
+        echo "and reports the run-to-run variance and noise floor."
+        echo ""
+        exec "$SCRIPT_DIR/baseline-variance.sh" "${2:-light}" "${3:-5}"
+        ;;
+
+    compare-runs)
+        # Diff two perf-impact summary JSONs. Exit code 1 if any LCP change
+        # exceeds the combined noise floor. See ROADMAP-PERFORMANCE.md Phase 1 P2.
+        if [ -z "${2:-}" ] || [ -z "${3:-}" ]; then
+            echo "Usage: $0 compare-runs <summary-a.json> <summary-b.json>"
+            echo ""
+            echo "Both summary files must be Phase 1+ multi-run aggregates"
+            echo "(produced by RUNS=N ./run.sh perf-impact <tier>)."
+            exit 1
+        fi
+        exec node "$SCRIPT_DIR/compare-runs.mjs" "$2" "$3"
         ;;
 
     compare-browser)
@@ -157,7 +183,7 @@ case "$MODE" in
 
     *)
         echo "Unknown mode: $MODE"
-        echo "Usage: $0 [continuous|accuracy|compare|browser|burst|discover|perf-impact|compare-browser|all]"
+        echo "Usage: $0 [continuous|accuracy|compare|browser|burst|discover|perf-impact|baseline-variance|compare-runs|compare-browser|all]"
         exit 1
         ;;
 esac

@@ -2,14 +2,14 @@
 # This file is distributed under the GPL-2.0-or-later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Statnive 0.3.0\n"
+"Project-Id-Version: Statnive 0.4.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/statnive\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-04-06T10:26:20+00:00\n"
+"POT-Creation-Date: 2026-04-13T08:00:04+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: statnive\n"
@@ -42,24 +42,54 @@ msgstr ""
 msgid "Statnive Analytics"
 msgstr ""
 
-#: src/Admin/GeoIPNotice.php:55
-msgid "Statnive: GeoIP is enabled but no MaxMind license key is configured. Visitor geolocation will not work until a key is added."
+#: src/Admin/GeoIPNotice.php:57
+msgid "Statnive: GeoIP is enabled but no MaxMind license key is configured."
+msgstr ""
+
+#: src/Admin/GeoIPNotice.php:58
+msgid "Impact: visitor country/region data will not appear in your reports. Page tracking, sources, devices and all other metrics continue to work normally."
+msgstr ""
+
+#: src/Admin/GeoIPNotice.php:59
+msgid "What Statnive will do: retry the GeoIP database download every week. No additional alerts will be raised until the key is added or GeoIP is disabled."
 msgstr ""
 
 #. translators: 1: MaxMind signup URL, 2: MaxMind EULA URL
-#: src/Admin/GeoIPNotice.php:59
+#: src/Admin/GeoIPNotice.php:63
 #, php-format
-msgid "<a href=\"%1$s\" target=\"_blank\" rel=\"noopener\">Get a free MaxMind license key</a> (requires accepting the <a href=\"%2$s\" target=\"_blank\" rel=\"noopener\">GeoLite2 EULA</a>)."
+msgid "<strong>To fix:</strong> <a href=\"%1$s\" target=\"_blank\" rel=\"noopener\">get a free MaxMind license key</a> (requires accepting the <a href=\"%2$s\" target=\"_blank\" rel=\"noopener\">GeoLite2 EULA</a>) and paste it into Settings → GeoIP. Or disable GeoIP in Settings to dismiss this notice."
 msgstr ""
 
-#: src/Admin/GeoIPNotice.php:84
-msgid "Statnive: WordPress cron is disabled on this site (DISABLE_WP_CRON). GeoIP database updates will not run automatically. Set up a system cron job or use WP-CLI to update the database manually."
+#: src/Admin/GeoIPNotice.php:92
+msgid "Statnive: WordPress cron is disabled on this site (DISABLE_WP_CRON)."
+msgstr ""
+
+#: src/Admin/GeoIPNotice.php:93
+msgid "This affects all Statnive background jobs: daily salt rotation, data aggregation, retention cleanup, email reports, and GeoIP updates. Without cron, analytics data will not be summarized and old data will not be purged."
+msgstr ""
+
+#: src/Admin/GeoIPNotice.php:94
+msgid "To fix: set up a system cron job (recommended) or run \"wp statnive cron run\" via WP-CLI."
+msgstr ""
+
+#: src/Cron/CronRegistrar.php:32
+msgid "Once Monthly"
 msgstr ""
 
 #. translators: %1$s: site name, %2$s: report frequency
 #: src/Cron/EmailReportJob.php:54
 #, php-format
 msgid "%1$s Analytics — %2$s Report"
+msgstr ""
+
+#: src/Database/Migrator.php:109
+msgid "Statnive: plugin version mismatch detected."
+msgstr ""
+
+#. translators: 1: stored schema version, 2: running plugin version
+#: src/Database/Migrator.php:113
+#, php-format
+msgid "Your database schema is at version %1$s but the running plugin is version %2$s. This may happen if you downgraded the plugin. Please re-install the latest version to avoid data inconsistencies."
 msgstr ""
 
 #. translators: %s: report frequency (e.g. Weekly, Monthly)
@@ -101,19 +131,19 @@ msgstr ""
 msgid "Sent by Statnive — Privacy-first analytics for WordPress"
 msgstr ""
 
-#: src/Plugin.php:113
+#: src/Plugin.php:126
 msgid "You do not have permission to activate plugins."
 msgstr ""
 
 #. translators: 1: Required PHP version, 2: Current PHP version
-#: src/Plugin.php:125
+#: src/Plugin.php:138
 #: statnive.php:68
 #, php-format
 msgid "Statnive requires PHP %1$s or higher. You are running PHP %2$s."
 msgstr ""
 
 #. translators: 1: Required WordPress version, 2: Current WordPress version
-#: src/Plugin.php:141
+#: src/Plugin.php:154
 #: statnive.php:93
 #, php-format
 msgid "Statnive requires WordPress %1$s or higher. You are running WordPress %2$s."
@@ -243,7 +273,7 @@ msgid "Site not using HTTPS. Analytics data transmitted in plaintext."
 msgstr ""
 
 #. translators: %d: number of sessions anonymized
-#: src/Privacy/PrivacyEraser.php:119
+#: src/Privacy/PrivacyEraser.php:122
 #, php-format
 msgid "Anonymized %d analytics session(s). Aggregate statistics preserved."
 msgstr ""

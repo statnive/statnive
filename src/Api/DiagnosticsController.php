@@ -192,8 +192,11 @@ final class DiagnosticsController extends WP_REST_Controller {
 		];
 
 		// Step 3: read-back of the most recent row.
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-		$latest             = $wpdb->get_var( "SELECT MAX(viewed_at) FROM `{$views_table}`" );
+		$latest = null;
+		if ( preg_match( '/^[a-zA-Z0-9_]+$/', $views_table ) ) {
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- table name from TableRegistry, validated above.
+			$latest = $wpdb->get_var( "SELECT MAX(viewed_at) FROM `{$views_table}`" );
+		}
 		$steps['read_back'] = [
 			'ok'               => null !== $latest,
 			'latest_viewed_at' => null !== $latest ? (string) $latest : null,
@@ -337,7 +340,10 @@ final class DiagnosticsController extends WP_REST_Controller {
 
 		$out = [];
 		foreach ( (array) $tables as $table ) {
-			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			if ( ! preg_match( '/^[a-zA-Z0-9_]+$/', $table ) ) {
+				continue;
+			}
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- table name from SHOW TABLES (DB-controlled, validated above).
 			$count = (int) $wpdb->get_var( "SELECT COUNT(*) FROM `{$table}`" );
 			$out[] = [
 				'table' => (string) $table,

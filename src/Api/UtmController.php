@@ -8,6 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+use Statnive\Api\Concerns\CachesResponses;
 use Statnive\Database\TableRegistry;
 use WP_REST_Controller;
 use WP_REST_Request;
@@ -20,6 +21,8 @@ use WP_REST_Server;
  * Endpoint: GET /wp-json/statnive/v1/utm
  */
 final class UtmController extends WP_REST_Controller {
+
+	use CachesResponses;
 
 	/**
 	 * Route namespace.
@@ -50,10 +53,14 @@ final class UtmController extends WP_REST_Controller {
 					'args'                => [
 						'from'  => [
 							'required'          => true,
+							'type'              => 'string',
+							'validate_callback' => [ $this, 'validate_date' ],
 							'sanitize_callback' => 'sanitize_text_field',
 						],
 						'to'    => [
 							'required'          => true,
+							'type'              => 'string',
+							'validate_callback' => [ $this, 'validate_date' ],
 							'sanitize_callback' => 'sanitize_text_field',
 						],
 						'limit' => [
@@ -83,11 +90,21 @@ final class UtmController extends WP_REST_Controller {
 	 * @return WP_REST_Response
 	 */
 	public function get_items( $request ): WP_REST_Response {
-		global $wpdb;
+		$from   = $request->get_param( 'from' );
+		$to     = $request->get_param( 'to' );
+		$limit  = min( (int) $request->get_param( 'limit' ), 100 );
+		$params = [
+			'from'  => $from,
+			'to'    => $to,
+			'limit' => $limit,
+		];
 
-		$from  = $request->get_param( 'from' );
-		$to    = $request->get_param( 'to' );
-		$limit = min( (int) $request->get_param( 'limit' ), 100 );
+		$cached = $this->get_cached_response( 'utm', $params );
+		if ( null !== $cached ) {
+			return new WP_REST_Response( $cached, 200 );
+		}
+
+		global $wpdb;
 
 		$sessions   = TableRegistry::get( 'sessions' );
 		$parameters = TableRegistry::get( 'parameters' );
@@ -147,6 +164,18 @@ final class UtmController extends WP_REST_Controller {
 			$payload[]       = $row;
 		}
 
+		$this->set_cached_response( 'utm', $params, $payload, $from, $to );
+
 		return new WP_REST_Response( $payload, 200 );
+	}
+
+	/**
+	 * Validate a date string (YYYY-MM-DD).
+	 *
+	 * @param mixed $value Value to validate.
+	 * @return bool
+	 */
+	public function validate_date( $value ): bool {
+		return (bool) preg_match( '/^\d{4}-\d{2}-\d{2}$/', $value );
 	}
 }

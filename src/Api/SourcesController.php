@@ -8,6 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+use Statnive\Api\Concerns\CachesResponses;
 use Statnive\Database\TableRegistry;
 use WP_REST_Controller;
 use WP_REST_Request;
@@ -21,6 +22,8 @@ use WP_REST_Server;
  * Returns channel-grouped traffic data with visitor and session counts.
  */
 final class SourcesController extends WP_REST_Controller {
+
+	use CachesResponses;
 
 	/**
 	 * Route namespace.
@@ -51,10 +54,14 @@ final class SourcesController extends WP_REST_Controller {
 					'args'                => [
 						'from'  => [
 							'required'          => true,
+							'type'              => 'string',
+							'validate_callback' => [ $this, 'validate_date' ],
 							'sanitize_callback' => 'sanitize_text_field',
 						],
 						'to'    => [
 							'required'          => true,
+							'type'              => 'string',
+							'validate_callback' => [ $this, 'validate_date' ],
 							'sanitize_callback' => 'sanitize_text_field',
 						],
 						'limit' => [
@@ -84,11 +91,21 @@ final class SourcesController extends WP_REST_Controller {
 	 * @return WP_REST_Response
 	 */
 	public function get_items( $request ): WP_REST_Response {
-		global $wpdb;
+		$from   = $request->get_param( 'from' );
+		$to     = $request->get_param( 'to' );
+		$limit  = min( (int) $request->get_param( 'limit' ), 100 );
+		$params = [
+			'from'  => $from,
+			'to'    => $to,
+			'limit' => $limit,
+		];
 
-		$from  = $request->get_param( 'from' );
-		$to    = $request->get_param( 'to' );
-		$limit = min( (int) $request->get_param( 'limit' ), 100 );
+		$cached = $this->get_cached_response( 'sources', $params );
+		if ( null !== $cached ) {
+			return new WP_REST_Response( $cached, 200 );
+		}
+
+		global $wpdb;
 
 		$sessions  = TableRegistry::get( 'sessions' );
 		$referrers = TableRegistry::get( 'referrers' );
@@ -116,7 +133,10 @@ final class SourcesController extends WP_REST_Controller {
 		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery
 		// phpcs:enable WordPress.DB.DirectDatabaseQuery.NoCaching
 
-		return new WP_REST_Response( is_array( $rows ) ? $rows : [], 200 );
+		$result = is_array( $rows ) ? $rows : [];
+		$this->set_cached_response( 'sources', $params, $result, $from, $to );
+
+		return new WP_REST_Response( $result, 200 );
 	}
 
 	/**

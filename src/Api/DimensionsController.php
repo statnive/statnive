@@ -8,6 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+use Statnive\Api\Concerns\CachesResponses;
 use Statnive\Database\TableRegistry;
 use WP_REST_Controller;
 use WP_REST_Request;
@@ -21,6 +22,8 @@ use WP_REST_Server;
  * Types: countries, cities, browsers, oss, devices, languages
  */
 final class DimensionsController extends WP_REST_Controller {
+
+	use CachesResponses;
 
 	/**
 	 * Route namespace.
@@ -89,14 +92,28 @@ final class DimensionsController extends WP_REST_Controller {
 	 * @return WP_REST_Response
 	 */
 	public function get_items( $request ): WP_REST_Response {
-		$type  = $request->get_param( 'type' );
-		$from  = $request->get_param( 'from' );
-		$to    = $request->get_param( 'to' );
-		$limit = min( (int) $request->get_param( 'limit' ), 100 );
+		$type   = $request->get_param( 'type' );
+		$from   = $request->get_param( 'from' );
+		$to     = $request->get_param( 'to' );
+		$limit  = min( (int) $request->get_param( 'limit' ), 100 );
+		$params = [
+			'from'  => $from,
+			'to'    => $to,
+			'limit' => $limit,
+			'type'  => $type,
+		];
 
-		$rows = $this->query_dimension( $type, $from, $to, $limit );
+		$cached = $this->get_cached_response( 'dimensions', $params );
+		if ( null !== $cached ) {
+			return new WP_REST_Response( $cached, 200 );
+		}
 
-		return new WP_REST_Response( is_array( $rows ) ? $rows : [], 200 );
+		$rows   = $this->query_dimension( $type, $from, $to, $limit );
+		$result = is_array( $rows ) ? $rows : [];
+
+		$this->set_cached_response( 'dimensions', $params, $result, $from, $to );
+
+		return new WP_REST_Response( $result, 200 );
 	}
 
 	/**

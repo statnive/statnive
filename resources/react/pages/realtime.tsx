@@ -1,3 +1,4 @@
+import { __, sprintf } from '@wordpress/i18n';
 import { useRealtime } from '@/hooks/use-realtime';
 import { formatNumber } from '@/lib/utils';
 import { RealtimeCounter } from '@/components/shared/realtime-counter';
@@ -7,7 +8,7 @@ export function RealtimePage() {
 
 	return (
 		<div className="space-y-6">
-			<h2 className="text-lg font-semibold">Real-time</h2>
+			<h2 className="text-lg font-semibold">{__('Real-time', 'statnive')}</h2>
 
 			{/* Hero Counter */}
 			<div className="flex flex-col items-center justify-center rounded-lg border border-border bg-card py-12">
@@ -17,13 +18,17 @@ export function RealtimePage() {
 						<span className="relative inline-flex h-4 w-4 rounded-full bg-green-500" />
 					</span>
 					<span className="text-sm font-medium uppercase tracking-wider text-muted-foreground">
-						Active Visitors
+						{__('Active Visitors', 'statnive')}
 					</span>
 				</div>
 				<span
 					className="text-7xl font-bold tabular-nums"
 					aria-live="polite"
-					aria-label={`${data?.active_visitors ?? 0} active visitors`}
+					aria-label={sprintf(
+						/* translators: %s: number of active visitors */
+						__('%s active visitors', 'statnive'),
+						String(data?.active_visitors ?? 0),
+					)}
 				>
 					{isLoading ? '—' : formatNumber(data?.active_visitors ?? 0)}
 				</span>
@@ -32,7 +37,7 @@ export function RealtimePage() {
 			<div className="grid grid-cols-1 gap-6 md:grid-cols-2">
 				{/* Active Pages */}
 				<div className="rounded-lg border border-border bg-card p-4">
-					<h3 className="mb-3 text-sm font-medium text-muted-foreground">Active Pages</h3>
+					<h3 className="mb-3 text-sm font-medium text-muted-foreground">{__('Active Pages', 'statnive')}</h3>
 					{isLoading ? (
 						<div className="space-y-2">
 							{Array.from({ length: 3 }).map((_, i) => (
@@ -51,7 +56,7 @@ export function RealtimePage() {
 								</li>
 							))}
 							{(data?.active_pages ?? []).length === 0 && (
-								<li className="py-4 text-center text-muted-foreground">No active pages</li>
+								<li className="py-4 text-center text-muted-foreground">{__('No active pages', 'statnive')}</li>
 							)}
 						</ul>
 					)}
@@ -59,7 +64,7 @@ export function RealtimePage() {
 
 				{/* Recent Feed */}
 				<div className="rounded-lg border border-border bg-card p-4">
-					<h3 className="mb-3 text-sm font-medium text-muted-foreground">Recent Pageviews</h3>
+					<h3 className="mb-3 text-sm font-medium text-muted-foreground">{__('Recent Pageviews', 'statnive')}</h3>
 					{isLoading ? (
 						<div className="space-y-2">
 							{Array.from({ length: 5 }).map((_, i) => (
@@ -80,7 +85,7 @@ export function RealtimePage() {
 								</li>
 							))}
 							{(data?.recent_feed ?? []).length === 0 && (
-								<li className="py-4 text-center text-muted-foreground">No recent activity</li>
+								<li className="py-4 text-center text-muted-foreground">{__('No recent activity', 'statnive')}</li>
 							)}
 						</ul>
 					)}

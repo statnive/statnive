@@ -7,6 +7,43 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-04-13
+
+### Added
+
+- **React i18n**: wrapped ~130 user-visible strings with `@wordpress/i18n` `__()` across 14 component/page files. Dashboard is now translatable.
+- **Host allow-list on `page_url`**: tracking endpoints validate URL host against site origin. Multi-domain setups can extend via `statnive_allowed_hosts` filter.
+- **Rate limiting on AJAX fallback**: 60 req/min per IP (SHA-256 hashed), matching REST endpoint behavior.
+- **`validate_callback` on all REST args**: HitController, EventController, EngagementController (new args schema), plus all admin dashboard controllers.
+- **Downgrade detection**: Migrator warns admins when the stored schema version exceeds the running plugin version.
+- **Circuit-breaker**: stops tracking writes after 50 failures in a 5-minute window, returns 503. Resets automatically.
+- **GeoIP exponential backoff**: tracks download failures, waits 2^n hours between retries (capped at 1 week).
+- **Disk-full detection**: DataPurgeJob checks total Statnive table size before each purge run, warns at 500 MB.
+- **Automated a11y**: vitest-axe + axe-core integration for WCAG 2.2 AA regression testing in CI.
+- **Action Scheduler detection**: `CronRegistrar::has_action_scheduler()` for WooCommerce environments.
+- **Chart a11y table fallback**: visually-hidden `<table>` alongside Recharts time-series chart for screen readers.
+- **Empty-state copy**: cause/fix/next-step messages on Pages, Referrers, Geography, Devices, Languages pages.
+- **Privacy Policy section** in readme.txt.
+- **`monthly` WP-Cron interval** registered via `cron_schedules` filter for email reports.
+- **`DISABLE_WP_CRON` admin notice** broadened to cover all 5 Statnive cron jobs (not just GeoIP).
+- **`pageshow` bfcache handler** in tracker JS — re-sends pageview when page is restored from back/forward cache.
+- **GPL license banner** in React SPA bundle (`esbuild.banner`) and tracker JS builds (`terser.output.preamble`).
+
+### Changed
+
+- GDPR compliance language harmonized across readme.txt, README.md, and FAQ — all now say "designed to support" per Guideline 9.
+- `tsc --noEmit` re-enabled in Frontend Quality CI job after fixing TanStack Router type-narrowing errors.
+- `$wpdb->insert()` in DimensionService now includes explicit format arrays.
+- Table-name validation added to DiagnosticsController SQL queries.
+- `WPStatisticsImporter.php` uses `$wpdb->prepare()` with `$wpdb->esc_like()` for `SHOW TABLES`.
+- `.distignore` expanded: `vendor/phpcompatibility/`, `vendor/*/examples/`, `vendor/*/*/examples/`.
+
+### Fixed
+
+- React bundle (`public/react/assets/main-*.js`) now includes GPL-2.0-or-later license header.
+- FAQ heading changed from "Is Statnive GDPR compliant?" to "Is Statnive designed for GDPR compliance?" (Guideline 9).
+- readme.txt trimmed to 9,881 bytes (safely under 10 KB cap).
+
 ## [0.3.1] - 2026-04-09
 
 ### Changed

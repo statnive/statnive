@@ -13,6 +13,7 @@ use Statnive\Http\PayloadValidator;
 use Statnive\Http\PayloadValidatorException;
 use Statnive\Privacy\PrivacyManager;
 use Statnive\Security\HmacValidator;
+use Statnive\Service\IpExtractor;
 
 /**
  * AJAX fallback endpoint for tracking hits.
@@ -100,6 +101,12 @@ final class AjaxFallback {
 			return;
 		}
 
+		// Validate page_url host against site origin.
+		if ( ! empty( $data['page_url'] ) && ! HitController::validate_page_url_host( (string) $data['page_url'] ) ) {
+			self::reject( 'invalid_host', 'page_url host does not match this site.', 400 );
+			return;
+		}
+
 		$resource_type = sanitize_text_field( $data['resource_type'] ?? '' );
 		$resource_id   = absint( $data['resource_id'] ?? 0 );
 		$signature     = sanitize_text_field( $data['signature'] ?? '' );
@@ -132,6 +139,21 @@ final class AjaxFallback {
 			// return guarantees we never fall through to the persistence
 			// path on a privacy-blocked request. Do not remove.
 			return; // @phpstan-ignore-line deadCode.unreachable
+		}
+
+		// Rate limiting (60 req/min per IP, matching HitController).
+		$ip_key = 'statnive_rate_' . hash( 'sha256', IpExtractor::extract() . wp_salt( 'auth' ) );
+		$count  = (int) get_transient( $ip_key );
+		if ( $count >= 60 ) {
+			self::reject( 'rate_limited', 'Too many requests.', 429 );
+			return;
+		}
+		set_transient( $ip_key, $count + 1, MINUTE_IN_SECONDS );
+
+		// Circuit-breaker: stop writes if too many recent failures (§28.3.2).
+		if ( HitController::is_circuit_open() ) {
+			self::reject( 'circuit_open', 'Tracking temporarily paused due to repeated errors.', 503 );
+			return;
 		}
 
 		// Create VisitorProfile, enrich with services, and persist.

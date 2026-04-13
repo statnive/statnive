@@ -2,6 +2,7 @@
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
+import { axe } from 'vitest-axe';
 
 // ---------------------------------------------------------------------------
 // Mocks — DashboardLayout uses TanStack Router and keyboard shortcuts
@@ -118,5 +119,17 @@ describe('DashboardLayout accessibility', () => {
 		// The mock sets pathname to "/" so Overview should be active
 		const overviewLink = screen.getByText('Overview').closest('a');
 		expect(overviewLink).toHaveAttribute('aria-current', 'page');
+	});
+
+	// Automated axe accessibility scan (§24.6)
+	it('passes automated axe accessibility checks', async () => {
+		const { container } = render(
+			<DashboardLayout>
+				<p>Dashboard content</p>
+			</DashboardLayout>,
+		);
+
+		const results = await axe(container);
+		expect(results).toHaveNoViolations();
 	});
 });

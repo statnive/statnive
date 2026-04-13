@@ -90,25 +90,31 @@ final class EventController extends WP_REST_Controller {
 		return [
 			'event_name'      => [
 				'type'              => 'string',
+				'validate_callback' => 'rest_validate_request_arg',
 				'sanitize_callback' => 'sanitize_text_field',
 			],
 			'resource_type'   => [
 				'type'              => 'string',
+				'validate_callback' => 'rest_validate_request_arg',
 				'sanitize_callback' => 'sanitize_text_field',
 			],
 			'resource_id'     => [
 				'type'              => 'integer',
+				'validate_callback' => 'rest_validate_request_arg',
 				'sanitize_callback' => 'absint',
 			],
 			'signature'       => [
 				'type'              => 'string',
+				'validate_callback' => 'rest_validate_request_arg',
 				'sanitize_callback' => 'sanitize_text_field',
 			],
 			'properties'      => [
-				'type' => 'object',
+				'type'              => 'object',
+				'validate_callback' => 'rest_validate_request_arg',
 			],
 			'consent_granted' => [
-				'type' => 'boolean',
+				'type'              => 'boolean',
+				'validate_callback' => 'rest_validate_request_arg',
 			],
 		];
 	}
@@ -180,6 +186,11 @@ final class EventController extends WP_REST_Controller {
 			return self::error_response( [ 'rate_limited', 'Too many requests.', 429 ] );
 		}
 		set_transient( $ip_key, $count + 1, MINUTE_IN_SECONDS );
+
+		// Circuit-breaker: stop writes if too many recent failures (§28.3.2).
+		if ( HitController::is_circuit_open() ) {
+			return self::error_response( [ 'circuit_open', 'Tracking temporarily paused due to repeated errors.', 503 ] );
+		}
 
 		// Record the event.
 		EventService::record(

@@ -285,7 +285,7 @@ final class DimensionService {
 		}
 
 		// Insert with race condition handling.
-		$wpdb->insert( $table, $data );
+		$wpdb->insert( $table, $data, self::build_format( $data ) );
 		$new_id = (int) $wpdb->insert_id;
 
 		if ( $new_id > 0 ) {
@@ -345,7 +345,7 @@ final class DimensionService {
 			return (int) $id;
 		}
 
-		$wpdb->insert( $table, $data );
+		$wpdb->insert( $table, $data, self::build_format( $data ) );
 		$new_id = (int) $wpdb->insert_id;
 
 		if ( $new_id > 0 ) {
@@ -368,6 +368,16 @@ final class DimensionService {
 		}
 
 		return $resolved;
+	}
+
+	/**
+	 * Build a format array for $wpdb->insert() from data values.
+	 *
+	 * @param array<string, mixed> $data Column data.
+	 * @return string[] Format placeholders (%d or %s).
+	 */
+	private static function build_format( array $data ): array {
+		return array_map( static fn( $v ) => is_int( $v ) ? '%d' : '%s', $data );
 	}
 
 	/**

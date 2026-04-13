@@ -5,6 +5,7 @@ export default defineConfig({
 	resolve: {
 		alias: {
 			'@': resolve(__dirname, 'resources/react'),
+			'@wordpress/i18n': resolve(__dirname, 'resources/react/__tests__/__mocks__/wordpress-i18n.ts'),
 		},
 	},
 	test: {

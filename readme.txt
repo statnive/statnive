@@ -4,7 +4,7 @@ Tags: analytics, statistics, privacy, tracking, dashboard
 Requires at least: 5.6
 Tested up to: 6.9
 Requires PHP: 8.0
-Stable tag: 0.3.1
+Stable tag: 0.4.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -21,7 +21,7 @@ Statnive gives WordPress site owners fast, smart, and easy-to-understand analyti
 = Why Statnive? =
 
 * **Channel intelligence** — Automatically groups traffic into Organic Search, Social Media, Direct, Referral, and Email so you see which channels drive real results.
-* **Privacy by default** — No cookies, no localStorage, no fingerprinting. GDPR, CCPA, and APPI compliant out of the box. Daily rotating salts make cross-day tracking impossible.
+* **Privacy by default** — No cookies, no localStorage, no fingerprinting. Designed to support GDPR, CCPA, and APPI compliance. Daily rotating salts make cross-day tracking impossible.
 * **Zero-config setup** — Install, activate, done. No tracking code to paste, no account to create, no external service to connect.
 
 = Key Features =
@@ -53,9 +53,9 @@ That's it. Analytics tracking begins immediately — no configuration required.
 
 No. Statnive is 100% cookie-free. It uses a daily rotating salt hash for visitor identification that cannot be used to track individuals across days or sites.
 
-= Is Statnive GDPR compliant? =
+= Is Statnive designed for GDPR compliance? =
 
-Statnive is **designed to support** GDPR, CCPA, and APPI compliance from the ground up: no cookies, no PII storage, daily rotating hashes, configurable data retention (30 days to 10 years), and full support for the WordPress Privacy API (data export and erasure requests). Compliance ultimately depends on how you configure and operate the plugin on your site.
+Statnive is **designed to support** GDPR, CCPA, and APPI compliance: no cookies, no PII storage, daily rotating hashes, configurable retention, and WordPress Privacy API support. Compliance depends on how you configure the plugin.
 
 = Does it work with WooCommerce? =
 
@@ -127,7 +127,17 @@ This product includes GeoLite Data created by MaxMind, available from https://ww
 
 No visitor data is ever sent to any external service. All analytics data remains in your WordPress database.
 
+== Privacy Policy ==
+
+All analytics data stays in your WordPress database. No cookies, no fingerprinting, no external transfers. Daily-rotating salted hashes prevent cross-day tracking. Raw IPs are used only for GeoIP lookup and never stored. Integrates with the WordPress Privacy API for data export and erasure.
+
 == Changelog ==
+
+= 0.4.0 - 2026-04-13 =
+* WordPress.org submission readiness: 24 audit items resolved.
+* Dashboard fully translatable (~130 strings). Chart a11y, empty states, bfcache handler.
+* Circuit-breaker, GeoIP backoff, host allow-list, AJAX rate limiting, downgrade detection.
+* See CHANGELOG.md for full details.
 
 = 0.3.1 - 2026-04-09 =
 * Lowered runtime floor to WordPress 5.6 / PHP 8.0; PHPCompatibilityWP ruleset enforces it.
@@ -139,21 +149,14 @@ No visitor data is ever sent to any external service. All analytics data remains
 * Refactored API layer: extracted PayloadValidator, hardened privacy fall-through.
 
 = 0.3.0 - 2026-04-06 =
-* WordPress.org submission compliance pass — see CHANGELOG.md for the full list.
-* Removed all bundled license validation per Guideline 6.
-* Hardened tracking endpoints: REST schema validation, 8 KB body cap, salted SHA-256 rate limit, GPC-first opt-out.
-* Added five privacy filter hooks (`statnive_should_track`, `statnive_require_consent`, `statnive_has_visitor_consent`, `statnive_respect_dnt`, `statnive_respect_gpc`).
-* Added MaxMind GeoLite EULA compliance (user-supplied key required, no bundled mmdb).
-* Added i18n infrastructure (`load_plugin_textdomain`, `wp_set_script_translations`, regenerated POT).
-* Bumped Tested up to WordPress 6.9.
+* WordPress.org compliance pass. Removed license validation (Guideline 6). Added privacy hooks, MaxMind EULA compliance, i18n.
 
-= 0.2.0 - 2026-04-05 =
-* Fixed real-time dashboard, tracker URLs, Overview report, Recent Pageviews dedup, GeoIP download URL.
-* Added regex-based UA fallback parser, `statnive_client_ip` filter, 38 regression tests.
-
-For older releases (0.1.x), see CHANGELOG.md in the plugin source.
+For older releases, see CHANGELOG.md in the plugin source.
 
 == Upgrade Notice ==
+
+= 0.4.0 =
+Full WordPress.org submission readiness. Dashboard now translatable. Adds circuit-breaker, GeoIP backoff, bfcache support, chart accessibility, and automated a11y testing.
 
 = 0.3.1 =
 Fixes UTM persistence, REST `/hit` regression from 0.3.0, dashboard CSS leak into WP admin, dual-bar scaling, and Pages search wiring. Lowers runtime floor to WP 5.6 / PHP 8.0.

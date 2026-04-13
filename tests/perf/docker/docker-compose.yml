@@ -1,0 +1,87 @@
+# Statnive Performance Test Environment
+#
+# Reproducible WordPress + WooCommerce + 8 analytics plugins stack.
+# Used for: perf-impact, baseline-variance, accuracy, browser, E2E testing.
+#
+# k6 runs on the HOST (needs Chromium for browser tests).
+# This stack provides only the WordPress server with deterministic
+# resource allocation — no macOS background noise.
+#
+# Usage:
+#   ./run-docker.sh up          # Start + seed
+#   ./run-docker.sh test <mode> # Run any test mode
+#   ./run-docker.sh down        # Stop
+#
+# See DEVENV.md for full documentation.
+
+services:
+  mariadb:
+    image: mariadb:11.4
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-wordpress}
+      MYSQL_USER: ${MYSQL_USER:-wordpress}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-wordpress}
+    volumes:
+      - db_data:/var/lib/mysql
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+  php:
+    build:
+      context: ./php
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    environment:
+      WORDPRESS_DB_HOST: mariadb
+      WORDPRESS_DB_USER: ${MYSQL_USER:-wordpress}
+      WORDPRESS_DB_PASSWORD: ${MYSQL_PASSWORD:-wordpress}
+      WORDPRESS_DB_NAME: ${MYSQL_DATABASE:-wordpress}
+      WORDPRESS_TABLE_PREFIX: wp_
+      WP_FPM_WORKERS: ${WP_FPM_WORKERS:-4}
+    volumes:
+      - wordpress:/var/www/html
+      # Mount statnive plugin source (read-only — code changes via host)
+      - ../../../:/var/www/html/wp-content/plugins/statnive:ro
+      # mu-plugins for ground-truth and test helpers
+      - ./mu-plugins:/var/www/html/wp-content/mu-plugins:ro
+    healthcheck:
+      test: ["CMD-SHELL", "php -r 'echo 1;' 2>/dev/null || exit 1"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+  nginx:
+    image: nginx:1.27-alpine
+    depends_on:
+      php:
+        condition: service_healthy
+    ports:
+      - "${WP_PORT:-8080}:80"
+    volumes:
+      - wordpress:/var/www/html:ro
+      - ../../../:/var/www/html/wp-content/plugins/statnive:ro
+      - ./mu-plugins:/var/www/html/wp-content/mu-plugins:ro
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --spider http://localhost/ 2>/dev/null || exit 0"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+    restart: unless-stopped
+
+volumes:
+  db_data:
+    driver: local
+  wordpress:
+    driver: local

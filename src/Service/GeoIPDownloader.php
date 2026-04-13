@@ -57,12 +57,34 @@ final class GeoIPDownloader {
 			return false;
 		}
 
+		// Exponential backoff: skip if too many recent failures.
+		$failures = (int) get_option( 'statnive_geoip_failures', 0 );
+		if ( $failures > 0 ) {
+			$last_attempt = (int) get_option( 'statnive_geoip_last_attempt', 0 );
+			// Wait 2^failures hours, capped at 168 hours (1 week).
+			$backoff_seconds = min( pow( 2, $failures ) * HOUR_IN_SECONDS, WEEK_IN_SECONDS );
+			if ( time() - $last_attempt < $backoff_seconds ) {
+				return false;
+			}
+		}
+		update_option( 'statnive_geoip_last_attempt', time(), false );
+
 		$url = sprintf(
 			'https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City&license_key=%s&suffix=tar.gz',
 			rawurlencode( $license_key )
 		);
 
-		return self::download_and_extract_targz( $url, $target_path );
+		$result = self::download_and_extract_targz( $url, $target_path );
+
+		if ( $result ) {
+			// Reset failure counter on success.
+			delete_option( 'statnive_geoip_failures' );
+		} else {
+			// Increment failure counter for exponential backoff.
+			update_option( 'statnive_geoip_failures', $failures + 1, false );
+		}
+
+		return $result;
 	}
 
 	/**

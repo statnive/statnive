@@ -1,6 +1,8 @@
 import { type ReactNode, useEffect, useMemo } from 'react';
 import { Link, useRouter, useRouterState } from '@tanstack/react-router';
+import { __ } from '@wordpress/i18n';
 import { cn } from '@/lib/utils';
+import type { DateRange } from '@/types/api';
 import { useDateRange } from '@/hooks/use-date-range';
 import { DateRangePicker } from '@/components/shared/date-range-picker';
 import { useKeyboardShortcuts } from '@/hooks/use-keyboard-shortcuts';
@@ -45,7 +47,10 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
 	// Register WP Command Palette commands on mount.
 	useEffect(() => {
 		registerWpCommands((path) =>
-			router.navigate({ to: path, search: (prev: Record<string, unknown>) => prev }),
+			router.navigate({
+				to: path,
+				search: (prev) => ({ ...prev }) as { range: DateRange },
+			}),
 		);
 	}, [router]);
 
@@ -58,7 +63,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
 					() =>
 						router.navigate({
 							to: item.to,
-							search: (prev: Record<string, unknown>) => prev,
+							search: (prev) => ({ ...prev }) as { range: DateRange },
 						}),
 				]),
 			),
@@ -73,7 +78,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
 				href="#statnive-content"
 				className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-primary focus:px-4 focus:py-2 focus:text-primary-foreground"
 			>
-				Skip to content
+				{__('Skip to content', 'statnive')}
 			</a>
 
 			{/* Header */}
@@ -91,7 +96,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
 			</header>
 
 			{/* Navigation */}
-			<nav className="border-b border-border bg-card" aria-label="Dashboard navigation">
+			<nav className="border-b border-border bg-card" aria-label={__('Dashboard navigation', 'statnive')}>
 				<div className="mx-auto max-w-7xl overflow-x-auto px-4">
 					<div className="flex gap-1">
 						{navItems.map((item) => {
@@ -105,7 +110,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
 								<Link
 									key={item.to}
 									to={item.to}
-									search={(prev) => prev}
+									search={(prev) => ({ ...prev }) as { range: DateRange }}
 									className={cn(
 										'flex items-center gap-1.5 whitespace-nowrap border-b-2 px-3 py-2.5 text-sm font-medium transition-colors duration-150',
 										isActive
@@ -115,7 +120,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
 									aria-current={isActive ? 'page' : undefined}
 								>
 									<Icon className="h-4 w-4" />
-									{item.label}
+									{__(item.label, 'statnive')}
 								</Link>
 							);
 						})}
