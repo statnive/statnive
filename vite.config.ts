@@ -86,6 +86,10 @@ export default defineConfig(({ mode }) => {
 				'@': resolve(__dirname, 'resources/react'),
 			},
 		},
+		esbuild: {
+			legalComments: 'inline',
+			banner: licenseBanner,
+		},
 		build: {
 			outDir: resolve(__dirname, 'public/react'),
 			emptyOutDir: true,
@@ -94,6 +98,7 @@ export default defineConfig(({ mode }) => {
 				input: resolve(__dirname, 'resources/react/main.tsx'),
 				external: ['@wordpress/i18n'],
 				output: {
+					banner: licenseBanner,
 					entryFileNames: 'assets/[name]-[hash].js',
 					chunkFileNames: 'assets/[name]-[hash].js',
 					assetFileNames: 'assets/[name]-[hash].[ext]',

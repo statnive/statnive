@@ -53,9 +53,9 @@ That's it. Analytics tracking begins immediately — no configuration required.
 
 No. Statnive is 100% cookie-free. It uses a daily rotating salt hash for visitor identification that cannot be used to track individuals across days or sites.
 
-= Is Statnive GDPR compliant? =
+= Is Statnive designed for GDPR compliance? =
 
-Statnive is **designed to support** GDPR, CCPA, and APPI compliance from the ground up: no cookies, no PII storage, daily rotating hashes, configurable data retention (30 days to 10 years), and full support for the WordPress Privacy API (data export and erasure requests). Compliance ultimately depends on how you configure and operate the plugin on your site.
+Statnive is **designed to support** GDPR, CCPA, and APPI compliance: no cookies, no PII storage, daily rotating hashes, configurable retention, and WordPress Privacy API support. Compliance depends on how you configure the plugin.
 
 = Does it work with WooCommerce? =
 
