@@ -43,7 +43,7 @@ final class ImportAtScaleTest extends WP_UnitTestCase {
 	public function tear_down(): void {
 		foreach ( $this->temp_files as $file ) {
 			if ( file_exists( $file ) ) {
-				unlink( $file );
+				wp_delete_file( $file );
 			}
 		}
 

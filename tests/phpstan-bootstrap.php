@@ -10,6 +10,10 @@
 
 declare(strict_types=1);
 
+if ( ! defined( 'ABSPATH' ) ) {
+	define( 'ABSPATH', dirname( __DIR__, 4 ) . '/' );
+}
+
 if ( ! defined( 'STATNIVE_VERSION' ) ) {
 	define( 'STATNIVE_VERSION', '0.0.0' );
 }

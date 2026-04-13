@@ -46,7 +46,7 @@ final class ImportControllerTest extends WP_UnitTestCase {
 		];
 		foreach ( $files as $file ) {
 			if ( file_exists( $file ) ) {
-				unlink( $file );
+				wp_delete_file( $file );
 			}
 		}
 

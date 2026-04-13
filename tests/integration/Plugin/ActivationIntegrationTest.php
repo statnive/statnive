@@ -9,6 +9,8 @@ use Statnive\Database\TableRegistry;
 use Statnive\Plugin;
 use WP_UnitTestCase;
 
+defined( 'ABSPATH' ) || define( 'ABSPATH', dirname( __DIR__, 6 ) . '/' );
+
 /**
  * Integration tests for plugin activation / deactivation / uninstall lifecycle.
  *

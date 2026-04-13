@@ -7,6 +7,10 @@
 
 declare(strict_types=1);
 
+if ( ! defined( 'ABSPATH' ) ) {
+	define( 'ABSPATH', dirname( __DIR__, 4 ) . '/' );
+}
+
 // Composer autoloader.
 require_once dirname( __DIR__ ) . '/vendor/autoload.php';
 

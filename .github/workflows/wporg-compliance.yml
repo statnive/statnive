@@ -41,6 +41,14 @@ jobs:
             fi
           done
 
+          # Also check tests/ PHP files (excluded from dist but good hygiene)
+          while IFS= read -r file; do
+            if ! grep -qE "$ABSPATH_RE" "$file"; then
+              echo "::error file=$file::Missing ABSPATH guard: $file"
+              FAILED=1
+            fi
+          done < <(find tests -name '*.php' -type f -not -path '*/node_modules/*')
+
           if [ "$FAILED" -eq 1 ]; then
             echo "::error::One or more PHP files are missing ABSPATH guards (WP.org Guideline)"
             exit 1
@@ -340,8 +348,16 @@ jobs:
             echo "✓ Found: built tracker"
           fi
 
-          # Must NOT contain dev files
-          for forbidden in "node_modules/" ".git/" "composer.json" "package.json" "phpstan.neon" ".phpcs.xml.dist" "tests/" "phpunit"; do
+          # Must NOT contain dev files (comprehensive list from Plugin Check audit 2026-04-13)
+          FORBIDDEN=(
+            "node_modules/" ".git/" "composer.json" "package.json" "phpstan.neon"
+            ".phpcs.xml.dist" "tests/" "phpunit" "bin/"
+            ".wp-env.json" ".phpunit.result.cache" ".env.example"
+            "blueprint.json" "vite.config.ts" "vitest.config.ts"
+            "tsconfig.json" "playwright.config.ts"
+            "resources/react/" "src/Addon/"
+          )
+          for forbidden in "${FORBIDDEN[@]}"; do
             if grep -q "$forbidden" /tmp/zip-contents.txt; then
               echo "::error::ZIP contains forbidden path: $forbidden"
               FAILED=1

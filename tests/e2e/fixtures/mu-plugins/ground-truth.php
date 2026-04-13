@@ -10,6 +10,10 @@
  * @package Statnive\Tests
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	define( 'ABSPATH', dirname( __DIR__, 7 ) . '/' );
+}
+
 // Only run in debug/test mode.
 if ( ! defined( 'WP_DEBUG' ) || ! WP_DEBUG ) {
 	return;
