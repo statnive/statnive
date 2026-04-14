@@ -67,6 +67,7 @@ final class SourcesController extends WP_REST_Controller {
 						'limit'       => [
 							'default'           => 20,
 							'sanitize_callback' => 'absint',
+							'validate_callback' => 'rest_validate_request_arg',
 						],
 						'group_by'    => [
 							'default'           => '',
@@ -78,6 +79,7 @@ final class SourcesController extends WP_REST_Controller {
 						'per_channel' => [
 							'default'           => 10,
 							'sanitize_callback' => 'absint',
+							'validate_callback' => 'rest_validate_request_arg',
 						],
 					],
 				],

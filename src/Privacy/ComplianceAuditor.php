@@ -70,7 +70,7 @@ final class ComplianceAuditor {
 			'label'  => __( 'Consent mode configured', 'statnive' ),
 			'status' => ! empty( $mode ) ? 'pass' : 'fail',
 			'detail' => ! empty( $mode )
-				// translators: %s: consent mode name.
+				/* translators: %s: consent mode name. */
 				? sprintf( __( 'Consent mode: %s', 'statnive' ), $mode )
 				: __( 'No consent mode configured. Set one in Settings.', 'statnive' ),
 		];
@@ -123,7 +123,7 @@ final class ComplianceAuditor {
 			'label'  => __( 'Data retention configured', 'statnive' ),
 			'status' => 'forever' !== $mode ? 'pass' : 'warning',
 			'detail' => 'forever' !== $mode
-				// translators: %1$d: number of days, %2$s: retention mode.
+				/* translators: %1$d: number of days, %2$s: retention mode. */
 				? sprintf( __( 'Data retained for %1$d days (%2$s mode).', 'statnive' ), $days, $mode )
 				: __( 'Data retained forever. Consider setting a retention period for compliance.', 'statnive' ),
 		];
@@ -181,7 +181,7 @@ final class ComplianceAuditor {
 			'label'  => __( 'Daily salt rotation active', 'statnive' ),
 			'status' => $fresh ? 'pass' : 'warning',
 			'detail' => $fresh
-				// translators: %s: datetime of last salt rotation.
+				/* translators: %s: datetime of last salt rotation. */
 				? sprintf( __( 'Last rotation: %s', 'statnive' ), $rotated_at )
 				: __( 'Salt rotation may not be running. Check WP-Cron.', 'statnive' ),
 		];

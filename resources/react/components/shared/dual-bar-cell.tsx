@@ -1,3 +1,4 @@
+import { __ } from '@wordpress/i18n';
 import { formatNumber } from '@/lib/utils';
 
 interface DualBarCellProps {
@@ -18,7 +19,7 @@ export function DualBarCell({
 
 	return (
 		<div className="flex min-w-[120px] flex-col gap-1">
-			<div className="flex items-center gap-2">
+			<div className="flex items-center gap-2" aria-label={__('Visitors', 'statnive')}>
 				<div
 					className="h-[6px] rounded-full bg-primary transition-all duration-200"
 					style={{ width: `${visitorWidth}%` }}
@@ -27,7 +28,7 @@ export function DualBarCell({
 					{formatNumber(visitors)}
 				</span>
 			</div>
-			<div className="flex items-center gap-2">
+			<div className="flex items-center gap-2" aria-label={__('Sessions', 'statnive')}>
 				<div
 					className="h-[6px] rounded-full bg-revenue transition-all duration-200"
 					style={{ width: `${secondaryWidth}%` }}

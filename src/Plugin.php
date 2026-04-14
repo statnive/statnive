@@ -121,7 +121,7 @@ final class Plugin {
 		if ( ! ( defined( 'WP_CLI' ) && WP_CLI ) && ! current_user_can( 'activate_plugins' ) ) {
 			wp_die(
 				esc_html__( 'You do not have permission to activate plugins.', 'statnive' ),
-				'Plugin Activation Error',
+				esc_html__( 'Plugin Activation Error', 'statnive' ),
 				[ 'back_link' => true ]
 			);
 		}
@@ -137,7 +137,7 @@ final class Plugin {
 						PHP_VERSION
 					)
 				),
-				'Plugin Activation Error',
+				esc_html__( 'Plugin Activation Error', 'statnive' ),
 				[ 'back_link' => true ]
 			);
 		}
@@ -153,7 +153,7 @@ final class Plugin {
 						get_bloginfo( 'version' )
 					)
 				),
-				'Plugin Activation Error',
+				esc_html__( 'Plugin Activation Error', 'statnive' ),
 				[ 'back_link' => true ]
 			);
 		}

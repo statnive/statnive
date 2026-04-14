@@ -112,12 +112,34 @@ final class EventController extends WP_REST_Controller {
 			'properties'      => [
 				'type'              => 'object',
 				'validate_callback' => 'rest_validate_request_arg',
+				'sanitize_callback' => [ self::class, 'sanitize_properties' ],
 			],
 			'consent_granted' => [
 				'type'              => 'boolean',
 				'validate_callback' => 'rest_validate_request_arg',
 			],
 		];
+	}
+
+	/**
+	 * Sanitize event properties to a flat key-value map.
+	 *
+	 * Only scalar values are retained — nested structures are dropped
+	 * because EventService stores properties as flat JSON.
+	 *
+	 * @param mixed $value Properties value.
+	 * @return array<string, string|int|float|bool> Sanitized flat map.
+	 */
+	public static function sanitize_properties( $value ): array {
+		$raw = is_object( $value ) ? get_object_vars( $value ) : ( is_array( $value ) ? $value : [] );
+		$out = [];
+		foreach ( $raw as $k => $v ) {
+			if ( ! is_scalar( $v ) ) {
+				continue;
+			}
+			$out[ sanitize_text_field( (string) $k ) ] = is_string( $v ) ? sanitize_text_field( $v ) : $v;
+		}
+		return $out;
 	}
 
 	/**

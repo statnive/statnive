@@ -38,6 +38,14 @@ final class ImportController extends WP_REST_Controller {
 					'methods'             => WP_REST_Server::CREATABLE,
 					'callback'            => [ $this, 'start_csv' ],
 					'permission_callback' => [ $this, 'permissions_check' ],
+					'args'                => [
+						'file_path' => [
+							'required'          => true,
+							'type'              => 'string',
+							'sanitize_callback' => 'sanitize_text_field',
+							'validate_callback' => [ $this, 'validate_file_path' ],
+						],
+					],
 				],
 			]
 		);
@@ -49,6 +57,7 @@ final class ImportController extends WP_REST_Controller {
 					'methods'             => WP_REST_Server::READABLE,
 					'callback'            => [ $this, 'csv_progress' ],
 					'permission_callback' => [ $this, 'permissions_check' ],
+					'args'                => [],
 				],
 			]
 		);
@@ -62,6 +71,7 @@ final class ImportController extends WP_REST_Controller {
 					'methods'             => WP_REST_Server::CREATABLE,
 					'callback'            => [ $this, 'start_wp_statistics' ],
 					'permission_callback' => [ $this, 'permissions_check' ],
+					'args'                => [],
 				],
 			]
 		);
@@ -73,6 +83,7 @@ final class ImportController extends WP_REST_Controller {
 					'methods'             => WP_REST_Server::READABLE,
 					'callback'            => [ $this, 'wp_statistics_progress' ],
 					'permission_callback' => [ $this, 'permissions_check' ],
+					'args'                => [],
 				],
 			]
 		);
@@ -86,6 +97,44 @@ final class ImportController extends WP_REST_Controller {
 	 */
 	public function permissions_check( $request ): bool {
 		return current_user_can( 'manage_options' );
+	}
+
+	/**
+	 * Validate that a file_path is within the uploads directory and is a .csv file.
+	 *
+	 * Prevents path traversal attacks by requiring the resolved real path
+	 * to be within wp_upload_dir()['basedir'].
+	 *
+	 * @param string          $value   File path.
+	 * @param WP_REST_Request $request Request.
+	 * @param string          $param   Parameter name.
+	 * @return true|\WP_Error
+	 */
+	public function validate_file_path( $value, $request, $param ) {
+		$path = sanitize_text_field( (string) $value );
+
+		if ( empty( $path ) ) {
+			return new \WP_Error( 'invalid_file_path', 'file_path is required.', [ 'status' => 400 ] );
+		}
+
+		// Must be a .csv file.
+		if ( '.csv' !== strtolower( substr( $path, -4 ) ) ) {
+			return new \WP_Error( 'invalid_file_type', 'Only .csv files are allowed.', [ 'status' => 400 ] );
+		}
+
+		// Resolve real path to prevent directory traversal.
+		$real_path = realpath( $path );
+		if ( false === $real_path ) {
+			return new \WP_Error( 'file_not_found', 'File does not exist.', [ 'status' => 400 ] );
+		}
+
+		$upload_dir = wp_upload_dir();
+		$base_dir   = realpath( $upload_dir['basedir'] );
+		if ( false === $base_dir || ! str_starts_with( $real_path, $base_dir ) ) {
+			return new \WP_Error( 'path_traversal', 'File must be within the uploads directory.', [ 'status' => 403 ] );
+		}
+
+		return true;
 	}
 
 	/**

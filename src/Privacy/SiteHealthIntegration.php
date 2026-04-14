@@ -76,7 +76,7 @@ final class SiteHealthIntegration {
 			'actions'     => sprintf(
 				'<a href="%s">%s</a>',
 				esc_url( admin_url( 'admin.php?page=statnive#/settings' ) ),
-				__( 'Review Privacy Settings', 'statnive' )
+				esc_html__( 'Review Privacy Settings', 'statnive' )
 			),
 			'test'        => 'statnive_privacy',
 		];
@@ -99,11 +99,11 @@ final class SiteHealthIntegration {
 					'label' => 'Statnive',
 					'color' => 'blue',
 				],
-				'description' => '<p>' . __( 'Analytics data is retained forever. Consider setting a retention period for GDPR compliance.', 'statnive' ) . '</p>',
+				'description' => '<p>' . esc_html__( 'Analytics data is retained forever. Consider setting a retention period for data minimization best practices.', 'statnive' ) . '</p>',
 				'actions'     => sprintf(
 					'<a href="%s">%s</a>',
 					esc_url( admin_url( 'admin.php?page=statnive#/settings' ) ),
-					__( 'Configure Retention', 'statnive' )
+					esc_html__( 'Configure Retention', 'statnive' )
 				),
 				'test'        => 'statnive_retention',
 			];
@@ -121,7 +121,7 @@ final class SiteHealthIntegration {
 				'label' => 'Statnive',
 				'color' => 'blue',
 			],
-			'description' => '<p>' . __( 'Data retention is configured with automatic cleanup.', 'statnive' ) . '</p>',
+			'description' => '<p>' . esc_html__( 'Data retention is configured with automatic cleanup.', 'statnive' ) . '</p>',
 			'test'        => 'statnive_retention',
 		];
 	}
