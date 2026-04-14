@@ -23,8 +23,7 @@ playwright.config.ts
 # Code remains in the git repo for future Pro development.
 /src/Addon
 
-# PHP dev tooling
-composer.json
+# PHP dev tooling (composer.json ships — PCP expects it alongside vendor/)
 composer.lock
 phpstan.neon
 .phpcs.xml.dist

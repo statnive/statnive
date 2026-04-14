@@ -66,7 +66,15 @@ final class DimensionService {
 			return 0;
 		}
 
+		global $wpdb;
 		$key = $country_id . ':' . $city_name;
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
+		$select = $wpdb->prepare(
+			'SELECT ID FROM %i WHERE country_id = %d AND city_name = %s LIMIT 1',
+			TableRegistry::get( 'cities' ),
+			$country_id,
+			$city_name
+		);
 		return self::resolve_by_key(
 			'cities',
 			$key,
@@ -76,8 +84,7 @@ final class DimensionService {
 				'region_code' => $region_code,
 				'region_name' => $region_name,
 			],
-			'country_id = %d AND city_name = %s',
-			[ $country_id, $city_name ]
+			$select
 		);
 	}
 
@@ -113,7 +120,15 @@ final class DimensionService {
 			return 0;
 		}
 
+		global $wpdb;
 		$key = $browser_id . ':' . $version;
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
+		$select = $wpdb->prepare(
+			'SELECT ID FROM %i WHERE browser_id = %d AND version = %s LIMIT 1',
+			TableRegistry::get( 'device_browser_versions' ),
+			$browser_id,
+			$version
+		);
 		return self::resolve_by_key(
 			'device_browser_versions',
 			$key,
@@ -121,8 +136,7 @@ final class DimensionService {
 				'browser_id' => $browser_id,
 				'version'    => $version,
 			],
-			'browser_id = %d AND version = %s',
-			[ $browser_id, $version ]
+			$select
 		);
 	}
 
@@ -148,7 +162,15 @@ final class DimensionService {
 			return 0;
 		}
 
+		global $wpdb;
 		$key = $width . 'x' . $height;
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
+		$select = $wpdb->prepare(
+			'SELECT ID FROM %i WHERE width = %d AND height = %d LIMIT 1',
+			TableRegistry::get( 'resolutions' ),
+			$width,
+			$height
+		);
 		return self::resolve_by_key(
 			'resolutions',
 			$key,
@@ -156,8 +178,7 @@ final class DimensionService {
 				'width'  => $width,
 				'height' => $height,
 			],
-			'width = %d AND height = %d',
-			[ $width, $height ]
+			$select
 		);
 	}
 
@@ -194,9 +215,18 @@ final class DimensionService {
 			return 0;
 		}
 
+		global $wpdb;
 		$domain_hash = crc32( $domain );
 		$key         = $channel . ':' . $domain;
 
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
+		$select = $wpdb->prepare(
+			'SELECT ID FROM %i WHERE domain_hash = %d AND domain = %s AND channel = %s LIMIT 1',
+			TableRegistry::get( 'referrers' ),
+			$domain_hash,
+			$domain,
+			$channel
+		);
 		return self::resolve_by_key(
 			'referrers',
 			$key,
@@ -206,8 +236,7 @@ final class DimensionService {
 				'domain'      => $domain,
 				'domain_hash' => $domain_hash,
 			],
-			'domain_hash = %d AND domain = %s AND channel = %s',
-			[ $domain_hash, $domain, $channel ]
+			$select
 		);
 	}
 
@@ -319,14 +348,16 @@ final class DimensionService {
 	/**
 	 * Generic resolve for tables with composite unique keys.
 	 *
-	 * @param string               $table_name  Table name without prefix.
-	 * @param string               $cache_key   Cache lookup key.
-	 * @param array<string, mixed> $data        Column data for insert.
-	 * @param string               $where_clause WHERE clause with placeholders.
-	 * @param array<mixed>         $where_values Values for the WHERE clause.
+	 * Accepts a fully prepared SELECT query (already run through
+	 * $wpdb->prepare()) so PCP can trace the literal SQL at each call site.
+	 *
+	 * @param string               $table_name     Table name without prefix.
+	 * @param string               $cache_key      Cache lookup key.
+	 * @param array<string, mixed> $data           Column data for insert.
+	 * @param string               $prepared_select Fully prepared SELECT query.
 	 * @return int Row ID.
 	 */
-	private static function resolve_by_key( string $table_name, string $cache_key, array $data, string $where_clause, array $where_values ): int {
+	private static function resolve_by_key( string $table_name, string $cache_key, array $data, string $prepared_select ): int {
 		if ( isset( self::$cache[ $table_name ][ $cache_key ] ) ) {
 			return self::$cache[ $table_name ][ $cache_key ];
 		}
@@ -334,16 +365,8 @@ final class DimensionService {
 		global $wpdb;
 		$table = TableRegistry::get( $table_name );
 
-		// $where_clause is built from a static allowlist of column names;
-		// placeholders are passed via $where_values to wpdb->prepare().
-		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare,WordPress.DB.PreparedSQLPlaceholders.ReplacementsWrongNumber
-		$id = $wpdb->get_var(
-			$wpdb->prepare(
-				"SELECT ID FROM %i WHERE {$where_clause} LIMIT 1",
-				$table,
-				...$where_values
-			)
-		);
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.NotPrepared -- $prepared_select is already prepared by each caller via $wpdb->prepare().
+		$id = $wpdb->get_var( $prepared_select );
 
 		if ( null !== $id ) {
 			self::$cache[ $table_name ][ $cache_key ] = (int) $id;
@@ -359,14 +382,8 @@ final class DimensionService {
 		}
 
 		// Race condition fallback.
-		$id = $wpdb->get_var(
-			$wpdb->prepare(
-				"SELECT ID FROM %i WHERE {$where_clause} LIMIT 1",
-				$table,
-				...$where_values
-			)
-		);
-		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare,WordPress.DB.PreparedSQLPlaceholders.ReplacementsWrongNumber
+		$id = $wpdb->get_var( $prepared_select );
+		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.NotPrepared
 
 		$resolved = ( null !== $id ) ? (int) $id : 0;
 		if ( $resolved > 0 ) {

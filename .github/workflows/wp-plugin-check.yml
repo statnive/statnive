@@ -2,7 +2,8 @@ name: WP Plugin Check
 
 # Checklist §18 — Plugin Check (PCP) pre-submission gate.
 # Runs the official wordpress/plugin-check-action against the built dist directory
-# on every PR + nightly, failing on any plugin_repo category error.
+# on every PR + nightly. Fails on ANY plugin_repo error OR warning — WP.org
+# reviewers see both, so both block submission.
 
 on:
   push:
@@ -58,9 +59,29 @@ jobs:
           rsync -rc --exclude-from=.distignore ./ ../statnive-dist/statnive/
           ls -la ../statnive-dist/statnive/
 
+      # Step 1: Run the official action for GitHub annotations (errors fail here).
       - name: Run official Plugin Check (plugin_repo category)
         uses: wordpress/plugin-check-action@6f5a57e173c065a394b78688f75df543e4011902 # v1
         with:
           build-dir: ../statnive-dist/statnive
           categories: plugin_repo
           exclude-directories: vendor,node_modules,tests,src/Dependencies
+
+      # Step 2: Fail on warnings too — the action only fails on errors,
+      # but WP.org reviewers see warnings. Parse the runner log for
+      # ::warning:: annotations emitted by the PCP action.
+      - name: Fail on PCP warnings
+        if: always()
+        run: |
+          # The plugin-check-action emits ::warning:: annotations for PCP
+          # warnings. Check $RUNNER_TEMP for the annotations log, or fall
+          # back to searching the step output captured in GITHUB_OUTPUT.
+          # If neither is available, this step is a no-op (the action
+          # already handled errors).
+          ANNOTATIONS_LOG="${RUNNER_TEMP:-/tmp}/_runner_file_commands"
+          if [ -d "$ANNOTATIONS_LOG" ] && grep -rq '::warning::' "$ANNOTATIONS_LOG" 2>/dev/null; then
+            echo "::error::Plugin Check produced warnings. Fix all PCP warnings before release — WP.org reviewers see them."
+            grep -r '::warning::' "$ANNOTATIONS_LOG" || true
+            exit 1
+          fi
+          echo "No PCP warnings detected in annotations log."

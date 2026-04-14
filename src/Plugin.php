@@ -57,11 +57,8 @@ final class Plugin {
 
 		self::$initialized = true;
 
-		load_plugin_textdomain(
-			'statnive',
-			false,
-			dirname( plugin_basename( STATNIVE_FILE ) ) . '/languages/'
-		);
+		// WordPress auto-loads translations for wp.org-hosted plugins since 4.6.
+		// load_plugin_textdomain() is no longer needed and triggers a PCP warning.
 
 		// Database schema migrations (runs on plugins_loaded, bails fast when nothing pending).
 		Migrator::init();
