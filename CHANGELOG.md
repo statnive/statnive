@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.2] - 2026-04-14
+
+### Added
+
+- Device Distribution and Bot vs Human pie charts on Devices page, replacing progress-bar cards.
+- DualBarCell (visitors/sessions side-by-side bars) on all report tables: Top Pages, Top Content, Entry/Exit Pages.
+
+### Fixed
+
+- Resolve 5 Plugin Check (PCP) warnings: ship composer.json in ZIP, rename THIRD-PARTY-LICENSES to .txt, remove deprecated load_plugin_textdomain(), bake SQL direction literals, refactor DimensionService to pass fully prepared queries.
+- Stop externalizing react-is — WordPress has no ReactIs global; was causing runtime errors.
+- Use unfiltered data for DualBarCell max calculation + DRY entry/exit column definitions.
+- CI workflow now fails on PCP warnings (not just errors) via runner annotations check.
+
 ## [0.4.1] - 2026-04-14
 
 ### Fixed

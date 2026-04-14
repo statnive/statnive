@@ -36,6 +36,24 @@ vi.mock('@/hooks/use-dimensions', () => ({
 	useDimensions: (...args: unknown[]) => mockUseDimensions(...args),
 }));
 
+// Mock Recharts to avoid rendering SVG in jsdom
+vi.mock('recharts', () => {
+	const React = require('react');
+	const MockPie = ({ data, children }: { data?: Array<{ name: string; value: number }>; children?: React.ReactNode }) =>
+		React.createElement('div', { 'data-testid': 'recharts-pie', 'data-items': JSON.stringify(data) }, children);
+	const MockCell = () => null;
+	return {
+		ResponsiveContainer: ({ children }: { children: React.ReactNode }) =>
+			React.createElement('div', { 'data-testid': 'recharts-responsive' }, children),
+		PieChart: ({ children }: { children: React.ReactNode }) =>
+			React.createElement('div', { 'data-testid': 'recharts-piechart' }, children),
+		Pie: MockPie,
+		Cell: MockCell,
+		Tooltip: () => null,
+		Legend: () => null,
+	};
+});
+
 import { DevicesPage } from '@/pages/devices';
 
 // ---------------------------------------------------------------------------
@@ -47,8 +65,8 @@ describe('DevicesPage', () => {
 		vi.restoreAllMocks();
 	});
 
-	// REQ-1.20 — Device type breakdown with percentages
-	it('renders device type cards with percentage and progress bar', () => {
+	// REQ-1.20 — Device distribution pie chart + Bot vs Human pie chart
+	it('renders pie charts with device distribution and bot vs human data', () => {
 		mockUseDimensions.mockImplementation((dimension: string) => {
 			if (dimension === 'devices') {
 				return {
@@ -56,6 +74,7 @@ describe('DevicesPage', () => {
 						{ name: 'Desktop', visitors: 1400, sessions: 1800 },
 						{ name: 'Mobile', visitors: 900, sessions: 1100 },
 						{ name: 'Tablet', visitors: 200, sessions: 250 },
+						{ name: 'Bot', visitors: 50, sessions: 50 },
 					],
 					isLoading: false,
 				};
@@ -65,16 +84,18 @@ describe('DevicesPage', () => {
 
 		render(<DevicesPage />);
 
-		// Total = 2500; Desktop = 56.0%, Mobile = 36.0%, Tablet = 8.0%
+		// Pie charts render (title + sr-only caption = 2 matches each)
+		expect(screen.getAllByText('Device Distribution').length).toBeGreaterThanOrEqual(1);
+		expect(screen.getAllByText('Bot vs Human').length).toBeGreaterThanOrEqual(1);
+
+		// SR-only table has device breakdown (human devices only)
 		expect(screen.getByText('Desktop')).toBeInTheDocument();
-		expect(screen.getByText('56.0%')).toBeInTheDocument();
-
 		expect(screen.getByText('Mobile')).toBeInTheDocument();
-		expect(screen.getByText('36.0%')).toBeInTheDocument();
-		expect(screen.getByText('900 visitors')).toBeInTheDocument();
-
 		expect(screen.getByText('Tablet')).toBeInTheDocument();
-		expect(screen.getByText('8.0%')).toBeInTheDocument();
+
+		// Bot vs Human SR table
+		expect(screen.getByText('Human')).toBeInTheDocument();
+		expect(screen.getByText('Bot')).toBeInTheDocument();
 	});
 
 	// REQ-1.21 — Browser and OS tables side by side

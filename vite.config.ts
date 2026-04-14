@@ -152,21 +152,8 @@ export default defineConfig(({ mode }) => {
 			id: '\0wp-react-jsx',
 			code: 'const R = window.React; export const jsx = R.createElement; export const jsxs = R.createElement; export const Fragment = R.Fragment; export const jsxDEV = R.createElement;',
 		},
-		'react-is': {
-			id: '\0wp-react-is',
-			code: [
-				'const RI = window.ReactIs || {};',
-				'export default RI;',
-				'export const isElement = RI.isElement;',
-				'export const isValidElementType = RI.isValidElementType;',
-				'export const ForwardRef = RI.ForwardRef;',
-				'export const Memo = RI.Memo;',
-				'export const isFragment = RI.isFragment;',
-				'export const isMemo = RI.isMemo;',
-				'export const isForwardRef = RI.isForwardRef;',
-				'export const typeOf = RI.typeOf;',
-			].join('\n'),
-		},
+		// react-is is NOT externalized — WordPress does not expose ReactIs
+		// as a window global. Let libraries (e.g., Recharts) bundle their own copy.
 	};
 
 	const wpExternals = {

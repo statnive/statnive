@@ -4,7 +4,7 @@ Tags: analytics, statistics, privacy, tracking, dashboard
 Requires at least: 6.2
 Tested up to: 6.9
 Requires PHP: 8.0
-Stable tag: 0.4.1
+Stable tag: 0.4.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -132,6 +132,13 @@ No visitor data is ever sent to any external service. All analytics data remains
 All analytics data stays in your WordPress database. No cookies, no fingerprinting, no external transfers. Daily-rotating salted hashes prevent cross-day tracking. Raw IPs are used only for GeoIP lookup and never stored. Integrates with the WordPress Privacy API for data export and erasure.
 
 == Changelog ==
+
+= 0.4.2 - 2026-04-14 =
+* Added: Device Distribution + Bot vs Human pie charts on Devices page.
+* Added: DualBarCell (visitors/sessions bars) on all report tables.
+* Fixed: Resolve 5 PCP warnings for zero-warning Plugin Check compliance.
+* Fixed: Stop externalizing react-is (no WordPress global exists).
+* Fixed: CI now fails on PCP warnings, not just errors.
 
 = 0.4.1 - 2026-04-14 =
 * Fixed: Externalize React/ReactDOM to wp-element instead of bundling (WP.org §8). Bundle size reduced 24%.

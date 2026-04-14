@@ -129,37 +129,69 @@ final class PagesDetailController extends WP_REST_Controller {
 		$resource_uris = TableRegistry::get( 'resource_uris' );
 		$resources     = TableRegistry::get( 'resources' );
 
-		// Entry pages: first view in each session; Exit pages: last view.
-		$order_direction = 'entry' === $type ? 'ASC' : 'DESC';
+		// Entry pages: first view in each session (ASC); Exit pages: last view (DESC).
+		// Direction is baked into the SQL literal — two separate prepare() calls —
+		// because both PCP and phpcs cannot trace variables interpolated into SQL.
+		$from_dt = $from . ' 00:00:00';
+		$to_dt   = $to . ' 23:59:59';
 
-		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $order_direction is ASC/DESC from validated allowlist, not an identifier.
-		$rows = $wpdb->get_results(
-			$wpdb->prepare(
-				"SELECT ru.uri, res.cached_title AS title,
-					COUNT(*) AS count,
-					COUNT(DISTINCT v.session_id) AS visitors
-				FROM (
-					SELECT session_id, resource_uri_id,
-						ROW_NUMBER() OVER (PARTITION BY session_id ORDER BY viewed_at {$order_direction}) AS rn
-					FROM %i
-					WHERE viewed_at BETWEEN %s AND %s
-				) v
-				INNER JOIN %i ru ON v.resource_uri_id = ru.ID
-				LEFT JOIN %i res ON ru.resource_id = res.resource_id
-				WHERE v.rn = 1
-				GROUP BY ru.uri, res.cached_title
-				ORDER BY count DESC
-				LIMIT %d",
-				$views,
-				$from . ' 00:00:00',
-				$to . ' 23:59:59',
-				$resource_uris,
-				$resources,
-				$limit
-			),
-			ARRAY_A
-		);
-		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
+		if ( 'entry' === $type ) {
+			$rows = $wpdb->get_results(
+				$wpdb->prepare(
+					'SELECT ru.uri, res.cached_title AS title,
+						COUNT(*) AS count,
+						COUNT(DISTINCT v.session_id) AS visitors
+					FROM (
+						SELECT session_id, resource_uri_id,
+							ROW_NUMBER() OVER (PARTITION BY session_id ORDER BY viewed_at ASC) AS rn
+						FROM %i
+						WHERE viewed_at BETWEEN %s AND %s
+					) v
+					INNER JOIN %i ru ON v.resource_uri_id = ru.ID
+					LEFT JOIN %i res ON ru.resource_id = res.resource_id
+					WHERE v.rn = 1
+					GROUP BY ru.uri, res.cached_title
+					ORDER BY count DESC
+					LIMIT %d',
+					$views,
+					$from_dt,
+					$to_dt,
+					$resource_uris,
+					$resources,
+					$limit
+				),
+				ARRAY_A
+			);
+		} else {
+			$rows = $wpdb->get_results(
+				$wpdb->prepare(
+					'SELECT ru.uri, res.cached_title AS title,
+						COUNT(*) AS count,
+						COUNT(DISTINCT v.session_id) AS visitors
+					FROM (
+						SELECT session_id, resource_uri_id,
+							ROW_NUMBER() OVER (PARTITION BY session_id ORDER BY viewed_at DESC) AS rn
+						FROM %i
+						WHERE viewed_at BETWEEN %s AND %s
+					) v
+					INNER JOIN %i ru ON v.resource_uri_id = ru.ID
+					LEFT JOIN %i res ON ru.resource_id = res.resource_id
+					WHERE v.rn = 1
+					GROUP BY ru.uri, res.cached_title
+					ORDER BY count DESC
+					LIMIT %d',
+					$views,
+					$from_dt,
+					$to_dt,
+					$resource_uris,
+					$resources,
+					$limit
+				),
+				ARRAY_A
+			);
+		}
+		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
 
 		return new WP_REST_Response( is_array( $rows ) ? $rows : [], 200 );
 	}

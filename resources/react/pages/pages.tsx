@@ -4,7 +4,8 @@ import { useDateRange } from '@/hooks/use-date-range';
 import { usePages } from '@/hooks/use-pages';
 import { useEntryPages, useExitPages } from '@/hooks/use-entry-exit-pages';
 import { DataTable, type Column } from '@/components/shared/data-table';
-import { formatNumber, formatDuration } from '@/lib/utils';
+import { DualBarCell } from '@/components/shared/dual-bar-cell';
+import { formatDuration } from '@/lib/utils';
 import type { PageRow, EntryExitPage } from '@/types/api';
 import { Search } from 'lucide-react';
 
@@ -35,6 +36,19 @@ export function PagesPage() {
 	const filteredEntry = useMemo(() => filterByQuery(entry, q), [entry, q]);
 	const filteredExit = useMemo(() => filterByQuery(exit, q), [exit, q]);
 
+	const maxPageViews = useMemo(
+		() => Math.max(...(pages ?? []).map(p => Math.max(p.visitors, p.views)), 1),
+		[pages],
+	);
+	const maxEntry = useMemo(
+		() => Math.max(...(entry ?? []).map(p => Math.max(p.count, p.visitors)), 1),
+		[entry],
+	);
+	const maxExit = useMemo(
+		() => Math.max(...(exit ?? []).map(p => Math.max(p.count, p.visitors)), 1),
+		[exit],
+	);
+
 	const pageColumns: Column<PageRow>[] = useMemo(
 		() => [
 			{
@@ -47,21 +61,19 @@ export function PagesPage() {
 					</div>
 				),
 			},
-			{ key: 'visitors', header: __('Visitors', 'statnive'), sortable: true, align: 'right' as const, render: (row) => <span className="tabular-nums">{formatNumber(row.visitors)}</span> },
-			{ key: 'views', header: __('Views', 'statnive'), sortable: true, align: 'right' as const, render: (row) => <span className="tabular-nums">{formatNumber(row.views)}</span> },
+			{ key: 'visitors', header: __('Visitors / Views', 'statnive'), sortable: true, render: (row) => <DualBarCell visitors={row.visitors} secondaryValue={row.views} max={maxPageViews} /> },
 			{ key: 'total_duration', header: __('Avg Duration', 'statnive'), align: 'right' as const, render: (row) => <span className="tabular-nums">{row.visitors > 0 ? formatDuration(row.total_duration / row.visitors) : '—'}</span> },
 		],
-		[],
+		[maxPageViews],
 	);
 
-	const entryColumns: Column<EntryExitPage>[] = useMemo(
-		() => [
-			{ key: 'uri', header: __('Page', 'statnive'), render: (row) => <span className="font-medium" title={row.uri}>{row.title ?? row.uri}</span> },
-			{ key: 'count', header: __('Entries', 'statnive'), sortable: true, align: 'right' as const, render: (row) => <span className="tabular-nums">{formatNumber(row.count)}</span> },
-			{ key: 'visitors', header: __('Visitors', 'statnive'), sortable: true, align: 'right' as const, render: (row) => <span className="tabular-nums">{formatNumber(row.visitors)}</span> },
-		],
-		[],
-	);
+	const makeEntryExitColumns = (header: string, max: number): Column<EntryExitPage>[] => [
+		{ key: 'uri', header: __('Page', 'statnive'), render: (row) => <span className="font-medium" title={row.uri}>{row.title ?? row.uri}</span> },
+		{ key: 'count', header, sortable: true, render: (row) => <DualBarCell visitors={row.count} secondaryValue={row.visitors} max={max} /> },
+	];
+
+	const entryColumns = useMemo(() => makeEntryExitColumns(__('Entries / Visitors', 'statnive'), maxEntry), [maxEntry]);
+	const exitColumns = useMemo(() => makeEntryExitColumns(__('Exits / Visitors', 'statnive'), maxExit), [maxExit]);
 
 	const emptyPageMessage = __('No page data for this period. If your site has traffic, data should appear within minutes. If nothing shows after 10 minutes, check Settings → Diagnostics.', 'statnive');
 
@@ -111,7 +123,7 @@ export function PagesPage() {
 					<DataTable
 						title={__('Exit Pages', 'statnive')}
 						data={filteredExit}
-						columns={entryColumns}
+						columns={exitColumns}
 						isLoading={loadingExit}
 						defaultSortKey="count"
 						getRowKey={(row) => `exit-${row.uri}`}

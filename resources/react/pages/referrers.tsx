@@ -25,14 +25,19 @@ export function ReferrersPage() {
 		return max;
 	}, [channels]);
 
+	const maxUtm = useMemo(
+		() => Math.max(...(utm ?? []).map(d => Math.max(d.visitors, d.sessions)), 1),
+		[utm],
+	);
+
 	const utmColumns: Column<UtmRow>[] = useMemo(
 		() => [
 			{ key: 'campaign', header: __('Campaign', 'statnive'), render: (row) => <span className="font-medium">{row.campaign ?? '—'}</span> },
 			{ key: 'source', header: __('Source', 'statnive'), render: (row) => <span>{row.source ?? '—'}</span> },
 			{ key: 'medium', header: __('Medium', 'statnive'), render: (row) => <span>{row.medium ?? '—'}</span> },
-			{ key: 'visitors', header: __('Visitors', 'statnive'), sortable: true, align: 'right' as const, render: (row) => <span className="tabular-nums">{formatNumber(row.visitors)}</span> },
+			{ key: 'visitors', header: __('Visitors / Sessions', 'statnive'), sortable: true, render: (row) => <DualBarCell visitors={row.visitors} secondaryValue={row.sessions} max={maxUtm} /> },
 		],
-		[],
+		[maxUtm],
 	);
 
 	const emptyReferrerMessage = __('No referrer data for this period. If your site has traffic, data should appear within minutes. If nothing shows after 10 minutes, check Settings → Diagnostics.', 'statnive');

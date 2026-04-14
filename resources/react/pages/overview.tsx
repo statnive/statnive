@@ -68,6 +68,11 @@ export function OverviewPage() {
 		[max],
 	);
 
+	const maxPageVisitors = useMemo(
+		() => Math.max(...(pages ?? []).map(p => Math.max(p.visitors, p.views)), 1),
+		[pages],
+	);
+
 	const pageColumns: Column<PageRow>[] = useMemo(
 		() => [
 			{
@@ -81,24 +86,14 @@ export function OverviewPage() {
 			},
 			{
 				key: 'visitors',
-				header: __('Visitors', 'statnive'),
+				header: __('Visitors / Views', 'statnive'),
 				sortable: true,
-				align: 'right' as const,
 				render: (row) => (
-					<span className="tabular-nums">{formatNumber(row.visitors)}</span>
-				),
-			},
-			{
-				key: 'views',
-				header: __('Views', 'statnive'),
-				sortable: true,
-				align: 'right' as const,
-				render: (row) => (
-					<span className="tabular-nums">{formatNumber(row.views)}</span>
+					<DualBarCell visitors={row.visitors} secondaryValue={row.views} max={maxPageVisitors} />
 				),
 			},
 		],
-		[],
+		[maxPageVisitors],
 	);
 
 	const chartSubtitle = range === 'today'
