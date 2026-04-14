@@ -71,6 +71,8 @@ final class DimensionsController extends WP_REST_Controller {
 						],
 						'limit' => [
 							'default'           => 20,
+							'type'              => 'integer',
+							'minimum'           => 1,
 							'sanitize_callback' => 'absint',
 							'validate_callback' => 'rest_validate_request_arg',
 						],
@@ -88,6 +90,16 @@ final class DimensionsController extends WP_REST_Controller {
 	 */
 	public function get_items_permissions_check( $request ): bool {
 		return current_user_can( 'manage_options' );
+	}
+
+	/**
+	 * Validate a YYYY-MM-DD date string.
+	 *
+	 * @param string $value Date string.
+	 * @return bool
+	 */
+	public function validate_date( $value ): bool {
+		return (bool) preg_match( '/^\d{4}-\d{2}-\d{2}$/', $value );
 	}
 
 	/**
