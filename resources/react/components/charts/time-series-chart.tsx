@@ -10,15 +10,11 @@ import {
 } from 'recharts';
 import { __ } from '@wordpress/i18n';
 import type { DailyMetric } from '@/types/api';
-import { formatNumber } from '@/lib/utils';
+import { formatNumber, prefersReducedMotion } from '@/lib/utils';
 
 interface TimeSeriesChartProps {
 	data: DailyMetric[];
 }
-
-const prefersReducedMotion =
-	typeof window !== 'undefined' &&
-	window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 function CustomTooltip({
 	active,

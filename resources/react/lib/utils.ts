@@ -26,3 +26,7 @@ export function percentChange(current: number, previous: number): number {
 	if (previous === 0) return current > 0 ? 100 : 0;
 	return ((current - previous) / previous) * 100;
 }
+
+export const prefersReducedMotion =
+	typeof window !== 'undefined' &&
+	window.matchMedia('(prefers-reduced-motion: reduce)').matches;

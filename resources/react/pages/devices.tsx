@@ -1,10 +1,15 @@
 import { useMemo } from 'react';
-import { __, sprintf } from '@wordpress/i18n';
+import { __ } from '@wordpress/i18n';
 import { useDateRange } from '@/hooks/use-date-range';
 import { useDimensions } from '@/hooks/use-dimensions';
 import { DataTable, type Column } from '@/components/shared/data-table';
+import { PieChartCard } from '@/components/charts/pie-chart-card';
 import { formatNumber } from '@/lib/utils';
 import type { DimensionRow } from '@/types/api';
+
+const BOT_DEVICE_TYPE = 'Bot';
+const DEVICE_COLORS = ['#2271b1', '#059669', '#f59e0b'];
+const BOT_COLORS = ['#2271b1', '#ef4444'];
 
 export function DevicesPage() {
 	const { params } = useDateRange();
@@ -12,10 +17,29 @@ export function DevicesPage() {
 	const { data: browsers, isLoading: loadingBrowsers } = useDimensions('browsers', params.from, params.to);
 	const { data: oss, isLoading: loadingOs } = useDimensions('oss', params.from, params.to);
 
-	const totalVisitors = useMemo(
-		() => (deviceTypes ?? []).reduce((sum, d) => sum + Number(d.visitors), 0),
-		[deviceTypes],
-	);
+	const { humanDevices, botVsHuman } = useMemo(() => {
+		const devices = deviceTypes ?? [];
+		const human: { name: string; value: number }[] = [];
+		let botTotal = 0;
+		let humanTotal = 0;
+
+		for (const d of devices) {
+			if (d.name === BOT_DEVICE_TYPE) {
+				botTotal += Number(d.visitors);
+			} else {
+				human.push({ name: d.name ?? __('Unknown', 'statnive'), value: Number(d.visitors) });
+				humanTotal += Number(d.visitors);
+			}
+		}
+
+		return {
+			humanDevices: human,
+			botVsHuman: [
+				{ name: __('Human', 'statnive'), value: humanTotal },
+				{ name: __('Bot', 'statnive'), value: botTotal },
+			],
+		};
+	}, [deviceTypes]);
 
 	const dimColumns: Column<DimensionRow>[] = useMemo(
 		() => [
@@ -32,27 +56,18 @@ export function DevicesPage() {
 		<div className="space-y-6">
 			<h2 className="text-lg font-semibold">{__('Devices', 'statnive')}</h2>
 
-			{/* Device Type Breakdown */}
-			<div className="grid grid-cols-3 gap-4">
-				{(deviceTypes ?? []).map((d) => {
-					const pct = totalVisitors > 0 ? (d.visitors / totalVisitors) * 100 : 0;
-					return (
-						<div key={d.name} className="rounded-lg border border-border bg-card p-4">
-							<p className="text-xs font-medium text-muted-foreground">{d.name}</p>
-							<p className="mt-1 text-2xl font-bold tabular-nums">{pct.toFixed(1)}%</p>
-							<div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-muted">
-								<div className="h-full rounded-full bg-primary transition-all duration-300" style={{ width: `${pct}%` }} />
-							</div>
-							<p className="mt-1 text-xs text-muted-foreground">
-								{sprintf(
-									/* translators: %s: formatted visitor count */
-									__('%s visitors', 'statnive'),
-									formatNumber(d.visitors),
-								)}
-							</p>
-						</div>
-					);
-				})}
+			{/* Device Distribution + Bot vs Human pie charts */}
+			<div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+				<PieChartCard
+					title={__('Device Distribution', 'statnive')}
+					data={humanDevices}
+					colors={DEVICE_COLORS}
+				/>
+				<PieChartCard
+					title={__('Bot vs Human', 'statnive')}
+					data={botVsHuman}
+					colors={BOT_COLORS}
+				/>
 			</div>
 
 			{/* Browsers + OS */}
