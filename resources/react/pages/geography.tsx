@@ -3,7 +3,7 @@ import { __ } from '@wordpress/i18n';
 import { useDateRange } from '@/hooks/use-date-range';
 import { useDimensions } from '@/hooks/use-dimensions';
 import { DataTable, type Column } from '@/components/shared/data-table';
-import { formatNumber } from '@/lib/utils';
+import { DualBarCell } from '@/components/shared/dual-bar-cell';
 import type { DimensionRow } from '@/types/api';
 
 export function GeographyPage() {
@@ -11,22 +11,30 @@ export function GeographyPage() {
 	const { data: countries, isLoading: loadingCountries } = useDimensions('countries', params.from, params.to, 30);
 	const { data: cities, isLoading: loadingCities } = useDimensions('cities', params.from, params.to, 30);
 
+	const maxCountry = useMemo(
+		() => Math.max(...(countries ?? []).map(d => Math.max(d.visitors, d.sessions)), 1),
+		[countries],
+	);
+	const maxCity = useMemo(
+		() => Math.max(...(cities ?? []).map(d => Math.max(d.visitors, d.sessions)), 1),
+		[cities],
+	);
+
 	const countryColumns: Column<DimensionRow>[] = useMemo(
 		() => [
 			{ key: 'name', header: __('Country', 'statnive'), render: (row) => <span className="font-medium">{row.code ? `${row.code} — ` : ''}{row.name ?? '—'}</span> },
-			{ key: 'visitors', header: __('Visitors', 'statnive'), sortable: true, align: 'right' as const, render: (row) => <span className="tabular-nums">{formatNumber(row.visitors)}</span> },
-			{ key: 'sessions', header: __('Sessions', 'statnive'), sortable: true, align: 'right' as const, render: (row) => <span className="tabular-nums">{formatNumber(row.sessions)}</span> },
+			{ key: 'visitors', header: __('Visitors / Sessions', 'statnive'), sortable: true, render: (row) => <DualBarCell visitors={row.visitors} secondaryValue={row.sessions} max={maxCountry} /> },
 		],
-		[],
+		[maxCountry],
 	);
 
 	const cityColumns: Column<DimensionRow>[] = useMemo(
 		() => [
 			{ key: 'city_name', header: __('City', 'statnive'), render: (row) => <span className="font-medium">{row.city_name ?? '—'}</span> },
 			{ key: 'country', header: __('Country', 'statnive'), render: (row) => <span className="text-muted-foreground">{row.country ?? '—'}</span> },
-			{ key: 'visitors', header: __('Visitors', 'statnive'), sortable: true, align: 'right' as const, render: (row) => <span className="tabular-nums">{formatNumber(row.visitors)}</span> },
+			{ key: 'visitors', header: __('Visitors / Sessions', 'statnive'), sortable: true, render: (row) => <DualBarCell visitors={row.visitors} secondaryValue={row.sessions} max={maxCity} /> },
 		],
-		[],
+		[maxCity],
 	);
 
 	const emptyGeoMessage = __('No geography data for this period. If your site has traffic, data should appear within minutes. If nothing shows after 10 minutes, check Settings → Diagnostics.', 'statnive');

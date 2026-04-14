@@ -3,20 +3,24 @@ import { __ } from '@wordpress/i18n';
 import { useDateRange } from '@/hooks/use-date-range';
 import { useDimensions } from '@/hooks/use-dimensions';
 import { DataTable, type Column } from '@/components/shared/data-table';
-import { formatNumber } from '@/lib/utils';
+import { DualBarCell } from '@/components/shared/dual-bar-cell';
 import type { DimensionRow } from '@/types/api';
 
 export function LanguagesPage() {
 	const { params } = useDateRange();
 	const { data: languages, isLoading } = useDimensions('languages', params.from, params.to, 30);
 
+	const maxVisitors = useMemo(
+		() => Math.max(...(languages ?? []).map(d => Math.max(d.visitors, d.sessions)), 1),
+		[languages],
+	);
+
 	const columns: Column<DimensionRow>[] = useMemo(
 		() => [
 			{ key: 'name', header: __('Language', 'statnive'), render: (row) => <span className="font-medium">{row.name ?? '—'}</span> },
-			{ key: 'visitors', header: __('Visitors', 'statnive'), sortable: true, align: 'right' as const, render: (row) => <span className="tabular-nums">{formatNumber(row.visitors)}</span> },
-			{ key: 'sessions', header: __('Sessions', 'statnive'), sortable: true, align: 'right' as const, render: (row) => <span className="tabular-nums">{formatNumber(row.sessions)}</span> },
+			{ key: 'visitors', header: __('Visitors / Sessions', 'statnive'), sortable: true, render: (row) => <DualBarCell visitors={row.visitors} secondaryValue={row.sessions} max={maxVisitors} /> },
 		],
-		[],
+		[maxVisitors],
 	);
 
 	return (
