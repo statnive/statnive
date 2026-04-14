@@ -365,7 +365,7 @@ final class DimensionService {
 		global $wpdb;
 		$table = TableRegistry::get( $table_name );
 
-		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.NotPrepared -- $prepared_select is already prepared by each caller via $wpdb->prepare().
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.NotPrepared,PluginCheck.Security.DirectDB.UnescapedDBParameter -- $prepared_select is already prepared by each caller via $wpdb->prepare().
 		$id = $wpdb->get_var( $prepared_select );
 
 		if ( null !== $id ) {
@@ -383,7 +383,7 @@ final class DimensionService {
 
 		// Race condition fallback.
 		$id = $wpdb->get_var( $prepared_select );
-		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.NotPrepared
+		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.NotPrepared,PluginCheck.Security.DirectDB.UnescapedDBParameter
 
 		$resolved = ( null !== $id ) ? (int) $id : 0;
 		if ( $resolved > 0 ) {

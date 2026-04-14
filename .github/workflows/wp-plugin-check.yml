@@ -66,22 +66,4 @@ jobs:
           build-dir: ../statnive-dist/statnive
           categories: plugin_repo
           exclude-directories: vendor,node_modules,tests,src/Dependencies
-
-      # Step 2: Fail on warnings too — the action only fails on errors,
-      # but WP.org reviewers see warnings. Parse the runner log for
-      # ::warning:: annotations emitted by the PCP action.
-      - name: Fail on PCP warnings
-        if: always()
-        run: |
-          # The plugin-check-action emits ::warning:: annotations for PCP
-          # warnings. Check $RUNNER_TEMP for the annotations log, or fall
-          # back to searching the step output captured in GITHUB_OUTPUT.
-          # If neither is available, this step is a no-op (the action
-          # already handled errors).
-          ANNOTATIONS_LOG="${RUNNER_TEMP:-/tmp}/_runner_file_commands"
-          if [ -d "$ANNOTATIONS_LOG" ] && grep -rq '::warning::' "$ANNOTATIONS_LOG" 2>/dev/null; then
-            echo "::error::Plugin Check produced warnings. Fix all PCP warnings before release — WP.org reviewers see them."
-            grep -r '::warning::' "$ANNOTATIONS_LOG" || true
-            exit 1
-          fi
-          echo "No PCP warnings detected in annotations log."
+          strict: true
