@@ -37,16 +37,16 @@ export function PagesPage() {
 	const filteredExit = useMemo(() => filterByQuery(exit, q), [exit, q]);
 
 	const maxPageViews = useMemo(
-		() => Math.max(...(filteredPages).map(p => Math.max(p.visitors, p.views)), 1),
-		[filteredPages],
+		() => Math.max(...(pages ?? []).map(p => Math.max(p.visitors, p.views)), 1),
+		[pages],
 	);
 	const maxEntry = useMemo(
-		() => Math.max(...(filteredEntry).map(p => Math.max(p.count, p.visitors)), 1),
-		[filteredEntry],
+		() => Math.max(...(entry ?? []).map(p => Math.max(p.count, p.visitors)), 1),
+		[entry],
 	);
 	const maxExit = useMemo(
-		() => Math.max(...(filteredExit).map(p => Math.max(p.count, p.visitors)), 1),
-		[filteredExit],
+		() => Math.max(...(exit ?? []).map(p => Math.max(p.count, p.visitors)), 1),
+		[exit],
 	);
 
 	const pageColumns: Column<PageRow>[] = useMemo(
@@ -67,21 +67,13 @@ export function PagesPage() {
 		[maxPageViews],
 	);
 
-	const entryColumns: Column<EntryExitPage>[] = useMemo(
-		() => [
-			{ key: 'uri', header: __('Page', 'statnive'), render: (row) => <span className="font-medium" title={row.uri}>{row.title ?? row.uri}</span> },
-			{ key: 'count', header: __('Entries / Visitors', 'statnive'), sortable: true, render: (row) => <DualBarCell visitors={row.count} secondaryValue={row.visitors} max={maxEntry} /> },
-		],
-		[maxEntry],
-	);
+	const makeEntryExitColumns = (header: string, max: number): Column<EntryExitPage>[] => [
+		{ key: 'uri', header: __('Page', 'statnive'), render: (row) => <span className="font-medium" title={row.uri}>{row.title ?? row.uri}</span> },
+		{ key: 'count', header, sortable: true, render: (row) => <DualBarCell visitors={row.count} secondaryValue={row.visitors} max={max} /> },
+	];
 
-	const exitColumns: Column<EntryExitPage>[] = useMemo(
-		() => [
-			{ key: 'uri', header: __('Page', 'statnive'), render: (row) => <span className="font-medium" title={row.uri}>{row.title ?? row.uri}</span> },
-			{ key: 'count', header: __('Exits / Visitors', 'statnive'), sortable: true, render: (row) => <DualBarCell visitors={row.count} secondaryValue={row.visitors} max={maxExit} /> },
-		],
-		[maxExit],
-	);
+	const entryColumns = useMemo(() => makeEntryExitColumns(__('Entries / Visitors', 'statnive'), maxEntry), [maxEntry]);
+	const exitColumns = useMemo(() => makeEntryExitColumns(__('Exits / Visitors', 'statnive'), maxExit), [maxExit]);
 
 	const emptyPageMessage = __('No page data for this period. If your site has traffic, data should appear within minutes. If nothing shows after 10 minutes, check Settings → Diagnostics.', 'statnive');
 
