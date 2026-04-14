@@ -96,10 +96,12 @@ final class RealtimeController extends WP_REST_Controller {
 		// phpcs:disable WordPress.DB.DirectDatabaseQuery.NoCaching
 		$active_count = (int) $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT COUNT(DISTINCT s.visitor_id)
-				FROM `{$views}` v
-				INNER JOIN `{$sessions}` s ON v.session_id = s.ID
-				WHERE v.viewed_at >= %s",
+				'SELECT COUNT(DISTINCT s.visitor_id)
+				FROM %i v
+				INNER JOIN %i s ON v.session_id = s.ID
+				WHERE v.viewed_at >= %s',
+				$views,
+				$sessions,
 				$five_min_ago
 			)
 		);
@@ -107,12 +109,16 @@ final class RealtimeController extends WP_REST_Controller {
 		$active_pages = $wpdb->get_results(
 			$wpdb->prepare(
 				"SELECT ru.uri, COALESCE(res.cached_title, '') AS title, COUNT(DISTINCT s.visitor_id) AS visitors
-				FROM `{$views}` v
-				INNER JOIN `{$sessions}` s ON v.session_id = s.ID
-				INNER JOIN `{$resource_uris}` ru ON v.resource_uri_id = ru.ID
-				LEFT JOIN (SELECT resource_id, MIN(cached_title) AS cached_title FROM `{$resources}` GROUP BY resource_id) res ON ru.resource_id = res.resource_id
+				FROM %i v
+				INNER JOIN %i s ON v.session_id = s.ID
+				INNER JOIN %i ru ON v.resource_uri_id = ru.ID
+				LEFT JOIN (SELECT resource_id, MIN(cached_title) AS cached_title FROM %i GROUP BY resource_id) res ON ru.resource_id = res.resource_id
 				WHERE v.viewed_at >= %s
 				GROUP BY ru.uri, res.cached_title ORDER BY visitors DESC LIMIT 10",
+				$views,
+				$sessions,
+				$resource_uris,
+				$resources,
 				$five_min_ago
 			),
 			ARRAY_A
@@ -123,14 +129,20 @@ final class RealtimeController extends WP_REST_Controller {
 				"SELECT ru.uri, COALESCE(res.cached_title, '') AS title,
 					COALESCE(c.code, '') AS country, COALESCE(b.name, '') AS browser,
 					v.viewed_at AS time
-				FROM `{$views}` v
-				INNER JOIN `{$sessions}` s ON v.session_id = s.ID
-				INNER JOIN `{$resource_uris}` ru ON v.resource_uri_id = ru.ID
-				LEFT JOIN (SELECT resource_id, MIN(cached_title) AS cached_title FROM `{$resources}` GROUP BY resource_id) res ON ru.resource_id = res.resource_id
-				LEFT JOIN `{$countries}` c ON s.country_id = c.ID
-				LEFT JOIN `{$browsers}` b ON s.device_browser_id = b.ID
+				FROM %i v
+				INNER JOIN %i s ON v.session_id = s.ID
+				INNER JOIN %i ru ON v.resource_uri_id = ru.ID
+				LEFT JOIN (SELECT resource_id, MIN(cached_title) AS cached_title FROM %i GROUP BY resource_id) res ON ru.resource_id = res.resource_id
+				LEFT JOIN %i c ON s.country_id = c.ID
+				LEFT JOIN %i b ON s.device_browser_id = b.ID
 				WHERE v.viewed_at >= %s
 				ORDER BY v.viewed_at DESC LIMIT 20",
+				$views,
+				$sessions,
+				$resource_uris,
+				$resources,
+				$countries,
+				$browsers,
 				$five_min_ago
 			),
 			ARRAY_A

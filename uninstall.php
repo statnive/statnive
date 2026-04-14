@@ -34,9 +34,7 @@ $statnive_tables = $wpdb->get_col(
 );
 
 foreach ( $statnive_tables as $statnive_table ) {
-	// Table names come from SHOW TABLES — safe to use directly.
-	// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-	$wpdb->query( "DROP TABLE IF EXISTS `{$statnive_table}`" );
+	$wpdb->query( $wpdb->prepare( 'DROP TABLE IF EXISTS %i', $statnive_table ) );
 }
 
 // Delete all Statnive options.

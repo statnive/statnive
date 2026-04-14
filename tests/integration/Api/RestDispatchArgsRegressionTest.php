@@ -10,6 +10,8 @@ use WP_REST_Request;
 use WP_REST_Server;
 use WP_UnitTestCase;
 
+defined( 'ABSPATH' ) || define( 'ABSPATH' , dirname( __DIR__, 6 ) . '/' );
+
 /**
  * Regression guard for the args-schema bug fixed in PR #11.
  *

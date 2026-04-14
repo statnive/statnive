@@ -13,6 +13,8 @@ use WP_REST_Request;
 use WP_REST_Response;
 use WP_UnitTestCase;
 
+defined( 'ABSPATH' ) || define( 'ABSPATH' , dirname( __DIR__, 6 ) . '/' );
+
 /**
  * Integration test for the end-to-end UTM persistence pipeline.
  *

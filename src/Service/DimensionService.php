@@ -274,7 +274,9 @@ final class DimensionService {
 		// phpcs:disable WordPress.DB.DirectDatabaseQuery.NoCaching
 		$id = $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT ID FROM `{$table}` WHERE `{$unique_col}` = %s LIMIT 1",
+				'SELECT ID FROM %i WHERE %i = %s LIMIT 1',
+				$table,
+				$unique_col,
 				$data[ $unique_col ]
 			)
 		);
@@ -297,7 +299,9 @@ final class DimensionService {
 		// Re-query to get the ID.
 		$id = $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT ID FROM `{$table}` WHERE `{$unique_col}` = %s LIMIT 1",
+				'SELECT ID FROM %i WHERE %i = %s LIMIT 1',
+				$table,
+				$unique_col,
 				$data[ $unique_col ]
 			)
 		);
@@ -332,10 +336,11 @@ final class DimensionService {
 
 		// $where_clause is built from a static allowlist of column names;
 		// placeholders are passed via $where_values to wpdb->prepare().
-		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare,WordPress.DB.PreparedSQLPlaceholders.ReplacementsWrongNumber
 		$id = $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT ID FROM `{$table}` WHERE {$where_clause} LIMIT 1",
+				"SELECT ID FROM %i WHERE {$where_clause} LIMIT 1",
+				$table,
 				...$where_values
 			)
 		);
@@ -356,11 +361,12 @@ final class DimensionService {
 		// Race condition fallback.
 		$id = $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT ID FROM `{$table}` WHERE {$where_clause} LIMIT 1",
+				"SELECT ID FROM %i WHERE {$where_clause} LIMIT 1",
+				$table,
 				...$where_values
 			)
 		);
-		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare
+		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare,WordPress.DB.PreparedSQLPlaceholders.ReplacementsWrongNumber
 
 		$resolved = ( null !== $id ) ? (int) $id : 0;
 		if ( $resolved > 0 ) {

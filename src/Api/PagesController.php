@@ -121,18 +121,21 @@ final class PagesController extends WP_REST_Controller {
 		// phpcs:disable WordPress.DB.DirectDatabaseQuery.NoCaching
 		$rows = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT ru.uri, res.cached_title AS title,
+				'SELECT ru.uri, res.cached_title AS title,
 					SUM(sm.visitors) AS visitors,
 					SUM(sm.views) AS views,
 					SUM(sm.total_duration) AS total_duration,
 					SUM(sm.bounces) AS bounces
-				FROM `{$summary}` sm
-				INNER JOIN `{$resource_uris}` ru ON sm.resource_uri_id = ru.ID
-				LEFT JOIN `{$resources}` res ON ru.resource_id = res.resource_id
+				FROM %i sm
+				INNER JOIN %i ru ON sm.resource_uri_id = ru.ID
+				LEFT JOIN %i res ON ru.resource_id = res.resource_id
 				WHERE sm.date BETWEEN %s AND %s
 				GROUP BY ru.uri, res.cached_title
 				ORDER BY visitors DESC
-				LIMIT %d OFFSET %d",
+				LIMIT %d OFFSET %d',
+				$summary,
+				$resource_uris,
+				$resources,
 				$from,
 				$to,
 				$limit,
@@ -149,19 +152,23 @@ final class PagesController extends WP_REST_Controller {
 			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 			$today_rows = $wpdb->get_results(
 				$wpdb->prepare(
-					"SELECT ru.uri, res.cached_title AS title,
+					'SELECT ru.uri, res.cached_title AS title,
 						COUNT(DISTINCT s.visitor_id) AS visitors,
 						COUNT(v.ID) AS views,
 						COALESCE(SUM(s.duration), 0) AS total_duration,
 						SUM(CASE WHEN s.total_views = 1 THEN 1 ELSE 0 END) AS bounces
-					FROM `{$views_table}` v
-					INNER JOIN `{$sessions_table}` s ON v.session_id = s.ID
-					INNER JOIN `{$resource_uris}` ru ON v.resource_uri_id = ru.ID
-					LEFT JOIN `{$resources}` res ON ru.resource_id = res.resource_id
+					FROM %i v
+					INNER JOIN %i s ON v.session_id = s.ID
+					INNER JOIN %i ru ON v.resource_uri_id = ru.ID
+					LEFT JOIN %i res ON ru.resource_id = res.resource_id
 					WHERE DATE(v.viewed_at) = %s
 					GROUP BY ru.uri, res.cached_title
 					ORDER BY visitors DESC
-					LIMIT %d",
+					LIMIT %d',
+					$views_table,
+					$sessions_table,
+					$resource_uris,
+					$resources,
 					$today,
 					$limit
 				),

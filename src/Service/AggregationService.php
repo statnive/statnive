@@ -44,15 +44,15 @@ final class AggregationService {
 		// phpcs:disable WordPress.DB.DirectDatabaseQuery.NoCaching
 		$wpdb->query(
 			$wpdb->prepare(
-				"INSERT INTO `{$summary}` (date, resource_uri_id, visitors, sessions, views, total_duration, bounces)
+				'INSERT INTO %i (date, resource_uri_id, visitors, sessions, views, total_duration, bounces)
 				SELECT %s, v.resource_uri_id,
 					COUNT(DISTINCT s.visitor_id),
 					COUNT(DISTINCT s.ID),
 					COUNT(v.ID),
 					COALESCE(SUM(v.duration), 0),
 					SUM(CASE WHEN s.total_views = 1 THEN 1 ELSE 0 END)
-				FROM `{$views}` v
-				INNER JOIN `{$sessions}` s ON v.session_id = s.ID
+				FROM %i v
+				INNER JOIN %i s ON v.session_id = s.ID
 				WHERE DATE(v.viewed_at) = %s
 				GROUP BY v.resource_uri_id
 				ON DUPLICATE KEY UPDATE
@@ -60,8 +60,11 @@ final class AggregationService {
 					sessions = VALUES(sessions),
 					views = VALUES(views),
 					total_duration = VALUES(total_duration),
-					bounces = VALUES(bounces)",
+					bounces = VALUES(bounces)',
+				$summary,
 				$date,
+				$views,
+				$sessions,
 				$date
 			)
 		);
@@ -85,23 +88,26 @@ final class AggregationService {
 		// phpcs:disable WordPress.DB.DirectDatabaseQuery.NoCaching
 		$wpdb->query(
 			$wpdb->prepare(
-				"INSERT INTO `{$summary_totals}` (date, visitors, sessions, views, total_duration, bounces)
+				'INSERT INTO %i (date, visitors, sessions, views, total_duration, bounces)
 				SELECT %s,
 					COUNT(DISTINCT s.visitor_id),
 					COUNT(DISTINCT s.ID),
 					COUNT(v.ID),
 					COALESCE(SUM(v.duration), 0),
 					SUM(CASE WHEN s.total_views = 1 THEN 1 ELSE 0 END)
-				FROM `{$sessions}` s
-				LEFT JOIN `{$views}` v ON v.session_id = s.ID AND DATE(v.viewed_at) = %s
+				FROM %i s
+				LEFT JOIN %i v ON v.session_id = s.ID AND DATE(v.viewed_at) = %s
 				WHERE DATE(s.started_at) = %s
 				ON DUPLICATE KEY UPDATE
 					visitors = VALUES(visitors),
 					sessions = VALUES(sessions),
 					views = VALUES(views),
 					total_duration = VALUES(total_duration),
-					bounces = VALUES(bounces)",
+					bounces = VALUES(bounces)',
+				$summary_totals,
 				$date,
+				$sessions,
+				$views,
 				$date,
 				$date
 			)
@@ -124,7 +130,8 @@ final class AggregationService {
 		// phpcs:disable WordPress.DB.DirectDatabaseQuery.NoCaching
 		$count = (int) $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT COUNT(*) FROM `{$table}` WHERE date = %s",
+				'SELECT COUNT(*) FROM %i WHERE date = %s',
+				$table,
 				$date
 			)
 		);

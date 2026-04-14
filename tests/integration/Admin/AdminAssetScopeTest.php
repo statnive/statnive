@@ -7,6 +7,8 @@ namespace Statnive\Tests\Integration\Admin;
 use Statnive\Admin\ReactHandler;
 use WP_UnitTestCase;
 
+defined( 'ABSPATH' ) || define( 'ABSPATH' , dirname( __DIR__, 6 ) . '/' );
+
 /**
  * Regression guard for the "admin asset scoping rule".
  *

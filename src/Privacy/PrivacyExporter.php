@@ -74,11 +74,12 @@ final class PrivacyExporter {
 		// phpcs:disable WordPress.DB.DirectDatabaseQuery.NoCaching
 		$sessions = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT s.ID, s.started_at, s.ended_at, s.total_views, s.duration
-				FROM `{$sessions_table}` s
+				'SELECT s.ID, s.started_at, s.ended_at, s.total_views, s.duration
+				FROM %i s
 				WHERE s.user_id = %d
 				ORDER BY s.started_at DESC
-				LIMIT %d OFFSET %d",
+				LIMIT %d OFFSET %d',
+				$sessions_table,
 				$user->ID,
 				self::BATCH_SIZE,
 				$offset
@@ -120,11 +121,13 @@ final class PrivacyExporter {
 			// phpcs:disable WordPress.DB.DirectDatabaseQuery.NoCaching
 			$pages = $wpdb->get_col(
 				$wpdb->prepare(
-					"SELECT ru.uri FROM `{$views_table}` v
-					JOIN `{$uris_table}` ru ON v.resource_uri_id = ru.ID
+					'SELECT ru.uri FROM %i v
+					JOIN %i ru ON v.resource_uri_id = ru.ID
 					WHERE v.session_id = %d
 					ORDER BY v.viewed_at ASC
-					LIMIT 50",
+					LIMIT 50',
+					$views_table,
+					$uris_table,
 					$session->ID
 				)
 			);

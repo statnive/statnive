@@ -31,9 +31,10 @@ vi.mock('@/hooks/use-date-range', () => ({
 	})),
 }));
 
-const mockUseSources = vi.fn();
+const mockUseGroupedSources = vi.fn();
 vi.mock('@/hooks/use-sources', () => ({
-	useSources: (...args: unknown[]) => mockUseSources(...args),
+	useSources: vi.fn(() => ({ data: [], isLoading: false })),
+	useGroupedSources: (...args: unknown[]) => mockUseGroupedSources(...args),
 }));
 
 const mockUseUtm = vi.fn();
@@ -53,7 +54,7 @@ describe('ReferrersPage edge cases', () => {
 	});
 
 	it('shows UTM empty-state message when UTM data is empty', () => {
-		mockUseSources.mockReturnValue({ data: [], isLoading: false });
+		mockUseGroupedSources.mockReturnValue({ data: [], isLoading: false });
 		mockUseUtm.mockReturnValue({ data: [], isLoading: false });
 
 		render(<ReferrersPage />);
@@ -61,10 +62,18 @@ describe('ReferrersPage edge cases', () => {
 		expect(screen.getByText('No UTM parameters tracked yet. UTM-tagged links will appear here once visitors arrive through them.')).toBeInTheDocument();
 	});
 
-	it('shows fallback "Direct" for source with null name', () => {
-		mockUseSources.mockReturnValue({
+	it('shows fallback "Direct" for source with empty name in Direct channel', () => {
+		mockUseGroupedSources.mockReturnValue({
 			data: [
-				{ channel: 'Direct', name: null, domain: null, visitors: 100, sessions: 120, views: 300 },
+				{
+					channel: 'Direct',
+					visitors: 100,
+					sessions: 120,
+					views: 300,
+					sources: [
+						{ name: '', domain: '', visitors: 100, sessions: 120, views: 300 },
+					],
+				},
 			],
 			isLoading: false,
 		});
@@ -72,30 +81,23 @@ describe('ReferrersPage edge cases', () => {
 
 		render(<ReferrersPage />);
 
-		// The source render function uses `row.name ?? 'Direct'`
-		expect(screen.getAllByText('Direct').length).toBeGreaterThanOrEqual(1);
-	});
-
-	it('shows empty string fallback for source with empty channel', () => {
-		mockUseSources.mockReturnValue({
-			data: [
-				{ channel: '', name: 'unknown-source.com', domain: 'unknown-source.com', visitors: 50, sessions: 60, views: 100 },
-			],
-			isLoading: false,
-		});
-		mockUseUtm.mockReturnValue({ data: [], isLoading: false });
-
-		render(<ReferrersPage />);
-
-		// The channel renders via `row.channel ?? ''` — empty string is rendered as-is
-		expect(screen.getByText('unknown-source.com')).toBeInTheDocument();
+		// The source render function uses `source.name || 'Direct'`
+		expect(screen.getAllByText('Direct').length).toBeGreaterThanOrEqual(2);
 	});
 
 	it('renders without crash when source name is very long (200+ chars)', () => {
 		const longName = 'a'.repeat(250);
-		mockUseSources.mockReturnValue({
+		mockUseGroupedSources.mockReturnValue({
 			data: [
-				{ channel: 'Referral', name: longName, domain: longName, visitors: 10, sessions: 12, views: 20 },
+				{
+					channel: 'Referral',
+					visitors: 10,
+					sessions: 12,
+					views: 20,
+					sources: [
+						{ name: longName, domain: longName, visitors: 10, sessions: 12, views: 20 },
+					],
+				},
 			],
 			isLoading: false,
 		});
@@ -106,5 +108,29 @@ describe('ReferrersPage edge cases', () => {
 		// Should render without throwing
 		expect(container.querySelector('div')).toBeInTheDocument();
 		expect(screen.getByText(longName)).toBeInTheDocument();
+	});
+
+	it('renders correctly with a single channel containing one source', () => {
+		mockUseGroupedSources.mockReturnValue({
+			data: [
+				{
+					channel: 'Email',
+					visitors: 50,
+					sessions: 55,
+					views: 100,
+					sources: [
+						{ name: 'newsletter', domain: '', visitors: 50, sessions: 55, views: 100 },
+					],
+				},
+			],
+			isLoading: false,
+		});
+		mockUseUtm.mockReturnValue({ data: [], isLoading: false });
+
+		render(<ReferrersPage />);
+
+		expect(screen.getAllByText('Email').length).toBeGreaterThanOrEqual(2);
+		expect(screen.getByText('newsletter')).toBeInTheDocument();
+		expect(screen.getByText('50 visitors · 55 sessions')).toBeInTheDocument();
 	});
 });

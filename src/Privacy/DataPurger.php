@@ -64,7 +64,9 @@ final class DataPurger {
 			// phpcs:disable WordPress.DB.DirectDatabaseQuery.NoCaching
 			$deleted = $wpdb->query(
 				$wpdb->prepare(
-					"DELETE FROM `{$table}` WHERE `{$date_column}` < %s LIMIT %d",
+					'DELETE FROM %i WHERE %i < %s LIMIT %d',
+					$table,
+					$date_column,
 					$cutoff,
 					self::BATCH_SIZE
 				)

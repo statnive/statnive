@@ -1,6 +1,6 @@
 {
 	"name": "statnive",
-	"version": "0.4.0",
+	"version": "0.4.1",
 	"private": true,
 	"description": "Simple stats, clear decisions. Privacy-first analytics for WordPress.",
 	"scripts": {
@@ -22,11 +22,14 @@
 		"@testing-library/jest-dom": "^6.9.1",
 		"@testing-library/react": "^16.3.2",
 		"@testing-library/user-event": "^14.6.1",
-		"@types/react": "^19.2.14",
-		"@types/react-dom": "^19.2.3",
+		"@types/react": "^18.3.18",
+		"@types/react-dom": "^18.3.5",
 		"@vitejs/plugin-react": "^4.7.0",
 		"axe-core": "^4.11.2",
 		"jsdom": "^29.0.1",
+		"react": "^18.3.1",
+		"react-dom": "^18.3.1",
+		"react-is": "^18.3.1",
 		"tailwindcss": "^4.2.2",
 		"terser": "^5.46.1",
 		"typescript": "^6.0.2",
@@ -40,9 +43,6 @@
 		"class-variance-authority": "^0.7.1",
 		"clsx": "^2.1.1",
 		"lucide-react": "^1.7.0",
-		"react": "^19.2.4",
-		"react-dom": "^19.2.4",
-		"react-is": "^19.2.4",
 		"recharts": "^3.8.1",
 		"tailwind-merge": "^3.5.0"
 	}

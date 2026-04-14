@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.1] - 2026-04-14
+
+### Fixed
+
+- Externalize React/ReactDOM to WordPress's `wp-element` instead of bundling (WP.org Guideline §8, Appendix A #12). Dashboard bundle reduced from 743 KB to 562 KB.
+- Add CSRF nonce to all public tracking endpoints — hit, event, engagement, AJAX fallback (WP.org Checklist §7). Centralized in `PayloadValidator::validate_nonce()`.
+- Register `weekly` cron interval in `CronRegistrar` — WordPress has no built-in weekly schedule; GeoIP download and email reports depend on it (Checklist §9).
+- Set `autoload=false` for admin-only options (`statnive_version`, `statnive_geoip_enabled`, `statnive_db_version`) to reduce `alloptions` bloat.
+
 ## [0.4.0] - 2026-04-13
 
 ### Added

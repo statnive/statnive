@@ -71,7 +71,7 @@ final class SchemaMaintainer {
 		}
 
 		// Update stored version and set transient guard.
-		update_option( 'statnive_db_version', STATNIVE_VERSION );
+		update_option( 'statnive_db_version', STATNIVE_VERSION, false );
 		set_transient( self::TRANSIENT_KEY, '1', self::CHECK_TTL );
 	}
 

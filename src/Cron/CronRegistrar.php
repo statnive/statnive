@@ -26,6 +26,12 @@ final class CronRegistrar {
 	 * @return array<string, array{interval: int, display: string}>
 	 */
 	public static function add_intervals( array $schedules ): array {
+		if ( ! isset( $schedules['weekly'] ) ) {
+			$schedules['weekly'] = [
+				'interval' => WEEK_IN_SECONDS,
+				'display'  => __( 'Once Weekly', 'statnive' ),
+			];
+		}
 		if ( ! isset( $schedules['monthly'] ) ) {
 			$schedules['monthly'] = [
 				'interval' => 30 * DAY_IN_SECONDS,

@@ -7,6 +7,8 @@ namespace Statnive\Tests\Unit\Api;
 use PHPUnit\Framework\TestCase;
 use Statnive\Api\Concerns\CachesResponses;
 
+defined( 'ABSPATH' ) || define( 'ABSPATH' , dirname( __DIR__, 6 ) . '/' );
+
 /**
  * Unit tests for the CachesResponses trait.
  *

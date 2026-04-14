@@ -137,8 +137,8 @@ final class UtmController extends WP_REST_Controller {
 						MAX(CASE WHEN p.param_key = 'utm_campaign' THEN p.param_value END) AS campaign,
 						MAX(CASE WHEN p.param_key = 'utm_source'   THEN p.param_value END) AS source,
 						MAX(CASE WHEN p.param_key = 'utm_medium'   THEN p.param_value END) AS medium
-					FROM `{$parameters}` p
-					INNER JOIN `{$sessions}` s ON p.session_id = s.ID
+					FROM %i p
+					INNER JOIN %i s ON p.session_id = s.ID
 					WHERE p.param_key IN ('utm_campaign', 'utm_source', 'utm_medium')
 					  AND s.started_at BETWEEN %s AND %s
 					GROUP BY s.ID, s.visitor_id
@@ -146,6 +146,8 @@ final class UtmController extends WP_REST_Controller {
 				GROUP BY session_utm.campaign, session_utm.source, session_utm.medium
 				ORDER BY visitors DESC
 				LIMIT %d",
+				$parameters,
+				$sessions,
 				$from . ' 00:00:00',
 				$to . ' 23:59:59',
 				$limit

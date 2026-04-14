@@ -8,6 +8,8 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Statnive\Privacy\PrivacyManager;
 
+defined( 'ABSPATH' ) || define( 'ABSPATH' , dirname( __DIR__, 6 ) . '/' );
+
 #[CoversClass( PrivacyManager::class )]
 final class PrivacyManagerCacheTest extends TestCase {
 

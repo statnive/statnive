@@ -7,6 +7,10 @@
 
 declare(strict_types=1);
 
+if ( ! defined( 'ABSPATH' ) ) {
+	define( 'ABSPATH', dirname( __DIR__, 4 ) . '/' );
+}
+
 // Composer autoloader.
 require_once dirname( __DIR__ ) . '/vendor/autoload.php';
 
@@ -14,7 +18,7 @@ require_once dirname( __DIR__ ) . '/vendor/autoload.php';
 $_tests_dir = getenv( 'WP_TESTS_DIR' ) ?: '/tmp/wordpress-tests-lib';
 
 if ( ! file_exists( $_tests_dir . '/includes/functions.php' ) ) {
-	echo "Could not find WordPress test suite at {$_tests_dir}" . PHP_EOL;
+	echo "Could not find WordPress test suite at {$_tests_dir}" . PHP_EOL; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CLI bootstrap, not web output.
 	echo 'Install with: svn co https://develop.svn.wordpress.org/tags/6.7/tests/phpunit/includes/ /tmp/wordpress-tests-lib/includes/' . PHP_EOL;
 	exit( 1 );
 }

@@ -133,6 +133,39 @@ final class PayloadValidator {
 	}
 
 	/**
+	 * Nonce action for public tracking endpoints.
+	 *
+	 * @var string
+	 */
+	public const NONCE_ACTION = 'statnive_tracking';
+
+	/**
+	 * Body field name carrying the tracking nonce.
+	 *
+	 * @var string
+	 */
+	public const NONCE_FIELD = '_statnonce';
+
+	/**
+	 * Verify the CSRF nonce on a tracking request.
+	 *
+	 * This is a hardening layer alongside HMAC (Checklist §7). All logged-out
+	 * visitors share the same nonce (WP user ID 0), so per-visitor differentiation
+	 * comes from HMAC — the nonce mitigates cross-origin form submissions.
+	 *
+	 * @param array<string, mixed> $data Decoded payload.
+	 * @return array{0: string, 1: string, 2: int}|null Error tuple or null on success.
+	 */
+	public static function validate_nonce( array $data ): ?array {
+		$nonce = sanitize_text_field( $data[ self::NONCE_FIELD ] ?? '' );
+		if ( empty( $nonce ) || false === wp_verify_nonce( $nonce, self::NONCE_ACTION ) ) {
+			return [ 'invalid_nonce', 'Security check failed.', 403 ];
+		}
+
+		return null;
+	}
+
+	/**
 	 * Validate that every top-level key in the payload is allow-listed.
 	 *
 	 * @param array<string, mixed> $data    Decoded payload.

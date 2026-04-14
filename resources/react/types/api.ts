@@ -32,6 +32,19 @@ export interface SourceRow {
 	views: number;
 }
 
+export type ChannelSourceRow = Omit<SourceRow, 'channel' | 'name' | 'domain'> & {
+	name: string;
+	domain: string;
+};
+
+export interface ChannelGroup {
+	channel: string;
+	visitors: number;
+	sessions: number;
+	views: number;
+	sources: ChannelSourceRow[];
+}
+
 export interface PageRow {
 	uri: string;
 	title: string | null;

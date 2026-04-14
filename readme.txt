@@ -1,10 +1,10 @@
 === Statnive ===
 Contributors: statnive
 Tags: analytics, statistics, privacy, tracking, dashboard
-Requires at least: 5.6
+Requires at least: 6.2
 Tested up to: 6.9
 Requires PHP: 8.0
-Stable tag: 0.4.0
+Stable tag: 0.4.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -132,6 +132,12 @@ No visitor data is ever sent to any external service. All analytics data remains
 All analytics data stays in your WordPress database. No cookies, no fingerprinting, no external transfers. Daily-rotating salted hashes prevent cross-day tracking. Raw IPs are used only for GeoIP lookup and never stored. Integrates with the WordPress Privacy API for data export and erasure.
 
 == Changelog ==
+
+= 0.4.1 - 2026-04-14 =
+* Fixed: Externalize React/ReactDOM to wp-element instead of bundling (WP.org §8). Bundle size reduced 24%.
+* Fixed: Add CSRF nonce to all public tracking endpoints (WP.org §7).
+* Fixed: Register weekly cron interval — WordPress has no built-in weekly schedule (WP.org §9).
+* Fixed: Set autoload=false for admin-only options to reduce alloptions bloat.
 
 = 0.4.0 - 2026-04-13 =
 * WordPress.org submission readiness: 24 audit items resolved.

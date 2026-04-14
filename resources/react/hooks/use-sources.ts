@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { apiGet } from '@/lib/api-client';
-import type { SourceRow } from '@/types/api';
+import type { ChannelGroup, SourceRow } from '@/types/api';
 
 export function useSources(from: string, to: string, limit = 20) {
 	return useQuery({
@@ -10,6 +10,19 @@ export function useSources(from: string, to: string, limit = 20) {
 				from,
 				to,
 				limit: String(limit),
+			}),
+	});
+}
+
+export function useGroupedSources(from: string, to: string, perChannel = 10) {
+	return useQuery({
+		queryKey: ['sources', 'grouped', from, to, perChannel],
+		queryFn: () =>
+			apiGet<ChannelGroup[]>('sources', {
+				from,
+				to,
+				group_by: 'channel',
+				per_channel: String(perChannel),
 			}),
 	});
 }

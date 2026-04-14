@@ -10,6 +10,8 @@ use Statnive\Database\TableRegistry;
 use WP_REST_Request;
 use WP_UnitTestCase;
 
+defined( 'ABSPATH' ) || define( 'ABSPATH' , dirname( __DIR__, 6 ) . '/' );
+
 /**
  * Integration tests for import edge cases and scale scenarios.
  *
@@ -43,7 +45,7 @@ final class ImportAtScaleTest extends WP_UnitTestCase {
 	public function tear_down(): void {
 		foreach ( $this->temp_files as $file ) {
 			if ( file_exists( $file ) ) {
-				unlink( $file );
+				wp_delete_file( $file );
 			}
 		}
 

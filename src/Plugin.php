@@ -162,15 +162,17 @@ final class Plugin {
 		}
 
 		// Set default options.
-		add_option( 'statnive_version', STATNIVE_VERSION );
+		// Options read on every frontend page keep autoload=yes (default).
+		// Admin-only / migration-only options set autoload=false to avoid bloating alloptions.
+		add_option( 'statnive_version', STATNIVE_VERSION, '', false );
 		add_option( 'statnive_respect_dnt', true );
 		add_option( 'statnive_respect_gpc', true );
 		add_option( 'statnive_tracking_enabled', true );
-		add_option( 'statnive_geoip_enabled', false );
+		add_option( 'statnive_geoip_enabled', false, '', false );
 
 		// Create database tables.
 		DatabaseFactory::create_tables();
-		update_option( 'statnive_db_version', STATNIVE_VERSION );
+		update_option( 'statnive_db_version', STATNIVE_VERSION, false );
 
 		// Schedule cron jobs (aggregation, salt rotation, data purge, etc.).
 		CronRegistrar::register_all();

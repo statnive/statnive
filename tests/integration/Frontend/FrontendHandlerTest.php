@@ -7,6 +7,8 @@ namespace Statnive\Tests\Integration\Frontend;
 use Statnive\Frontend\FrontendHandler;
 use WP_UnitTestCase;
 
+defined( 'ABSPATH' ) || define( 'ABSPATH' , dirname( __DIR__, 6 ) . '/' );
+
 /**
  * Integration tests for the FrontendHandler tracker loading.
  *
@@ -151,7 +153,7 @@ final class FrontendHandlerTest extends WP_UnitTestCase {
 		$this->assertFalse( get_transient( $cache_key ) );
 
 		// Trigger SRI computation.
-		$tag = '<script src="test.js"></script>';
+		$tag = '<script src="test.js"></script>'; // phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedScript -- test fixture string, not actual script output.
 		FrontendHandler::add_sri_attribute( $tag, 'statnive-tracker' );
 
 		// Transient should now be set.
@@ -176,7 +178,7 @@ final class FrontendHandlerTest extends WP_UnitTestCase {
 		set_transient( $stale_key, 'sha256-stalevalue', MONTH_IN_SECONDS );
 
 		// Trigger SRI computation — should NOT use stale value.
-		$tag = '<script src="test.js"></script>';
+		$tag = '<script src="test.js"></script>'; // phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedScript -- test fixture string, not actual script output.
 		FrontendHandler::add_sri_attribute( $tag, 'statnive-tracker' );
 
 		// New transient should exist with correct mtime key.

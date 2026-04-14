@@ -12,6 +12,8 @@ use Statnive\Service\ExclusionMatcher;
 use Statnive\Service\ReferrerService;
 use WP_UnitTestCase;
 
+defined( 'ABSPATH' ) || define( 'ABSPATH' , dirname( __DIR__, 6 ) . '/' );
+
 /**
  * Integration tests for exclusion rule matching.
  *

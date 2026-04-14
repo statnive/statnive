@@ -34,8 +34,9 @@ final class ExclusionLogger {
 		// phpcs:disable WordPress.DB.DirectDatabaseQuery.NoCaching
 		$wpdb->query(
 			$wpdb->prepare(
-				"INSERT INTO `{$table}` (date, reason, count) VALUES (%s, %s, 1)
-				ON DUPLICATE KEY UPDATE count = count + 1",
+				'INSERT INTO %i (date, reason, count) VALUES (%s, %s, 1)
+				ON DUPLICATE KEY UPDATE count = count + 1',
+				$table,
 				$date,
 				$reason
 			)

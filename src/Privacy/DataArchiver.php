@@ -74,10 +74,11 @@ final class DataArchiver {
 		// phpcs:disable WordPress.DB.DirectDatabaseQuery.NoCaching
 		$rows = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT date, visitors, sessions, views, total_duration, bounces
-				FROM `{$summary}`
+				'SELECT date, visitors, sessions, views, total_duration, bounces
+				FROM %i
 				WHERE date LIKE %s
-				ORDER BY date ASC",
+				ORDER BY date ASC',
+				$summary,
 				$year_month . '%'
 			),
 			ARRAY_A
