@@ -2,14 +2,14 @@
 # This file is distributed under the GPL-2.0-or-later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Statnive 0.4.0\n"
+"Project-Id-Version: Statnive 0.4.2\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/statnive\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-04-13T08:00:04+00:00\n"
+"POT-Creation-Date: 2026-04-15T12:33:58+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: statnive\n"
@@ -73,6 +73,10 @@ msgid "To fix: set up a system cron job (recommended) or run \"wp statnive cron 
 msgstr ""
 
 #: src/Cron/CronRegistrar.php:32
+msgid "Once Weekly"
+msgstr ""
+
+#: src/Cron/CronRegistrar.php:38
 msgid "Once Monthly"
 msgstr ""
 
@@ -93,57 +97,63 @@ msgid "Your database schema is at version %1$s but the running plugin is version
 msgstr ""
 
 #. translators: %s: report frequency (e.g. Weekly, Monthly)
-#: src/Email/ReportBuilder.php:78
+#: src/Email/ReportBuilder.php:81
 #, php-format
 msgid "%s Report"
 msgstr ""
 
-#: src/Email/ReportBuilder.php:90
-#: src/Email/ReportBuilder.php:108
+#: src/Email/ReportBuilder.php:93
+#: src/Email/ReportBuilder.php:111
 msgid "Visitors"
 msgstr ""
 
-#: src/Email/ReportBuilder.php:94
+#: src/Email/ReportBuilder.php:97
 msgid "Sessions"
 msgstr ""
 
-#: src/Email/ReportBuilder.php:98
+#: src/Email/ReportBuilder.php:101
 msgid "Pageviews"
 msgstr ""
 
-#: src/Email/ReportBuilder.php:104
+#: src/Email/ReportBuilder.php:107
 msgid "Top Pages"
 msgstr ""
 
-#: src/Email/ReportBuilder.php:107
+#: src/Email/ReportBuilder.php:110
 msgid "Page"
 msgstr ""
 
-#: src/Email/ReportBuilder.php:109
+#: src/Email/ReportBuilder.php:112
 msgid "Views"
 msgstr ""
 
-#: src/Email/ReportBuilder.php:122
+#: src/Email/ReportBuilder.php:125
 msgid "View Full Dashboard"
 msgstr ""
 
-#: src/Email/ReportBuilder.php:126
+#: src/Email/ReportBuilder.php:129
 msgid "Sent by Statnive — Privacy-first analytics for WordPress"
 msgstr ""
 
-#: src/Plugin.php:126
+#: src/Plugin.php:123
 msgid "You do not have permission to activate plugins."
 msgstr ""
 
+#: src/Plugin.php:124
+#: src/Plugin.php:140
+#: src/Plugin.php:156
+msgid "Plugin Activation Error"
+msgstr ""
+
 #. translators: 1: Required PHP version, 2: Current PHP version
-#: src/Plugin.php:138
+#: src/Plugin.php:135
 #: statnive.php:68
 #, php-format
 msgid "Statnive requires PHP %1$s or higher. You are running PHP %2$s."
 msgstr ""
 
 #. translators: 1: Required WordPress version, 2: Current WordPress version
-#: src/Plugin.php:154
+#: src/Plugin.php:151
 #: statnive.php:93
 #, php-format
 msgid "Statnive requires WordPress %1$s or higher. You are running WordPress %2$s."
@@ -273,40 +283,40 @@ msgid "Site not using HTTPS. Analytics data transmitted in plaintext."
 msgstr ""
 
 #. translators: %d: number of sessions anonymized
-#: src/Privacy/PrivacyEraser.php:122
+#: src/Privacy/PrivacyEraser.php:124
 #, php-format
 msgid "Anonymized %d analytics session(s). Aggregate statistics preserved."
 msgstr ""
 
-#: src/Privacy/PrivacyExporter.php:101
+#: src/Privacy/PrivacyExporter.php:102
 msgid "Session Start"
 msgstr ""
 
-#: src/Privacy/PrivacyExporter.php:105
+#: src/Privacy/PrivacyExporter.php:106
 msgid "Session End"
 msgstr ""
 
-#: src/Privacy/PrivacyExporter.php:106
+#: src/Privacy/PrivacyExporter.php:107
 msgid "Active"
 msgstr ""
 
-#: src/Privacy/PrivacyExporter.php:109
+#: src/Privacy/PrivacyExporter.php:110
 msgid "Pages Viewed"
 msgstr ""
 
-#: src/Privacy/PrivacyExporter.php:113
+#: src/Privacy/PrivacyExporter.php:114
 msgid "Duration (seconds)"
 msgstr ""
 
-#: src/Privacy/PrivacyExporter.php:136
+#: src/Privacy/PrivacyExporter.php:139
 msgid "Pages Visited"
 msgstr ""
 
-#: src/Privacy/PrivacyExporter.php:143
+#: src/Privacy/PrivacyExporter.php:146
 msgid "Statnive Analytics Sessions"
 msgstr ""
 
-#: src/Privacy/PrivacyExporter.php:144
+#: src/Privacy/PrivacyExporter.php:147
 msgid "Analytics sessions recorded by Statnive. No IP addresses or cookies are stored."
 msgstr ""
 
@@ -453,7 +463,7 @@ msgid "Statnive: Data retained indefinitely"
 msgstr ""
 
 #: src/Privacy/SiteHealthIntegration.php:102
-msgid "Analytics data is retained forever. Consider setting a retention period for GDPR compliance."
+msgid "Analytics data is retained forever. Consider setting a retention period for data minimization best practices."
 msgstr ""
 
 #: src/Privacy/SiteHealthIntegration.php:106

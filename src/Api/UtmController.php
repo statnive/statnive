@@ -9,6 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 use Statnive\Api\Concerns\CachesResponses;
+use Statnive\Api\Concerns\ValidatesDateRange;
 use Statnive\Database\TableRegistry;
 use WP_REST_Controller;
 use WP_REST_Request;
@@ -23,6 +24,7 @@ use WP_REST_Server;
 final class UtmController extends WP_REST_Controller {
 
 	use CachesResponses;
+	use ValidatesDateRange;
 
 	/**
 	 * Route namespace.
@@ -169,15 +171,5 @@ final class UtmController extends WP_REST_Controller {
 		$this->set_cached_response( 'utm', $params, $payload, $from, $to );
 
 		return new WP_REST_Response( $payload, 200 );
-	}
-
-	/**
-	 * Validate a date string (YYYY-MM-DD).
-	 *
-	 * @param mixed $value Value to validate.
-	 * @return bool
-	 */
-	public function validate_date( $value ): bool {
-		return (bool) preg_match( '/^\d{4}-\d{2}-\d{2}$/', $value );
 	}
 }

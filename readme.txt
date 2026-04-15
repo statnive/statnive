@@ -85,19 +85,13 @@ All data is stored in your WordPress database on your own server. Statnive creat
 
 The Statnive tracker uses standard browser APIs (`navigator.sendBeacon`, `fetch` with `keepalive`, `Intl.DateTimeFormat`) that ship in every modern browser. We test against the latest two major versions of Chrome, Firefox, Safari, and Edge, plus iOS WebKit. Older browsers will silently fall back to a no-op — analytics won't work, but your site is unaffected.
 
-= What can cause "no data" or partial data loss? =
+= What can cause "no data"? =
 
-A few common things can prevent the tracker from reporting:
+Common causes: ad blockers filtering analytics requests, aggressive page caching serving stale HTML, CSP blocking `fetch()`/`sendBeacon()` (ensure `connect-src 'self'`), privacy signals (GPC/DNT) honouring opt-outs by design, or `DISABLE_WP_CRON` preventing background jobs. See [troubleshooting guide](https://statnive.com/docs/troubleshooting) for details.
 
-* **Ad blockers and privacy extensions** filter requests to anything that looks like analytics. There is no way around this — it's intentional on the visitor's part.
-* **Aggressive page caching** can serve a stale HTML page that omits the tracker tag. If you use a custom cache, exclude the tracker endpoint (see the next FAQ).
-* **CSP (Content Security Policy) misconfiguration** can block `fetch()` / `sendBeacon()` to your own site. Ensure `connect-src 'self'` (or your site origin) is allowed.
-* **Strict privacy settings** like `Sec-GPC: 1` (Global Privacy Control) or `DNT: 1` cause Statnive to honour the opt-out and skip tracking — by design.
-* **WP-Cron disabled** (e.g., `DISABLE_WP_CRON`) does not stop tracking, but it prevents data retention cleanup and GeoIP updates from running on schedule. Add a system cron or run `wp statnive cron run` manually.
+= Do I need to exclude URLs from page caches? =
 
-= Do I need to exclude any URL from page caches? =
-
-Yes — exclude the tracking endpoint from page caches. The endpoint is `/wp-json/statnive/v1/hit` (REST) and `wp-admin/admin-ajax.php?action=statnive_hit` (AJAX fallback). Most caching plugins exclude REST endpoints and admin-ajax by default, but if you use a custom cache rule, add these to the exclusion list.
+Exclude `/wp-json/statnive/v1/hit` and `admin-ajax.php?action=statnive_hit` from page caches. Most caching plugins do this by default.
 
 == Screenshots ==
 

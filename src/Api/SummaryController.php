@@ -9,6 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 use Statnive\Api\Concerns\CachesResponses;
+use Statnive\Api\Concerns\ValidatesDateRange;
 use Statnive\Database\TableRegistry;
 use WP_REST_Controller;
 use WP_REST_Request;
@@ -24,6 +25,7 @@ use WP_REST_Server;
 final class SummaryController extends WP_REST_Controller {
 
 	use CachesResponses;
+	use ValidatesDateRange;
 
 	/**
 	 * Route namespace.
@@ -187,15 +189,5 @@ final class SummaryController extends WP_REST_Controller {
 		$this->set_cached_response( 'summary', $params, $result, $from, $to );
 
 		return new WP_REST_Response( $result, 200 );
-	}
-
-	/**
-	 * Validate a date parameter.
-	 *
-	 * @param string $value Date string.
-	 * @return bool
-	 */
-	public function validate_date( $value ): bool {
-		return (bool) preg_match( '/^\d{4}-\d{2}-\d{2}$/', $value );
 	}
 }
