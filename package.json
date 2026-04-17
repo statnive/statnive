@@ -2,6 +2,7 @@
 	"name": "statnive",
 	"version": "0.4.2",
 	"private": true,
+	"license": "GPL-2.0-or-later",
 	"description": "Simple stats, clear decisions. Privacy-first analytics for WordPress.",
 	"scripts": {
 		"build": "vite build && vite build --mode tracker && vite build --mode tracker-core",
