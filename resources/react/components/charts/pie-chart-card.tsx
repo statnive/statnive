@@ -27,8 +27,8 @@ function CustomTooltip({
 	active?: boolean;
 	payload?: Array<{ name: string; value: number; payload: { fill: string } }>;
 }) {
-	if (!active || !payload?.length) return null;
-	const entry = payload[0];
+	const entry = payload?.[0];
+	if (!active || !entry) return null;
 	return (
 		<div className="rounded-md border border-border bg-card px-3 py-2 text-sm shadow-sm">
 			<p style={{ color: entry.payload.fill }} className="font-medium">
