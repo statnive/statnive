@@ -16,6 +16,12 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 final class AdminMenuManager {
 
+	private const MENU_ICON_SVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">'
+		. '<path d="M 10 82 L 50 24" stroke="currentColor" stroke-width="4" stroke-linecap="round" fill="none"/>'
+		. '<path d="M 50 24 L 92 82" stroke="currentColor" stroke-width="4" stroke-linecap="round" fill="none"/>'
+		. '<circle cx="50" cy="22" r="7.5" fill="#00A693"/>'
+		. '</svg>';
+
 	/**
 	 * Hook into WordPress admin.
 	 */
@@ -33,7 +39,7 @@ final class AdminMenuManager {
 			'manage_options',
 			'statnive',
 			[ self::class, 'render_page' ],
-			'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0iI2E3YWFhZCI+PHBhdGggZD0iTTIgMTFoMy41TDkgMmw2IDIwIDMuNS0xMUgyMnYyaC0zLjVMMTUgMjAgOSA0IDUuNSAxM0gyeiIvPjwvc3ZnPg==',
+			'data:image/svg+xml;base64,' . base64_encode( self::MENU_ICON_SVG ),
 			26
 		);
 	}
