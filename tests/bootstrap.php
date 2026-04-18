@@ -370,6 +370,23 @@ if ( ! function_exists( 'deactivate_plugins' ) ) {
 	}
 }
 
+if ( ! function_exists( 'wp_upload_dir' ) ) {
+	/**
+	 * @return array{basedir: string, baseurl: string, path: string, url: string, subdir: string, error: false}
+	 */
+	function wp_upload_dir(): array {
+		$base = sys_get_temp_dir() . '/statnive-unit-uploads';
+		return [
+			'basedir' => $base,
+			'baseurl' => 'http://example.test/uploads',
+			'path'    => $base,
+			'url'     => 'http://example.test/uploads',
+			'subdir'  => '',
+			'error'   => false,
+		];
+	}
+}
+
 /*
  * Statnive constants for unit tests.
  */

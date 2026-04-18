@@ -12,6 +12,7 @@ use Statnive\Cron\DailyAggregationJob;
 use Statnive\Cron\DataPurgeJob;
 use Statnive\Database\Migrator;
 use Statnive\Database\TableRegistry;
+use Statnive\Service\GeoIPService;
 use WP_REST_Controller;
 use WP_REST_Request;
 use WP_REST_Response;
@@ -157,6 +158,8 @@ final class DiagnosticsController extends WP_REST_Controller {
 				'enabled'             => (bool) get_option( 'statnive_geoip_enabled', false ),
 				'maxmind_key_present' => '' !== (string) get_option( 'statnive_maxmind_license_key', '' ),
 				'database_present'    => self::geoip_database_present(),
+				'source_detected'     => GeoIPService::detect_source(),
+				'cdn_header_seen'     => GeoIPService::first_cdn_header_name(),
 			],
 		];
 
