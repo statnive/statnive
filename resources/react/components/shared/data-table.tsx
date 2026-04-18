@@ -41,12 +41,25 @@ export function DataTable<T>({
 	const sortedData = useMemo(() => {
 		if (!sortKey) return data;
 
+		// WordPress $wpdb->get_results() returns numeric DB columns as strings,
+		// so coerce numeric-looking values before comparing to avoid lexicographic order.
+		const toNumber = (v: unknown): number | null => {
+			if (typeof v === 'number' && Number.isFinite(v)) return v;
+			if (typeof v === 'string' && v.trim() !== '') {
+				const n = Number(v);
+				return Number.isFinite(n) ? n : null;
+			}
+			return null;
+		};
+
 		return [...data].sort((a, b) => {
 			const aVal = (a as Record<string, unknown>)[sortKey];
 			const bVal = (b as Record<string, unknown>)[sortKey];
 
-			if (typeof aVal === 'number' && typeof bVal === 'number') {
-				return sortDir === 'asc' ? aVal - bVal : bVal - aVal;
+			const aNum = toNumber(aVal);
+			const bNum = toNumber(bVal);
+			if (aNum !== null && bNum !== null) {
+				return sortDir === 'asc' ? aNum - bNum : bNum - aNum;
 			}
 
 			const aStr = String(aVal ?? '');
