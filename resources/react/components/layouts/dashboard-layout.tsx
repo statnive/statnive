@@ -85,7 +85,15 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
 			<header className="border-b border-border bg-card px-4 py-3">
 				<div className="mx-auto flex max-w-7xl items-center justify-between">
 					<div className="flex items-center gap-2">
-						<BarChart3 className="h-5 w-5 text-primary" />
+						<svg
+							viewBox="0 0 100 100"
+							className="h-5 w-5 text-primary"
+							aria-hidden="true"
+						>
+							<path d="M 10 82 L 50 24" stroke="currentColor" strokeWidth="8" strokeLinecap="round" fill="none" />
+							<path d="M 50 24 L 92 82" stroke="currentColor" strokeWidth="8" strokeLinecap="round" fill="none" />
+							<circle cx="50" cy="22" r="10" fill="var(--color-sn-green)" />
+						</svg>
 						<span className="text-lg font-semibold tracking-tight">Statnive</span>
 						<span className="hidden text-sm text-muted-foreground sm:inline">
 							— {siteTitle}

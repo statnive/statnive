@@ -19,7 +19,7 @@ final class AdminMenuManager {
 	private const MENU_ICON_SVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">'
 		. '<path d="M 10 82 L 50 24" stroke="currentColor" stroke-width="4" stroke-linecap="round" fill="none"/>'
 		. '<path d="M 50 24 L 92 82" stroke="currentColor" stroke-width="4" stroke-linecap="round" fill="none"/>'
-		. '<circle cx="50" cy="22" r="7.5" fill="#00A693"/>'
+		. '<circle cx="50" cy="22" r="7.5" fill="currentColor"/>'
 		. '</svg>';
 
 	/**
@@ -27,6 +27,7 @@ final class AdminMenuManager {
 	 */
 	public static function init(): void {
 		add_action( 'admin_menu', [ self::class, 'register_menu' ] );
+		add_action( 'admin_enqueue_scripts', [ self::class, 'enqueue_menu_icon_style' ] );
 	}
 
 	/**
@@ -39,9 +40,54 @@ final class AdminMenuManager {
 			'manage_options',
 			'statnive',
 			[ self::class, 'render_page' ],
-			'data:image/svg+xml;base64,' . base64_encode( self::MENU_ICON_SVG ),
+			self::menu_icon_data_uri(),
 			26
 		);
+	}
+
+	/**
+	 * Paint the admin-menu icon through a CSS mask so its colour
+	 * follows the menu link's `currentColor` (matching Dashboards,
+	 * Posts, etc.) instead of rendering black — `currentColor` inside
+	 * a data-URI SVG used as `background-image` doesn't inherit from
+	 * the host element. Selector is statnive-prefixed, so this is
+	 * safe against the admin asset-scoping rule.
+	 */
+	public static function enqueue_menu_icon_style(): void {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
+
+		$handle = 'statnive-admin-menu-icon';
+		wp_register_style( $handle, false, [], STATNIVE_VERSION );
+		wp_enqueue_style( $handle );
+
+		$svg_data_uri = self::menu_icon_data_uri();
+
+		$css = '#toplevel_page_statnive .wp-menu-image {'
+			. 'background-image: none !important;'
+			. 'background-color: currentColor;'
+			. '-webkit-mask-image: url("' . $svg_data_uri . '");'
+			. 'mask-image: url("' . $svg_data_uri . '");'
+			. '-webkit-mask-repeat: no-repeat;'
+			. 'mask-repeat: no-repeat;'
+			. '-webkit-mask-position: center 8px;'
+			. 'mask-position: center 8px;'
+			. '-webkit-mask-size: 20px auto;'
+			. 'mask-size: 20px auto;'
+			. '}';
+
+		wp_add_inline_style( $handle, $css );
+	}
+
+	/**
+	 * Base64 data URI for the menu-icon SVG. Shared by `register_menu()`
+	 * (where WordPress uses it as the menu icon's background-image) and
+	 * `enqueue_menu_icon_style()` (where we paint it through a CSS mask).
+	 */
+	private static function menu_icon_data_uri(): string {
+		// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode -- data URI encoding, not obfuscation.
+		return 'data:image/svg+xml;base64,' . base64_encode( self::MENU_ICON_SVG );
 	}
 
 	/**
