@@ -94,6 +94,9 @@ final class AnalyticsServiceProvider implements ServiceProvider {
 		try {
 			$geo = GeoIPService::resolve( $raw_ip );
 			// CDN country headers cover sites without a MaxMind database.
+			// Only reached when HitController / AjaxFallback have already passed
+			// PrivacyManager::check_request_privacy(), so DNT/GPC-honoured
+			// requests never land here.
 			if ( '' === $geo['country_code'] ) {
 				$geo = GeoIPService::resolve_from_request_headers();
 			}
