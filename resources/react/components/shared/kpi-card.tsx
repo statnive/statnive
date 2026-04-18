@@ -30,8 +30,8 @@ export function KpiCard({ label, value, change, isLoading = false }: KpiCardProp
 						className={cn(
 							'rounded-full px-1.5 py-0.5 text-xs font-medium',
 							change >= 0
-								? 'bg-green-100 text-green-800'
-								: 'bg-red-100 text-red-800',
+								? 'bg-revenue/10 text-revenue-dark'
+								: 'bg-destructive/10 text-destructive',
 						)}
 						aria-label={sprintf(
 							/* translators: 1: "up" or "down", 2: percentage change */

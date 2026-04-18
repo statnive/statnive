@@ -7,7 +7,7 @@ interface RealtimeCounterProps {
 export function RealtimeCounter({ count }: RealtimeCounterProps) {
 	return (
 		<div
-			className="flex items-center gap-2 rounded-full bg-green-50 px-3 py-1"
+			className="flex items-center gap-2 rounded-full bg-revenue/10 px-3 py-1"
 			aria-live="polite"
 			aria-label={sprintf(
 				/* translators: %d: number of active visitors */
@@ -16,13 +16,13 @@ export function RealtimeCounter({ count }: RealtimeCounterProps) {
 			)}
 		>
 			<span className="relative flex h-2 w-2">
-				<span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75 motion-reduce:animate-none" />
-				<span className="relative inline-flex h-2 w-2 rounded-full bg-green-500" />
+				<span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-revenue opacity-75 motion-reduce:animate-none" />
+				<span className="relative inline-flex h-2 w-2 rounded-full bg-revenue" />
 			</span>
-			<span className="text-sm font-medium tabular-nums text-green-800">
+			<span className="text-sm font-medium tabular-nums text-revenue-dark">
 				{count}
 			</span>
-			<span className="hidden text-xs text-green-600 sm:inline">{__('online', 'statnive')}</span>
+			<span className="hidden text-xs text-revenue-dark sm:inline">{__('online', 'statnive')}</span>
 		</div>
 	);
 }

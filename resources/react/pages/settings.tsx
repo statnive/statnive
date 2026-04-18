@@ -34,7 +34,7 @@ export function SettingsPage() {
 						/>
 						<div>
 							<span className="text-sm font-medium">{__('Cookieless', 'statnive')}</span>
-							<span className="ml-2 rounded-full bg-green-100 px-2 py-0.5 text-xs text-green-800">{__('Recommended', 'statnive')}</span>
+							<span className="ml-2 rounded-full bg-revenue/10 px-2 py-0.5 text-xs text-revenue-dark">{__('Recommended', 'statnive')}</span>
 							<p className="text-xs text-muted-foreground">{__('No cookies, privacy-first. Designed to support GDPR/CCPA/APPI compliance.', 'statnive')}</p>
 						</div>
 					</label>

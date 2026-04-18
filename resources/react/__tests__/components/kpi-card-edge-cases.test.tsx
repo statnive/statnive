@@ -16,7 +16,7 @@ describe('KpiCard edge cases', () => {
 
 		const badge = screen.getByText(/100\.0%/);
 		expect(badge).toBeInTheDocument();
-		expect(badge.className).toContain('bg-green');
+		expect(badge.className).toContain('bg-revenue');
 	});
 
 	// Edge case: both periods zero — percentChange(0, 0) returns 0
@@ -26,7 +26,7 @@ describe('KpiCard edge cases', () => {
 		const badge = screen.getByText(/0\.0%/);
 		expect(badge).toBeInTheDocument();
 		// Zero is treated as non-negative, so green badge
-		expect(badge.className).toContain('bg-green');
+		expect(badge.className).toContain('bg-revenue');
 	});
 
 	// Edge case: negative to positive transition (e.g., change = 150 meaning +150%)
@@ -35,7 +35,7 @@ describe('KpiCard edge cases', () => {
 
 		const badge = screen.getByText(/150\.0%/);
 		expect(badge).toBeInTheDocument();
-		expect(badge.className).toContain('bg-green');
+		expect(badge.className).toContain('bg-revenue');
 		expect(badge.textContent).toContain('↑');
 	});
 
@@ -45,7 +45,7 @@ describe('KpiCard edge cases', () => {
 
 		const badge = screen.getByText(/33\.3%/);
 		expect(badge).toBeInTheDocument();
-		expect(badge.className).toContain('bg-red');
+		expect(badge.className).toContain('bg-destructive');
 		expect(badge.textContent).toContain('↓');
 	});
 

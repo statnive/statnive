@@ -5,11 +5,12 @@ import { useDimensions } from '@/hooks/use-dimensions';
 import { DataTable, type Column } from '@/components/shared/data-table';
 import { DualBarCell } from '@/components/shared/dual-bar-cell';
 import { PieChartCard } from '@/components/charts/pie-chart-card';
+import { CHART_NEGATIVE, CHART_SERIES } from '@/lib/chart-colors';
 import type { DimensionRow } from '@/types/api';
 
 const BOT_DEVICE_TYPE = 'Bot';
-const DEVICE_COLORS = ['#2271b1', '#059669', '#f59e0b'];
-const BOT_COLORS = ['#2271b1', '#ef4444'];
+const DEVICE_COLORS = CHART_SERIES.slice(0, 3);
+const BOT_COLORS = [CHART_SERIES[0], CHART_NEGATIVE];
 
 export function DevicesPage() {
 	const { params } = useDateRange();
