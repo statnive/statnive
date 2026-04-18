@@ -38,12 +38,11 @@ final class AdminBarWidget {
 		$span_allowed = [
 			'span' => [
 				'id'          => [],
-				'style'       => [],
 				'aria-hidden' => [],
 			],
 		];
 
-		$title_html = '<span id="statnive-bar-chart" style="display:inline-flex;align-items:center;gap:6px;">'
+		$title_html = '<span id="statnive-bar-chart">'
 			. '<span id="statnive-bar-icon" aria-hidden="true"></span>'
 			. '<span id="statnive-bar-count">—</span>'
 			. '</span>';
