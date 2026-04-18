@@ -46,12 +46,14 @@ final class AdminMenuManager {
 	}
 
 	/**
-	 * Paint the admin-menu icon through a CSS mask so its colour
-	 * follows the menu link's `currentColor` (matching Dashboards,
-	 * Posts, etc.) instead of rendering black — `currentColor` inside
-	 * a data-URI SVG used as `background-image` doesn't inherit from
-	 * the host element. Selector is statnive-prefixed, so this is
-	 * safe against the admin asset-scoping rule.
+	 * Paint both the admin-menu icon and the admin-bar icon through a
+	 * CSS mask so each picks up its host link's `currentColor`
+	 * (matching Dashboard / Posts / other bar items). `currentColor`
+	 * inside a data-URI SVG used as `background-image` doesn't inherit
+	 * from the host element; mask-image + `background-color:
+	 * currentColor` gives us that inheritance. Selectors are
+	 * statnive-prefixed so this is safe against the admin asset-scoping
+	 * rule.
 	 */
 	public static function enqueue_menu_icon_style(): void {
 		if ( ! current_user_can( 'manage_options' ) ) {
@@ -75,6 +77,20 @@ final class AdminMenuManager {
 			. 'mask-position: center 8px;'
 			. '-webkit-mask-size: 20px auto;'
 			. 'mask-size: 20px auto;'
+			. '}'
+			. '#wp-admin-bar-statnive-stats #statnive-bar-icon {'
+			. 'display: inline-block;'
+			. 'width: 20px;'
+			. 'height: 20px;'
+			. 'background-color: currentColor;'
+			. '-webkit-mask-image: url("' . $svg_data_uri . '");'
+			. 'mask-image: url("' . $svg_data_uri . '");'
+			. '-webkit-mask-repeat: no-repeat;'
+			. 'mask-repeat: no-repeat;'
+			. '-webkit-mask-position: center;'
+			. 'mask-position: center;'
+			. '-webkit-mask-size: contain;'
+			. 'mask-size: contain;'
 			. '}';
 
 		wp_add_inline_style( $handle, $css );
