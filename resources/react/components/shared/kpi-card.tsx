@@ -5,10 +5,11 @@ interface KpiCardProps {
 	label: string;
 	value: string;
 	change?: number;
+	helper?: string;
 	isLoading?: boolean;
 }
 
-export function KpiCard({ label, value, change, isLoading = false }: KpiCardProps) {
+export function KpiCard({ label, value, change, helper, isLoading = false }: KpiCardProps) {
 	if (isLoading) {
 		return (
 			<div className="rounded-lg border border-border bg-card p-4">
@@ -45,6 +46,9 @@ export function KpiCard({ label, value, change, isLoading = false }: KpiCardProp
 					</span>
 				)}
 			</div>
+			{helper && (
+				<p className="mt-2 text-xs text-muted-foreground tabular-nums">{helper}</p>
+			)}
 		</div>
 	);
 }
