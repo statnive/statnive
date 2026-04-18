@@ -34,6 +34,7 @@ final class GeoIPServiceHeadersTest extends TestCase {
 		foreach ( self::ALL_HEADERS as $key ) {
 			unset( $_SERVER[ $key ] );
 		}
+		unset( $GLOBALS['statnive_test_filters']['statnive_trust_cdn_country_headers'] );
 		parent::tearDown();
 	}
 
@@ -151,5 +152,34 @@ final class GeoIPServiceHeadersTest extends TestCase {
 
 		$_SERVER['HTTP_CF_IPCOUNTRY'] = 'DE';
 		$this->assertSame( 'cdn_headers', GeoIPService::detect_source() );
+	}
+
+	public function test_resolve_returns_empty_when_trust_filter_returns_false(): void {
+		$_SERVER['REMOTE_ADDR']      = '203.0.113.5';
+		$_SERVER['HTTP_CF_IPCOUNTRY'] = 'DE';
+
+		$GLOBALS['statnive_test_filters']['statnive_trust_cdn_country_headers'] = static fn() => false;
+
+		$result = GeoIPService::resolve_from_request_headers();
+
+		$this->assertSame( '', $result['country_code'] );
+		$this->assertSame( '', $result['country_name'] );
+	}
+
+	public function test_first_cdn_header_name_returns_null_when_trust_filter_returns_false(): void {
+		$_SERVER['HTTP_CF_IPCOUNTRY'] = 'DE';
+
+		$GLOBALS['statnive_test_filters']['statnive_trust_cdn_country_headers'] = static fn() => false;
+
+		$this->assertNull( GeoIPService::first_cdn_header_name() );
+	}
+
+	public function test_trust_filter_defaults_to_true_preserving_resolution(): void {
+		$_SERVER['REMOTE_ADDR']      = '203.0.113.5';
+		$_SERVER['HTTP_CF_IPCOUNTRY'] = 'DE';
+
+		// No filter attached — expect default-true behaviour.
+		$result = GeoIPService::resolve_from_request_headers();
+		$this->assertSame( 'DE', $result['country_code'] );
 	}
 }

@@ -159,7 +159,7 @@ final class DiagnosticsController extends WP_REST_Controller {
 				'maxmind_key_present' => '' !== (string) get_option( 'statnive_maxmind_license_key', '' ),
 				'database_present'    => self::geoip_database_present(),
 				'source_detected'     => GeoIPService::detect_source(),
-				'cdn_header_seen'     => GeoIPService::first_cdn_header_name(),
+				'cdn_header_present'  => null !== GeoIPService::first_cdn_header_name(),
 			],
 		];
 

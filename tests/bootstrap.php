@@ -104,7 +104,18 @@ if ( ! function_exists( 'delete_transient' ) ) {
 }
 
 if ( ! function_exists( 'apply_filters' ) ) {
+	/**
+	 * Stub with a test override: if a callable is registered at
+	 * $GLOBALS['statnive_test_filters'][$hook_name], it is invoked with
+	 * the default value. Otherwise the default passes through.
+	 *
+	 * @param mixed $value
+	 * @return mixed
+	 */
 	function apply_filters( string $hook_name, $value ) {
+		if ( isset( $GLOBALS['statnive_test_filters'][ $hook_name ] ) && is_callable( $GLOBALS['statnive_test_filters'][ $hook_name ] ) ) {
+			return $GLOBALS['statnive_test_filters'][ $hook_name ]( $value );
+		}
 		return $value;
 	}
 }

@@ -139,6 +139,27 @@ final class GeoIPService {
 	}
 
 	/**
+	 * Whether inbound CDN country headers may be trusted.
+	 *
+	 * Sites with a publicly reachable origin (where visitors can bypass the
+	 * CDN and hit the web server directly) should disable this via the
+	 * `statnive_trust_cdn_country_headers` filter — otherwise an attacker
+	 * could forge `CF-IPCountry` from a direct request and pollute the
+	 * country column in analytics. No security impact beyond data quality.
+	 *
+	 * @return bool
+	 */
+	private static function cdn_headers_trusted(): bool {
+		/**
+		 * Filters whether inbound CDN country headers are trusted.
+		 *
+		 * @since 0.4.3
+		 * @param bool $trusted Default true — preserves historical behaviour.
+		 */
+		return (bool) apply_filters( 'statnive_trust_cdn_country_headers', true );
+	}
+
+	/**
 	 * Resolve an approximate country from inbound CDN country headers.
 	 *
 	 * Reads $_SERVER for the standard country-indicating headers emitted by
@@ -153,6 +174,10 @@ final class GeoIPService {
 	 * @return array{country_code: string, country_name: string, city_name: string, region_code: string, continent_code: string, continent: string}
 	 */
 	public static function resolve_from_request_headers(): array {
+		if ( ! self::cdn_headers_trusted() ) {
+			return self::empty_result();
+		}
+
 		$remote = isset( $_SERVER['REMOTE_ADDR'] )
 			? sanitize_text_field( wp_unslash( (string) $_SERVER['REMOTE_ADDR'] ) )
 			: '';
@@ -195,6 +220,10 @@ final class GeoIPService {
 	 * @return string|null
 	 */
 	public static function first_cdn_header_name(): ?string {
+		if ( ! self::cdn_headers_trusted() ) {
+			return null;
+		}
+
 		foreach ( self::CDN_HEADERS as $header => $label ) {
 			if ( ! isset( $_SERVER[ $header ] ) ) {
 				continue;

@@ -6,7 +6,7 @@ export type GeoSource = 'maxmind' | 'cdn_headers' | 'none';
 interface DiagnosticsSnapshot {
 	geoip?: {
 		source_detected?: GeoSource;
-		cdn_header_seen?: string | null;
+		cdn_header_present?: boolean;
 	};
 }
 
