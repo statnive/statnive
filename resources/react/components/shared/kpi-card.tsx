@@ -20,11 +20,11 @@ export function KpiCard({ label, value, change, isLoading = false }: KpiCardProp
 
 	return (
 		<div className="rounded-lg border border-border bg-card p-4">
-			<p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+			<p className="font-display text-[11px] font-medium uppercase leading-[1.4] tracking-[0.12em] text-muted-foreground">
 				{label}
 			</p>
-			<div className="mt-1 flex items-baseline gap-2">
-				<span className="text-3xl font-bold tabular-nums">{value}</span>
+			<div className="mt-2.5 flex items-baseline gap-2">
+				<span className="font-display text-[34px] font-medium leading-none tracking-[-0.5px] tabular-nums">{value}</span>
 				{change !== undefined && (
 					<span
 						className={cn(

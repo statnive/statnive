@@ -5,6 +5,7 @@ import { useDimensions } from '@/hooks/use-dimensions';
 import { useGeoSource } from '@/hooks/use-geo-source';
 import { DataTable, type Column } from '@/components/shared/data-table';
 import { DualBarCell } from '@/components/shared/dual-bar-cell';
+import { HEADING_H2 } from '@/lib/typography';
 import type { DimensionRow } from '@/types/api';
 
 export function GeographyPage() {
@@ -47,7 +48,7 @@ export function GeographyPage() {
 
 	return (
 		<div className="space-y-6">
-			<h2 className="text-lg font-semibold">{__('Geography', 'statnive')}</h2>
+			<h2 className={HEADING_H2}>{__('Geography', 'statnive')}</h2>
 
 			<div className="grid grid-cols-1 gap-6 md:grid-cols-2">
 				<div className="rounded-lg border border-border bg-card p-4">

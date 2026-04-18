@@ -1,5 +1,6 @@
 import { __ } from '@wordpress/i18n';
 import { useSettings, useUpdateSettings } from '@/hooks/use-settings';
+import { HEADING_H2, HEADING_H3 } from '@/lib/typography';
 
 export function SettingsPage() {
 	const { data: settings, isLoading } = useSettings();
@@ -8,7 +9,7 @@ export function SettingsPage() {
 	if (isLoading || !settings) {
 		return (
 			<div className="space-y-4">
-				<h2 className="text-lg font-semibold">{__('Settings', 'statnive')}</h2>
+				<h2 className={HEADING_H2}>{__('Settings', 'statnive')}</h2>
 				{Array.from({ length: 4 }).map((_, i) => (
 					<div key={i} className="h-24 animate-pulse rounded-lg border border-border bg-card" />
 				))}
@@ -18,11 +19,11 @@ export function SettingsPage() {
 
 	return (
 		<div className="space-y-6">
-			<h2 className="text-lg font-semibold">{__('Settings', 'statnive')}</h2>
+			<h2 className={HEADING_H2}>{__('Settings', 'statnive')}</h2>
 
 			{/* Privacy */}
 			<div className="rounded-lg border border-border bg-card p-4">
-				<h3 className="mb-4 text-sm font-medium">{__('Privacy', 'statnive')}</h3>
+				<h3 className={`mb-4 ${HEADING_H3}`}>{__('Privacy', 'statnive')}</h3>
 				<div className="space-y-3">
 					<label className="flex cursor-pointer items-center gap-3">
 						<input
@@ -68,7 +69,7 @@ export function SettingsPage() {
 
 			{/* Data Retention */}
 			<div className="rounded-lg border border-border bg-card p-4">
-				<h3 className="mb-4 text-sm font-medium">{__('Data Retention', 'statnive')}</h3>
+				<h3 className={`mb-4 ${HEADING_H3}`}>{__('Data Retention', 'statnive')}</h3>
 				<select
 					value={settings.retention_days}
 					onChange={(e) => update({ retention_days: Number(e.target.value) })}
@@ -84,7 +85,7 @@ export function SettingsPage() {
 
 			{/* Exclusions */}
 			<div className="rounded-lg border border-border bg-card p-4">
-				<h3 className="mb-4 text-sm font-medium">{__('Exclusions', 'statnive')}</h3>
+				<h3 className={`mb-4 ${HEADING_H3}`}>{__('Exclusions', 'statnive')}</h3>
 				<label className="block text-sm">
 					<span className="text-muted-foreground">{__('Excluded IP Addresses (one per line)', 'statnive')}</span>
 					<textarea
@@ -99,7 +100,7 @@ export function SettingsPage() {
 
 			{/* Email Reports */}
 			<div className="rounded-lg border border-border bg-card p-4">
-				<h3 className="mb-4 text-sm font-medium">{__('Email Reports', 'statnive')}</h3>
+				<h3 className={`mb-4 ${HEADING_H3}`}>{__('Email Reports', 'statnive')}</h3>
 				<label className="flex cursor-pointer items-center gap-2">
 					<input type="checkbox" checked={settings.email_reports} onChange={(e) => update({ email_reports: e.target.checked })} className="accent-primary" />
 					<span className="text-sm">{__('Send email reports', 'statnive')}</span>

@@ -72,7 +72,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
 	useKeyboardShortcuts(shortcuts);
 
 	return (
-		<div className="min-h-screen bg-background">
+		<div className="min-h-screen bg-muted">
 			{/* Skip to content — a11y */}
 			<a
 				href="#statnive-content"

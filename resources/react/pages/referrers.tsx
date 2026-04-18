@@ -6,6 +6,7 @@ import { useUtm } from '@/hooks/use-utm';
 import { DualBarCell } from '@/components/shared/dual-bar-cell';
 import { DataTable, type Column } from '@/components/shared/data-table';
 import { formatNumber } from '@/lib/utils';
+import { HEADING_H2, HEADING_H3 } from '@/lib/typography';
 import type { UtmRow } from '@/types/api';
 
 export function ReferrersPage() {
@@ -44,7 +45,7 @@ export function ReferrersPage() {
 
 	return (
 		<div className="space-y-6">
-			<h2 className="text-lg font-semibold">{__('Referrers', 'statnive')}</h2>
+			<h2 className={HEADING_H2}>{__('Referrers', 'statnive')}</h2>
 
 			{/* Channel Summary Cards */}
 			<div className="grid grid-cols-2 gap-4 md:grid-cols-5">
@@ -65,7 +66,7 @@ export function ReferrersPage() {
 
 			{/* Channel-Grouped Sources */}
 			<div className="rounded-lg border border-border bg-card p-4">
-				<h3 className="mb-3 text-sm font-semibold">{__('All Sources', 'statnive')}</h3>
+				<h3 className={`mb-3 ${HEADING_H3}`}>{__('All Sources', 'statnive')}</h3>
 				{loadingChannels ? (
 					<div className="space-y-2" role="status" aria-label={__('Loading sources', 'statnive')}>
 						{Array.from({ length: 5 }, (_, i) => (
