@@ -77,32 +77,6 @@ test.describe('Consent Mode Behaviors', () => {
 		expect(hitRequests.length).toBeGreaterThan(preConsentCount);
 	});
 
-	test('full consent mode sends hit without any consent signal', async ({ page }) => {
-		// This test requires consent mode to be set to "full".
-		// Disable sendBeacon so tracker falls back to fetch (interceptable by Playwright).
-		await page.addInitScript(() => {
-			// @ts-ignore
-			navigator.sendBeacon = undefined; Object.defineProperty(navigator, "webdriver", { get: () => false });
-		});
-
-		const hitRequests: string[] = [];
-		await page.route('**/statnive/v1/hit', async (route) => {
-			hitRequests.push(route.request().url());
-			await route.continue();
-		});
-
-		await page.goto(env.baseUrl);
-
-		// Wait for the actual tracking request to complete.
-		await page.waitForResponse(
-			(res) => res.url().includes('statnive/v1/hit') && res.status() === 204,
-			{ timeout: 5000 }
-		);
-
-		// In full mode, hit should be sent regardless of consent.
-		expect(hitRequests.length).toBeGreaterThanOrEqual(1);
-	});
-
 	test('cookieless mode sends hit and sets zero cookies', async ({ page }) => {
 		// This test requires consent mode to be set to "cookieless".
 		// Disable sendBeacon so tracker falls back to fetch (interceptable by Playwright).

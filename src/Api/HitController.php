@@ -228,14 +228,16 @@ final class HitController extends WP_REST_Controller {
 			return self::error_response( $nonce_error );
 		}
 
-		// Privacy enforcement: check consent mode, DNT, GPC headers.
+		// Privacy enforcement: excluded IP/role, consent mode, DNT, GPC.
+		$ip              = IpExtractor::extract();
 		$consent_granted = ! empty( $data['consent_granted'] );
 		$privacy_check   = PrivacyManager::check_request_privacy(
 			[
 				'HTTP_DNT'     => sanitize_text_field( wp_unslash( $_SERVER['HTTP_DNT'] ?? '' ) ),
 				'HTTP_SEC_GPC' => sanitize_text_field( wp_unslash( $_SERVER['HTTP_SEC_GPC'] ?? '' ) ),
 			],
-			$consent_granted
+			$consent_granted,
+			$ip
 		);
 
 		if ( ! $privacy_check->allowed() ) {
@@ -245,7 +247,6 @@ final class HitController extends WP_REST_Controller {
 
 		// Basic rate limiting via transient (60 req/min per IP).
 		// Key is salted SHA-256 of the raw IP — raw IP is never persisted.
-		$ip     = IpExtractor::extract();
 		$ip_key = 'statnive_rate_' . hash( 'sha256', $ip . wp_salt( 'auth' ) );
 		$count  = (int) get_transient( $ip_key );
 		if ( $count >= 60 ) {

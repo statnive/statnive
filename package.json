@@ -13,8 +13,10 @@
 		"dev:tracker": "vite build --config vite.config.ts --mode tracker --watch",
 		"test": "vitest run",
 		"test:watch": "vitest",
+		"test:e2e": "playwright test",
 		"typecheck": "tsc --noEmit",
 		"gate": "npm run test",
+		"gate:e2e": "playwright test",
 		"prepare": "git config core.hooksPath .githooks || true"
 	},
 	"devDependencies": {

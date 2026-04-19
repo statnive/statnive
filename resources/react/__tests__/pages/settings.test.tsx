@@ -1,19 +1,20 @@
 // Generated from BDD scenarios — Feature: Dashboard Detail Pages — Settings screen
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 // ---------------------------------------------------------------------------
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockUpdate = vi.fn();
+const mockMutate = vi.fn();
 const mockUseSettings = vi.fn();
+let mockIsPending = false;
 
 vi.mock('@/hooks/use-settings', () => ({
 	useSettings: (...args: unknown[]) => mockUseSettings(...args),
-	useUpdateSettings: () => ({ mutate: mockUpdate }),
+	useUpdateSettings: () => ({ mutate: mockMutate, isPending: mockIsPending }),
 }));
 
 import { SettingsPage } from '@/pages/settings';
@@ -27,14 +28,27 @@ function defaultSettings() {
 		consent_mode: 'cookieless' as const,
 		respect_dnt: true,
 		respect_gpc: true,
-		retention_days: 90,
+		retention_days: 3650,
+		retention_mode: 'forever' as const,
 		excluded_ips: '',
 		excluded_roles: [],
-		email_reports: false,
-		email_frequency: 'weekly' as const,
 		tracking_enabled: true,
 	};
 }
+
+beforeEach(() => {
+	Object.defineProperty(window, 'StatniveDashboard', {
+		writable: true,
+		configurable: true,
+		value: {
+			restUrl: '/wp-json/statnive/v1/',
+			nonce: 'test-nonce',
+			siteTitle: 'Test',
+			version: '0.0.0-test',
+			currentIp: '198.51.100.77',
+		},
+	});
+});
 
 // ---------------------------------------------------------------------------
 // Tests
@@ -43,39 +57,58 @@ function defaultSettings() {
 describe('SettingsPage', () => {
 	beforeEach(() => {
 		vi.restoreAllMocks();
-		mockUpdate.mockClear();
+		mockMutate.mockClear();
+		mockIsPending = false;
 	});
 
-	// REQ-1.23 — Consent mode toggle switches between 3 privacy modes
-	it('renders 3 consent mode radio options with Cookieless marked as Recommended', () => {
+	it('renders the two supported consent modes with Cookieless marked as Recommended', () => {
 		mockUseSettings.mockReturnValue({ data: defaultSettings(), isLoading: false });
 
 		render(<SettingsPage />);
 
 		expect(screen.getByText('Cookieless')).toBeInTheDocument();
-		expect(screen.getByText('Full Tracking')).toBeInTheDocument();
 		expect(screen.getByText('Disabled Until Consent')).toBeInTheDocument();
+		expect(screen.queryByText('Full Tracking')).not.toBeInTheDocument();
 		expect(screen.getByText('Recommended')).toBeInTheDocument();
 	});
 
-	// REQ-1.23 — Selecting Disabled Until Consent persists the setting
-	it('calls update with consent_mode "disabled-until-consent" when that radio is selected', async () => {
+	it('keeps Save disabled until a field is changed, then submits the whole form on click', async () => {
 		mockUseSettings.mockReturnValue({ data: defaultSettings(), isLoading: false });
+		mockMutate.mockImplementation((_body, opts) => opts?.onSuccess?.(defaultSettings()));
 		const user = userEvent.setup();
 
 		render(<SettingsPage />);
 
-		// The radio inputs are wrapped in <label> elements. Find via the label text
-		// and click the associated radio input.
-		const label = screen.getByText('Disabled Until Consent').closest('label');
-		const radio = label?.querySelector('input[type="radio"]');
-		expect(radio).toBeTruthy();
-		await user.click(radio!);
+		const save = screen.getByTestId('settings-save');
+		expect(save).toBeDisabled();
 
-		expect(mockUpdate).toHaveBeenCalledWith({ consent_mode: 'disabled-until-consent' });
+		await user.click(screen.getByTestId('consent-mode-disabled-until-consent'));
+
+		expect(save).toBeEnabled();
+		await user.click(save);
+
+		expect(mockMutate).toHaveBeenCalledTimes(1);
+		const [payload] = mockMutate.mock.calls[0];
+		expect(payload.consent_mode).toBe('disabled-until-consent');
+		expect(payload.retention_days).toBe(3650);
+		expect(payload.retention_mode).toBe('forever');
 	});
 
-	// REQ-1.23 — DNT and GPC checkboxes are present
+	it('shows the "Saved ✓" flash after a successful save', async () => {
+		mockUseSettings.mockReturnValue({ data: defaultSettings(), isLoading: false });
+		mockMutate.mockImplementation((body, opts) => opts?.onSuccess?.(body));
+		const user = userEvent.setup();
+
+		render(<SettingsPage />);
+
+		await user.click(screen.getByTestId('dnt-respect-toggle'));
+		await user.click(screen.getByTestId('settings-save'));
+
+		await waitFor(() => {
+			expect(screen.getByTestId('settings-saved-flash')).toBeInTheDocument();
+		});
+	});
+
 	it('renders Respect Do Not Track and Respect Global Privacy Control checkboxes', () => {
 		mockUseSettings.mockReturnValue({ data: defaultSettings(), isLoading: false });
 
@@ -85,36 +118,62 @@ describe('SettingsPage', () => {
 		expect(screen.getByText('Respect Global Privacy Control')).toBeInTheDocument();
 	});
 
-	// REQ-1.25 — Data retention dropdown persists selection
-	it('renders data retention dropdown with 4 options and calls update when changed', async () => {
-		mockUseSettings.mockReturnValue({ data: defaultSettings(), isLoading: false });
+	it('maps retention select "Forever" → mode=forever and any other value → mode=delete', async () => {
+		mockUseSettings.mockReturnValue({
+			data: { ...defaultSettings(), retention_days: 90, retention_mode: 'delete' as const },
+			isLoading: false,
+		});
+		mockMutate.mockImplementation((body, opts) => opts?.onSuccess?.(body));
 		const user = userEvent.setup();
 
 		render(<SettingsPage />);
 
-		const select = screen.getByDisplayValue('90 days');
-		expect(select).toBeInTheDocument();
+		const select = screen.getByTestId('retention-select') as HTMLSelectElement;
+		await user.selectOptions(select, '3650');
+		await user.click(screen.getByTestId('settings-save'));
 
-		await user.selectOptions(select, '365');
-
-		expect(mockUpdate).toHaveBeenCalledWith({ retention_days: 365 });
+		expect(mockMutate).toHaveBeenCalledTimes(1);
+		const payload = mockMutate.mock.calls[0][0];
+		expect(payload.retention_days).toBe(3650);
+		expect(payload.retention_mode).toBe('forever');
 	});
 
-	// REQ-1.25 — All retention options available
-	it('displays all 4 retention period options: 30 days, 90 days, 1 year, Forever', () => {
+	it('offers the 5 retention options: 30 days, 90 days, 180 days, 1 year, Forever', () => {
 		mockUseSettings.mockReturnValue({ data: defaultSettings(), isLoading: false });
 
 		render(<SettingsPage />);
 
 		const options = screen.getAllByRole('option');
-		const retentionOptions = options.map((o) => o.textContent);
-		expect(retentionOptions).toContain('30 days');
-		expect(retentionOptions).toContain('90 days');
-		expect(retentionOptions).toContain('1 year');
-		expect(retentionOptions).toContain('Forever');
+		const labels = options.map((o) => o.textContent);
+		expect(labels).toContain('30 days');
+		expect(labels).toContain('90 days');
+		expect(labels).toContain('180 days');
+		expect(labels).toContain('1 year');
+		expect(labels).toContain('Forever');
 	});
 
-	// Settings loading state
+	it('shows the current IP and the "Add to exclusions" button appends it to the textarea', async () => {
+		mockUseSettings.mockReturnValue({ data: defaultSettings(), isLoading: false });
+		const user = userEvent.setup();
+
+		render(<SettingsPage />);
+
+		expect(screen.getByTestId('current-ip-value')).toHaveTextContent('198.51.100.77');
+		await user.click(screen.getByTestId('add-ip-button'));
+
+		const textarea = screen.getByTestId('excluded-ips-textarea') as HTMLTextAreaElement;
+		expect(textarea.value).toContain('198.51.100.77');
+		expect(screen.getByTestId('settings-save')).toBeEnabled();
+	});
+
+	it('has no Email Reports section', () => {
+		mockUseSettings.mockReturnValue({ data: defaultSettings(), isLoading: false });
+
+		render(<SettingsPage />);
+
+		expect(screen.queryByText(/email report/i)).not.toBeInTheDocument();
+	});
+
 	it('shows skeleton loading state while settings are fetching', () => {
 		mockUseSettings.mockReturnValue({ data: null, isLoading: true });
 

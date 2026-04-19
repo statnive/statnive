@@ -88,14 +88,13 @@ export interface RealtimeResponse {
 }
 
 export interface SettingsState {
-	consent_mode: 'full' | 'cookieless' | 'disabled-until-consent';
+	consent_mode: 'cookieless' | 'disabled-until-consent';
 	respect_dnt: boolean;
 	respect_gpc: boolean;
 	retention_days: number;
+	retention_mode: 'forever' | 'delete' | 'archive';
 	excluded_ips: string;
 	excluded_roles: string[];
-	email_reports: boolean;
-	email_frequency: 'weekly' | 'monthly';
 	tracking_enabled: boolean;
 }
 

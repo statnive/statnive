@@ -309,7 +309,6 @@ final class DiagnosticsController extends WP_REST_Controller {
 			'statnive_daily_salt_rotation',
 			'statnive_daily_aggregation',
 			'statnive_daily_data_purge',
-			'statnive_email_report',
 			'statnive_weekly_geoip_update',
 		];
 

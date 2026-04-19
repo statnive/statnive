@@ -132,13 +132,15 @@ final class AjaxFallback {
 		}
 
 		// Privacy enforcement: check consent mode, DNT, GPC headers.
+		$ip              = IpExtractor::extract();
 		$consent_granted = ! empty( $data['consent_granted'] );
 		$privacy_check   = PrivacyManager::check_request_privacy(
 			[
 				'HTTP_DNT'     => sanitize_text_field( wp_unslash( $_SERVER['HTTP_DNT'] ?? '' ) ),
 				'HTTP_SEC_GPC' => sanitize_text_field( wp_unslash( $_SERVER['HTTP_SEC_GPC'] ?? '' ) ),
 			],
-			$consent_granted
+			$consent_granted,
+			$ip
 		);
 
 		if ( ! $privacy_check->allowed() ) {
@@ -151,7 +153,7 @@ final class AjaxFallback {
 		}
 
 		// Rate limiting (60 req/min per IP, matching HitController).
-		$ip_key = 'statnive_rate_' . hash( 'sha256', IpExtractor::extract() . wp_salt( 'auth' ) );
+		$ip_key = 'statnive_rate_' . hash( 'sha256', $ip . wp_salt( 'auth' ) );
 		$count  = (int) get_transient( $ip_key );
 		if ( $count >= 60 ) {
 			self::reject( 'rate_limited', 'Too many requests.', 429 );
