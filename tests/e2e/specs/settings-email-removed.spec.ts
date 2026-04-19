@@ -14,7 +14,11 @@ import { env } from '../env';
 test.describe('Email Reports removal', () => {
 	test('EM-1 Settings UI has no Email Reports section', async ({ page }) => {
 		await page.goto(`${env.baseUrl}/wp-admin/admin.php?page=statnive#/settings`);
-		await expect(page.getByText(/email report/i)).toHaveCount(0);
+		// Search the Statnive SPA mount only — Local admin chrome can mention
+		// "Email Reports" in other plugins (WooCommerce, etc.) that are
+		// visible in the same page.
+		const spa = page.locator('#statnive-app');
+		await expect(spa.getByText(/email report/i)).toHaveCount(0);
 	});
 
 	test('EM-2 REST GET /settings has no email_* keys', async ({ page }) => {

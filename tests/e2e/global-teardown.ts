@@ -16,6 +16,7 @@ const E2E_MU_FILES = [
 	'statnive-ip-filter.php',
 	'statnive-consent-stub.php',
 	'statnive-e2e-debug.php',
+	'.statnive-e2e-on',
 ];
 
 export default async function globalTeardown(): Promise<void> {

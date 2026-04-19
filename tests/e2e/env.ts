@@ -5,17 +5,17 @@
  * same site the Playwright MCP attaches to. Override any field via env
  * for CI (wp-env, Docker, etc.).
  */
-const defaultBaseUrl = process.env.WP_BASE_URL || 'http://statnive-test.local';
+const defaultBaseUrl = process.env.WP_BASE_URL || 'http://localhost:10013';
 
 export const env = {
 	/** WordPress base URL. */
 	baseUrl: defaultBaseUrl,
 
 	/** WordPress admin username. */
-	adminUser: process.env.WP_ADMIN_USER || 'admin',
+	adminUser: process.env.WP_ADMIN_USER || 'statnive_e2e',
 
 	/** WordPress admin password. */
-	adminPassword: process.env.WP_ADMIN_PASSWORD || 'password',
+	adminPassword: process.env.WP_ADMIN_PASSWORD || 'statnive_e2e_pw_2026',
 
 	/** REST API base URL. */
 	restUrl: process.env.WP_REST_URL || `${defaultBaseUrl}/wp-json`,
@@ -30,4 +30,13 @@ export const env = {
 	 * needing to know Local's per-site MySQL socket.
 	 */
 	wpRoot: process.env.WP_ROOT || '/Users/parhumm/Local Sites/statnive-test/app/public',
+
+	/**
+	 * Local WP ships its own MySQL socket at a per-site path under
+	 * `Library/Application Support/Local/run/<siteId>/mysql/mysqld.sock`.
+	 * Exporting `STATNIVE_E2E_MYSQL_SOCKET` lets the Node-side DB helpers
+	 * (`db-cli.ts`) connect without relying on `wp db query` working through
+	 * wp-config.php.
+	 */
+	mysqlSocket: process.env.STATNIVE_E2E_MYSQL_SOCKET || '',
 };

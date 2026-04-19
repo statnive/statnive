@@ -25,19 +25,28 @@ test.describe('Full Tracking removal', () => {
 		await expect(page.locator('input[name="consent"]')).toHaveCount(2);
 	});
 
-	test('CM-7 REST PUT consent_mode="full" is silently coerced to cookieless', async ({ page }) => {
+	test('CM-7 REST PUT consent_mode="full" is rejected or silently coerced', async ({ page }) => {
 		await page.goto(`${env.baseUrl}/wp-admin/admin.php?page=statnive#/settings`);
+		const nonce = await getDashboardNonce(page);
 		const put = await page.request.put(`${env.restUrl}/statnive/v1/settings`, {
-			headers: {
-				'Content-Type': 'application/json',
-				'X-WP-Nonce': await getDashboardNonce(page),
-			},
+			headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': nonce },
 			data: { consent_mode: 'full' },
 		});
 
-		expect(put.ok()).toBeTruthy();
-		const body = (await put.json()) as { consent_mode: string };
-		expect(body.consent_mode).toBe('cookieless');
+		if (put.status() === 400) {
+			// WordPress REST `enum` validation rejected it before our sanitizer
+			// ran. Confirm the option on disk was not mutated.
+			const get = await page.request.get(`${env.restUrl}/statnive/v1/settings`, {
+				headers: { 'X-WP-Nonce': nonce },
+			});
+			const body = (await get.json()) as { consent_mode: string };
+			expect(body.consent_mode).not.toBe('full');
+		} else {
+			// REST framework let it through; our sanitizer must coerce.
+			expect(put.ok()).toBeTruthy();
+			const body = (await put.json()) as { consent_mode: string };
+			expect(body.consent_mode).toBe('cookieless');
+		}
 	});
 
 	test('CM-8 legacy wp_option value "full" is coerced on GET', async ({ page }) => {

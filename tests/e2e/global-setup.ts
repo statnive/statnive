@@ -13,7 +13,7 @@
  */
 
 import { chromium, type FullConfig } from '@playwright/test';
-import { cpSync, mkdirSync, readdirSync } from 'node:fs';
+import { cpSync, mkdirSync, readdirSync, writeFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { env } from './env';
 
@@ -36,6 +36,10 @@ export default async function globalSetup(_config: FullConfig): Promise<void> {
 		const dst = join(SITE_MU_DIR, file);
 		cpSync(join(FIXTURE_MU_DIR, file), dst, { force: true });
 	}
+	// Activate the mu-plugins via the file sentinel they check for.
+	// Local's PHP worker does not inherit `STATNIVE_E2E_*` env vars, so this
+	// file is the only reliable gate.
+	writeFileSync(join(SITE_MU_DIR, '.statnive-e2e-on'), '1');
 
 	mkdirSync(AUTH_DIR, { recursive: true });
 	const storageStatePath = join(AUTH_DIR, 'admin.json');

@@ -9,7 +9,7 @@
  * mounted by `statnive-e2e-debug.php`.
  */
 
-import type { APIRequestContext, Page } from '@playwright/test';
+import type { Page } from '@playwright/test';
 import { env } from '../env';
 import { wpCacheFlush } from '../db-cli';
 
@@ -56,9 +56,24 @@ export async function setSetting(
 	await setSettings(page, { [key]: value } as Partial<Record<SettingKey, SettingValue>>);
 }
 
-async function debugPost(request: APIRequestContext, path: string, body: unknown = {}): Promise<unknown> {
-	const response = await request.post(`${env.restUrl}/statnive/v1${path}`, {
-		headers: { 'Content-Type': 'application/json' },
+async function ensureDashboardNonce(page: Page): Promise<string> {
+	let nonce = await getDashboardNonce(page);
+	if (nonce === '') {
+		// The admin dashboard is the only page that localises the nonce —
+		// specs that exercise the debug endpoints from the frontend need to
+		// hit wp-admin first so window.StatniveDashboard is populated.
+		await page.goto(`${env.baseUrl}/wp-admin/admin.php?page=statnive`);
+		nonce = await getDashboardNonce(page);
+	}
+	return nonce;
+}
+
+async function debugPost(page: Page, path: string, body: unknown = {}): Promise<unknown> {
+	const response = await page.request.post(`${env.restUrl}/statnive/v1${path}`, {
+		headers: {
+			'Content-Type': 'application/json',
+			'X-WP-Nonce': await ensureDashboardNonce(page),
+		},
 		data: body,
 	});
 	if (!response.ok()) {
@@ -68,16 +83,16 @@ async function debugPost(request: APIRequestContext, path: string, body: unknown
 }
 
 export async function snapshotSettings(page: Page): Promise<void> {
-	await debugPost(page.request, '/debug/settings-snapshot');
+	await debugPost(page, '/debug/settings-snapshot');
 }
 
 export async function restoreSettings(page: Page): Promise<void> {
-	await debugPost(page.request, '/debug/settings-restore');
+	await debugPost(page, '/debug/settings-restore');
 	wpCacheFlush();
 }
 
 export async function truncateStatnive(page: Page): Promise<void> {
-	await debugPost(page.request, '/debug/truncate');
+	await debugPost(page, '/debug/truncate');
 }
 
 export async function backdate(
@@ -87,16 +102,17 @@ export async function backdate(
 	daysAgo: number,
 	where: Record<string, string | number> = {}
 ): Promise<void> {
-	await debugPost(page.request, '/debug/backdate', { table, column, days_ago: daysAgo, where });
+	await debugPost(page, '/debug/backdate', { table, column, days_ago: daysAgo, where });
 }
 
 export async function runPurge(page: Page): Promise<void> {
-	await debugPost(page.request, '/debug/run-purge');
+	await debugPost(page, '/debug/run-purge');
 }
 
 export async function nextScheduled(page: Page, hook: string): Promise<number> {
 	const response = await page.request.get(
-		`${env.restUrl}/statnive/v1/debug/next-scheduled?hook=${encodeURIComponent(hook)}`
+		`${env.restUrl}/statnive/v1/debug/next-scheduled?hook=${encodeURIComponent(hook)}`,
+		{ headers: { 'X-WP-Nonce': await ensureDashboardNonce(page) } }
 	);
 	if (!response.ok()) {
 		throw new Error(`GET /next-scheduled failed: ${response.status()}`);
@@ -110,5 +126,5 @@ export async function setStubbedConsent(
 	category: string,
 	granted: boolean
 ): Promise<void> {
-	await debugPost(page.request, '/debug/consent-stub', { category, granted });
+	await debugPost(page, '/debug/consent-stub', { category, granted });
 }

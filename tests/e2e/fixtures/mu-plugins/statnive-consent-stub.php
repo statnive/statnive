@@ -11,7 +11,16 @@
  * @package Statnive\Tests\E2E
  */
 
-if ( '1' !== getenv( 'STATNIVE_E2E_CONSENT_STUB' ) ) {
+// File-sentinel gate — see statnive-ip-filter.php for rationale.
+if ( ! file_exists( __DIR__ . '/.statnive-e2e-on' ) ) {
+	return;
+}
+
+// The real `wp-consent-api` plugin ships its own `wp_has_consent()`. Stubbing
+// here would collide (mu-plugins load BEFORE regular plugins), causing a
+// "Cannot redeclare" fatal. Bail when the plugin file is present and rely on
+// its own API instead — tests that need this path can drive it via cookies.
+if ( file_exists( WP_PLUGIN_DIR . '/wp-consent-api/wp-consent-api.php' ) ) {
 	return;
 }
 

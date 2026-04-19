@@ -14,7 +14,10 @@
  * @package Statnive\Tests\E2E
  */
 
-if ( '1' !== getenv( 'STATNIVE_E2E_IP_FILTER' ) ) {
+// File-sentinel gate — global-setup.ts creates `.statnive-e2e-on` next to
+// this file and global-teardown.ts removes it. Env vars do not propagate
+// into Local's PHP worker, so file presence is the only reliable signal.
+if ( ! file_exists( __DIR__ . '/.statnive-e2e-on' ) ) {
 	return;
 }
 

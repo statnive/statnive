@@ -3,10 +3,11 @@
  * E2E-only: debug REST endpoints the test harness uses for setup/teardown.
  *
  * Mounted under `/wp-json/statnive/v1/debug/*`. Every route is gated on:
- *   1. `WP_DEBUG` being true, AND
+ *   1. the sentinel file `.statnive-e2e-on` existing next to this file (the
+ *      test harness drops it in global-setup and removes it in teardown),
+ *      AND
  *   2. `manage_options` capability on the caller (admin storageState
- *      carries the nonce), AND
- *   3. the env var `STATNIVE_E2E_DEBUG=1`.
+ *      carries the nonce).
  *
  * Endpoints:
  *   POST /debug/truncate              Truncate all Statnive analytics tables.
@@ -21,11 +22,11 @@
  * @package Statnive\Tests\E2E
  */
 
-if ( '1' !== getenv( 'STATNIVE_E2E_DEBUG' ) ) {
-	return;
-}
-
-if ( ! defined( 'WP_DEBUG' ) || ! WP_DEBUG ) {
+// File-sentinel gate — env vars don't propagate to Local's PHP worker.
+// global-setup.ts drops `.statnive-e2e-on` next to this file and
+// global-teardown.ts removes it. The sentinel's absence on production IS
+// the gate — routes only register when the test harness is in control.
+if ( ! file_exists( __DIR__ . '/.statnive-e2e-on' ) ) {
 	return;
 }
 

@@ -16,6 +16,31 @@ import { env } from './env';
 
 const WP_CWD = env.wpRoot;
 
+function mysqlArgs(): string[] {
+	const base = ['-uroot', '-proot', 'local', '--batch'];
+	if (env.mysqlSocket) {
+		return [`--socket=${env.mysqlSocket}`, ...base];
+	}
+	return base;
+}
+
+function runMysql(sql: string): string {
+	try {
+		return execFileSync('mysql', mysqlArgs(), {
+			input: sql,
+			encoding: 'utf8',
+			stdio: ['pipe', 'pipe', 'pipe'],
+		});
+	} catch (err) {
+		const { stderr, stdout } = err as { stderr?: Buffer | string; stdout?: Buffer | string };
+		throw new Error(
+			['mysql failed', stderr ? `stderr: ${String(stderr).trim()}` : '', stdout ? `stdout: ${String(stdout).trim()}` : '']
+				.filter(Boolean)
+				.join('\n')
+		);
+	}
+}
+
 function wp(args: string[], opts: { input?: string } = {}): string {
 	try {
 		return execFileSync('wp', args, {
@@ -39,7 +64,7 @@ function wp(args: string[], opts: { input?: string } = {}): string {
 
 /** Run an arbitrary SQL query and return tab-separated rows as record objects. */
 export function dbQuery<T = Record<string, string>>(sql: string): T[] {
-	const out = wp(['db', 'query', sql, '--skip-column-names=false', '--batch'], {}).trim();
+	const out = runMysql(sql).trim();
 	if (!out) return [];
 	const [header, ...lines] = out.split('\n');
 	const cols = header.split('\t');
@@ -63,16 +88,28 @@ export function dbCount(table: string, where = ''): number {
 	return rows.length ? Number(rows[0].c) : 0;
 }
 
-/** Set/clear a single option via WP-CLI. */
+/**
+ * Set a single option directly in wp_options.
+ *
+ * Uses mysql over the Local socket instead of `wp option update` because
+ * wp-cli can't reach Local's per-site MySQL socket without PHP ini overrides.
+ */
 export function wpOptionUpdate(key: string, value: string): void {
-	wp(['option', 'update', key, value]);
+	const sql = `INSERT INTO wp_options (option_name, option_value, autoload) VALUES (${sqlQuote(
+		key
+	)}, ${sqlQuote(value)}, 'yes') ON DUPLICATE KEY UPDATE option_value=VALUES(option_value);`;
+	runMysql(sql);
 }
 
-/** Flush the object cache (in case settings are cached). */
+/** Flush the object cache (no-op if no persistent cache is installed). */
 export function wpCacheFlush(): void {
 	try {
 		wp(['cache', 'flush']);
 	} catch {
 		// Non-fatal — persistent object cache may not be installed.
 	}
+}
+
+function sqlQuote(v: string): string {
+	return `'${v.replace(/\\/g, '\\\\').replace(/'/g, "''")}'`;
 }
