@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
 import { __ } from '@wordpress/i18n';
 import { cn } from '@/lib/utils';
+import { HEADING_H3 } from '@/lib/typography';
 import { ArrowUp, ArrowDown, ArrowUpDown } from 'lucide-react';
 
 export interface Column<T> {
@@ -41,12 +42,25 @@ export function DataTable<T>({
 	const sortedData = useMemo(() => {
 		if (!sortKey) return data;
 
+		// WordPress $wpdb->get_results() returns numeric DB columns as strings,
+		// so coerce numeric-looking values before comparing to avoid lexicographic order.
+		const toNumber = (v: unknown): number | null => {
+			if (typeof v === 'number' && Number.isFinite(v)) return v;
+			if (typeof v === 'string' && v.trim() !== '') {
+				const n = Number(v);
+				return Number.isFinite(n) ? n : null;
+			}
+			return null;
+		};
+
 		return [...data].sort((a, b) => {
 			const aVal = (a as Record<string, unknown>)[sortKey];
 			const bVal = (b as Record<string, unknown>)[sortKey];
 
-			if (typeof aVal === 'number' && typeof bVal === 'number') {
-				return sortDir === 'asc' ? aVal - bVal : bVal - aVal;
+			const aNum = toNumber(aVal);
+			const bNum = toNumber(bVal);
+			if (aNum !== null && bNum !== null) {
+				return sortDir === 'asc' ? aNum - bNum : bNum - aNum;
 			}
 
 			const aStr = String(aVal ?? '');
@@ -67,7 +81,7 @@ export function DataTable<T>({
 	if (isLoading) {
 		return (
 			<div className="space-y-2">
-				{title && <h3 className="text-sm font-medium text-muted-foreground">{title}</h3>}
+				{title && <h3 className={HEADING_H3}>{title}</h3>}
 				{Array.from({ length: 5 }).map((_, i) => (
 					<div key={i} className="h-8 animate-pulse rounded bg-muted" />
 				))}
@@ -78,7 +92,7 @@ export function DataTable<T>({
 	return (
 		<div>
 			{title && (
-				<h3 className="mb-3 text-sm font-medium text-muted-foreground">{title}</h3>
+				<h3 className={`mb-3 ${HEADING_H3}`}>{title}</h3>
 			)}
 			<div className="overflow-x-auto">
 				<table className="w-full text-sm" role="table">
@@ -91,7 +105,7 @@ export function DataTable<T>({
 									tabIndex={col.sortable ? 0 : undefined}
 									role={col.sortable ? 'button' : undefined}
 									className={cn(
-										'px-3 py-2 text-xs font-medium uppercase tracking-wider text-muted-foreground',
+										'px-3 py-2 font-display text-xs font-medium uppercase tracking-[0.125em] text-muted-foreground',
 										col.align === 'right' ? 'text-right' : 'text-left',
 										col.sortable ? 'cursor-pointer select-none hover:text-foreground' : '',
 										col.className,

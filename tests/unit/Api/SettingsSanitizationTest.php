@@ -47,4 +47,30 @@ final class SettingsSanitizationTest extends TestCase {
 
 		$this->assertSame( 'cookieless', $result, 'Invalid consent_mode should fall back to cookieless.' );
 	}
+
+	public function test_consent_mode_full_is_rejected_and_coerced_to_cookieless(): void {
+		// 'full' was removed as a valid mode — behaviorally it was identical to
+		// cookieless, so legacy installs get silently migrated rather than broken.
+		$result = $this->sanitize->invoke( $this->controller, 'consent_mode', 'full' );
+
+		$this->assertSame( 'cookieless', $result );
+	}
+
+	public function test_retention_mode_accepts_forever(): void {
+		$result = $this->sanitize->invoke( $this->controller, 'retention_mode', 'forever' );
+
+		$this->assertSame( 'forever', $result );
+	}
+
+	public function test_retention_mode_accepts_delete(): void {
+		$result = $this->sanitize->invoke( $this->controller, 'retention_mode', 'delete' );
+
+		$this->assertSame( 'delete', $result );
+	}
+
+	public function test_retention_mode_rejects_invalid_value_falls_back_to_forever(): void {
+		$result = $this->sanitize->invoke( $this->controller, 'retention_mode', 'whatever' );
+
+		$this->assertSame( 'forever', $result );
+	}
 }

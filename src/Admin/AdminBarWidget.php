@@ -35,33 +35,22 @@ final class AdminBarWidget {
 			return;
 		}
 
-		$svg_allowed = [
-			'span'     => [
-				'id'    => [],
-				'style' => [],
-			],
-			'svg'      => [
-				'width'        => [],
-				'height'       => [],
-				'viewBox'      => [],
-				'fill'         => [],
-				'stroke'       => [],
-				'stroke-width' => [],
-			],
-			'polyline' => [
-				'points' => [],
+		$span_allowed = [
+			'span' => [
+				'id'          => [],
+				'aria-hidden' => [],
 			],
 		];
 
-		$title_html = '<span id="statnive-bar-chart" style="display:inline-flex;align-items:center;gap:6px;">'
-			. '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>'
+		$title_html = '<span id="statnive-bar-chart">'
+			. '<span id="statnive-bar-icon" aria-hidden="true"></span>'
 			. '<span id="statnive-bar-count">—</span>'
 			. '</span>';
 
 		$wp_admin_bar->add_node(
 			[
 				'id'    => 'statnive-stats',
-				'title' => wp_kses( $title_html, $svg_allowed ),
+				'title' => wp_kses( $title_html, $span_allowed ),
 				'href'  => admin_url( 'admin.php?page=statnive' ),
 				'meta'  => [
 					'title' => __( 'Statnive — Today\'s visitors', 'statnive' ),

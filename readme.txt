@@ -93,12 +93,25 @@ Common causes: ad blockers filtering analytics requests, aggressive page caching
 
 Exclude `/wp-json/statnive/v1/hit` and `admin-ajax.php?action=statnive_hit` from page caches. Most caching plugins do this by default.
 
+= How does Geography work? =
+
+Statnive reports approximate country/region in two tiers.
+
+1. **Out of the box — inbound CDN country headers.** If your site sits behind Cloudflare, AWS CloudFront, or Vercel (free tiers all set a country header automatically), Statnive reads `CF-IPCountry` / `CloudFront-Viewer-Country` / `X-Vercel-IP-Country` on each request. Country codes from CDN headers are trusted as-is — suitable for analytics, not for IP-verified country data.
+2. **Optional upgrade — MaxMind GeoLite2.** Configure a free MaxMind license key in Settings → GeoIP to unlock city and region precision resolved from the raw IP before it is discarded.
+
+No outbound request is made to read CDN headers; they arrive with the page view. See the Privacy Policy section for how IPs are handled.
+
 == Screenshots ==
 
-1. All your key metrics in one view — visitors, events, and pageviews with trend comparison
-2. Know where your visitors come from — country and city breakdown without third-party services
-3. Understand your audience — device types, browsers, and operating systems at a glance
-4. See who's on your site right now — live visitor count with active pages and recent activity
+1. Know your traffic at a glance — visitors, sessions, pageviews and trends that matter
+2. Find what's actually driving results — top sources and top pages side by side
+3. Every page, ranked by what matters — search, sort, find your best content
+4. See where visitors arrive and leave — entry and exit pages side by side
+5. Understand where your traffic comes from — referral, direct, organic, social
+6. Desktop, mobile, bots — device, browser and OS breakdowns in one view
+7. Reach across languages and regions — see which languages your visitors speak
+8. Watch your site breathe in real time — active visitors and live pageviews
 
 == External Services ==
 

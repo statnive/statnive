@@ -186,10 +186,10 @@ describe('OverviewPage', () => {
 
 		render(<OverviewPage />);
 
-		// formatPercentChange renders "↑ 16.7%" — KPI badge has green background for positive
+		// formatPercentChange renders "↑ 16.7%" — KPI badge has revenue background for positive
 		const badge = screen.getByText(/16\.7%/);
 		expect(badge).toBeInTheDocument();
-		expect(badge.className).toContain('bg-green');
+		expect(badge.className).toContain('bg-revenue');
 	});
 
 	// REQ-1.7 — Comparison mode shows negative delta for declining metrics
@@ -209,8 +209,8 @@ describe('OverviewPage', () => {
 
 		const badge = screen.getByText(/25\.0%/);
 		expect(badge).toBeInTheDocument();
-		// Negative change badge has red background
-		expect(badge.className).toContain('bg-red');
+		// Negative change badge has destructive background
+		expect(badge.className).toContain('bg-destructive');
 	});
 
 	// REQ-1.8 — Empty state displays appropriate message for new installs

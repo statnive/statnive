@@ -36,6 +36,11 @@ vi.mock('@/hooks/use-dimensions', () => ({
 	useDimensions: (...args: unknown[]) => mockUseDimensions(...args),
 }));
 
+const mockUseGeoSource = vi.fn(() => 'maxmind' as const);
+vi.mock('@/hooks/use-geo-source', () => ({
+	useGeoSource: () => mockUseGeoSource(),
+}));
+
 import { GeographyPage } from '@/pages/geography';
 
 // ---------------------------------------------------------------------------
@@ -45,6 +50,43 @@ import { GeographyPage } from '@/pages/geography';
 describe('GeographyPage', () => {
 	beforeEach(() => {
 		vi.restoreAllMocks();
+		mockUseGeoSource.mockReturnValue('maxmind');
+	});
+
+	describe('empty state by geo source', () => {
+		beforeEach(() => {
+			mockUseDimensions.mockReturnValue({ data: [], isLoading: false });
+		});
+
+		it('prompts to configure a CDN or MaxMind when source is none', () => {
+			mockUseGeoSource.mockReturnValue('none');
+
+			render(<GeographyPage />);
+
+			expect(
+				screen.getAllByText(/Geography needs an approximate-country source/),
+			).toHaveLength(2);
+		});
+
+		it('shows "data will appear" when CDN headers are active but period is empty', () => {
+			mockUseGeoSource.mockReturnValue('cdn_headers');
+
+			render(<GeographyPage />);
+
+			expect(
+				screen.getAllByText(/Country detection via your CDN is active/),
+			).toHaveLength(2);
+		});
+
+		it('shows the existing empty copy when MaxMind is configured but period is empty', () => {
+			mockUseGeoSource.mockReturnValue('maxmind');
+
+			render(<GeographyPage />);
+
+			expect(
+				screen.getAllByText(/No geography data for this period/),
+			).toHaveLength(2);
+		});
 	});
 
 	// REQ-1.18 — Countries table with visitor and session counts

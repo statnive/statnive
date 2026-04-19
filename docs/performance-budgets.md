@@ -58,7 +58,6 @@ Operators on the **Large** profile should enable an aggressive retention policy 
 | `statnive_daily_salt_rotation` | < 200 ms | < 1 s | Single `update_option()` write. |
 | `statnive_daily_aggregation` | < 5 s | < 30 s | One day of summary rollups. Backfill (>1 day) reschedules. |
 | `statnive_daily_data_purge` | < 5 s / 1k rows | < 30 s / 1k rows | Re-schedules itself when more than 1 000 rows remain (chunked). |
-| `statnive_email_report` | < 2 s | < 10 s | Single SQL summary + `wp_mail()`. |
 | `statnive_weekly_geoip_update` | < 30 s | < 120 s | MaxMind download + extract. Network-bound. |
 
 If `DISABLE_WP_CRON` is set, the admin notice in `src/Admin/GeoIPNotice.php` warns about scheduled work and points the user at `wp statnive cron run` (Phase B follow-up — see §29 / fix-plan-pass-2).

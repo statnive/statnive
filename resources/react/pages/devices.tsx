@@ -5,11 +5,13 @@ import { useDimensions } from '@/hooks/use-dimensions';
 import { DataTable, type Column } from '@/components/shared/data-table';
 import { DualBarCell } from '@/components/shared/dual-bar-cell';
 import { PieChartCard } from '@/components/charts/pie-chart-card';
+import { CHART_NEGATIVE, CHART_SERIES } from '@/lib/chart-colors';
+import { HEADING_H2 } from '@/lib/typography';
 import type { DimensionRow } from '@/types/api';
 
 const BOT_DEVICE_TYPE = 'Bot';
-const DEVICE_COLORS = ['#2271b1', '#059669', '#f59e0b'];
-const BOT_COLORS = ['#2271b1', '#ef4444'];
+const DEVICE_COLORS = CHART_SERIES.slice(0, 3);
+const BOT_COLORS = [CHART_SERIES[0], CHART_NEGATIVE];
 
 export function DevicesPage() {
 	const { params } = useDateRange();
@@ -69,7 +71,7 @@ export function DevicesPage() {
 
 	return (
 		<div className="space-y-6">
-			<h2 className="text-lg font-semibold">{__('Devices', 'statnive')}</h2>
+			<h2 className={HEADING_H2}>{__('Devices', 'statnive')}</h2>
 
 			{/* Device Distribution + Bot vs Human pie charts */}
 			<div className="grid grid-cols-1 gap-6 md:grid-cols-2">

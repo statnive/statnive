@@ -262,14 +262,13 @@ final class DiagnosticsOutputTest extends TestCase {
 			'statnive_daily_salt_rotation',
 			'statnive_daily_aggregation',
 			'statnive_daily_data_purge',
-			'statnive_email_report',
 			'statnive_weekly_geoip_update',
 		];
 
 		// These hooks are hardcoded in DiagnosticsController::cron_status().
 		// This test serves as a regression guard: if a new hook is added to the
 		// controller, this constant must be updated.
-		self::assertCount( 5, $expected_hooks );
+		self::assertCount( 4, $expected_hooks );
 	}
 
 	/**

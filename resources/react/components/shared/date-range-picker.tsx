@@ -24,7 +24,7 @@ export function DateRangePicker({ value, onChange }: DateRangePickerProps) {
 					type="button"
 					onClick={() => onChange(preset.value)}
 					className={cn(
-						'cursor-pointer rounded-md px-3 py-1.5 text-sm font-medium transition-colors duration-150',
+						'cursor-pointer rounded-md px-[18px] py-[10px] text-sm font-medium transition-colors duration-150',
 						value === preset.value
 							? 'bg-primary text-primary-foreground'
 							: 'text-muted-foreground hover:bg-muted hover:text-foreground',

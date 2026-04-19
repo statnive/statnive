@@ -5,7 +5,9 @@ import { useGroupedSources } from '@/hooks/use-sources';
 import { useUtm } from '@/hooks/use-utm';
 import { DualBarCell } from '@/components/shared/dual-bar-cell';
 import { DataTable, type Column } from '@/components/shared/data-table';
+import { KpiCard } from '@/components/shared/kpi-card';
 import { formatNumber } from '@/lib/utils';
+import { HEADING_H2, HEADING_H3 } from '@/lib/typography';
 import type { UtmRow } from '@/types/api';
 
 export function ReferrersPage() {
@@ -44,28 +46,28 @@ export function ReferrersPage() {
 
 	return (
 		<div className="space-y-6">
-			<h2 className="text-lg font-semibold">{__('Referrers', 'statnive')}</h2>
+			<h2 className={HEADING_H2}>{__('Referrers', 'statnive')}</h2>
 
 			{/* Channel Summary Cards */}
 			<div className="grid grid-cols-2 gap-4 md:grid-cols-5">
 				{(channels ?? []).map((ch) => (
-					<div key={ch.channel} className="rounded-lg border border-border bg-card p-3">
-						<p className="text-xs font-medium text-muted-foreground">{__(ch.channel, 'statnive')}</p>
-						<p className="mt-1 text-xl font-bold tabular-nums">{formatNumber(ch.visitors)}</p>
-						<p className="text-xs text-muted-foreground">
-							{sprintf(
-								/* translators: %s: formatted session count */
-								__('%s sessions', 'statnive'),
-								formatNumber(ch.sessions),
-							)}
-						</p>
-					</div>
+					<KpiCard
+						key={ch.channel}
+						label={__(ch.channel, 'statnive')}
+						value={formatNumber(ch.visitors)}
+						helper={sprintf(
+							/* translators: %s: formatted session count */
+							__('%s sessions', 'statnive'),
+							formatNumber(ch.sessions),
+						)}
+						isLoading={loadingChannels}
+					/>
 				))}
 			</div>
 
 			{/* Channel-Grouped Sources */}
 			<div className="rounded-lg border border-border bg-card p-4">
-				<h3 className="mb-3 text-sm font-semibold">{__('All Sources', 'statnive')}</h3>
+				<h3 className={`mb-3 ${HEADING_H3}`}>{__('All Sources', 'statnive')}</h3>
 				{loadingChannels ? (
 					<div className="space-y-2" role="status" aria-label={__('Loading sources', 'statnive')}>
 						{Array.from({ length: 5 }, (_, i) => (

@@ -7,6 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Settings page Save button with dirty tracking — replaces auto-save-on-every-keystroke. Inline "Saved ✓" flash on success, inline error + retry on failure.
+- "Your IP right now" hint in Exclusions with a one-click "Add to exclusions" button.
+- Short per-control descriptions on every Settings control (DNT, GPC, Data Retention, Exclusions) so users can decide without docs.
+- Mention that Statnive integrates with Real Cookie Banner, Complianz, CookieYes, and any WordPress Consent API plugin (copy only — integrations already existed).
+- Real-production Playwright E2E suite that proves every Settings-page description is accurate: consent modes, DNT/GPC signal handling, retention purge behavior, IP/CIDR exclusion matching, Save contract, and removal guarantees.
+
+### Changed
+
+- Default Data Retention is now "Forever" (`retention_mode=forever`, `retention_days=3650`). Previous default was 90 days with `retention_mode=delete`.
+- `PrivacyManager::check_request_privacy()` now accepts the extracted client IP and short-circuits on `ExclusionMatcher::is_excluded_ip()` / `is_excluded_role()` before expensive checks.
+
+### Fixed
+
+- Excluded IPs / CIDR ranges actually block tracking. `ExclusionMatcher` was defined but had no caller in the hit pipeline, so the "Excluded IP Addresses" setting was cosmetic. Now wired into `PrivacyManager` and exercised by `HitController`, `EventController`, and `AjaxFallback`.
+
+### Removed
+
+- "Full Tracking" consent mode. It was behaviorally identical to Cookieless (same `allows_tracking`, `requires_consent_signal`, `allows_geo`, `allows_device` flags in `ConsentMode::behaviors()`) — shipping the label without the intended cookie-based cross-day recognition was misleading. Deferred to a future release that actually implements the differentiation. Legacy installs with `statnive_consent_mode='full'` are silently coerced to `'cookieless'` on read.
+- Email Reports subsystem: `EmailReportJob`, `ReportBuilder`, `wp statnive cron run --job=email-report`, the REST `email_reports`/`email_frequency` fields, and the Settings UI section. Deferred — will come back with email recipient management, template customization, and delivery diagnostics.
+
 ## [0.4.2] - 2026-04-14
 
 ### Added

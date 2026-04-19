@@ -2,6 +2,7 @@
 	"name": "statnive",
 	"version": "0.4.2",
 	"private": true,
+	"license": "GPL-2.0-or-later",
 	"description": "Simple stats, clear decisions. Privacy-first analytics for WordPress.",
 	"scripts": {
 		"build": "vite build && vite build --mode tracker && vite build --mode tracker-core",
@@ -12,8 +13,10 @@
 		"dev:tracker": "vite build --config vite.config.ts --mode tracker --watch",
 		"test": "vitest run",
 		"test:watch": "vitest",
+		"test:e2e": "playwright test",
 		"typecheck": "tsc --noEmit",
 		"gate": "npm run test",
+		"gate:e2e": "playwright test",
 		"prepare": "git config core.hooksPath .githooks || true"
 	},
 	"devDependencies": {

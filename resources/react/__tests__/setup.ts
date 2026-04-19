@@ -11,8 +11,10 @@ Object.defineProperty(window, 'StatniveDashboard', {
 		nonce: 'test-nonce-123',
 		siteTitle: 'Test Site',
 		version: '0.1.0',
+		currentIp: '127.0.0.1',
 	},
 	writable: true,
+	configurable: true,
 });
 
 // Mock matchMedia for prefers-reduced-motion.

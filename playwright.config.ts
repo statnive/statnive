@@ -3,8 +3,9 @@ import { defineConfig, devices } from '@playwright/test';
 /**
  * Playwright configuration for Statnive E2E tests.
  *
- * Uses WP Playground or local WordPress instance for testing.
- * DB-oracle assertions query analytics tables directly.
+ * Targets a live WordPress install (Local WP by default). `globalSetup`
+ * copies test-only mu-plugins and captures an admin session so specs
+ * can exercise admin-scoped routes without re-logging in every test.
  */
 export default defineConfig({
 	testDir: './tests/e2e/specs',
@@ -15,8 +16,11 @@ export default defineConfig({
 	reporter: process.env.CI ? 'github' : 'html',
 	timeout: 30_000,
 
+	globalSetup: require.resolve('./tests/e2e/global-setup.ts'),
+	globalTeardown: require.resolve('./tests/e2e/global-teardown.ts'),
+
 	use: {
-		baseURL: process.env.WP_BASE_URL || 'http://localhost:8080',
+		baseURL: process.env.WP_BASE_URL || 'http://statnive-test.local',
 		trace: 'retain-on-failure',
 		screenshot: 'only-on-failure',
 		video: 'off',
