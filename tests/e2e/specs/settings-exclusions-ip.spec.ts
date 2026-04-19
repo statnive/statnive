@@ -4,39 +4,17 @@
  *    hiding your own team. One per line. Supports CIDR (e.g., 10.0.0.0/8)
  *    and IPv6."
  *
- * Requires the ip-spoof mu-plugin (STATNIVE_E2E_IP_FILTER=1). Every test
- * posts directly to /hit with a chosen client IP; the mu-plugin feeds that
- * IP into the statnive_client_ip filter so PrivacyManager sees it during
- * exclusion matching.
+ * The ip-filter mu-plugin reads X-Test-Client-IP and feeds it to
+ * statnive_client_ip. Real frontend visits (anon context) are needed so
+ * the tracker runs — the admin context redirects "/" to wp-admin.
  */
 
 import { test, expect } from '../fixtures/auth';
-import { disableBeacon } from '../fixtures/privacy';
-import {
-	setSettings,
-	snapshotSettings,
-	restoreSettings,
-	truncateStatnive,
-	getDashboardNonce,
-} from '../fixtures/settings';
+import { setSettings, snapshotSettings, restoreSettings, truncateStatnive } from '../fixtures/settings';
+import { newAnonContext, waitForViewCount } from '../fixtures/anon';
 import { withClientIp } from '../fixtures/ip-spoof';
 import { dbCount } from '../db-cli';
 import { env } from '../env';
-
-async function directHit(page: import('@playwright/test').Page): Promise<number> {
-	const response = await page.request.post(`${env.restUrl}/statnive/v1/hit`, {
-		headers: {
-			'Content-Type': 'text/plain',
-			'X-WP-Nonce': await getDashboardNonce(page),
-		},
-		data: JSON.stringify({
-			resource_type: 'post',
-			resource_id: 1,
-			signature: 'never-accepted',
-		}),
-	});
-	return response.status();
-}
 
 type Row = { excludedIp: string; clientIp: string; expected: 'blocked' | 'allowed'; id: string };
 
@@ -50,8 +28,7 @@ const matrix: Row[] = [
 ];
 
 test.describe('Settings → Exclusions → IP / CIDR', () => {
-	test.beforeEach(async ({ page, context }) => {
-		await disableBeacon(context);
+	test.beforeEach(async ({ page }) => {
 		await snapshotSettings(page);
 		await truncateStatnive(page);
 		await setSettings(page, {
@@ -67,75 +44,49 @@ test.describe('Settings → Exclusions → IP / CIDR', () => {
 	});
 
 	for (const row of matrix) {
-		test(`${row.id} excluded="${row.excludedIp}" client="${row.clientIp}" → ${row.expected}`, async ({ browser, page }) => {
+		test(`${row.id} excluded="${row.excludedIp}" client="${row.clientIp}" → ${row.expected}`, async ({ page, browser }) => {
 			await setSettings(page, { excluded_ips: row.excludedIp });
 
-			const context = await browser.newContext();
-			await disableBeacon(context);
-			await withClientIp(context, row.clientIp);
+			const anon = await newAnonContext(browser);
+			await withClientIp(anon.context, row.clientIp);
+			await anon.page.goto(env.baseUrl);
 
-			const p = await context.newPage();
-			await p.goto(`${env.baseUrl}/wp-admin/admin.php?page=statnive`);
-			// HMAC will fail regardless — the purpose of this test is that
-			// PrivacyManager returns 204 BEFORE HMAC when excluded, and the
-			// underlying row is never written either way.
-			await directHit(p);
-
-			expect(dbCount('statnive_views')).toBe(0);
-			await context.close();
-
-			// Also prove the allow case by making a real pageview from the
-			// non-excluded IP path — the direct hit above fails HMAC, so
-			// use page.goto() which the plugin signs correctly.
-			if (row.expected === 'allowed') {
-				const ctxAllow = await browser.newContext();
-				await disableBeacon(ctxAllow);
-				await withClientIp(ctxAllow, row.clientIp);
-				const pp = await ctxAllow.newPage();
-				await pp.goto(env.baseUrl);
-				await pp.waitForResponse(
-					(r) => r.url().includes('/statnive/v1/hit') && r.status() === 204,
-					{ timeout: 5000 }
-				);
+			if (row.expected === 'blocked') {
+				// Give the tracker time to try firing then confirm nothing landed.
+				await anon.page.waitForTimeout(1500);
+				expect(dbCount('statnive_views')).toBe(0);
+			} else {
+				await waitForViewCount(1);
 				expect(dbCount('statnive_views')).toBeGreaterThanOrEqual(1);
-				await ctxAllow.close();
 			}
+
+			await anon.close();
 		});
 	}
 
-	test('EX-7 malformed entries do not block everyone — tracker still works for a non-matching IP', async ({ browser, page }) => {
+	test('EX-7 malformed entries do not block everyone — tracker still works for a non-matching IP', async ({ page, browser }) => {
 		await setSettings(page, {
 			excluded_ips: 'not-an-ip\n300.300.300.300\n10.0.0.1',
 		});
 
-		const context = await browser.newContext();
-		await disableBeacon(context);
-		await withClientIp(context, '198.51.100.5');
-		const p = await context.newPage();
-		await p.goto(env.baseUrl);
-		await p.waitForResponse(
-			(r) => r.url().includes('/statnive/v1/hit') && r.status() === 204,
-			{ timeout: 5000 }
-		);
+		const anon = await newAnonContext(browser);
+		await withClientIp(anon.context, '198.51.100.5');
+		await anon.page.goto(env.baseUrl);
+		await waitForViewCount(1);
 
 		expect(dbCount('statnive_views')).toBeGreaterThanOrEqual(1);
-		await context.close();
+		await anon.close();
 	});
 
-	test('EX-8 empty exclusion list does not block anyone', async ({ browser, page }) => {
+	test('EX-8 empty exclusion list does not block anyone', async ({ page, browser }) => {
 		await setSettings(page, { excluded_ips: '' });
 
-		const context = await browser.newContext();
-		await disableBeacon(context);
-		await withClientIp(context, '198.51.100.5');
-		const p = await context.newPage();
-		await p.goto(env.baseUrl);
-		await p.waitForResponse(
-			(r) => r.url().includes('/statnive/v1/hit') && r.status() === 204,
-			{ timeout: 5000 }
-		);
+		const anon = await newAnonContext(browser);
+		await withClientIp(anon.context, '198.51.100.5');
+		await anon.page.goto(env.baseUrl);
+		await waitForViewCount(1);
 
 		expect(dbCount('statnive_views')).toBeGreaterThanOrEqual(1);
-		await context.close();
+		await anon.close();
 	});
 });

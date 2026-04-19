@@ -1,5 +1,5 @@
 /**
- * R-1..R-6 — Retention dropdown copy is accurate:
+ * R-30..R-3650 — Retention dropdown copy is accurate:
  *   30 / 90 / 180 / 365 days → aged rows deleted by data-purge.
  *   Forever (3650 + mode=forever) → nothing deleted.
  */
@@ -13,29 +13,28 @@ import {
 	backdate,
 	runPurge,
 } from '../fixtures/settings';
+import { newAnonContext, waitForViewCount } from '../fixtures/anon';
 import { dbCount, dbQuery } from '../db-cli';
 import { env } from '../env';
 
-async function seedOneAndOne(page: import('@playwright/test').Page): Promise<void> {
-	// Two fresh pageviews before backdating, then backdate one of them.
-	await page.goto(env.baseUrl);
-	await page.waitForResponse(
-		(r) => r.url().includes('/statnive/v1/hit') && r.status() === 204,
-		{ timeout: 5000 }
-	);
-	await page.goto(`${env.baseUrl}/?cachebuster=${Date.now()}`);
-	await page.waitForResponse(
-		(r) => r.url().includes('/statnive/v1/hit') && r.status() === 204,
-		{ timeout: 5000 }
-	);
+async function seedTwoPageviews(browser: import('@playwright/test').Browser): Promise<void> {
+	const a = await newAnonContext(browser);
+	await a.page.goto(env.baseUrl);
+	await waitForViewCount(1);
+	await a.close();
+
+	const b = await newAnonContext(browser);
+	await b.page.goto(`${env.baseUrl}/?cachebuster=${Date.now()}`);
+	await waitForViewCount(1);
+	await b.close();
 }
 
 test.describe('Settings → Data Retention', () => {
-	test.beforeEach(async ({ page, context }) => {
-		await context.addInitScript(() => {
-			// @ts-expect-error force fetch fallback
-			navigator.sendBeacon = undefined;
-		});
+	// Each test does admin REST setup + 2 anon pageviews + backdate + purge.
+	// Comfortably exceeds the 30s default on Local.
+	test.setTimeout(60_000);
+
+	test.beforeEach(async ({ page }) => {
 		await snapshotSettings(page);
 		await truncateStatnive(page);
 		await setSettings(page, {
@@ -52,11 +51,10 @@ test.describe('Settings → Data Retention', () => {
 	});
 
 	for (const days of [30, 90, 180, 365] as const) {
-		test(`R-${days} retention=${days} + mode=delete → rows older than ${days}d are purged`, async ({ page }) => {
+		test(`R-${days} retention=${days} + mode=delete → rows older than ${days}d are purged`, async ({ page, browser }) => {
 			await setSettings(page, { retention_days: days, retention_mode: 'delete' });
-			await seedOneAndOne(page);
+			await seedTwoPageviews(browser);
 
-			// Pick the first inserted view and age it past the cutoff.
 			const [older] = dbQuery<{ ID: string }>(
 				`SELECT ID FROM ${env.tablePrefix}statnive_views ORDER BY ID ASC LIMIT 1`
 			);
@@ -64,19 +62,16 @@ test.describe('Settings → Data Retention', () => {
 
 			await runPurge(page);
 
-			const remaining = dbCount('statnive_views');
-			// Exactly the fresh row survives — the aged one is gone.
-			expect(remaining).toBe(1);
+			expect(dbCount('statnive_views')).toBe(1);
 		});
 	}
 
-	test('R-3650 retention=Forever + mode=forever → purge runs but deletes nothing', async ({ page }) => {
+	test('R-3650 retention=Forever + mode=forever → purge runs but deletes nothing', async ({ page, browser }) => {
 		await setSettings(page, { retention_days: 3650, retention_mode: 'forever' });
-		await seedOneAndOne(page);
+		await seedTwoPageviews(browser);
 		const before = dbCount('statnive_views');
 		expect(before).toBeGreaterThanOrEqual(2);
 
-		// Age one row to simulate the edge — Forever must still protect it.
 		const [older] = dbQuery<{ ID: string }>(
 			`SELECT ID FROM ${env.tablePrefix}statnive_views ORDER BY ID ASC LIMIT 1`
 		);
