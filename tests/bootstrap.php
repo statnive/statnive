@@ -77,6 +77,27 @@ if ( ! function_exists( 'update_option' ) ) {
 	}
 }
 
+if ( ! function_exists( 'delete_option' ) ) {
+	function delete_option( string $option ): bool {
+		$existed = array_key_exists( $option, $GLOBALS['statnive_test_options'] ?? [] );
+		unset( $GLOBALS['statnive_test_options'][ $option ] );
+		return $existed;
+	}
+}
+
+if ( ! function_exists( 'add_option' ) ) {
+	/**
+	 * @param mixed $value
+	 */
+	function add_option( string $option, $value = '', string $deprecated = '', $autoload = null ): bool {
+		if ( array_key_exists( $option, $GLOBALS['statnive_test_options'] ?? [] ) ) {
+			return false;
+		}
+		$GLOBALS['statnive_test_options'][ $option ] = $value;
+		return true;
+	}
+}
+
 if ( ! function_exists( 'get_transient' ) ) {
 	/**
 	 * @return mixed

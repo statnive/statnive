@@ -94,9 +94,44 @@ final class Migrator {
 	 * @return array<string, callable>
 	 */
 	private static function registered_migrations(): array {
-		// Example for the next schema bump (intentionally commented out).
-		// '0.4.0' => [ self::class, 'migrate_0_4_0' ].
-		return [];
+		return [
+			// Drops the Email Reports subsystem and coerces legacy consent
+			// values. Keyed at the current plugin version so pre-0.4.2
+			// installs run it exactly once on their next page load.
+			STATNIVE_VERSION => [ self::class, 'migrate_0_4_2_drop_email_and_full_mode' ],
+		];
+	}
+
+	/**
+	 * Upgrade migration.
+	 *
+	 * - Drops dead options left over from the Email Reports subsystem.
+	 * - Coerces any legacy `statnive_consent_mode = 'full'` to `'cookieless'`
+	 *   so the value matches the reduced CONSENT_MODES allow-list.
+	 * - Backfills `statnive_retention_mode = 'forever'` for sites whose stored
+	 *   days value already matches the new "Forever" default, so purge does
+	 *   not silently start deleting data after upgrade.
+	 *
+	 * Idempotent: `delete_option` is a no-op when the key is absent, and the
+	 * `get_option` checks only write when the stored value actually needs
+	 * updating.
+	 */
+	public static function migrate_0_4_2_drop_email_and_full_mode(): void {
+		delete_option( 'statnive_email_reports' );
+		delete_option( 'statnive_email_frequency' );
+		delete_option( 'statnive_email_recipients' );
+
+		if ( 'full' === get_option( 'statnive_consent_mode' ) ) {
+			update_option( 'statnive_consent_mode', 'cookieless' );
+		}
+
+		if ( 3650 === (int) get_option( 'statnive_retention_days', 3650 )
+			&& false === get_option( 'statnive_retention_mode', false )
+		) {
+			update_option( 'statnive_retention_mode', 'forever' );
+		}
+
+		wp_clear_scheduled_hook( 'statnive_email_report' );
 	}
 
 	/**

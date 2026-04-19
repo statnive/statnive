@@ -33,7 +33,6 @@ Statnive gives WordPress site owners fast, smart, and easy-to-understand analyti
 * **Custom events** — Track button clicks, form submissions, file downloads, and outbound links
 * **Bot detection** — Automatic filtering of bots, crawlers, and headless browsers
 * **Privacy compliance** — DNT/GPC respect, configurable data retention, WordPress Privacy API (export/erase)
-* **Email reports** — Weekly or monthly email summaries delivered to your inbox
 
 [Learn more at statnive.com](https://statnive.com)
 

@@ -145,49 +145,45 @@ export function SettingsPage() {
 				<h3 className={`mb-4 ${HEADING_H3}`}>{__('Privacy', 'statnive')}</h3>
 
 				<div className="space-y-4">
-					<label className="flex cursor-pointer gap-3">
+					<label className="grid cursor-pointer grid-cols-[1rem_1fr] items-center gap-x-3 gap-y-1">
 						<input
 							data-testid="consent-mode-cookieless"
 							type="radio"
 							name="consent"
 							checked={form.consent_mode === 'cookieless'}
 							onChange={() => patch({ consent_mode: 'cookieless' })}
-							className="mt-[5px] h-4 w-4 shrink-0 accent-primary"
+							className="m-0 h-4 w-4 accent-primary"
 						/>
-						<div className="flex-1">
-							<div className="flex items-center gap-2">
-								<span className="text-sm font-medium leading-5">{__('Cookieless', 'statnive')}</span>
-								<span className="rounded-full bg-revenue/10 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide text-revenue-dark">
-									{__('Recommended', 'statnive')}
-								</span>
-							</div>
-							<p className="mt-1 text-xs leading-5 text-muted-foreground">
-								{__('No cookies, privacy-first. Supports GDPR/CCPA/APPI compliance.', 'statnive')}
-							</p>
-						</div>
+						<span className="flex flex-wrap items-center gap-2">
+							<span className="text-sm font-medium leading-5">{__('Cookieless', 'statnive')}</span>
+							<span className="rounded-full bg-revenue/10 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide text-revenue-dark">
+								{__('Recommended', 'statnive')}
+							</span>
+						</span>
+						<p className="col-start-2 text-xs leading-5 text-muted-foreground">
+							{__('No cookies, privacy-first. Designed to support GDPR/CCPA/APPI compliance.', 'statnive')}
+						</p>
 					</label>
-					<label className="flex cursor-pointer gap-3">
+					<label className="grid cursor-pointer grid-cols-[1rem_1fr] items-center gap-x-3 gap-y-1">
 						<input
 							data-testid="consent-mode-disabled-until-consent"
 							type="radio"
 							name="consent"
 							checked={form.consent_mode === 'disabled-until-consent'}
 							onChange={() => patch({ consent_mode: 'disabled-until-consent' })}
-							className="mt-[5px] h-4 w-4 shrink-0 accent-primary"
+							className="m-0 h-4 w-4 accent-primary"
 						/>
-						<div className="flex-1">
-							<span className="text-sm font-medium leading-5">{__('Disabled Until Consent', 'statnive')}</span>
-							<p className="mt-1 text-xs leading-5 text-muted-foreground">
-								{__(
-									'Tracking stays off until a consent-banner plugin signals approval. Also honors plugins that implement the WordPress Consent API.',
-									'statnive'
-								)}
-							</p>
-						</div>
+						<span className="text-sm font-medium leading-5">{__('Disabled Until Consent', 'statnive')}</span>
+						<p className="col-start-2 text-xs leading-5 text-muted-foreground">
+							{__(
+								'Tracking stays off until a consent-banner plugin signals approval. Also honors plugins that implement the WordPress Consent API.',
+								'statnive'
+							)}
+						</p>
 					</label>
 				</div>
 
-				<p className="mt-3 pl-7 text-[11px] italic leading-5 text-muted-foreground">
+				<p className="mt-3 pl-[calc(1rem+0.75rem)] text-[11px] italic leading-5 text-muted-foreground">
 					{__(
 						'Works with Real Cookie Banner, Complianz, CookieYes, or any WordPress Consent API plugin.',
 						'statnive'
@@ -197,38 +193,34 @@ export function SettingsPage() {
 				<div className="my-4 border-t border-border" />
 
 				<div className="space-y-4">
-					<label className="flex cursor-pointer gap-3">
+					<label className="grid cursor-pointer grid-cols-[1rem_1fr] items-center gap-x-3 gap-y-1">
 						<input
 							data-testid="dnt-respect-toggle"
 							type="checkbox"
 							checked={form.respect_dnt}
 							onChange={(e) => patch({ respect_dnt: e.target.checked })}
-							className="mt-[5px] h-4 w-4 shrink-0 accent-primary"
+							className="m-0 h-4 w-4 accent-primary"
 						/>
-						<div className="flex-1">
-							<span className="text-sm font-medium leading-5">{__('Respect Do Not Track', 'statnive')}</span>
-							<p className="mt-1 text-xs leading-5 text-muted-foreground">
-								{__('Skip visitors whose browser sends the DNT signal.', 'statnive')}
-							</p>
-						</div>
+						<span className="text-sm font-medium leading-5">{__('Respect Do Not Track', 'statnive')}</span>
+						<p className="col-start-2 text-xs leading-5 text-muted-foreground">
+							{__('Skip visitors whose browser sends the DNT signal.', 'statnive')}
+						</p>
 					</label>
-					<label className="flex cursor-pointer gap-3">
+					<label className="grid cursor-pointer grid-cols-[1rem_1fr] items-center gap-x-3 gap-y-1">
 						<input
 							data-testid="gpc-respect-toggle"
 							type="checkbox"
 							checked={form.respect_gpc}
 							onChange={(e) => patch({ respect_gpc: e.target.checked })}
-							className="mt-[5px] h-4 w-4 shrink-0 accent-primary"
+							className="m-0 h-4 w-4 accent-primary"
 						/>
-						<div className="flex-1">
-							<span className="text-sm font-medium leading-5">{__('Respect Global Privacy Control', 'statnive')}</span>
-							<p className="mt-1 text-xs leading-5 text-muted-foreground">
-								{__(
-									'Skip visitors whose browser sends the GPC signal. Legally recognized in California and other regions.',
-									'statnive'
-								)}
-							</p>
-						</div>
+						<span className="text-sm font-medium leading-5">{__('Respect Global Privacy Control', 'statnive')}</span>
+						<p className="col-start-2 text-xs leading-5 text-muted-foreground">
+							{__(
+								'Skip visitors whose browser sends the GPC signal. Legally recognized in California and other regions.',
+								'statnive'
+							)}
+						</p>
 					</label>
 				</div>
 			</div>
