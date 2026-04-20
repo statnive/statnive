@@ -26,9 +26,17 @@ type SettingKey =
 type SettingValue = string | number | boolean | string[];
 
 export async function getDashboardNonce(page: Page): Promise<string> {
-	return page.evaluate(
-		() => (window as unknown as { StatniveDashboard?: { nonce: string } }).StatniveDashboard?.nonce ?? ''
-	);
+	return page.evaluate(() => {
+		const w = window as unknown as {
+			StatniveDashboard?: { nonce: string };
+			wpApiSettings?: { nonce: string };
+		};
+		// Prefer the plugin's own nonce (guaranteed fresh on the Statnive
+		// dashboard). Fall back to the core wp-api nonce enqueued on every
+		// wp-admin page — lets the CI helpers work even when the Statnive
+		// dashboard hasn't loaded yet.
+		return w.StatniveDashboard?.nonce ?? w.wpApiSettings?.nonce ?? '';
+	});
 }
 
 export async function setSettings(
