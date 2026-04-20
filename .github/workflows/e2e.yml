@@ -49,26 +49,13 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
 
+      # The test-only mu-plugins are bind-mounted into the `tests` wp-env
+      # containers via `.wp-env.json` → `env.tests.mappings`. That's the
+      # only wp-env mechanism that writes to BOTH `tests-wordpress` (web)
+      # and `tests-cli` — doing it through `wp-env run tests-cli cp …`
+      # only hits the CLI container's ephemeral filesystem.
       - name: Start wp-env
         run: npx -y @wordpress/env@10.0.0 start --update
-
-      # wp-env runs WordPress inside a Docker container, so the host-side
-      # cpSync in tests/e2e/global-setup.ts can't reach the container's
-      # mu-plugins directory. Drop them in through `wp-env run tests-cli`
-      # — the plugin tree is mounted at /var/www/html/wp-content/plugins/
-      # statnive, so the mu-plugin sources are already inside the box and
-      # just need to be moved next to the .statnive-e2e-on sentinel.
-      - name: Install test mu-plugins into wp-env container
-        run: |
-          npx -y @wordpress/env@10.0.0 run tests-cli bash -c '
-            set -eux
-            mkdir -p /var/www/html/wp-content/mu-plugins
-            cp /var/www/html/wp-content/plugins/statnive/tests/e2e/fixtures/mu-plugins/statnive-ip-filter.php /var/www/html/wp-content/mu-plugins/
-            cp /var/www/html/wp-content/plugins/statnive/tests/e2e/fixtures/mu-plugins/statnive-consent-stub.php /var/www/html/wp-content/mu-plugins/
-            cp /var/www/html/wp-content/plugins/statnive/tests/e2e/fixtures/mu-plugins/statnive-e2e-debug.php /var/www/html/wp-content/mu-plugins/
-            printf "1" > /var/www/html/wp-content/mu-plugins/.statnive-e2e-on
-            ls -la /var/www/html/wp-content/mu-plugins
-          '
 
       # CI runs only the UI-focused settings specs that work against any
       # WordPress host. The tracking-side specs (cookieless, DNT/GPC,
