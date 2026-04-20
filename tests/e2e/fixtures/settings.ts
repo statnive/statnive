@@ -73,19 +73,6 @@ async function ensureDashboardNonce(page: Page): Promise<string> {
 		await page.goto(`${env.baseUrl}/wp-admin/admin.php?page=statnive`);
 		nonce = await getDashboardNonce(page);
 	}
-	if (nonce === '' && process.env.CI) {
-		// Give ops a fighting chance to understand CI-only auth failures.
-		const diag = await page.evaluate(() => ({
-			url: location.href,
-			title: document.title,
-			hasStatnive: typeof (window as any).StatniveDashboard !== 'undefined',
-			hasApiSettings: typeof (window as any).wpApiSettings !== 'undefined',
-			// Pick up a wp-login redirect even if the ?loggedout=true param is gone.
-			body: document.body.innerText.slice(0, 200),
-		}));
-		// eslint-disable-next-line no-console
-		console.error('[e2e] ensureDashboardNonce got empty nonce:', diag);
-	}
 	return nonce;
 }
 
@@ -131,8 +118,11 @@ export async function runPurge(page: Page): Promise<void> {
 }
 
 export async function nextScheduled(page: Page, hook: string): Promise<number> {
+	// When env.restUrl already contains `?rest_route=` (CI on wp-env), the
+	// extra query param must be appended with `&`, not a second `?`.
+	const separator = env.restUrl.includes('?') ? '&' : '?';
 	const response = await page.request.get(
-		`${env.restUrl}/statnive/v1/debug/next-scheduled?hook=${encodeURIComponent(hook)}`,
+		`${env.restUrl}/statnive/v1/debug/next-scheduled${separator}hook=${encodeURIComponent(hook)}`,
 		{ headers: { 'X-WP-Nonce': await ensureDashboardNonce(page) } }
 	);
 	if (!response.ok()) {
