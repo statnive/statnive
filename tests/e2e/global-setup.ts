@@ -31,15 +31,20 @@ const E2E_MU_FILES = [
 export default async function globalSetup(_config: FullConfig): Promise<void> {
 	void _config;
 
-	mkdirSync(SITE_MU_DIR, { recursive: true });
-	for (const file of E2E_MU_FILES) {
-		const dst = join(SITE_MU_DIR, file);
-		cpSync(join(FIXTURE_MU_DIR, file), dst, { force: true });
+	// CI (wp-env) installs the mu-plugins through the Docker container
+	// because the host-side filesystem isn't mounted into WP. Host-side
+	// copy runs for local dev only.
+	if (process.env.STATNIVE_E2E_SKIP_MU_COPY !== '1') {
+		mkdirSync(SITE_MU_DIR, { recursive: true });
+		for (const file of E2E_MU_FILES) {
+			const dst = join(SITE_MU_DIR, file);
+			cpSync(join(FIXTURE_MU_DIR, file), dst, { force: true });
+		}
+		// Activate the mu-plugins via the file sentinel they check for.
+		// Local's PHP worker does not inherit `STATNIVE_E2E_*` env vars,
+		// so this file is the only reliable gate.
+		writeFileSync(join(SITE_MU_DIR, '.statnive-e2e-on'), '1');
 	}
-	// Activate the mu-plugins via the file sentinel they check for.
-	// Local's PHP worker does not inherit `STATNIVE_E2E_*` env vars, so this
-	// file is the only reliable gate.
-	writeFileSync(join(SITE_MU_DIR, '.statnive-e2e-on'), '1');
 
 	mkdirSync(AUTH_DIR, { recursive: true });
 	const storageStatePath = join(AUTH_DIR, 'admin.json');
