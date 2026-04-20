@@ -22,6 +22,10 @@
  * @package Statnive\Tests\E2E
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 // File-sentinel gate — env vars don't propagate to Local's PHP worker.
 // global-setup.ts drops `.statnive-e2e-on` next to this file and
 // global-teardown.ts removes it. The sentinel's absence on production IS

@@ -2,14 +2,18 @@
 /**
  * E2E-only: stub the WordPress Consent API for tests.
  *
- * Activated only when the env var `STATNIVE_E2E_CONSENT_STUB=1` is set.
- * Defines `wp_has_consent()` if no consent-API plugin is installed and
- * reads the answer from a transient the tests flip via REST, so we can
- * drive Statnive's `ConsentApiIntegration::has_consent()` fallback path
+ * Activated by the `.statnive-e2e-on` sentinel file. Defines
+ * `wp_has_consent()` if no consent-API plugin is installed and reads the
+ * answer from a transient the tests flip via REST, so we can drive
+ * Statnive's `ConsentApiIntegration::has_consent()` fallback path
  * deterministically.
  *
  * @package Statnive\Tests\E2E
  */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 // File-sentinel gate — see statnive-ip-filter.php for rationale.
 if ( ! file_exists( __DIR__ . '/.statnive-e2e-on' ) ) {

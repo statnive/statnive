@@ -2,21 +2,21 @@
 /**
  * E2E-only: spoof the client IP used by Statnive's tracker gate.
  *
- * Activated only when the env var `STATNIVE_E2E_IP_FILTER=1` is set on the
- * PHP process. Reads the IP from the `X-Test-Client-IP` header that
- * Playwright sends per-request, validates it, and feeds it into the
- * `statnive_client_ip` filter documented in
- * `src/Service/IpExtractor.php:65`.
+ * Reads the IP from the `X-Test-Client-IP` header that Playwright sends
+ * per-request, validates it, and feeds it into the `statnive_client_ip`
+ * filter documented in `src/Service/IpExtractor.php:65`. Activated via
+ * the file-sentinel `.statnive-e2e-on` (env vars don't propagate to
+ * Local's PHP worker, so file presence is the only reliable signal).
  *
- * Safe-by-default: if the env var is absent (normal browsing, CI without
- * the flag), this file is a no-op — the filter never registers.
+ * Safe-by-default: when the sentinel is absent, this file is a no-op.
  *
  * @package Statnive\Tests\E2E
  */
 
-// File-sentinel gate — global-setup.ts creates `.statnive-e2e-on` next to
-// this file and global-teardown.ts removes it. Env vars do not propagate
-// into Local's PHP worker, so file presence is the only reliable signal.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 if ( ! file_exists( __DIR__ . '/.statnive-e2e-on' ) ) {
 	return;
 }
