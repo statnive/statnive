@@ -57,16 +57,13 @@ jobs:
       - name: Start wp-env
         run: npx -y @wordpress/env@10.0.0 start --update
 
-      - name: Diagnostic — inspect tests-wordpress mu-plugins dir
+      # wp-env boots with "Plain" permalinks, which makes `/wp-json/…`
+      # 404 through Apache. Switch to pretty permalinks so REST routes
+      # resolve via rewrite rules.
+      - name: Enable pretty permalinks on the tests site
         run: |
-          echo '--- tests-wordpress ---'
-          npx -y @wordpress/env@10.0.0 run tests-wordpress ls -la /var/www/html/wp-content/mu-plugins/ 2>&1 || true
-          echo '--- tests-cli ---'
-          npx -y @wordpress/env@10.0.0 run tests-cli ls -la /var/www/html/wp-content/mu-plugins/ 2>&1 || true
-          echo '--- REST namespaces ---'
-          curl -sf http://localhost:8889/wp-json/ | python3 -c "import json,sys; print([n for n in json.load(sys.stdin).get('namespaces', []) if 'statnive' in n])" || true
-          echo '--- /settings route probe ---'
-          curl -si -u admin:password -X POST http://localhost:8889/wp-json/statnive/v1/debug/settings-snapshot 2>&1 | head -20 || true
+          npx -y @wordpress/env@10.0.0 run tests-cli wp rewrite structure '/%postname%/' --hard
+          npx -y @wordpress/env@10.0.0 run tests-cli wp rewrite flush --hard
 
       # CI runs only the UI-focused settings specs that work against any
       # WordPress host. The tracking-side specs (cookieless, DNT/GPC,
