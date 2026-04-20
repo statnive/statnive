@@ -50,6 +50,14 @@ jobs:
       - name: Install composer deps
         run: composer install --no-interaction --prefer-dist --no-progress
 
+      # The React dashboard bundle must exist at public/react/ before
+      # wp-env boots; ReactHandler::enqueue_assets() bails on the
+      # missing manifest otherwise, so `window.StatniveDashboard` +
+      # the bundled `wp-api` nonce never reach the admin page and
+      # every debug-endpoint POST fails with rest_cookie_invalid_nonce.
+      - name: Build React dashboard
+        run: npm run build:react
+
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
 
@@ -60,15 +68,6 @@ jobs:
       # only hits the CLI container's ephemeral filesystem.
       - name: Start wp-env
         run: npx -y @wordpress/env@10.0.0 start --update
-
-      - name: Diagnostic — confirm Statnive is active + probe REST
-        run: |
-          echo '--- active plugins on tests site ---'
-          npx -y @wordpress/env@10.0.0 run tests-cli wp plugin list --status=active --fields=name,status 2>&1 || true
-          echo '--- REST namespaces (?rest_route=) ---'
-          curl -sf "http://localhost:8889/index.php?rest_route=/" | python3 -c "import json,sys; print([n for n in json.load(sys.stdin).get('namespaces', []) if 'statnive' in n])" || true
-          echo '--- debug route index ---'
-          curl -si "http://localhost:8889/index.php?rest_route=/statnive/v1/debug/next-scheduled&hook=statnive_daily_salt_rotation" | head -5 || true
 
       # CI runs only the UI-focused settings specs that work against any
       # WordPress host. The tracking-side specs (cookieless, DNT/GPC,
