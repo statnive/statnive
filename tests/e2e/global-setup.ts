@@ -13,7 +13,7 @@
  */
 
 import { chromium, type FullConfig } from '@playwright/test';
-import { cpSync, mkdirSync, readdirSync, writeFileSync } from 'node:fs';
+import { cpSync, existsSync, mkdirSync, readdirSync, writeFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { env } from './env';
 
@@ -63,9 +63,12 @@ export default async function globalSetup(_config: FullConfig): Promise<void> {
 	await browser.close();
 
 	// Log what we did — handy when a CI run fails before any spec starts.
+	const muPlugins = existsSync(SITE_MU_DIR)
+		? readdirSync(SITE_MU_DIR).filter((f) => f.startsWith('statnive-'))
+		: '<installed inside wp-env container>';
 	// eslint-disable-next-line no-console
 	console.log('[e2e] setup complete:', {
-		muPlugins: readdirSync(SITE_MU_DIR).filter((f) => f.startsWith('statnive-')),
+		muPlugins,
 		storageState: storageStatePath,
 		baseUrl: env.baseUrl,
 	});
