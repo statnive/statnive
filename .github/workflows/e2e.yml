@@ -14,7 +14,11 @@ jobs:
     timeout-minutes: 25
     env:
       WP_BASE_URL: http://localhost:8889
-      WP_REST_URL: http://localhost:8889/wp-json
+      # Query-string REST form bypasses Apache rewrite rules. wp-env's
+      # tests site boots with Plain permalinks and `wp rewrite --hard`
+      # can't regenerate .htaccess on the bundled Apache, so `/wp-json/`
+      # 404s through Apache. `?rest_route=/…` always works.
+      WP_REST_URL: http://localhost:8889/index.php?rest_route=
       WP_ADMIN_USER: admin
       WP_ADMIN_PASSWORD: password
       WP_TABLE_PREFIX: wp_
@@ -56,14 +60,6 @@ jobs:
       # only hits the CLI container's ephemeral filesystem.
       - name: Start wp-env
         run: npx -y @wordpress/env@10.0.0 start --update
-
-      # wp-env boots with "Plain" permalinks, which makes `/wp-json/…`
-      # 404 through Apache. Switch to pretty permalinks so REST routes
-      # resolve via rewrite rules.
-      - name: Enable pretty permalinks on the tests site
-        run: |
-          npx -y @wordpress/env@10.0.0 run tests-cli wp rewrite structure '/%postname%/' --hard
-          npx -y @wordpress/env@10.0.0 run tests-cli wp rewrite flush --hard
 
       # CI runs only the UI-focused settings specs that work against any
       # WordPress host. The tracking-side specs (cookieless, DNT/GPC,
