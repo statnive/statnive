@@ -36,6 +36,11 @@ vi.mock('@/hooks/use-dimensions', () => ({
 	useDimensions: (...args: unknown[]) => mockUseDimensions(...args),
 }));
 
+const mockUseGeoSource = vi.fn(() => 'maxmind' as const);
+vi.mock('@/hooks/use-geo-source', () => ({
+	useGeoSource: () => mockUseGeoSource(),
+}));
+
 import { GeographyPage } from '@/pages/geography';
 
 // ---------------------------------------------------------------------------
@@ -45,6 +50,53 @@ import { GeographyPage } from '@/pages/geography';
 describe('GeographyPage', () => {
 	beforeEach(() => {
 		vi.restoreAllMocks();
+		mockUseGeoSource.mockReturnValue('maxmind');
+	});
+
+	describe('empty state by geo source', () => {
+		beforeEach(() => {
+			mockUseDimensions.mockReturnValue({ data: [], isLoading: false });
+		});
+
+		it('explains the timezone fallback is active when source is timezone', () => {
+			mockUseGeoSource.mockReturnValue('timezone');
+
+			render(<GeographyPage />);
+
+			expect(
+				screen.getAllByText(/derived from each visitor’s browser timezone/),
+			).toHaveLength(2);
+		});
+
+		it('shows "data will appear" when CDN headers are active but period is empty', () => {
+			mockUseGeoSource.mockReturnValue('cdn_headers');
+
+			render(<GeographyPage />);
+
+			expect(
+				screen.getAllByText(/Country detection via your CDN is active/),
+			).toHaveLength(2);
+		});
+
+		it('flags resolution as disabled when source is none', () => {
+			mockUseGeoSource.mockReturnValue('none');
+
+			render(<GeographyPage />);
+
+			expect(
+				screen.getAllByText(/Geography resolution is currently disabled/),
+			).toHaveLength(2);
+		});
+
+		it('shows the existing empty copy when MaxMind is configured but period is empty', () => {
+			mockUseGeoSource.mockReturnValue('maxmind');
+
+			render(<GeographyPage />);
+
+			expect(
+				screen.getAllByText(/No geography data for this period/),
+			).toHaveLength(2);
+		});
 	});
 
 	// REQ-1.18 — Countries table with visitor and session counts

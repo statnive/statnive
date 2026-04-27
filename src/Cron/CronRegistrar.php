@@ -32,12 +32,6 @@ final class CronRegistrar {
 				'display'  => __( 'Once Weekly', 'statnive' ),
 			];
 		}
-		if ( ! isset( $schedules['monthly'] ) ) {
-			$schedules['monthly'] = [
-				'interval' => 30 * DAY_IN_SECONDS,
-				'display'  => __( 'Once Monthly', 'statnive' ),
-			];
-		}
 		return $schedules;
 	}
 
@@ -51,7 +45,6 @@ final class CronRegistrar {
 		SaltRotationJob::init();
 		DailyAggregationJob::init();
 		DataPurgeJob::init();
-		EmailReportJob::init();
 		add_action(
 			GeoIPDownloader::CRON_HOOK,
 			static function (): void {
@@ -63,7 +56,6 @@ final class CronRegistrar {
 		SaltRotationJob::schedule();
 		DailyAggregationJob::schedule();
 		DataPurgeJob::schedule();
-		EmailReportJob::schedule();
 
 		// Conditional: only schedule if user has opted in.
 		if ( get_option( 'statnive_geoip_enabled', false ) ) {
@@ -80,8 +72,11 @@ final class CronRegistrar {
 		SaltRotationJob::unschedule();
 		DailyAggregationJob::unschedule();
 		DataPurgeJob::unschedule();
-		EmailReportJob::unschedule();
 		GeoIPDownloader::unschedule();
+
+		// Legacy cleanup: remove the scheduled email-report hook left over
+		// from versions that shipped the Email Reports subsystem.
+		wp_clear_scheduled_hook( 'statnive_email_report' );
 
 		// Clean up Action Scheduler actions if it was used.
 		if ( function_exists( 'as_unschedule_all_actions' ) ) {

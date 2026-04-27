@@ -9,6 +9,7 @@ import { DualBarCell } from '@/components/shared/dual-bar-cell';
 import { DataTable, type Column } from '@/components/shared/data-table';
 import { TimeSeriesChart } from '@/components/charts/time-series-chart';
 import { formatNumber, formatDuration, percentChange } from '@/lib/utils';
+import { HEADING_H2, HEADING_H3 } from '@/lib/typography';
 import type { SourceRow, PageRow } from '@/types/api';
 
 export function OverviewPage() {
@@ -106,7 +107,7 @@ export function OverviewPage() {
 
 	return (
 		<div className="space-y-6">
-			<h2 className="text-lg font-semibold">{__('Overview', 'statnive')}</h2>
+			<h2 className={HEADING_H2}>{__('Overview', 'statnive')}</h2>
 
 			{/* KPI Cards */}
 			<div className="grid grid-cols-2 gap-4 md:grid-cols-4">
@@ -138,7 +139,7 @@ export function OverviewPage() {
 
 			{/* Time Series Chart */}
 			<div className="rounded-lg border border-border bg-card p-4">
-				<h3 className="mb-4 text-sm font-medium text-muted-foreground">
+				<h3 className={`mb-4 ${HEADING_H3}`}>
 					{sprintf(
 						/* translators: %s: date range label (e.g. "Today" or "Last 7d") */
 						__('Visitors & Sessions — %s', 'statnive'),

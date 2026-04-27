@@ -4,6 +4,7 @@ import { useDateRange } from '@/hooks/use-date-range';
 import { useDimensions } from '@/hooks/use-dimensions';
 import { DataTable, type Column } from '@/components/shared/data-table';
 import { DualBarCell } from '@/components/shared/dual-bar-cell';
+import { HEADING_H2 } from '@/lib/typography';
 import type { DimensionRow } from '@/types/api';
 
 export function LanguagesPage() {
@@ -25,7 +26,7 @@ export function LanguagesPage() {
 
 	return (
 		<div className="space-y-6">
-			<h2 className="text-lg font-semibold">{__('Languages', 'statnive')}</h2>
+			<h2 className={HEADING_H2}>{__('Languages', 'statnive')}</h2>
 			<div className="rounded-lg border border-border bg-card p-4">
 				<DataTable
 					title={__('Visitor Languages', 'statnive')}

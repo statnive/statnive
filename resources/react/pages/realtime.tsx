@@ -1,6 +1,7 @@
 import { __, sprintf } from '@wordpress/i18n';
 import { useRealtime } from '@/hooks/use-realtime';
 import { formatNumber } from '@/lib/utils';
+import { HEADING_H2, HEADING_H3 } from '@/lib/typography';
 import { RealtimeCounter } from '@/components/shared/realtime-counter';
 
 export function RealtimePage() {
@@ -8,14 +9,14 @@ export function RealtimePage() {
 
 	return (
 		<div className="space-y-6">
-			<h2 className="text-lg font-semibold">{__('Real-time', 'statnive')}</h2>
+			<h2 className={HEADING_H2}>{__('Real-time', 'statnive')}</h2>
 
 			{/* Hero Counter */}
 			<div className="flex flex-col items-center justify-center rounded-lg border border-border bg-card py-12">
 				<div className="mb-4 flex items-center gap-3">
 					<span className="relative flex h-4 w-4">
-						<span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75 motion-reduce:animate-none" />
-						<span className="relative inline-flex h-4 w-4 rounded-full bg-green-500" />
+						<span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-revenue opacity-75 motion-reduce:animate-none" />
+						<span className="relative inline-flex h-4 w-4 rounded-full bg-revenue" />
 					</span>
 					<span className="text-sm font-medium uppercase tracking-wider text-muted-foreground">
 						{__('Active Visitors', 'statnive')}
@@ -37,7 +38,7 @@ export function RealtimePage() {
 			<div className="grid grid-cols-1 gap-6 md:grid-cols-2">
 				{/* Active Pages */}
 				<div className="rounded-lg border border-border bg-card p-4">
-					<h3 className="mb-3 text-sm font-medium text-muted-foreground">{__('Active Pages', 'statnive')}</h3>
+					<h3 className={`mb-3 ${HEADING_H3}`}>{__('Active Pages', 'statnive')}</h3>
 					{isLoading ? (
 						<div className="space-y-2">
 							{Array.from({ length: 3 }).map((_, i) => (
@@ -64,7 +65,7 @@ export function RealtimePage() {
 
 				{/* Recent Feed */}
 				<div className="rounded-lg border border-border bg-card p-4">
-					<h3 className="mb-3 text-sm font-medium text-muted-foreground">{__('Recent Pageviews', 'statnive')}</h3>
+					<h3 className={`mb-3 ${HEADING_H3}`}>{__('Recent Pageviews', 'statnive')}</h3>
 					{isLoading ? (
 						<div className="space-y-2">
 							{Array.from({ length: 5 }).map((_, i) => (

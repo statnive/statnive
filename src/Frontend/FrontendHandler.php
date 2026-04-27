@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Statnive\Frontend;
 
-use Statnive\Http\PayloadValidator;
 use Statnive\Security\HmacValidator;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -181,7 +180,6 @@ final class FrontendHandler {
 			'eventUrl'      => esc_url_raw( rest_url( 'statnive/v1/event' ) ),
 			'engagementUrl' => esc_url_raw( rest_url( 'statnive/v1/engagement' ) ),
 			'ajaxUrl'       => esc_url_raw( admin_url( 'admin-ajax.php' ) ),
-			'nonce'         => wp_create_nonce( PayloadValidator::NONCE_ACTION ),
 			'hitParams'     => [
 				'resource_type' => $resource_type,
 				'resource_id'   => (string) $resource_id,

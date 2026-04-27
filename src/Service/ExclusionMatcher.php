@@ -16,6 +16,33 @@ if ( ! defined( 'ABSPATH' ) ) {
 final class ExclusionMatcher {
 
 	/**
+	 * Per-request cache of parsed IP ranges.
+	 *
+	 * Null means "not yet read". Empty array means "read, no exclusions".
+	 *
+	 * @var string[]|null
+	 */
+	private static ?array $cached_ip_ranges = null;
+
+	/**
+	 * Per-request cache of excluded role slugs.
+	 *
+	 * @var string[]|null
+	 */
+	private static ?array $cached_excluded_roles = null;
+
+	/**
+	 * Reset the per-request memoization.
+	 *
+	 * Call from tests and from code that updates the underlying options
+	 * inside the same request.
+	 */
+	public static function reset_cache(): void {
+		self::$cached_ip_ranges      = null;
+		self::$cached_excluded_roles = null;
+	}
+
+	/**
 	 * Check if an IP is in the excluded ranges.
 	 *
 	 * Supports CIDR notation (192.168.0.0/16) and single IPs.
@@ -24,19 +51,23 @@ final class ExclusionMatcher {
 	 * @return bool True if excluded.
 	 */
 	public static function is_excluded_ip( string $ip ): bool {
-		$excluded = get_option( 'statnive_excluded_ips', '' );
-		if ( empty( $excluded ) ) {
+		if ( null === self::$cached_ip_ranges ) {
+			$excluded               = (string) get_option( 'statnive_excluded_ips', '' );
+			self::$cached_ip_ranges = '' === $excluded
+				? []
+				: array_values( array_filter( array_map( 'trim', explode( "\n", $excluded ) ) ) );
+		}
+
+		if ( empty( self::$cached_ip_ranges ) ) {
 			return false;
 		}
 
-		$ranges = array_filter( array_map( 'trim', explode( "\n", $excluded ) ) );
 		$packed = inet_pton( $ip );
-
 		if ( false === $packed ) {
 			return false;
 		}
 
-		foreach ( $ranges as $range ) {
+		foreach ( self::$cached_ip_ranges as $range ) {
 			if ( self::ip_in_cidr( $packed, $range ) ) {
 				return true;
 			}
@@ -48,20 +79,27 @@ final class ExclusionMatcher {
 	/**
 	 * Check if the current user has an excluded role.
 	 *
+	 * Cheap path for the anonymous-tracker case: empty option → skip the
+	 * session parsing `is_user_logged_in()` triggers.
+	 *
 	 * @return bool True if excluded.
 	 */
 	public static function is_excluded_role(): bool {
-		if ( ! is_user_logged_in() ) {
+		if ( null === self::$cached_excluded_roles ) {
+			$opt                         = get_option( 'statnive_excluded_roles', [] );
+			self::$cached_excluded_roles = is_array( $opt ) ? array_values( $opt ) : [];
+		}
+
+		if ( empty( self::$cached_excluded_roles ) ) {
 			return false;
 		}
 
-		$excluded_roles = get_option( 'statnive_excluded_roles', [] );
-		if ( empty( $excluded_roles ) || ! is_array( $excluded_roles ) ) {
+		if ( ! function_exists( 'is_user_logged_in' ) || ! is_user_logged_in() ) {
 			return false;
 		}
 
 		$user = wp_get_current_user();
-		return ! empty( array_intersect( $user->roles, $excluded_roles ) );
+		return ! empty( array_intersect( $user->roles, self::$cached_excluded_roles ) );
 	}
 
 	/**

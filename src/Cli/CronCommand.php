@@ -10,7 +10,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 use Statnive\Cron\DailyAggregationJob;
 use Statnive\Cron\DataPurgeJob;
-use Statnive\Cron\EmailReportJob;
 use Statnive\Cron\SaltRotationJob;
 use WP_CLI;
 
@@ -40,7 +39,6 @@ final class CronCommand {
 	 *   - data-purge
 	 *   - aggregation
 	 *   - salt-rotation
-	 *   - email-report
 	 * ---
 	 *
 	 * ## EXAMPLES
@@ -63,7 +61,6 @@ final class CronCommand {
 			'salt-rotation' => [ SaltRotationJob::class, 'Daily salt rotation' ],
 			'aggregation'   => [ DailyAggregationJob::class, 'Daily aggregation' ],
 			'data-purge'    => [ DataPurgeJob::class, 'Data purge' ],
-			'email-report'  => [ EmailReportJob::class, 'Email report' ],
 		];
 
 		foreach ( $jobs as $key => $info ) {

@@ -45,6 +45,8 @@ final class EngagementController extends WP_REST_Controller {
 		'scroll_depth',
 		'pvid',
 		'page_url',
+		// Backward-compat: cached tracker bundles still emit this field.
+		// Server no longer validates it. See HitController::ALLOWED_KEYS.
 		'_statnonce',
 	];
 
@@ -146,11 +148,8 @@ final class EngagementController extends WP_REST_Controller {
 			return self::error_response( [ 'invalid_signature', 'Request signature is invalid.', 403 ] );
 		}
 
-		// CSRF nonce — hardening layer alongside HMAC (Checklist §7).
-		$nonce_error = PayloadValidator::validate_nonce( $data );
-		if ( null !== $nonce_error ) {
-			return self::error_response( $nonce_error );
-		}
+		// HMAC alone is the CSRF boundary here. See HitController::create_item
+		// for the rationale — WP nonces break behind page caches.
 
 		$engagement_time = absint( $data['engagement_time'] ?? 0 );
 		$scroll_depth    = min( absint( $data['scroll_depth'] ?? 0 ), 100 );

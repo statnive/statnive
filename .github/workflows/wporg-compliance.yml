@@ -349,8 +349,9 @@ jobs:
           fi
 
           # Must NOT contain dev files (comprehensive list from Plugin Check audit 2026-04-13)
+          # Note: composer.json MUST ship per PCP — vendor/ without composer.json triggers warnings.
           FORBIDDEN=(
-            "node_modules/" ".git/" "composer.json" "package.json" "phpstan.neon"
+            "node_modules/" ".git/" "package.json" "phpstan.neon"
             ".phpcs.xml.dist" "tests/" "phpunit" " bin/"
             ".wp-env.json" ".phpunit.result.cache" ".env.example"
             "blueprint.json" "vite.config.ts" "vitest.config.ts"

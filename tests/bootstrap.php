@@ -77,6 +77,27 @@ if ( ! function_exists( 'update_option' ) ) {
 	}
 }
 
+if ( ! function_exists( 'delete_option' ) ) {
+	function delete_option( string $option ): bool {
+		$existed = array_key_exists( $option, $GLOBALS['statnive_test_options'] ?? [] );
+		unset( $GLOBALS['statnive_test_options'][ $option ] );
+		return $existed;
+	}
+}
+
+if ( ! function_exists( 'add_option' ) ) {
+	/**
+	 * @param mixed $value
+	 */
+	function add_option( string $option, $value = '', string $deprecated = '', $autoload = null ): bool {
+		if ( array_key_exists( $option, $GLOBALS['statnive_test_options'] ?? [] ) ) {
+			return false;
+		}
+		$GLOBALS['statnive_test_options'][ $option ] = $value;
+		return true;
+	}
+}
+
 if ( ! function_exists( 'get_transient' ) ) {
 	/**
 	 * @return mixed
@@ -104,7 +125,18 @@ if ( ! function_exists( 'delete_transient' ) ) {
 }
 
 if ( ! function_exists( 'apply_filters' ) ) {
+	/**
+	 * Stub with a test override: if a callable is registered at
+	 * $GLOBALS['statnive_test_filters'][$hook_name], it is invoked with
+	 * the default value. Otherwise the default passes through.
+	 *
+	 * @param mixed $value
+	 * @return mixed
+	 */
 	function apply_filters( string $hook_name, $value ) {
+		if ( isset( $GLOBALS['statnive_test_filters'][ $hook_name ] ) && is_callable( $GLOBALS['statnive_test_filters'][ $hook_name ] ) ) {
+			return $GLOBALS['statnive_test_filters'][ $hook_name ]( $value );
+		}
 		return $value;
 	}
 }
@@ -367,6 +399,23 @@ if ( ! function_exists( 'wp_generate_password' ) ) {
 
 if ( ! function_exists( 'deactivate_plugins' ) ) {
 	function deactivate_plugins( $plugins, bool $silent = false, $network_wide = null ): void {
+	}
+}
+
+if ( ! function_exists( 'wp_upload_dir' ) ) {
+	/**
+	 * @return array{basedir: string, baseurl: string, path: string, url: string, subdir: string, error: false}
+	 */
+	function wp_upload_dir(): array {
+		$base = sys_get_temp_dir() . '/statnive-unit-uploads';
+		return [
+			'basedir' => $base,
+			'baseurl' => 'http://example.test/uploads',
+			'path'    => $base,
+			'url'     => 'http://example.test/uploads',
+			'subdir'  => '',
+			'error'   => false,
+		];
 	}
 }
 

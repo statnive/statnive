@@ -51,17 +51,14 @@ final class SettingsController extends WP_REST_Controller {
 		'statnive_retention_mode',
 		'statnive_excluded_ips',
 		'statnive_excluded_roles',
-		'statnive_email_reports',
-		'statnive_email_frequency',
 		'statnive_geoip_enabled',
 		'statnive_maxmind_license_key',
 	];
 
-	private const CONSENT_MODES     = [ 'full', 'cookieless', 'disabled-until-consent' ];
-	private const RETENTION_MODES   = [ 'forever', 'delete', 'archive' ];
-	private const EMAIL_FREQUENCIES = [ 'weekly', 'monthly' ];
-	private const RETENTION_MIN     = 30;
-	private const RETENTION_MAX     = 3650;
+	private const CONSENT_MODES   = [ 'cookieless', 'disabled-until-consent' ];
+	private const RETENTION_MODES = [ 'forever', 'delete', 'archive' ];
+	private const RETENTION_MIN   = 30;
+	private const RETENTION_MAX   = 3650;
 
 	/**
 	 * Register routes.
@@ -105,18 +102,21 @@ final class SettingsController extends WP_REST_Controller {
 	public function get_settings( WP_REST_Request $request ): WP_REST_Response {
 		$has_license_key = '' !== get_option( 'statnive_maxmind_license_key', '' );
 
+		$consent_mode = get_option( 'statnive_consent_mode', 'cookieless' );
+		if ( ! in_array( $consent_mode, self::CONSENT_MODES, true ) ) {
+			$consent_mode = 'cookieless';
+		}
+
 		return new WP_REST_Response(
 			[
 				'tracking_enabled'    => (bool) get_option( 'statnive_tracking_enabled', true ),
 				'respect_dnt'         => (bool) get_option( 'statnive_respect_dnt', true ),
 				'respect_gpc'         => (bool) get_option( 'statnive_respect_gpc', true ),
-				'consent_mode'        => get_option( 'statnive_consent_mode', 'cookieless' ),
-				'retention_days'      => (int) get_option( 'statnive_retention_days', 90 ),
-				'retention_mode'      => get_option( 'statnive_retention_mode', 'delete' ),
+				'consent_mode'        => $consent_mode,
+				'retention_days'      => (int) get_option( 'statnive_retention_days', 3650 ),
+				'retention_mode'      => get_option( 'statnive_retention_mode', 'forever' ),
 				'excluded_ips'        => get_option( 'statnive_excluded_ips', '' ),
 				'excluded_roles'      => get_option( 'statnive_excluded_roles', [] ),
-				'email_reports'       => (bool) get_option( 'statnive_email_reports', false ),
-				'email_frequency'     => get_option( 'statnive_email_frequency', 'weekly' ),
 				'geoip_enabled'       => (bool) get_option( 'statnive_geoip_enabled', false ),
 				'maxmind_license_key' => $has_license_key ? '********' : '',
 			],
@@ -146,8 +146,6 @@ final class SettingsController extends WP_REST_Controller {
 			'retention_mode'      => 'statnive_retention_mode',
 			'excluded_ips'        => 'statnive_excluded_ips',
 			'excluded_roles'      => 'statnive_excluded_roles',
-			'email_reports'       => 'statnive_email_reports',
-			'email_frequency'     => 'statnive_email_frequency',
 			'geoip_enabled'       => 'statnive_geoip_enabled',
 			'maxmind_license_key' => 'statnive_maxmind_license_key',
 		];
@@ -261,17 +259,6 @@ final class SettingsController extends WP_REST_Controller {
 				'items'             => [ 'type' => 'string' ],
 				'validate_callback' => 'rest_validate_request_arg',
 			],
-			'email_reports'       => [
-				'type'              => 'boolean',
-				'sanitize_callback' => 'rest_sanitize_boolean',
-				'validate_callback' => 'rest_validate_request_arg',
-			],
-			'email_frequency'     => [
-				'type'              => 'string',
-				'enum'              => self::EMAIL_FREQUENCIES,
-				'sanitize_callback' => 'sanitize_text_field',
-				'validate_callback' => 'rest_validate_request_arg',
-			],
 			'geoip_enabled'       => [
 				'type'              => 'boolean',
 				'sanitize_callback' => 'rest_sanitize_boolean',
@@ -294,13 +281,12 @@ final class SettingsController extends WP_REST_Controller {
 	 */
 	private function sanitize_setting( string $key, mixed $value ): mixed {
 		return match ( $key ) {
-			'tracking_enabled', 'respect_dnt', 'respect_gpc', 'email_reports', 'geoip_enabled' => (bool) $value,
+			'tracking_enabled', 'respect_dnt', 'respect_gpc', 'geoip_enabled' => (bool) $value,
 			'retention_days' => max( self::RETENTION_MIN, min( absint( $value ), self::RETENTION_MAX ) ),
 			'excluded_ips' => sanitize_textarea_field( (string) $value ),
 			'excluded_roles' => is_array( $value ) ? array_map( 'sanitize_text_field', $value ) : [],
 			'consent_mode' => ( in_array( $value, self::CONSENT_MODES, true ) ? $value : 'cookieless' ),
-			'retention_mode' => ( in_array( $value, self::RETENTION_MODES, true ) ? $value : 'delete' ),
-			'email_frequency' => ( in_array( $value, self::EMAIL_FREQUENCIES, true ) ? $value : 'weekly' ),
+			'retention_mode' => ( in_array( $value, self::RETENTION_MODES, true ) ? $value : 'forever' ),
 			'maxmind_license_key' => sanitize_text_field( (string) $value ),
 			default => sanitize_text_field( (string) $value ),
 		};

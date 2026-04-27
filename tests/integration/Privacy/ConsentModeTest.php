@@ -87,44 +87,6 @@ final class ConsentModeTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @testdox Full consent mode records tracking without consent signal
-	 */
-	public function test_full_consent_mode_records_without_signal(): void {
-		global $wpdb;
-
-		update_option( 'statnive_consent_mode', ConsentMode::FULL );
-
-		$visitors = TableRegistry::get( 'visitors' );
-		$sessions = TableRegistry::get( 'sessions' );
-		$views    = TableRegistry::get( 'views' );
-
-		// phpcs:disable WordPress.DB.DirectDatabaseQuery
-		$visitors_before = (int) $wpdb->get_var( "SELECT COUNT(*) FROM `{$visitors}`" );
-		$sessions_before = (int) $wpdb->get_var( "SELECT COUNT(*) FROM `{$sessions}`" );
-		// phpcs:enable WordPress.DB.DirectDatabaseQuery
-
-		$response = $this->controller->create_item( $this->build_request() );
-
-		// phpcs:disable WordPress.DB.DirectDatabaseQuery
-		$visitors_after = (int) $wpdb->get_var( "SELECT COUNT(*) FROM `{$visitors}`" );
-		$sessions_after = (int) $wpdb->get_var( "SELECT COUNT(*) FROM `{$sessions}`" );
-		// phpcs:enable WordPress.DB.DirectDatabaseQuery
-
-		$this->assertSame( $visitors_before + 1, $visitors_after, 'Full consent mode should create 1 visitor row' );
-		$this->assertSame( $sessions_before + 1, $sessions_after, 'Full consent mode should create 1 session row' );
-
-		// Verify a view row was created.
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery
-		$view_row = $wpdb->get_row(
-			"SELECT * FROM `{$views}` ORDER BY ID DESC LIMIT 1"
-		);
-
-		$this->assertNotNull( $view_row, 'View row should exist for tracked pageview in full consent mode' );
-		$this->assertGreaterThan( 0, (int) $view_row->session_id, 'View should have a valid session_id' );
-		$this->assertGreaterThan( 0, (int) $view_row->resource_uri_id, 'View should have a valid resource_uri_id' );
-	}
-
-	/**
 	 * @testdox Cookieless mode records tracking without consent signal
 	 */
 	public function test_cookieless_mode_records_without_signal(): void {
@@ -185,10 +147,10 @@ final class ConsentModeTest extends WP_UnitTestCase {
 		$views = TableRegistry::get( 'views' );
 
 		// First, grant consent and track.
-		update_option( 'statnive_consent_mode', 'full' );
+		update_option( 'statnive_consent_mode', ConsentMode::COOKIELESS );
 		$request  = $this->build_request();
 		$response = $this->controller->create_item( $request );
-		$this->assertSame( 204, $response->get_status(), 'Tracking should work with full consent' );
+		$this->assertSame( 204, $response->get_status(), 'Tracking should work in cookieless mode' );
 
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery
 		$views_before = (int) $wpdb->get_var( "SELECT COUNT(*) FROM `{$views}`" );

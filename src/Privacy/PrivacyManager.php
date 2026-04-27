@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Statnive\Privacy;
 
+use Statnive\Service\ExclusionMatcher;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -113,6 +115,7 @@ final class PrivacyManager {
 		self::$cached_respect_dnt      = null;
 		self::$cached_respect_gpc      = null;
 		self::$cached_tracking_enabled = null;
+		ExclusionMatcher::reset_cache();
 	}
 
 	/**
@@ -128,14 +131,25 @@ final class PrivacyManager {
 	 *
 	 * @param array<string, string> $server_vars Subset of $_SERVER (HTTP_SEC_GPC, HTTP_DNT).
 	 * @param bool                  $consent_granted Whether consent was granted via banner.
+	 * @param string                $client_ip       Extracted client IP for exclusion matching. Skipped when empty.
 	 * @return PrivacyDecision
 	 */
-	public static function check_request_privacy( array $server_vars, bool $consent_granted = false ): PrivacyDecision {
+	public static function check_request_privacy( array $server_vars, bool $consent_granted = false, string $client_ip = '' ): PrivacyDecision {
 		$mode = self::get_consent_mode();
 
 		// Global kill switch.
 		if ( ! self::is_tracking_enabled() ) {
 			return PrivacyDecision::block( 'tracking_disabled', $mode );
+		}
+
+		// Excluded IPs / CIDR ranges — admin-configured block list.
+		if ( '' !== $client_ip && ExclusionMatcher::is_excluded_ip( $client_ip ) ) {
+			return PrivacyDecision::block( 'excluded_ip', $mode );
+		}
+
+		// Excluded user roles (logged-in visitors only).
+		if ( ExclusionMatcher::is_excluded_role() ) {
+			return PrivacyDecision::block( 'excluded_role', $mode );
 		}
 
 		/**
@@ -223,8 +237,8 @@ final class PrivacyManager {
 	 */
 	public static function get_retention_config(): array {
 		return [
-			'days' => (int) get_option( 'statnive_retention_days', 90 ),
-			'mode' => get_option( 'statnive_retention_mode', 'delete' ),
+			'days' => (int) get_option( 'statnive_retention_days', 3650 ),
+			'mode' => get_option( 'statnive_retention_mode', 'forever' ),
 		];
 	}
 }

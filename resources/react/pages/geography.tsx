@@ -2,14 +2,17 @@ import { useMemo } from 'react';
 import { __ } from '@wordpress/i18n';
 import { useDateRange } from '@/hooks/use-date-range';
 import { useDimensions } from '@/hooks/use-dimensions';
+import { useGeoSource, type GeoSource } from '@/hooks/use-geo-source';
 import { DataTable, type Column } from '@/components/shared/data-table';
 import { DualBarCell } from '@/components/shared/dual-bar-cell';
+import { HEADING_H2 } from '@/lib/typography';
 import type { DimensionRow } from '@/types/api';
 
 export function GeographyPage() {
 	const { params } = useDateRange();
 	const { data: countries, isLoading: loadingCountries } = useDimensions('countries', params.from, params.to, 30);
 	const { data: cities, isLoading: loadingCities } = useDimensions('cities', params.from, params.to, 30);
+	const geoSource = useGeoSource();
 
 	const maxCountry = useMemo(
 		() => Math.max(...(countries ?? []).map(d => Math.max(d.visitors, d.sessions)), 1),
@@ -37,11 +40,17 @@ export function GeographyPage() {
 		[maxCity],
 	);
 
-	const emptyGeoMessage = __('No geography data for this period. If your site has traffic, data should appear within minutes. If nothing shows after 10 minutes, check Settings → Diagnostics.', 'statnive');
+	const emptyGeoMessages: Record<GeoSource, string> = {
+		maxmind: __('No geography data for this period. If your site has traffic, data should appear within minutes. If nothing shows after 10 minutes, check Settings → Diagnostics.', 'statnive'),
+		cdn_headers: __('No visitors with a resolvable country in this period. Country detection via your CDN is active; data will appear as traffic arrives.', 'statnive'),
+		timezone: __('No visitors with a resolvable country in this period. Approximate country is being derived from each visitor’s browser timezone; for precise city-level data, configure MaxMind GeoIP in Settings → GeoIP.', 'statnive'),
+		none: __('Geography resolution is currently disabled. Re-enable the timezone fallback, configure MaxMind GeoIP, or place your site behind a CDN that sets a country header.', 'statnive'),
+	};
+	const emptyGeoMessage = emptyGeoMessages[geoSource];
 
 	return (
 		<div className="space-y-6">
-			<h2 className="text-lg font-semibold">{__('Geography', 'statnive')}</h2>
+			<h2 className={HEADING_H2}>{__('Geography', 'statnive')}</h2>
 
 			<div className="grid grid-cols-1 gap-6 md:grid-cols-2">
 				<div className="rounded-lg border border-border bg-card p-4">

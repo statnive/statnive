@@ -5,12 +5,17 @@ declare global {
 			nonce: string;
 			siteTitle: string;
 			version: string;
+			currentIp: string;
 		};
 	}
 }
 
 function getConfig() {
 	return window.StatniveDashboard;
+}
+
+export function getCurrentIp(): string {
+	return window.StatniveDashboard?.currentIp ?? '';
 }
 
 export async function apiGet<T>(path: string, params?: Record<string, string>): Promise<T> {

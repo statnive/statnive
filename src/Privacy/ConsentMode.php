@@ -11,14 +11,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Consent mode definitions and behavior flags.
  *
- * Three modes control how tracking behaves:
- * - FULL: Track everything (requires explicit opt-in if consent banners used).
+ * Two modes control how tracking behaves:
  * - COOKIELESS: Track without cookies (default, privacy-safe for most jurisdictions).
  * - DISABLED_UNTIL_CONSENT: No tracking until user grants consent via banner.
  */
 final class ConsentMode {
 
-	public const FULL                   = 'full';
 	public const COOKIELESS             = 'cookieless';
 	public const DISABLED_UNTIL_CONSENT = 'disabled-until-consent';
 
@@ -28,7 +26,6 @@ final class ConsentMode {
 	 * @var string[]
 	 */
 	public const VALID_MODES = [
-		self::FULL,
 		self::COOKIELESS,
 		self::DISABLED_UNTIL_CONSENT,
 	];
@@ -41,27 +38,18 @@ final class ConsentMode {
 	 */
 	public static function behaviors( string $mode ): array {
 		return match ( $mode ) {
-			self::FULL => [
-				'allows_tracking'         => true,
-				'requires_consent_signal' => false,
-				'allows_geo'              => true,
-				'allows_device'           => true,
-			],
 			self::COOKIELESS => [
 				'allows_tracking'         => true,
 				'requires_consent_signal' => false,
 				'allows_geo'              => true,
 				'allows_device'           => true,
 			],
-			self::DISABLED_UNTIL_CONSENT => [
+			// Closed-by-default: any unknown mode (legacy 'full', typos) is
+			// treated as "no tracking until a consent signal arrives" so a
+			// corrupted option never silently over-tracks.
+			default => [
 				'allows_tracking'         => false,
 				'requires_consent_signal' => true,
-				'allows_geo'              => true,
-				'allows_device'           => true,
-			],
-			default => [
-				'allows_tracking'         => true,
-				'requires_consent_signal' => false,
 				'allows_geo'              => true,
 				'allows_device'           => true,
 			],

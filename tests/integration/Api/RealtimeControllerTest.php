@@ -156,8 +156,34 @@ final class RealtimeControllerTest extends WP_UnitTestCase {
 		$this->assertNotEmpty( $data['active_pages'], 'Active pages list should not be empty' );
 
 		$first_page = $data['active_pages'][0];
-		$this->assertSame( '/pricing', $first_page['uri'], 'First active page should be /pricing (most visitors)' );
+		$this->assertSame( '/pricing', $first_page['uri'], 'First active page should be /pricing (most recently viewed)' );
 		$this->assertEquals( 3, $first_page['visitors'], 'Pricing page should have 3 active visitors' );
+	}
+
+	/**
+	 * @testdox Active pages list orders by most-recent view time, not visitor count
+	 */
+	public function test_active_pages_ordered_by_most_recent_view(): void {
+		for ( $i = 0; $i < 5; $i++ ) {
+			$this->insert_active_visitor( '/blog', 'DE', 'Firefox', 3 );
+		}
+		$this->insert_active_visitor( '/new', 'US', 'Chrome', 1 );
+
+		$request  = new WP_REST_Request( 'GET', '/statnive/v1/realtime' );
+		$response = $this->controller->get_items( $request );
+		$data     = $response->get_data();
+
+		$this->assertNotEmpty( $data['active_pages'], 'Active pages list should not be empty' );
+		$this->assertSame(
+			'/new',
+			$data['active_pages'][0]['uri'],
+			'Most recently viewed page must appear first even if it has fewer visitors'
+		);
+		$this->assertSame(
+			'/blog',
+			$data['active_pages'][1]['uri'],
+			'Older page with more visitors must appear below the more recent one'
+		);
 	}
 
 	/**

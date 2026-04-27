@@ -75,9 +75,9 @@ if ( is_multisite() ) {
 // phpcs:enable WordPress.DB.DirectDatabaseQuery.SchemaChange
 
 // Delete scheduled cron events.
-// statnive_weekly_license_check is retained for backward compatibility:
-// installs upgrading from <= 0.3.0 may still have this hook scheduled even
-// though the licensing code has been removed from the WordPress.org build.
+// Legacy hooks (statnive_weekly_license_check, statnive_email_report) are
+// cleared unconditionally so sites upgrading from earlier versions don't
+// leave orphan schedules behind.
 wp_clear_scheduled_hook( 'statnive_daily_salt_rotation' );
 wp_clear_scheduled_hook( 'statnive_daily_aggregation' );
 wp_clear_scheduled_hook( 'statnive_daily_data_purge' );

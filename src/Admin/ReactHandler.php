@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Statnive\Admin;
 
+use Statnive\Service\IpExtractor;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -96,6 +98,7 @@ final class ReactHandler {
 				'nonce'     => wp_create_nonce( 'wp_rest' ),
 				'siteTitle' => get_bloginfo( 'name' ),
 				'version'   => STATNIVE_VERSION,
+				'currentIp' => IpExtractor::extract(),
 			]
 		);
 

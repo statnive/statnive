@@ -73,6 +73,7 @@ final class PrivacyPolicyGenerator {
 		// IP handling.
 		$sections[] = '<h3>' . esc_html__( 'IP Address Handling', 'statnive' ) . '</h3>';
 		$sections[] = '<p>' . esc_html__( 'Your IP address is never stored. It is used only momentarily to determine your approximate geographic location and to generate a one-way cryptographic hash for visit counting. The IP is discarded immediately after processing and cannot be recovered from the stored hash.', 'statnive' ) . '</p>';
+		$sections[] = '<p>' . esc_html__( 'When no IP-derived geolocation source is configured, an approximate country may be inferred from your browser’s timezone setting. The timezone string is processed on this site’s server only and is not transmitted to any third party.', 'statnive' ) . '</p>';
 
 		// Consent mode.
 		$sections[] = '<h3>' . esc_html__( 'Consent', 'statnive' ) . '</h3>';

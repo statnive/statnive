@@ -105,4 +105,64 @@ final class HitControllerTest extends WP_UnitTestCase {
 
 		$this->assertSame( 400, $response->get_status() );
 	}
+
+	public function test_cdn_header_fallback_populates_country_on_fresh_install(): void {
+		global $wpdb;
+
+		$_SERVER['REMOTE_ADDR']          = '203.0.113.5';
+		$_SERVER['HTTP_X_FORWARDED_FOR'] = '203.0.113.5';
+		$_SERVER['HTTP_CF_IPCOUNTRY']    = 'DE';
+
+		try {
+			$this->controller->create_item( $this->build_request() );
+
+			$sessions_table  = TableRegistry::get( 'sessions' );
+			$countries_table = TableRegistry::get( 'countries' );
+
+			// phpcs:disable WordPress.DB.DirectDatabaseQuery
+			$country_id = $wpdb->get_var( "SELECT country_id FROM `{$sessions_table}` LIMIT 1" );
+			$this->assertNotNull( $country_id, 'CDN header fallback must populate sessions.country_id' );
+			$this->assertGreaterThan( 0, (int) $country_id );
+
+			$row = $wpdb->get_row(
+				$wpdb->prepare( "SELECT code, name FROM `{$countries_table}` WHERE id = %d", (int) $country_id ),
+				ARRAY_A
+			);
+			// phpcs:enable WordPress.DB.DirectDatabaseQuery
+
+			$this->assertIsArray( $row );
+			$this->assertSame( 'DE', $row['code'] );
+			$this->assertSame( 'Germany', $row['name'] );
+		} finally {
+			unset(
+				$_SERVER['REMOTE_ADDR'],
+				$_SERVER['HTTP_X_FORWARDED_FOR'],
+				$_SERVER['HTTP_CF_IPCOUNTRY']
+			);
+		}
+	}
+
+	public function test_no_cdn_header_leaves_country_null(): void {
+		global $wpdb;
+
+		$_SERVER['REMOTE_ADDR']          = '203.0.113.5';
+		$_SERVER['HTTP_X_FORWARDED_FOR'] = '203.0.113.5';
+
+		try {
+			$this->controller->create_item( $this->build_request() );
+
+			$sessions_table = TableRegistry::get( 'sessions' );
+
+			// phpcs:disable WordPress.DB.DirectDatabaseQuery
+			$country_id = $wpdb->get_var( "SELECT country_id FROM `{$sessions_table}` LIMIT 1" );
+			// phpcs:enable WordPress.DB.DirectDatabaseQuery
+
+			$this->assertNull( $country_id, 'Without a CDN header and without MaxMind, country_id must stay NULL' );
+		} finally {
+			unset(
+				$_SERVER['REMOTE_ADDR'],
+				$_SERVER['HTTP_X_FORWARDED_FOR']
+			);
+		}
+	}
 }

@@ -12,6 +12,8 @@
 	<exclude-pattern>./vendor/*</exclude-pattern>
 	<exclude-pattern>./node_modules/*</exclude-pattern>
 	<exclude-pattern>./tests/*</exclude-pattern>
+	<!-- CLI build tools never run inside WordPress; WP-runtime sniffs do not apply. -->
+	<exclude-pattern>./bin/*</exclude-pattern>
 
 	<!-- Use WordPress standards -->
 	<rule ref="WordPress">
