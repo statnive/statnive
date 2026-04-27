@@ -7,8 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.3] - 2026-04-27
+
 ### Added
 
+- **Zero-config visitor geography**: a new IANA-timezone → ISO-3166 fallback tier resolves visitor country from `Intl.DateTimeFormat().resolvedOptions().timeZone` already in the tracker payload. A fresh install on a vanilla WP host (no Cloudflare, no MaxMind) now attributes most visitors to a country with no settings touched. Pure in-process — no external service contact, no consent surface. Resolve order: MaxMind → CDN headers → timezone → NULL. Lookup table generated from public-domain IANA tzdb (`zone1970.tab` + `backward`); 553 entries, ~16 KB.
 - Settings page Save button with dirty tracking — replaces auto-save-on-every-keystroke. Inline "Saved ✓" flash on success, inline error + retry on failure.
 - "Your IP right now" hint in Exclusions with a one-click "Add to exclusions" button.
 - Short per-control descriptions on every Settings control (DNT, GPC, Data Retention, Exclusions) so users can decide without docs.

@@ -1,0 +1,17 @@
+POT regeneration: SKIPPED — wp-env unavailable in this build environment.
+
+POT mtime:        Apr 15 14:33:59 2026
+statnive.php mtime: Apr 27 12:17:05 2026
+
+The POT is OLDER than statnive.php. New translatable strings introduced in
+v0.4.3 (timezone-tier dashboard copy, removed nonce-related strings, etc.)
+are NOT in the .pot until it's regenerated. This must run before the SVN
+push to wordpress.org.
+
+Regenerate via:
+
+    cd statnive
+    npx wp-env start
+    npx wp-env run cli wp i18n make-pot /var/www/html/wp-content/plugins/statnive languages/statnive.pot
+
+Or in CI on a machine with network access to wp-env's WordPress version cache.
