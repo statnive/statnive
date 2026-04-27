@@ -26,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+- WP-nonce hardening layer on the public tracker endpoints (`/hit`, `/event`, `/engagement`, AJAX fallback). WP nonces have a 12–24h tick window, so every page served from an HTML cache older than the current tick produced `403 invalid_nonce` and dropped the hit. HMAC signing remains the CSRF boundary — an attacker still cannot forge a `signature` without `wp_salt('auth')`. The `_statnonce` payload field is silently accepted for backward-compat with already-deployed cached bundles. `PayloadValidator::validate_nonce()`, `NONCE_ACTION`, `NONCE_FIELD`, and the `wp_create_nonce()` call in `FrontendHandler::build_config()` are removed.
 - "Full Tracking" consent mode. It was behaviorally identical to Cookieless (same `allows_tracking`, `requires_consent_signal`, `allows_geo`, `allows_device` flags in `ConsentMode::behaviors()`) — shipping the label without the intended cookie-based cross-day recognition was misleading. Deferred to a future release that actually implements the differentiation. Legacy installs with `statnive_consent_mode='full'` are silently coerced to `'cookieless'` on read.
 - Email Reports subsystem: `EmailReportJob`, `ReportBuilder`, `wp statnive cron run --job=email-report`, the REST `email_reports`/`email_frequency` fields, and the Settings UI section. Deferred — will come back with email recipient management, template customization, and delivery diagnostics.
 

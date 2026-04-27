@@ -41,6 +41,8 @@ final class AjaxFallback {
 		'page_query',
 		'pvid',
 		'consent_granted',
+		// Backward-compat: cached tracker bundles still emit this field.
+		// Server no longer validates it. See HitController::ALLOWED_KEYS.
 		'_statnonce',
 	];
 
@@ -123,20 +125,17 @@ final class AjaxFallback {
 			return;
 		}
 
-		// CSRF nonce — hardening layer alongside HMAC (Checklist §7).
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce IS verified via PayloadValidator::validate_nonce(); ignore suppresses the check_ajax_referer suggestion.
-		$nonce_error = PayloadValidator::validate_nonce( $data );
-		if ( null !== $nonce_error ) {
-			self::reject( $nonce_error[0], $nonce_error[1], $nonce_error[2] );
-			return;
-		}
+		// HMAC alone is the CSRF boundary here. See HitController::create_item
+		// for the rationale — WP nonces break behind page caches.
 
 		// Privacy enforcement: check consent mode, DNT, GPC headers.
 		$ip              = IpExtractor::extract();
 		$consent_granted = ! empty( $data['consent_granted'] );
 		$privacy_check   = PrivacyManager::check_request_privacy(
 			[
+				// phpcs:ignore WordPress.Security.NonceVerification.Missing -- public tracker endpoint; HMAC is the CSRF boundary.
 				'HTTP_DNT'     => sanitize_text_field( wp_unslash( $_SERVER['HTTP_DNT'] ?? '' ) ),
+				// phpcs:ignore WordPress.Security.NonceVerification.Missing -- public tracker endpoint; HMAC is the CSRF boundary.
 				'HTTP_SEC_GPC' => sanitize_text_field( wp_unslash( $_SERVER['HTTP_SEC_GPC'] ?? '' ) ),
 			],
 			$consent_granted,
