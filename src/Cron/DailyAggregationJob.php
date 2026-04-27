@@ -27,6 +27,14 @@ final class DailyAggregationJob {
 	public const HOOK = 'statnive_daily_aggregation';
 
 	/**
+	 * Heartbeat option written by `run()` and read by
+	 * Statnive\Admin\CronHealth.
+	 *
+	 * @var string
+	 */
+	public const LAST_RUN_OPTION = 'statnive_last_aggregation';
+
+	/**
 	 * Register the cron hook callback.
 	 */
 	public static function init(): void {
@@ -50,6 +58,9 @@ final class DailyAggregationJob {
 
 		// Invalidate dashboard caches after all aggregation is complete.
 		CacheVersion::increment();
+
+		// Cron-health heartbeat read by Statnive\Admin\CronHealth.
+		update_option( self::LAST_RUN_OPTION, gmdate( 'c' ), false );
 	}
 
 	/**

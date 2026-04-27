@@ -1,0 +1,53 @@
+# v0.4.3 gate run — 2026-04-27T10:43:21Z
+
+## Static (S-1..S-5)
+- S-1 phpcs    [PASS] zero errors (84 files, 6.0s)
+- S-2 phpstan  [PASS] zero errors at baseline level
+- S-3 phpunit  [PASS] 226/226 tests, 1001 assertions (unit suite)
+                 deferred: integration suite — wp-env unavailable in this dev environment;
+                 CI runs the full suite on every PR.
+- S-4 vitest   [PASS] 167 passed, 6 skipped (30 files)
+- S-5 PCP      [WARN] wp-env unavailable — must re-run via CI on the built ZIP before SVN push
+
+## Source-tree (C-1..C-12, C-15..C-17)
+- C-1  ABSPATH guard           [PASS]
+- C-2  LICENSE + GPL text      [PASS]
+- C-2a THIRD-PARTY-LICENSES    [PASS] (.txt per LEARN.md v0.4.2 rename)
+- C-3  no phone-home in activate [PASS]
+- C-4  no api.statnive.com refs  [PASS]
+- C-5  readme.txt               [PASS]
+  - C-5a External Services      [PASS]
+  - C-5b MaxMind attribution    [PASS]
+  - C-5d Stable tag matches     [PASS] 0.4.3
+  - C-5e Tested up to 6.9       [PASS]
+  - C-5f PHP/WP requirements    [PASS]
+  - C-5h size cap (10240B)      [PASS] 10136B
+  - C-5i not literal trunk      [PASS]
+  - C-5j no License Validation  [PASS]
+  - C-5k Changelog section      [PASS]
+- C-6  output escaping heuristic [PASS]
+- C-7  MaxMind hygiene           [PASS]
+- C-8  no custom updater         [PASS]
+- C-9  no bundled core libs      [PASS]
+- C-10 no external CDN enqueues  [PASS]
+- C-11 cron schedule==clear      [PASS] (added statnive_import_batch clear)
+- C-12 uninstall.php             [PASS] (added explicit delete_option literals)
+- C-15 dbDelta SQL formatting    [PASS]
+- C-16 i18n infrastructure       [PASS]
+- C-17 privacy hooks             [PASS]
+
+## Post-build (C-13, C-14)
+- C-13 SVN /assets/              [PASS]
+- C-14 ZIP integrity
+  - top-level=statnive            [PASS]
+  - required files                [PASS]
+  - forbidden patterns            [WARN — composer.json files flagged]
+    Documented false positive: per LEARN.md "ship composer.json in ZIP" was a
+    v0.4.2 PCP-warning fix. The 7 flagged paths are 1× plugin composer.json
+    (intentional) + 6× vendor/*/composer.json (Composer runtime metadata,
+    unstrippable). Follow-up: refine c14-zip-integrity.md regex to exclude
+    composer.json while keeping composer.lock as forbidden.
+  - size 1.06 MB                  [PASS]
+  - 332 files                     [PASS]
+  - Version 0.4.3 in ZIP          [PASS]
+  - .min.js source/maps           [PASS]

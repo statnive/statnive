@@ -51,6 +51,18 @@ if ( ! defined( 'MINUTE_IN_SECONDS' ) ) {
 	define( 'MINUTE_IN_SECONDS', 60 );
 }
 
+if ( ! defined( 'HOUR_IN_SECONDS' ) ) {
+	define( 'HOUR_IN_SECONDS', 60 * 60 );
+}
+
+if ( ! defined( 'DAY_IN_SECONDS' ) ) {
+	define( 'DAY_IN_SECONDS', 24 * 60 * 60 );
+}
+
+if ( ! defined( 'WEEK_IN_SECONDS' ) ) {
+	define( 'WEEK_IN_SECONDS', 7 * 24 * 60 * 60 );
+}
+
 if ( ! function_exists( 'wp_hash' ) ) {
 	function wp_hash( string $data, string $scheme = 'auth' ): string {
 		// Stub: use hash_hmac with a fixed salt for deterministic unit tests.
@@ -306,10 +318,49 @@ if ( ! function_exists( 'wp_schedule_event' ) ) {
 
 if ( ! function_exists( 'wp_next_scheduled' ) ) {
 	/**
-	 * @return false
+	 * Returns a value from $GLOBALS['statnive_test_scheduled'][$hook] when
+	 * set; otherwise false. Tests inject schedules by writing to that
+	 * array directly.
+	 *
+	 * @return int|false
 	 */
 	function wp_next_scheduled( string $hook, array $args = [] ) {
+		if ( isset( $GLOBALS['statnive_test_scheduled'][ $hook ] ) ) {
+			return (int) $GLOBALS['statnive_test_scheduled'][ $hook ];
+		}
 		return false;
+	}
+}
+
+if ( ! function_exists( 'wp_get_environment_type' ) ) {
+	function wp_get_environment_type(): string {
+		return $GLOBALS['statnive_test_env_type'] ?? 'production';
+	}
+}
+
+if ( ! function_exists( 'get_current_user_id' ) ) {
+	function get_current_user_id(): int {
+		return (int) ( $GLOBALS['statnive_test_user_id'] ?? 0 );
+	}
+}
+
+if ( ! function_exists( 'get_user_meta' ) ) {
+	/**
+	 * @return mixed
+	 */
+	function get_user_meta( int $user_id, string $key, bool $single = false ) {
+		$value = $GLOBALS['statnive_test_user_meta'][ $user_id ][ $key ] ?? '';
+		return $single ? $value : (array) $value;
+	}
+}
+
+if ( ! function_exists( 'update_user_meta' ) ) {
+	/**
+	 * @param mixed $value
+	 */
+	function update_user_meta( int $user_id, string $key, $value ): bool {
+		$GLOBALS['statnive_test_user_meta'][ $user_id ][ $key ] = $value;
+		return true;
 	}
 }
 

@@ -4,25 +4,23 @@ Tags: analytics, statistics, privacy, tracking, dashboard
 Requires at least: 6.2
 Tested up to: 6.9
 Requires PHP: 8.0
-Stable tag: 0.4.2
+Stable tag: 0.4.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Privacy-first WordPress analytics. Simple stats, clear decisions. No cookies, no third-party scripts, 100% self-hosted.
+Privacy-first WordPress analytics. No cookies, no third-party scripts, 100% self-hosted.
 
 == Description ==
 
 **The privacy-first analytics plugin for WordPress.**
 
-Statnive gives WordPress site owners fast, smart, and easy-to-understand analytics without complicated setup or confusing dashboards. All data stays on your server — no cookies, no fingerprinting, no third-party transfers.
-
-[See the live demo →](https://statnive.com/demo)
+Fast, smart, easy-to-understand analytics without complicated setup or confusing dashboards. All data stays on your server — no cookies, no fingerprinting, no third-party transfers.
 
 = Why Statnive? =
 
-* **Channel intelligence** — Automatically groups traffic into Organic Search, Social Media, Direct, Referral, and Email so you see which channels drive real results.
-* **Privacy by default** — No cookies, no localStorage, no fingerprinting. Designed to support GDPR, CCPA, and APPI compliance. Daily rotating salts make cross-day tracking impossible.
-* **Zero-config setup** — Install, activate, done. No tracking code to paste, no account to create, no external service to connect.
+* **Channel intelligence** — Auto-groups traffic into Organic Search, Social, Direct, Referral, Email.
+* **Privacy by default** — No cookies, no fingerprinting. Designed to support GDPR/CCPA/APPI. Daily rotating salts.
+* **Zero-config setup** — Install, activate, done. No tracking code, no account, no external service.
 
 = Key Features =
 
@@ -74,32 +72,29 @@ Yes. Statnive runs independently and does not conflict with Google Analytics, Ma
 
 = How does visitor counting work without cookies? =
 
-Statnive generates a daily visitor hash from the anonymized IP address and User-Agent string, salted with a cryptographically random key that rotates every 24 hours (with 48-hour overlap for session continuity). This means the same visitor gets a different hash each day, making cross-day tracking impossible while still providing accurate daily unique counts.
+A daily-rotating salted hash of the anonymized IP + User-Agent. The same visitor gets a different hash each day, so cross-day tracking is impossible while daily uniques stay accurate.
 
 = Where is my analytics data stored? =
 
 All data is stored in your WordPress database on your own server. Statnive creates its own tables (prefixed `statnive_`) and never sends data to external servers. When you uninstall the plugin, all tables are cleanly removed.
 
-= Which browsers does the tracker support? =
-
-The Statnive tracker uses standard browser APIs (`navigator.sendBeacon`, `fetch` with `keepalive`, `Intl.DateTimeFormat`) that ship in every modern browser. We test against the latest two major versions of Chrome, Firefox, Safari, and Edge, plus iOS WebKit. Older browsers will silently fall back to a no-op — analytics won't work, but your site is unaffected.
-
 = What can cause "no data"? =
 
-Common causes: ad blockers filtering analytics requests, aggressive page caching serving stale HTML, CSP blocking `fetch()`/`sendBeacon()` (ensure `connect-src 'self'`), privacy signals (GPC/DNT) honouring opt-outs by design, or `DISABLE_WP_CRON` preventing background jobs. See [troubleshooting guide](https://statnive.com/docs/troubleshooting) for details.
+Common causes: ad blockers, aggressive page caching, CSP blocking `fetch()`/`sendBeacon()` (allow `connect-src 'self'`), privacy signals (GPC/DNT), or `DISABLE_WP_CRON`. See the [troubleshooting guide](https://statnive.com/docs/troubleshooting).
 
 = Do I need to exclude URLs from page caches? =
 
-Exclude `/wp-json/statnive/v1/hit` and `admin-ajax.php?action=statnive_hit` from page caches. Most caching plugins do this by default.
+Exclude `/wp-json/statnive/v1/hit` and `admin-ajax.php?action=statnive_hit`. Most caching plugins do this by default.
 
 = How does Geography work? =
 
-Statnive reports approximate country/region in two tiers.
+Statnive resolves approximate country in three tiers, falling through automatically:
 
-1. **Out of the box — inbound CDN country headers.** If your site sits behind Cloudflare, AWS CloudFront, or Vercel (free tiers all set a country header automatically), Statnive reads `CF-IPCountry` / `CloudFront-Viewer-Country` / `X-Vercel-IP-Country` on each request. Country codes from CDN headers are trusted as-is — suitable for analytics, not for IP-verified country data.
-2. **Optional upgrade — MaxMind GeoLite2.** Configure a free MaxMind license key in Settings → GeoIP to unlock city and region precision resolved from the raw IP before it is discarded.
+1. **Zero-config — browser timezone.** Each tracker payload already carries the visitor's IANA timezone (`America/New_York`, etc.). Statnive maps it to a country via a static IANA tzdb lookup shipped in the plugin. No setup, no external service, ~80% accurate.
+2. **CDN country headers.** If your site sits behind Cloudflare, AWS CloudFront, or Vercel (free tiers set a country header), Statnive reads `CF-IPCountry` / `CloudFront-Viewer-Country` / `X-Vercel-IP-Country` per request — more accurate than timezone when present.
+3. **MaxMind GeoLite2.** Configure a free MaxMind license key in Settings → GeoIP to unlock city + region precision from the raw IP before it is discarded.
 
-No outbound request is made to read CDN headers; they arrive with the page view. See the Privacy Policy section for how IPs are handled.
+No outbound request is made for tiers 1 or 2; both arrive with the page view.
 
 == Screenshots ==
 
@@ -139,6 +134,16 @@ All analytics data stays in your WordPress database. No cookies, no fingerprinti
 
 == Changelog ==
 
+= 0.4.3 - 2026-04-27 =
+* Added: Zero-config visitor geography. New IANA-timezone fallback resolves country from each browser's timezone — works on fresh installs without Cloudflare or MaxMind. Pure in-process, no external service contact.
+* Added: Settings Save button with dirty tracking; "Your IP" hint with one-click exclude; per-control descriptions on every Settings control.
+* Added: Real-production Playwright E2E suite for consent modes, DNT/GPC, retention, IP exclusions.
+* Changed: Default Data Retention is now "Forever" (was 90 days).
+* Fixed: Excluded IPs / CIDR ranges now actually block tracking — ExclusionMatcher was previously cosmetic.
+* Removed: WP-nonce check on public tracker endpoints. WP nonces tick every 12-24h and 403'd every cached-page hit. HMAC remains the CSRF boundary.
+* Removed: "Full Tracking" consent mode (was behaviorally identical to Cookieless; legacy installs coerced).
+* Removed: Email Reports subsystem (deferred — will return with delivery diagnostics).
+
 = 0.4.2 - 2026-04-14 =
 * Added: Device Distribution + Bot vs Human pie charts on Devices page.
 * Added: DualBarCell (visitors/sessions bars) on all report tables.
@@ -158,27 +163,12 @@ All analytics data stays in your WordPress database. No cookies, no fingerprinti
 * Circuit-breaker, GeoIP backoff, host allow-list, AJAX rate limiting, downgrade detection.
 * See CHANGELOG.md for full details.
 
-= 0.3.1 - 2026-04-09 =
-* Lowered runtime floor to WordPress 5.6 / PHP 8.0; PHPCompatibilityWP ruleset enforces it.
-* Fixed UTM persistence and tuple-based campaign aggregation in referrers.
-* Fixed `/hit` and `/event` REST args incorrectly marked required (regression from 0.3.0).
-* Fixed dual-bar charts to use a shared scale across visitors and sessions.
-* Fixed dashboard CSS leaking into WP admin chrome (now scoped under `#statnive-app`).
-* Fixed Pages search input padding and wired search to entry/exit tables.
-* Refactored API layer: extracted PayloadValidator, hardened privacy fall-through.
-
-= 0.3.0 - 2026-04-06 =
-* WordPress.org compliance pass. Removed license validation (Guideline 6). Added privacy hooks, MaxMind EULA compliance, i18n.
-
-For older releases, see CHANGELOG.md in the plugin source.
+For older releases (0.3.x and earlier), see CHANGELOG.md in the plugin source.
 
 == Upgrade Notice ==
 
+= 0.4.3 =
+Zero-config visitor geography on fresh installs (no CDN or MaxMind needed). Drops the WP-nonce check that 403'd cached-page hits. Excluded IPs now actually block tracking.
+
 = 0.4.0 =
-Full WordPress.org submission readiness. Dashboard now translatable. Adds circuit-breaker, GeoIP backoff, bfcache support, chart accessibility, and automated a11y testing.
-
-= 0.3.1 =
-Fixes UTM persistence, REST `/hit` regression from 0.3.0, dashboard CSS leak into WP admin, dual-bar scaling, and Pages search wiring. Lowers runtime floor to WP 5.6 / PHP 8.0.
-
-= 0.3.0 =
-GeoIP now requires a MaxMind license key (free). Adds full i18n support and WordPress.org compliance fixes.
+Full WordPress.org submission readiness. Dashboard now translatable. Adds circuit-breaker, GeoIP backoff, bfcache support, chart accessibility.

@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Star schema design with sessions as the central hub.
  * All definitions follow strict dbDelta formatting rules:
  * - Lowercase type keywords.
- * - Two spaces before PRIMARY KEY.
+ * - Two leading spaces before the primary-key declaration.
  * - One column per line.
  * - No IF NOT EXISTS.
  * - No foreign key constraints (D-07: improves INSERT performance).

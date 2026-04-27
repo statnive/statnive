@@ -27,6 +27,14 @@ final class GeoIPDownloader {
 	public const CRON_HOOK = 'statnive_weekly_geoip_update';
 
 	/**
+	 * Heartbeat option written by the cron callback in CronRegistrar
+	 * and read by Statnive\Admin\CronHealth.
+	 *
+	 * @var string
+	 */
+	public const LAST_RUN_OPTION = 'statnive_last_geoip_update';
+
+	/**
 	 * Download the GeoIP database to the uploads directory.
 	 *
 	 * @return bool True on success, false on failure.
