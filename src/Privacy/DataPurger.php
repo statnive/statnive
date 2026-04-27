@@ -82,9 +82,6 @@ final class DataPurger {
 			}
 		}
 
-		// Log last purge time.
-		update_option( 'statnive_last_purge', gmdate( 'Y-m-d H:i:s' ), false );
-
 		return [
 			'deleted'   => $total_deleted,
 			'remaining' => $has_remaining,

@@ -8,10 +8,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+use Statnive\Admin\CronHealth;
 use Statnive\Cron\DailyAggregationJob;
 use Statnive\Cron\DataPurgeJob;
+use Statnive\Cron\SaltRotationJob;
 use Statnive\Database\Migrator;
 use Statnive\Database\TableRegistry;
+use Statnive\Service\GeoIPDownloader;
 use Statnive\Service\GeoIPService;
 use WP_REST_Controller;
 use WP_REST_Request;
@@ -256,8 +259,10 @@ final class DiagnosticsController extends WP_REST_Controller {
 		}
 
 		$duration_s = microtime( true ) - $start;
-		update_option( 'statnive_last_purge', gmdate( 'c' ) );
-		update_option( 'statnive_last_purge_duration', $duration_s );
+		// `statnive_last_purge` is written by DataPurgeJob::run() itself
+		// at the cron-health heartbeat — only the duration is recorded
+		// here, since it is observed only at the diagnostic call site.
+		update_option( 'statnive_last_purge_duration', $duration_s, false );
 
 		return new WP_REST_Response(
 			[
@@ -302,24 +307,51 @@ final class DiagnosticsController extends WP_REST_Controller {
 	/**
 	 * Cron status for every Statnive scheduled hook.
 	 *
+	 * Implements WP.org submission checklist §29 line 654 in full —
+	 * each entry exposes `next_run_iso`, `last_run_iso`, and `is_stale`,
+	 * so support and the admin notice can read the same source of truth
+	 * (Statnive\Admin\CronHealth) for cron-health questions.
+	 *
 	 * @return array<string, mixed>
 	 */
 	private static function cron_status(): array {
+		// Canonical hook list pulled from the Job class constants so the
+		// schema cannot drift if a new hook is registered. CronHealth is
+		// the single source of truth for next/last/is_stale per hook.
 		$hooks = [
-			'statnive_daily_salt_rotation',
-			'statnive_daily_aggregation',
-			'statnive_daily_data_purge',
-			'statnive_weekly_geoip_update',
+			SaltRotationJob::HOOK,
+			DailyAggregationJob::HOOK,
+			DataPurgeJob::HOOK,
+			GeoIPDownloader::CRON_HOOK,
 		];
+
+		$by_hook = CronHealth::job_status();
 
 		$status = [
 			'wp_cron_disabled' => defined( 'DISABLE_WP_CRON' ) && DISABLE_WP_CRON,
+			'any_stale'        => CronHealth::any_stale(),
 			'jobs'             => [],
 		];
 
 		foreach ( $hooks as $hook ) {
-			$next                    = wp_next_scheduled( $hook );
-			$status['jobs'][ $hook ] = false !== $next ? gmdate( 'c', (int) $next ) : null;
+			if ( isset( $by_hook[ $hook ] ) ) {
+				$status['jobs'][ $hook ] = [
+					'next_run_iso' => $by_hook[ $hook ]['next_run_iso'],
+					'last_run_iso' => $by_hook[ $hook ]['last_run_iso'],
+					'is_stale'     => $by_hook[ $hook ]['is_stale'],
+				];
+				continue;
+			}
+
+			// Hook not currently scheduled (opt-out feature, e.g. GeoIP
+			// when the user has not enabled it). Record next/last as null
+			// so support can still distinguish "not scheduled" from
+			// "scheduled and stale".
+			$status['jobs'][ $hook ] = [
+				'next_run_iso' => null,
+				'last_run_iso' => CronHealth::last_run_for_hook( $hook ),
+				'is_stale'     => false,
+			];
 		}
 
 		return $status;

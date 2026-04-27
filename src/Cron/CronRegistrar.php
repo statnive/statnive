@@ -49,6 +49,11 @@ final class CronRegistrar {
 			GeoIPDownloader::CRON_HOOK,
 			static function (): void {
 				GeoIPDownloader::download();
+				// Cron-health heartbeat. Recorded on every fire whether the
+				// download succeeded, was skipped (no license key), or
+				// hit the exponential backoff — what matters here is that
+				// WP-Cron is alive and dispatching the hook.
+				update_option( GeoIPDownloader::LAST_RUN_OPTION, gmdate( 'c' ), false );
 			}
 		);
 
