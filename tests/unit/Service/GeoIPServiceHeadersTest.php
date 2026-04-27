@@ -148,7 +148,7 @@ final class GeoIPServiceHeadersTest extends TestCase {
 	}
 
 	public function test_detect_source_falls_back_through_the_tiers(): void {
-		$this->assertSame( 'none', GeoIPService::detect_source() );
+		$this->assertSame( 'timezone', GeoIPService::detect_source() );
 
 		$_SERVER['HTTP_CF_IPCOUNTRY'] = 'DE';
 		$this->assertSame( 'cdn_headers', GeoIPService::detect_source() );

@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { __ } from '@wordpress/i18n';
 import { useDateRange } from '@/hooks/use-date-range';
 import { useDimensions } from '@/hooks/use-dimensions';
-import { useGeoSource } from '@/hooks/use-geo-source';
+import { useGeoSource, type GeoSource } from '@/hooks/use-geo-source';
 import { DataTable, type Column } from '@/components/shared/data-table';
 import { DualBarCell } from '@/components/shared/dual-bar-cell';
 import { HEADING_H2 } from '@/lib/typography';
@@ -40,11 +40,13 @@ export function GeographyPage() {
 		[maxCity],
 	);
 
-	const emptyGeoMessage = geoSource === 'none'
-		? __('Geography needs an approximate-country source. Put your site behind Cloudflare, AWS CloudFront, or Vercel (free tiers set a country header automatically), or configure MaxMind GeoIP in Settings → GeoIP.', 'statnive')
-		: geoSource === 'cdn_headers'
-			? __('No visitors with a resolvable country in this period. Country detection via your CDN is active; data will appear as traffic arrives.', 'statnive')
-			: __('No geography data for this period. If your site has traffic, data should appear within minutes. If nothing shows after 10 minutes, check Settings → Diagnostics.', 'statnive');
+	const emptyGeoMessages: Record<GeoSource, string> = {
+		maxmind: __('No geography data for this period. If your site has traffic, data should appear within minutes. If nothing shows after 10 minutes, check Settings → Diagnostics.', 'statnive'),
+		cdn_headers: __('No visitors with a resolvable country in this period. Country detection via your CDN is active; data will appear as traffic arrives.', 'statnive'),
+		timezone: __('No visitors with a resolvable country in this period. Approximate country is being derived from each visitor’s browser timezone; for precise city-level data, configure MaxMind GeoIP in Settings → GeoIP.', 'statnive'),
+		none: __('Geography resolution is currently disabled. Re-enable the timezone fallback, configure MaxMind GeoIP, or place your site behind a CDN that sets a country header.', 'statnive'),
+	};
+	const emptyGeoMessage = emptyGeoMessages[geoSource];
 
 	return (
 		<div className="space-y-6">

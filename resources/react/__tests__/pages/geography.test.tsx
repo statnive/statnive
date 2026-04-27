@@ -58,13 +58,13 @@ describe('GeographyPage', () => {
 			mockUseDimensions.mockReturnValue({ data: [], isLoading: false });
 		});
 
-		it('prompts to configure a CDN or MaxMind when source is none', () => {
-			mockUseGeoSource.mockReturnValue('none');
+		it('explains the timezone fallback is active when source is timezone', () => {
+			mockUseGeoSource.mockReturnValue('timezone');
 
 			render(<GeographyPage />);
 
 			expect(
-				screen.getAllByText(/Geography needs an approximate-country source/),
+				screen.getAllByText(/derived from each visitor’s browser timezone/),
 			).toHaveLength(2);
 		});
 
@@ -75,6 +75,16 @@ describe('GeographyPage', () => {
 
 			expect(
 				screen.getAllByText(/Country detection via your CDN is active/),
+			).toHaveLength(2);
+		});
+
+		it('flags resolution as disabled when source is none', () => {
+			mockUseGeoSource.mockReturnValue('none');
+
+			render(<GeographyPage />);
+
+			expect(
+				screen.getAllByText(/Geography resolution is currently disabled/),
 			).toHaveLength(2);
 		});
 

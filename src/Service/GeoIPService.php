@@ -49,6 +49,31 @@ final class GeoIPService {
 	}
 
 	/**
+	 * Build a result row carrying only a country, with city/region/continent empty.
+	 *
+	 * Used by the CDN-header and timezone tiers — neither has city or region
+	 * signal. Returns the canonical empty shape if the code is missing from
+	 * the ISO map (defensive: callers should validate first).
+	 *
+	 * @param string                $code ISO 3166-1 alpha-2 code.
+	 * @param array<string, string> $map  ISO code → English name lookup.
+	 * @return array{country_code: string, country_name: string, city_name: string, region_code: string, continent_code: string, continent: string}
+	 */
+	private static function country_only_result( string $code, array $map ): array {
+		if ( ! isset( $map[ $code ] ) ) {
+			return self::empty_result();
+		}
+		return [
+			'country_code'   => $code,
+			'country_name'   => $map[ $code ],
+			'city_name'      => '',
+			'region_code'    => '',
+			'continent_code' => '',
+			'continent'      => '',
+		];
+	}
+
+	/**
 	 * Lazy-load and cache the ISO 3166-1 alpha-2 → name map.
 	 *
 	 * @return array<string, string>
@@ -200,17 +225,30 @@ final class GeoIPService {
 				continue;
 			}
 
-			return [
-				'country_code'   => $code,
-				'country_name'   => $map[ $code ],
-				'city_name'      => '',
-				'region_code'    => '',
-				'continent_code' => '',
-				'continent'      => '',
-			];
+			return self::country_only_result( $code, $map );
 		}
 
 		return self::empty_result();
+	}
+
+	/**
+	 * Resolve an approximate country from the visitor's IANA timezone.
+	 *
+	 * Pure in-process lookup against a static table generated from public-domain
+	 * IANA tzdb sources — no network call, no external service. Used as the
+	 * final tier of the fallback chain when MaxMind and CDN headers both yield
+	 * nothing, so a fresh install on a vanilla WP host (no CDN, no MaxMind)
+	 * still attributes visitors to a country with no settings touched.
+	 *
+	 * @param string $tz IANA timezone identifier from the tracker payload.
+	 * @return array{country_code: string, country_name: string, city_name: string, region_code: string, continent_code: string, continent: string}
+	 */
+	public static function resolve_from_timezone( string $tz ): array {
+		$code = TimezoneGeoResolver::resolve( $tz );
+		if ( '' === $code ) {
+			return self::empty_result();
+		}
+		return self::country_only_result( $code, self::iso_codes() );
 	}
 
 	/**
@@ -239,13 +277,22 @@ final class GeoIPService {
 	/**
 	 * Describe which country source is currently available for this request.
 	 *
-	 * @return string 'maxmind' | 'cdn_headers' | 'none'
+	 * The timezone tier is always reachable on requests that carry a tracker
+	 * payload, so a fresh install on a vanilla host reports 'timezone' rather
+	 * than 'none'. The 'none' return is kept in the type for symmetry with
+	 * dashboard states that may surface it (e.g. when the tracker payload
+	 * carried no timezone at all).
+	 *
+	 * @return string 'maxmind' | 'cdn_headers' | 'timezone' | 'none'
 	 */
 	public static function detect_source(): string {
 		if ( self::is_available() ) {
 			return 'maxmind';
 		}
-		return null !== self::first_cdn_header_name() ? 'cdn_headers' : 'none';
+		if ( null !== self::first_cdn_header_name() ) {
+			return 'cdn_headers';
+		}
+		return 'timezone';
 	}
 
 	/**

@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { apiGet } from '@/lib/api-client';
 
-export type GeoSource = 'maxmind' | 'cdn_headers' | 'none';
+export type GeoSource = 'maxmind' | 'cdn_headers' | 'timezone' | 'none';
 
 interface DiagnosticsSnapshot {
 	geoip?: {
@@ -17,5 +17,8 @@ export function useGeoSource(): GeoSource {
 		staleTime: 5 * 60 * 1000,
 		retry: false,
 	});
+	// While diagnostics is loading we cannot know which tier is active —
+	// fall back to 'none' so the dashboard does not pre-commit to copy that
+	// would mislead users on a MaxMind-configured host.
 	return data?.geoip?.source_detected ?? 'none';
 }
