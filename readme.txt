@@ -4,7 +4,7 @@ Tags: analytics, statistics, privacy, tracking, dashboard
 Requires at least: 6.2
 Tested up to: 6.9
 Requires PHP: 8.0
-Stable tag: 0.4.3
+Stable tag: 0.4.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -134,6 +134,13 @@ All analytics data stays in your WordPress database. No cookies, no fingerprinti
 
 == Changelog ==
 
+= 0.4.4 - 2026-04-27 =
+* Added: Stale-aware cron health notice — only fires when a Statnive background job is actually behind its grace window. Managed hosts (WP Engine, Kinsta, SiteGround) that set DISABLE_WP_CRON while running system cron stay silent.
+* Added: In-notice "Run cleanup now" button + per-user dismissal that re-arms when a new job goes stale or cron catches up.
+* Added: Notice suppressed on WP_ENVIRONMENT_TYPE=local/development.
+* Added: cron.jobs[hook].next_run_iso / last_run_iso / is_stale and top-level any_stale in the diagnostics export.
+* Fixed: statnive_last_purge timestamp format — now ISO 8601, was local-time-parsed Y-m-d H:i:s.
+
 = 0.4.3 - 2026-04-27 =
 * Added: Zero-config visitor geography. New IANA-timezone fallback resolves country from each browser's timezone — works on fresh installs without Cloudflare or MaxMind. Pure in-process, no external service contact.
 * Added: Settings Save button with dirty tracking; "Your IP" hint with one-click exclude; per-control descriptions on every Settings control.
@@ -151,24 +158,12 @@ All analytics data stays in your WordPress database. No cookies, no fingerprinti
 * Fixed: Stop externalizing react-is (no WordPress global exists).
 * Fixed: CI now fails on PCP warnings, not just errors.
 
-= 0.4.1 - 2026-04-14 =
-* Fixed: Externalize React/ReactDOM to wp-element instead of bundling (WP.org §8). Bundle size reduced 24%.
-* Fixed: Add CSRF nonce to all public tracking endpoints (WP.org §7).
-* Fixed: Register weekly cron interval — WordPress has no built-in weekly schedule (WP.org §9).
-* Fixed: Set autoload=false for admin-only options to reduce alloptions bloat.
-
-= 0.4.0 - 2026-04-13 =
-* WordPress.org submission readiness: 24 audit items resolved.
-* Dashboard fully translatable (~130 strings). Chart a11y, empty states, bfcache handler.
-* Circuit-breaker, GeoIP backoff, host allow-list, AJAX rate limiting, downgrade detection.
-* See CHANGELOG.md for full details.
-
-For older releases (0.3.x and earlier), see CHANGELOG.md in the plugin source.
+For older releases (0.4.1 and earlier), see CHANGELOG.md in the plugin source.
 
 == Upgrade Notice ==
 
+= 0.4.4 =
+The cron-disabled admin notice no longer fires false positives on managed WordPress hosts (WP Engine, Kinsta, SiteGround, Cloudways). New "Run cleanup now" button + per-user dismissal. Recommended for every install that uses a managed host.
+
 = 0.4.3 =
 Zero-config visitor geography on fresh installs (no CDN or MaxMind needed). Drops the WP-nonce check that 403'd cached-page hits. Excluded IPs now actually block tracking.
-
-= 0.4.0 =
-Full WordPress.org submission readiness. Dashboard now translatable. Adds circuit-breaker, GeoIP backoff, bfcache support, chart accessibility.

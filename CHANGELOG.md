@@ -7,6 +7,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.4] - 2026-04-27
+
+### Added
+
+- **Stale-aware WP-Cron health notice**: replaces the naïve `defined('DISABLE_WP_CRON')` admin notice — which fires false positives on every managed WP host (WP Engine, Kinsta, SiteGround, Cloudways) where the constant is intentionally true while a system cron pings `wp-cron.php` on a real schedule — with a per-job staleness detector (`Statnive\Admin\CronHealth`). The notice now only appears when at least one of the four background jobs (salt rotation, daily aggregation, retention cleanup, weekly GeoIP update) is actually behind its grace window (36h for daily jobs, 9 days for weekly).
+- **In-notice "Run cleanup now" button** with WP nonce + `manage_options` capability check. Runs the three daily jobs synchronously via an `admin-post.php` handler and surfaces a success/failure flash on the redirect. WP-CLI equivalent (`wp statnive cron run`) remains available.
+- **Three-paragraph notice copy** (cause / fix / auto-action) per WP.org submission checklist § 25 — names the actually-stale jobs with localised "last ran" timestamps, gives an example crontab line, and explains the auto-dismissal behaviour.
+- **Per-user signature-scoped dismissal** stored in `user_meta`. The dismissal is keyed to a sha1 of the currently-stale hooks; if a new job goes stale tomorrow the signature changes and the notice re-arms automatically. Closes Common Issue #17 / Guideline 11.
+- **Automatic self-dismissal**: when the next cron tick (or "Run cleanup now") writes a fresh heartbeat for every stale job, `CronHealth::should_warn()` returns false on the next render and the notice disappears with no user action.
+- **Environment-aware suppression**: notice silenced entirely on `WP_ENVIRONMENT_TYPE=local` and `=development`, removing the noisy false-positive on Local-by-Flywheel and other dev boxes.
+- **Diagnostics export now carries cron health per hook**: `GET /wp-json/statnive/v1/diagnostics` → `cron.jobs[hook]` returns `next_run_iso`, `last_run_iso`, and `is_stale` for every Statnive cron hook, plus a top-level `any_stale` boolean. Closes § 29 line 654.
+- 13 PHPUnit unit tests covering the staleness decision logic, including the managed-host regression case.
+
+### Changed
+
+- Each Statnive cron job class (`SaltRotationJob`, `DailyAggregationJob`, `DataPurgeJob`, `GeoIPDownloader`) now exposes a `LAST_RUN_OPTION` class constant. `CronHealth::hook_map()` and `DiagnosticsController::cron_status()` reference these constants instead of duplicating string literals — a rename in one place propagates everywhere.
+- `DataPurgeJob::run()` records its cron-health heartbeat at the entry of the method instead of inside `DataPurger::purge()`. The job now stamps a heartbeat on every cron tick regardless of whether retention is configured, so sites that disable retention no longer trigger a "Retention cleanup is stale" warning.
+
+### Fixed
+
+- **Cron-disabled notice no longer fires false positives on managed hosts.** Closes the original false-positive that shipped in v0.4.3 and earlier — the notice was based purely on the `DISABLE_WP_CRON` constant, which managed hosts (WP Engine, Kinsta, SiteGround, Cloudways) intentionally set to `true` while running their own system cron. The new detector reads per-job heartbeats, so healthy managed-host installs are silent.
+- **`statnive_last_purge` timestamp format**: `DataPurger::purge()` was writing `gmdate('Y-m-d H:i:s')`, which `strtotime()` parses as **local server time**, not UTC. The format mismatch silently drifted any future staleness comparison by the local-time offset. Heartbeat now uses `gmdate('c')` (ISO 8601 with explicit timezone).
+
 ## [0.4.3] - 2026-04-27
 
 ### Added
