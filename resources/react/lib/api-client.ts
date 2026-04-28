@@ -60,3 +60,23 @@ export async function apiPut<T>(path: string, body: unknown): Promise<T> {
 
 	return response.json() as Promise<T>;
 }
+
+export async function apiPost<T>(path: string, body: unknown = null): Promise<T> {
+	const config = getConfig();
+	const url = config.restUrl + path;
+
+	const response = await fetch(url, {
+		method: 'POST',
+		headers: {
+			'X-WP-Nonce': config.nonce,
+			'Content-Type': 'application/json',
+		},
+		body: body === null ? null : JSON.stringify(body),
+	});
+
+	if (!response.ok) {
+		throw new Error(`API error: ${response.status} ${response.statusText}`);
+	}
+
+	return response.json() as Promise<T>;
+}

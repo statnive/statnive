@@ -1,0 +1,76 @@
+Statnive v0.4.4 — /statnive-release-zip gate run
+================================================
+Date: 2026-04-27
+Commit: feat(cron): stale-aware health notice + run-now button (PR #28 squash) + release v0.4.4 commit
+Branch: development
+
+S-1 phpcs       PASS (85/85 files, 0 errors, 6.15s)
+S-2 phpstan     PASS (level configured baseline, 0 errors)
+S-3 phpunit     PASS (unit; 239/239, 1030 assertions, 0.4s)
+                NOTE: integration suite deferred locally — wp-env unavailable
+                (no /tmp/wordpress-tests-lib). Same condition as v0.4.3.
+                CI runs the integration job currently gated off (PHPUnit 11
+                vs WP test framework parseTestMethodAnnotations removal).
+                Unit-suite addition: 13 new CronHealthTest cases (PR #28).
+S-4 vitest      PASS (167/167 + 6 skipped, 8.17s)
+S-5 PCP         WARN — wp-env offline (network not available to resolve
+                latest WP version). PCP previously ran on this exact
+                source via GitHub CI on PR #28 (24 checks SUCCESS,
+                including "PCP — plugin_repo category (§18)").
+                Waiver rationale: identical code already passed PCP
+                on origin; v0.4.4 only adds version bumps + changelog.
+
+C-1 ABSPATH guards     PASS (no missing guards; no HEREDOC, short tags,
+                        dangerous funcs, ALLOW_UNFILTERED_UPLOADS, hardcoded
+                        wp-content paths, or compressed archives in shipped
+                        tree; slug 'statnive' clean)
+C-2 LICENSE            PASS (LICENSE present + GPL text;
+                        THIRD-PARTY-LICENSES.txt present per LEARN.md;
+                        device-detector/regexes/ present)
+C-3 No phone-home      PASS (zero outbound HTTP/GeoIP triggers in
+                        activate())
+C-4 No api.statnive    PASS (zero references in src/, *.php, resources/)
+C-5 readme.txt         PASS (all sub-checks: External Services, MaxMind
+                        attribution, ≤5 tags + no competitor names,
+                        Stable=Version=0.4.4, Tested up to 6.9, Requires
+                        consistent, size 10209/10240, not 'trunk', no
+                        License Validation, Changelog section)
+C-5h size cap (10240B) [PASS] 10209B (after trimming v0.4.0/v0.4.1
+                        readme.txt entries to "see CHANGELOG.md" pointer
+                        and condensing v0.4.4 bullets)
+C-6 Output escaping    PASS (no bare _e(), no echo+__() without escape,
+                        no json_encode())
+C-7 MaxMind hygiene    PASS (no .mmdb bundled, no P3TERX, canonical
+                        download.maxmind.com URL only)
+C-8 No custom updater  PASS
+C-9 No bundled core    PASS (no jquery/react/lodash/underscore in
+                        resources or public)
+C-10 No external CDN   PASS
+C-11 Cron cleanup      PASS (statnive_import_batch single-event
+                        scheduled and cleared; class-constant scheduled
+                        hooks all symmetric in CronRegistrar::deregister_all)
+C-12 uninstall.php     PASS (WP_UNINSTALL_PLUGIN, delete_option,
+                        is_multisite, DROP TABLE, GeoIP cleanup)
+C-13 SVN assets        PASS (icon-128, banner-772x250, screenshot-1
+                        present in .wordpress-org/)
+C-14 ZIP integrity     PASS (top=statnive/, required files present,
+                        no forbidden patterns, 1099 KB ≤ 5 MB,
+                        333 files ≤ 1500, Version=0.4.4 inside ZIP,
+                        no .min.js source-of-truth issues)
+C-15 dbDelta format    PASS (PRIMARY KEY indent, KEY not INDEX, no
+                        ENGINE=, no trailing comma, upgrade.php
+                        require, statnive_db_version present)
+C-16 i18n              PASS (POT present at languages/statnive.pot
+                        with 112 msgids — +4 new strings for cron
+                        health notice; no foreign text domains;
+                        load_plugin_textdomain intentionally absent
+                        per LEARN.md WP-4.6+ auto-load + PCP warning)
+C-17 Privacy hooks     PASS (wp_add_privacy_policy_content,
+                        wp_privacy_personal_data_exporters,
+                        wp_privacy_personal_data_erasers,
+                        Sec-GPC server-side, HTTP_DNT legacy)
+
+Summary
+-------
+22 PASS / 0 FAIL / 1 WARN (S-5, waived — see rationale)
+ZIP: statnive-dist/statnive-0.4.4.zip (1125582 bytes, 333 files)

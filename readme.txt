@@ -4,7 +4,7 @@ Tags: analytics, statistics, privacy, tracking, dashboard
 Requires at least: 6.2
 Tested up to: 6.9
 Requires PHP: 8.0
-Stable tag: 0.4.3
+Stable tag: 0.4.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -88,13 +88,14 @@ Exclude `/wp-json/statnive/v1/hit` and `admin-ajax.php?action=statnive_hit`. Mos
 
 = How does Geography work? =
 
-Statnive resolves approximate country in three tiers, falling through automatically:
+Statnive resolves geography in tiers, falling through automatically:
 
-1. **Zero-config — browser timezone.** Each tracker payload already carries the visitor's IANA timezone (`America/New_York`, etc.). Statnive maps it to a country via a static IANA tzdb lookup shipped in the plugin. No setup, no external service, ~80% accurate.
-2. **CDN country headers.** If your site sits behind Cloudflare, AWS CloudFront, or Vercel (free tiers set a country header), Statnive reads `CF-IPCountry` / `CloudFront-Viewer-Country` / `X-Vercel-IP-Country` per request — more accurate than timezone when present.
-3. **MaxMind GeoLite2.** Configure a free MaxMind license key in Settings → GeoIP to unlock city + region precision from the raw IP before it is discarded.
+1. **Zero-config — browser timezone.** Each tracker payload carries the visitor's IANA timezone. Statnive maps it to a country via a static IANA tzdb lookup shipped in the plugin. No setup, ~80% accurate at country level.
+2. **CDN country headers.** Cloudflare / CloudFront / Vercel set a country header per request. More accurate than timezone when present. Country only.
+3. **DB-IP IP-to-City Lite (one click, free).** Click "Enable city-level geography" on the Geography page. Statnive downloads the free DB-IP city database (~80 MB) to your uploads directory; cities populate from the next hit. No account, no key.
+4. **MaxMind GeoLite2 (paid-grade).** Configure a free MaxMind license key in Settings → GeoIP for the highest-accuracy IP-to-city resolution.
 
-No outbound request is made for tiers 1 or 2; both arrive with the page view.
+Tiers 1 and 2 require no network call. Tiers 3 and 4 are opt-in via a discrete user action.
 
 == Screenshots ==
 
@@ -111,7 +112,7 @@ No outbound request is made for tiers 1 or 2; both arrive with the page view.
 
 This plugin connects to the following third-party services under specific conditions:
 
-= GeoIP Database Downloads =
+= GeoIP Database Downloads — MaxMind =
 This plugin can download MaxMind GeoLite2 GeoIP databases to enable visitor geolocation.
 Requires a free MaxMind account and license key (user must accept the GeoLite2 EULA).
 
@@ -126,6 +127,20 @@ Requires a free MaxMind account and license key (user must accept the GeoLite2 E
 
 This product includes GeoLite Data created by MaxMind, available from https://www.maxmind.com.
 
+= GeoIP Database Downloads — DB-IP IP-to-City Lite =
+This plugin can download the DB-IP IP-to-City Lite database to enable city-level geolocation.
+No account, no license key, no EULA — anonymously downloadable.
+
+* Source: DB-IP (https://db-ip.com), downloaded from https://download.db-ip.com/free/
+* When: One-shot user click "Enable city-level geography" on the Geography page, then weekly via WordPress Cron for refresh
+* Data sent: Standard HTTP request headers only (no visitor data, no account, no key)
+* Data received: dbip-city-lite-YYYY-MM.mmdb.gz file, decompressed and stored in your uploads directory
+* Purpose: Resolve approximate city/region from anonymized visitor IPs
+* DB-IP Terms: https://db-ip.com/db/about/
+* License: CC-BY 4.0
+
+GeoIP data © DB-IP under CC-BY 4.0.
+
 No visitor data is ever sent to any external service. All analytics data remains in your WordPress database.
 
 == Privacy Policy ==
@@ -134,41 +149,27 @@ All analytics data stays in your WordPress database. No cookies, no fingerprinti
 
 == Changelog ==
 
+= 0.4.4 - 2026-04-27 =
+* Added: Stale-aware cron health notice — fires only when a job is actually behind its grace window. Managed hosts that set DISABLE_WP_CRON while running system cron stay silent.
+* Added: "Run cleanup now" button + per-user dismissal; notice suppressed on local/development environments.
+* Added: cron.jobs[hook].next_run_iso / last_run_iso / is_stale + top-level any_stale in diagnostics.
+* Fixed: statnive_last_purge timestamp format — now ISO 8601.
+
 = 0.4.3 - 2026-04-27 =
-* Added: Zero-config visitor geography. New IANA-timezone fallback resolves country from each browser's timezone — works on fresh installs without Cloudflare or MaxMind. Pure in-process, no external service contact.
-* Added: Settings Save button with dirty tracking; "Your IP" hint with one-click exclude; per-control descriptions on every Settings control.
+* Added: Zero-config visitor geography via IANA-timezone fallback — fresh installs resolve country with no setup. Pure in-process.
+* Added: Settings Save button with dirty tracking; "Your IP" hint with one-click exclude; per-control descriptions.
 * Added: Real-production Playwright E2E suite for consent modes, DNT/GPC, retention, IP exclusions.
 * Changed: Default Data Retention is now "Forever" (was 90 days).
-* Fixed: Excluded IPs / CIDR ranges now actually block tracking — ExclusionMatcher was previously cosmetic.
-* Removed: WP-nonce check on public tracker endpoints. WP nonces tick every 12-24h and 403'd every cached-page hit. HMAC remains the CSRF boundary.
-* Removed: "Full Tracking" consent mode (was behaviorally identical to Cookieless; legacy installs coerced).
-* Removed: Email Reports subsystem (deferred — will return with delivery diagnostics).
+* Fixed: Excluded IPs / CIDR ranges now actually block tracking.
+* Removed: WP-nonce check on public tracker endpoints (WP nonces 403'd every cached-page hit; HMAC remains the CSRF boundary).
+* Removed: "Full Tracking" consent mode (legacy installs coerced to Cookieless); Email Reports subsystem (deferred).
 
-= 0.4.2 - 2026-04-14 =
-* Added: Device Distribution + Bot vs Human pie charts on Devices page.
-* Added: DualBarCell (visitors/sessions bars) on all report tables.
-* Fixed: Resolve 5 PCP warnings for zero-warning Plugin Check compliance.
-* Fixed: Stop externalizing react-is (no WordPress global exists).
-* Fixed: CI now fails on PCP warnings, not just errors.
-
-= 0.4.1 - 2026-04-14 =
-* Fixed: Externalize React/ReactDOM to wp-element instead of bundling (WP.org §8). Bundle size reduced 24%.
-* Fixed: Add CSRF nonce to all public tracking endpoints (WP.org §7).
-* Fixed: Register weekly cron interval — WordPress has no built-in weekly schedule (WP.org §9).
-* Fixed: Set autoload=false for admin-only options to reduce alloptions bloat.
-
-= 0.4.0 - 2026-04-13 =
-* WordPress.org submission readiness: 24 audit items resolved.
-* Dashboard fully translatable (~130 strings). Chart a11y, empty states, bfcache handler.
-* Circuit-breaker, GeoIP backoff, host allow-list, AJAX rate limiting, downgrade detection.
-* See CHANGELOG.md for full details.
-
-For older releases (0.3.x and earlier), see CHANGELOG.md in the plugin source.
+For older releases (0.4.2 and earlier), see CHANGELOG.md in the plugin source.
 
 == Upgrade Notice ==
 
-= 0.4.3 =
-Zero-config visitor geography on fresh installs (no CDN or MaxMind needed). Drops the WP-nonce check that 403'd cached-page hits. Excluded IPs now actually block tracking.
+= 0.4.4 =
+Cron-disabled notice no longer false-positives on managed WP hosts. Adds "Run cleanup now" button + per-user dismissal.
 
-= 0.4.0 =
-Full WordPress.org submission readiness. Dashboard now translatable. Adds circuit-breaker, GeoIP backoff, bfcache support, chart accessibility.
+= 0.4.3 =
+Zero-config visitor geography on fresh installs. Drops the WP-nonce check that 403'd cached-page hits. Excluded IPs now actually block tracking.

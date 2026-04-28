@@ -1,0 +1,20 @@
+Statnive v0.4.4 — POT regeneration evidence
+=============================================
+File: languages/statnive.pot
+Mtime: Apr 27 18:05 (regenerated during PR #28 work, today)
+Size: 15148 bytes
+msgid count: 112 (+4 new strings vs v0.4.3 baseline of 108)
+
+New strings introduced in v0.4.4:
+- "Statnive: WordPress cron jobs are not running on time."
+- "Run cleanup now"
+- "Daily salt rotation" / "Daily data aggregation" / "Retention cleanup" /
+  "Weekly GeoIP database update" (CronHealth job labels)
+- "Dismiss this Statnive cron warning" (aria-label)
+- "What Statnive will do automatically: this notice self-dismisses…"
+
+Regeneration command:
+  php -d error_reporting=E_ERROR -d display_errors=0 -d memory_limit=512M \
+    /Users/parhumm/bin/wp i18n make-pot . languages/statnive.pot \
+    --domain=statnive --exclude=vendor,node_modules,tests
+  → "Plugin file detected." → "Success: POT file successfully generated."

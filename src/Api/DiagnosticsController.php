@@ -84,6 +84,18 @@ final class DiagnosticsController extends WP_REST_Controller {
 				],
 			]
 		);
+
+		register_rest_route(
+			$this->namespace,
+			'/diagnostics/enable-dbip-city',
+			[
+				[
+					'methods'             => WP_REST_Server::CREATABLE,
+					'callback'            => [ $this, 'enable_dbip_city' ],
+					'permission_callback' => [ $this, 'permissions_check' ],
+				],
+			]
+		);
 	}
 
 	/**
@@ -163,6 +175,7 @@ final class DiagnosticsController extends WP_REST_Controller {
 				'database_present'    => self::geoip_database_present(),
 				'source_detected'     => GeoIPService::detect_source(),
 				'cdn_header_present'  => null !== GeoIPService::first_cdn_header_name(),
+				'dbip_city_active'    => GeoIPDownloader::is_dbip_city_active(),
 			],
 		];
 
@@ -271,6 +284,39 @@ final class DiagnosticsController extends WP_REST_Controller {
 				'duration_s' => round( $duration_s, 3 ),
 			],
 			$ok ? 200 : 500
+		);
+	}
+
+	/**
+	 * Opt the user into the DB-IP IP-to-City Lite database.
+	 *
+	 * One-shot RPC — no persistent setting written. Schedules a single-event
+	 * firing of the existing weekly GeoIP cron for ~5 seconds out (first
+	 * download) and arms a 1-hour pending transient so the cron callback
+	 * picks up the work even before the .mmdb file lands. Once the file is
+	 * on disk, file presence becomes the steady-state signal and the
+	 * transient is irrelevant.
+	 *
+	 * Capability is enforced by `permissions_check` (`manage_options`).
+	 *
+	 * @param WP_REST_Request $request The incoming request.
+	 * @return WP_REST_Response 202 Accepted with a status payload.
+	 */
+	public function enable_dbip_city( WP_REST_Request $request ): WP_REST_Response {
+		unset( $request );
+
+		// If the file is already on disk, the user re-clicked — fire a refresh
+		// instead of declining the call. Idempotent.
+		GeoIPDownloader::enable_dbip_city();
+
+		return new WP_REST_Response(
+			[
+				'status'           => 'pending',
+				'message'          => 'DB-IP IP-to-City Lite download scheduled. The database will appear in your uploads directory within ~30 seconds.',
+				'pending'          => true,
+				'database_present' => file_exists( GeoIPDownloader::get_dbip_city_path() ),
+			],
+			202
 		);
 	}
 
