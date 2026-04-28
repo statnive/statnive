@@ -4,7 +4,7 @@ Tags: analytics, statistics, privacy, tracking, dashboard
 Requires at least: 6.2
 Tested up to: 6.9
 Requires PHP: 8.0
-Stable tag: 0.4.4
+Stable tag: 0.4.5
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -149,24 +149,24 @@ All analytics data stays in your WordPress database. No cookies, no fingerprinti
 
 == Changelog ==
 
+= 0.4.5 - 2026-04-28 =
+* Added: One-click DB-IP IP-to-City Lite — free, account-less city-level geography. Click "Enable city-level geography" on the Geography page; ~80 MB downloads to your uploads directory. CC-BY-4.0.
+* Added: New POST /wp-json/statnive/v1/diagnostics/enable-dbip-city endpoint (manage_options).
+* Changed: GeoIPService::get_database_path() returns the first existing .mmdb (MaxMind wins ties, DB-IP is the free fallback).
+* Changed: Weekly GeoIP cron now refreshes both providers when active; @set_time_limit(300) defends against PHP-FPM kills on managed hosts.
+
 = 0.4.4 - 2026-04-27 =
 * Added: Stale-aware cron health notice — fires only when a job is actually behind its grace window. Managed hosts that set DISABLE_WP_CRON while running system cron stay silent.
 * Added: "Run cleanup now" button + per-user dismissal; notice suppressed on local/development environments.
 * Added: cron.jobs[hook].next_run_iso / last_run_iso / is_stale + top-level any_stale in diagnostics.
 * Fixed: statnive_last_purge timestamp format — now ISO 8601.
 
-= 0.4.3 - 2026-04-27 =
-* Added: Zero-config visitor geography via IANA-timezone fallback — fresh installs resolve country with no setup. Pure in-process.
-* Added: Settings Save button with dirty tracking; "Your IP" hint with one-click exclude; per-control descriptions.
-* Added: Real-production Playwright E2E suite for consent modes, DNT/GPC, retention, IP exclusions.
-* Changed: Default Data Retention is now "Forever" (was 90 days).
-* Fixed: Excluded IPs / CIDR ranges now actually block tracking.
-* Removed: WP-nonce check on public tracker endpoints (WP nonces 403'd every cached-page hit; HMAC remains the CSRF boundary).
-* Removed: "Full Tracking" consent mode (legacy installs coerced to Cookieless); Email Reports subsystem (deferred).
-
-For older releases (0.4.2 and earlier), see CHANGELOG.md in the plugin source.
+For older releases (0.4.3 and earlier), see CHANGELOG.md in the plugin source.
 
 == Upgrade Notice ==
+
+= 0.4.5 =
+City-level geography is now one click away — free, no account, no key. Click "Enable city-level geography" on the Geography page.
 
 = 0.4.4 =
 Cron-disabled notice no longer false-positives on managed WP hosts. Adds "Run cleanup now" button + per-user dismissal.
