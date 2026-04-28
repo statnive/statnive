@@ -48,11 +48,22 @@ final class CronRegistrar {
 		add_action(
 			GeoIPDownloader::CRON_HOOK,
 			static function (): void {
+				// Two sequential downloads (MaxMind ~70 MB, DB-IP ~80 MB) plus
+				// extraction can exceed the default 30s/60s PHP execution
+				// limit on shared/managed hosts running WP-Cron from frontend
+				// hits. Bump to 5 min defensively. WP core does the same in
+				// its update routines.
+				if ( function_exists( 'set_time_limit' ) ) {
+					// phpcs:ignore WordPress.PHP.IniSet.set_time_limit_set_time_limit, WordPress.PHP.NoSilencedErrors.Discouraged
+					@set_time_limit( 300 );
+				}
 				GeoIPDownloader::download();
-				// Cron-health heartbeat. Recorded on every fire whether the
-				// download succeeded, was skipped (no license key), or
-				// hit the exponential backoff — what matters here is that
-				// WP-Cron is alive and dispatching the hook.
+				if ( GeoIPDownloader::is_dbip_city_active() ) {
+					GeoIPDownloader::download_dbip_city();
+				}
+				// Cron-health heartbeat. Recorded on every fire so the admin
+				// CronHealth notice can prove WP-Cron is alive even when the
+				// download itself was skipped (no license key, backoff window).
 				update_option( GeoIPDownloader::LAST_RUN_OPTION, gmdate( 'c' ), false );
 			}
 		);
@@ -62,8 +73,10 @@ final class CronRegistrar {
 		DailyAggregationJob::schedule();
 		DataPurgeJob::schedule();
 
-		// Conditional: only schedule if user has opted in.
-		if ( get_option( 'statnive_geoip_enabled', false ) ) {
+		// Conditional: schedule the weekly GeoIP refresh if any provider is
+		// active. MaxMind opts in via `statnive_geoip_enabled`; DB-IP opts in
+		// via file presence (or pending transient on first install).
+		if ( get_option( 'statnive_geoip_enabled', false ) || GeoIPDownloader::is_dbip_city_active() ) {
 			GeoIPDownloader::schedule();
 		}
 	}

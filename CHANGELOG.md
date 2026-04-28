@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **One-click DB-IP IP-to-City Lite download** as a free, account-less alternative to MaxMind for city-level geography. Click "Enable city-level geography" on the Geography page; Statnive downloads the database (~80 MB) to `wp_upload_dir()/statnive/` via WP-Cron. Refreshes monthly. License: CC-BY-4.0 (GPLv2-compatible). New `POST /wp-json/statnive/v1/diagnostics/enable-dbip-city` REST endpoint (`manage_options` capability). No new persistent settings — provider state is inferred from the `.mmdb` file present on disk.
+- New `dbip_city_active` field in the diagnostics REST snapshot (`geoip.dbip_city_active`).
+- New `dbip_city` value in `GeoIPService::detect_source()` and the `useGeoSource()` TypeScript union.
+
+### Changed
+
+- `GeoIPService::get_database_path()` now returns the first existing `.mmdb` file from a priority list — MaxMind wins ties, DB-IP is the free fallback. Same `\GeoIp2\Database\Reader` consumes both.
+- The weekly GeoIP cron callback in `CronRegistrar` now refreshes both providers when active (gated by license-key + opt-in for MaxMind, gated by file presence + pending transient for DB-IP).
+
 ## [0.4.4] - 2026-04-27
 
 ### Added

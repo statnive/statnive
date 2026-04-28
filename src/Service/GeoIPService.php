@@ -283,11 +283,17 @@ final class GeoIPService {
 	 * dashboard states that may surface it (e.g. when the tracker payload
 	 * carried no timezone at all).
 	 *
-	 * @return string 'maxmind' | 'cdn_headers' | 'timezone' | 'none'
+	 * MaxMind wins ties when both .mmdb files are on disk (paid > free tier).
+	 *
+	 * @return string 'maxmind' | 'dbip_city' | 'cdn_headers' | 'timezone' | 'none'
 	 */
 	public static function detect_source(): string {
-		if ( self::is_available() ) {
+		$base = self::get_database_dir();
+		if ( file_exists( $base . GeoIPDownloader::MAXMIND_FILENAME ) ) {
 			return 'maxmind';
+		}
+		if ( file_exists( $base . GeoIPDownloader::DBIP_FILENAME ) ) {
+			return 'dbip_city';
 		}
 		if ( null !== self::first_cdn_header_name() ) {
 			return 'cdn_headers';
@@ -296,19 +302,38 @@ final class GeoIPService {
 	}
 
 	/**
-	 * Get the path to the MaxMind GeoLite2-City database.
+	 * Directory holding all Statnive GeoIP database files.
+	 *
+	 * @return string Absolute path with trailing slash.
+	 */
+	public static function get_database_dir(): string {
+		$upload_dir = wp_upload_dir();
+		return $upload_dir['basedir'] . '/statnive/';
+	}
+
+	/**
+	 * Get the path to the active GeoIP .mmdb database.
+	 *
+	 * MaxMind wins ties (paid > free). When neither file exists the legacy
+	 * MaxMind path is returned so diagnostic callers still get a meaningful
+	 * value — `is_available()` will then correctly return false.
 	 *
 	 * @return string Absolute path to .mmdb file.
 	 */
 	public static function get_database_path(): string {
-		$upload_dir = wp_upload_dir();
-		return $upload_dir['basedir'] . '/statnive/GeoLite2-City.mmdb';
+		$base = self::get_database_dir();
+		foreach ( [ GeoIPDownloader::MAXMIND_FILENAME, GeoIPDownloader::DBIP_FILENAME ] as $filename ) {
+			if ( file_exists( $base . $filename ) ) {
+				return $base . $filename;
+			}
+		}
+		return $base . GeoIPDownloader::MAXMIND_FILENAME;
 	}
 
 	/**
-	 * Check if the GeoIP database is available.
+	 * Check if any GeoIP database is available on disk.
 	 *
-	 * @return bool True if database file exists.
+	 * @return bool True if a .mmdb file exists for either provider.
 	 */
 	public static function is_available(): bool {
 		return file_exists( self::get_database_path() );
