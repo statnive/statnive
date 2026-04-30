@@ -51,19 +51,85 @@ final class SourceDetectorTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Data provider for 7 referrer-to-channel mappings.
+	 * Data provider for referrer-to-channel mappings.
 	 *
 	 * @return array<string, array{0: string, 1: string, 2: string}>
 	 */
 	public static function channel_mapping_provider(): array {
 		return [
-			'Google organic'      => [ 'https://www.google.com/search?q=wordpress+analytics', 'Organic Search', 'Google' ],
-			'Bing organic'        => [ 'https://www.bing.com/search?q=statnive', 'Organic Search', 'Bing' ],
-			'Facebook social'     => [ 'https://www.facebook.com/share/12345', 'Social Media', 'Facebook' ],
-			'Twitter/X social'    => [ 'https://t.co/abc123', 'Social Media', 'Twitter/X' ],
-			'Email (Outlook)'     => [ 'https://outlook.live.com/', 'Email', 'outlook.live.com' ],
-			'Referral'            => [ 'https://blog.example.org/article', 'Referral', 'blog.example.org' ],
-			'Direct (empty)'      => [ '', 'Direct', '' ],
+			'Google organic'                => [ 'https://www.google.com/search?q=wordpress+analytics', 'Organic Search', 'Google' ],
+			'Google ccTLD (UK)'             => [ 'https://www.google.co.uk/search?q=x', 'Organic Search', 'Google' ],
+			'Google ccTLD (Germany)'        => [ 'https://www.google.de/search?q=x', 'Organic Search', 'Google' ],
+			'Google subdomain (Mail)'       => [ 'https://mail.google.com/', 'Email', 'mail.google.com' ],
+			'Bing organic'                  => [ 'https://www.bing.com/search?q=statnive', 'Organic Search', 'Bing' ],
+			'Brave search subdomain'        => [ 'https://search.brave.com/search?q=x', 'Organic Search', 'Brave' ],
+			'AI Assistants — Gemini'        => [ 'https://gemini.google.com/', 'AI Assistants', 'Gemini' ],
+			'AI Assistants — NotebookLM'    => [ 'https://notebooklm.google.com/', 'AI Assistants', 'NotebookLM' ],
+			'AI Assistants — Copilot'       => [ 'https://copilot.microsoft.com/', 'AI Assistants', 'Copilot' ],
+			'AI Assistants — ChatGPT (new)' => [ 'https://chatgpt.com/', 'AI Assistants', 'ChatGPT' ],
+			'AI Assistants — ChatGPT (legacy)' => [ 'https://chat.openai.com/', 'AI Assistants', 'ChatGPT' ],
+			'AI Assistants — Claude'        => [ 'https://claude.ai/', 'AI Assistants', 'Claude' ],
+			'AI Assistants — Perplexity'    => [ 'https://perplexity.ai/', 'AI Assistants', 'Perplexity' ],
+			'AI Assistants — Le Chat'       => [ 'https://chat.mistral.ai/', 'AI Assistants', 'Le Chat' ],
+			'Facebook social'               => [ 'https://www.facebook.com/share/12345', 'Social Media', 'Facebook' ],
+			'Facebook mobile subdomain'     => [ 'https://m.facebook.com/share/12345', 'Social Media', 'Facebook' ],
+			'Facebook outbound wrapper'     => [ 'https://l.facebook.com/l.php?u=https%3A%2F%2Fexample.com', 'Social Media', 'Facebook' ],
+			'Twitter/X t.co shortener'      => [ 'https://t.co/abc123', 'Social Media', 'Twitter/X' ],
+			'Twitter/X x.com'               => [ 'https://x.com/user/status/1', 'Social Media', 'Twitter/X' ],
+			'Twitter/X mobile subdomain'    => [ 'https://mobile.twitter.com/user', 'Social Media', 'Twitter/X' ],
+			'LinkedIn shortener'            => [ 'https://lnkd.in/abc', 'Social Media', 'LinkedIn' ],
+			'YouTube shortener'             => [ 'https://youtu.be/dQw4w9WgXcQ', 'Social Media', 'YouTube' ],
+			'TikTok shortener'              => [ 'https://vm.tiktok.com/abc', 'Social Media', 'TikTok' ],
+			'Email (Outlook)'               => [ 'https://outlook.live.com/', 'Email', 'outlook.live.com' ],
+			'Referral'                      => [ 'https://blog.example.org/article', 'Referral', 'blog.example.org' ],
+			'Direct (empty)'                => [ '', 'Direct', '' ],
+		];
+	}
+
+	/**
+	 * @testdox Domains containing brand substrings do not falsely classify
+	 * @dataProvider false_positive_provider
+	 *
+	 * Regression guard for the v0.4.5 substring-match bug — `str_contains($domain, 't.co')`
+	 * mis-classified any host ending in `t.com` as Twitter/X. See production data in the
+	 * referrers table where 13/13 "Twitter/X" rows were unrelated sites.
+	 */
+	public function test_false_positive_substring_does_not_classify( string $domain ): void {
+		$result = SourceDetector::classify( $domain, '', '' );
+		$this->assertSame(
+			'Referral',
+			$result['channel'],
+			"Domain '{$domain}' must not be classified into a known channel — got '{$result['channel']}/{$result['name']}'"
+		);
+	}
+
+	/**
+	 * @return array<string, array{0: string}>
+	 */
+	public static function false_positive_provider(): array {
+		return [
+			// Real production data that mis-classified as Twitter/X under the old `t.co`/`x.com` substring rule.
+			'tantei-mt.com (mt.com contains t.co)'                => [ 'tantei-mt.com' ],
+			'kasimarket.com (et.com contains t.co)'               => [ 'kasimarket.com' ],
+			'bordafax.com (suffix x.com)'                         => [ 'bordafax.com' ],
+			'chatgpt.com (pt.com contains t.co)'                  => [ 'chatgpt.com' ],
+			'staging.wp-slimstat.com (at.com contains t.co)'      => [ 'staging.wp-slimstat.com' ],
+			'www.hudsonplaceresidencesshowflat.com'               => [ 'www.hudsonplaceresidencesshowflat.com' ],
+			'belksasar3dprint.com (nt.com contains t.co)'         => [ 'belksasar3dprint.com' ],
+			// Hypothetical near-misses for other brands.
+			'googleads.example.com (substring "google")'          => [ 'googleads.example.com' ],
+			'notgoogle.com'                                       => [ 'notgoogle.com' ],
+			'fake-twitter.org (substring "twitter")'              => [ 'fake-twitter.org' ],
+			'bravecruz.com (substring "brave")'                   => [ 'bravecruz.com' ],
+			'instagrammers.example.com (substring "instagram")'   => [ 'instagrammers.example.com' ],
+			'redditor-info.com (substring "reddit")'              => [ 'redditor-info.com' ],
+			// AI-channel false-positive guards (research-recommended #9).
+			'tantei-mt.ai (suffix .ai but not on AI list)'        => [ 'tantei-mt.ai' ],
+			'chatgpt-clone.example.com (substring "chatgpt")'     => [ 'chatgpt-clone.example.com' ],
+			'notchatgpt.com'                                      => [ 'notchatgpt.com' ],
+			'fake-claude.com (substring "claude")'                => [ 'fake-claude.com' ],
+			'perplexity-research.example.org'                     => [ 'perplexity-research.example.org' ],
+			'jasper-ai-tutorials.com (substring "jasper.ai")'     => [ 'jasper-ai-tutorials.com' ],
 		];
 	}
 
