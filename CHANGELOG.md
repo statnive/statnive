@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.6] - 2026-04-30
+
+### Added
+
+- **AI Assistants traffic channel.** Statnive now classifies referrers from ChatGPT (`chatgpt.com`, `chat.openai.com`), Claude (`claude.ai`), Perplexity (`perplexity.ai`), Gemini (`gemini.google.com`, `bard.google.com`), NotebookLM (`notebooklm.google.com`), Copilot (`copilot.microsoft.com`), Meta AI (`meta.ai`), Le Chat (`chat.mistral.ai`), Deepseek (`deepseek.com`, `chat.deepseek.com`), You (`you.com`), iAsk (`iask.ai`), Jasper (`jasper.ai`), and Writesonic (`writesonic.com`) into a dedicated **AI Assistants** channel on the Referrers › All Sources view. AI host detection runs **before** the generic search/social match, so `gemini.google.com` and `notebooklm.google.com` no longer mis-route as Organic Search/Google.
+
+### Changed
+
+- **One-shot DB backfill on upgrade.** `Migrator::migrate_reclassify_referrers()` re-runs the corrected `SourceDetector::classify()` over every existing row in `wp_statnive_referrers` and writes back the corrected `channel`/`name` only when it differs. Chunked at 500 rows per batch with up to 4 batches per request, cursor persisted in the new `statnive_reclassify_cursor` option, with a continuation hook on `plugins_loaded@21` so very large datasets resume across requests — per WP.org submission checklist § 27.
+
+### Fixed
+
+- **Referrer classifier mis-classified `*t.com` domains as Twitter/X.** The substring-matching rule in `SourceDetector::classify()` matched `t.co` anywhere in a host, so unrelated sites like `tantei-mt.com`, `chatgpt.com`, and any domain ending in `t.com` were tagged as Twitter/X under Social Media. Same trap on `x.com` for any `*x.com` host. Switched to anchored host-suffix matching (`$domain === $host || str_ends_with($domain, '.' . $host)`), the same algorithm Snowplow `referer-parser`, Plausible, and Matomo use. Patterns are now full registrable hosts. Regression test seeded with the 13 production false-positive domains.
+- **All Sources view duplicated brand-equivalent rows.** Multiple Google ccTLDs (`www.google.com`, `www.google.de`, `gemini.google.com`) and Twitter/X variants (`t.co`, `x.com`, `twitter.com`) rendered as separate dashboard rows because the per-source SQL query grouped by `(channel, name, domain)`. Now groups by `(channel, name)` and exposes a representative `MIN(r.domain)` so the API contract for the React side is preserved without frontend changes.
+- **Plugin Check WARNING for `set_time_limit()`** in `CronRegistrar::register_all`'s GeoIP cron callback. The defensive `@set_time_limit(300)` (already gated by `function_exists()` and matching the WP-core precedent in `WP_Upgrader`) now also silences the `Squiz.PHP.DiscouragedFunctions.Discouraged` sniff that Plugin Check runs in addition to WPCS.
+
 ## [0.4.5] - 2026-04-28
 
 ### Added

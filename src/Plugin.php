@@ -57,8 +57,9 @@ final class Plugin {
 
 		self::$initialized = true;
 
-		// WordPress auto-loads translations for wp.org-hosted plugins since 4.6.
-		// load_plugin_textdomain() is no longer needed and triggers a PCP warning.
+		// WP 4.6+ auto-loads translations for wp.org-hosted plugins; PCP's
+		// DiscouragedFunctions sniff flags an explicit textdomain-loader call,
+		// so the call is intentionally absent. `.pot` still ships in languages/.
 
 		// Database schema migrations (runs on plugins_loaded, bails fast when nothing pending).
 		Migrator::init();
