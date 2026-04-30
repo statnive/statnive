@@ -54,7 +54,7 @@ final class CronRegistrar {
 				// hits. Bump to 5 min defensively. WP core does the same in
 				// its update routines.
 				if ( function_exists( 'set_time_limit' ) ) {
-					// phpcs:ignore WordPress.PHP.IniSet.set_time_limit_set_time_limit, WordPress.PHP.NoSilencedErrors.Discouraged
+					// phpcs:ignore WordPress.PHP.IniSet.set_time_limit_set_time_limit,WordPress.PHP.NoSilencedErrors.Discouraged,Squiz.PHP.DiscouragedFunctions.Discouraged
 					@set_time_limit( 300 );
 				}
 				GeoIPDownloader::download();
