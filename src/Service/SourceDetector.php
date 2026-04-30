@@ -12,9 +12,37 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Traffic source channel classification.
  *
  * Classifies referrer domains into human-readable channels:
- * Direct, Organic Search, Social Media, Email, Referral, Paid Search, Paid Social.
+ * Direct, AI Assistants, Organic Search, Social Media, Email, Referral, Paid Search, Paid Social.
  */
 final class SourceDetector {
+
+	/**
+	 * AI assistant / LLM hosts. Checked **before** search engines so
+	 * `gemini.google.com` and `notebooklm.google.com` classify as AI, not as
+	 * subdomains of Google. Verified entries from Matomo's `AIAssistants.yml`
+	 * (introduced Aug 2025); medium-confidence inferred hosts kept only when
+	 * the inference matches the official product naming convention.
+	 *
+	 * @var array<string, string>
+	 */
+	private const AI_ASSISTANTS = [
+		'chatgpt.com'           => 'ChatGPT',
+		'chat.openai.com'       => 'ChatGPT',
+		'claude.ai'             => 'Claude',
+		'perplexity.ai'         => 'Perplexity',
+		'gemini.google.com'     => 'Gemini',
+		'bard.google.com'       => 'Gemini',
+		'notebooklm.google.com' => 'NotebookLM',
+		'copilot.microsoft.com' => 'Copilot',
+		'meta.ai'               => 'Meta AI',
+		'chat.mistral.ai'       => 'Le Chat',
+		'deepseek.com'          => 'Deepseek',
+		'chat.deepseek.com'     => 'Deepseek',
+		'you.com'               => 'You',
+		'iask.ai'               => 'iAsk',
+		'jasper.ai'             => 'Jasper',
+		'writesonic.com'        => 'Writesonic',
+	];
 
 	/**
 	 * Search engine hosts. Match is `domain === host` OR `domain` ends with `.host`,
@@ -141,6 +169,15 @@ final class SourceDetector {
 				'channel' => 'Direct',
 				'name'    => '',
 			];
+		}
+
+		foreach ( self::AI_ASSISTANTS as $host => $name ) {
+			if ( self::host_matches( $domain, $host ) ) {
+				return [
+					'channel' => 'AI Assistants',
+					'name'    => $name,
+				];
+			}
 		}
 
 		foreach ( self::SEARCH_ENGINES as $host => $name ) {

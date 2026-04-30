@@ -60,10 +60,17 @@ final class SourceDetectorTest extends WP_UnitTestCase {
 			'Google organic'                => [ 'https://www.google.com/search?q=wordpress+analytics', 'Organic Search', 'Google' ],
 			'Google ccTLD (UK)'             => [ 'https://www.google.co.uk/search?q=x', 'Organic Search', 'Google' ],
 			'Google ccTLD (Germany)'        => [ 'https://www.google.de/search?q=x', 'Organic Search', 'Google' ],
-			'Google subdomain (Gemini)'     => [ 'https://gemini.google.com/', 'Organic Search', 'Google' ],
 			'Google subdomain (Mail)'       => [ 'https://mail.google.com/', 'Email', 'mail.google.com' ],
 			'Bing organic'                  => [ 'https://www.bing.com/search?q=statnive', 'Organic Search', 'Bing' ],
 			'Brave search subdomain'        => [ 'https://search.brave.com/search?q=x', 'Organic Search', 'Brave' ],
+			'AI Assistants — Gemini'        => [ 'https://gemini.google.com/', 'AI Assistants', 'Gemini' ],
+			'AI Assistants — NotebookLM'    => [ 'https://notebooklm.google.com/', 'AI Assistants', 'NotebookLM' ],
+			'AI Assistants — Copilot'       => [ 'https://copilot.microsoft.com/', 'AI Assistants', 'Copilot' ],
+			'AI Assistants — ChatGPT (new)' => [ 'https://chatgpt.com/', 'AI Assistants', 'ChatGPT' ],
+			'AI Assistants — ChatGPT (legacy)' => [ 'https://chat.openai.com/', 'AI Assistants', 'ChatGPT' ],
+			'AI Assistants — Claude'        => [ 'https://claude.ai/', 'AI Assistants', 'Claude' ],
+			'AI Assistants — Perplexity'    => [ 'https://perplexity.ai/', 'AI Assistants', 'Perplexity' ],
+			'AI Assistants — Le Chat'       => [ 'https://chat.mistral.ai/', 'AI Assistants', 'Le Chat' ],
 			'Facebook social'               => [ 'https://www.facebook.com/share/12345', 'Social Media', 'Facebook' ],
 			'Facebook mobile subdomain'     => [ 'https://m.facebook.com/share/12345', 'Social Media', 'Facebook' ],
 			'Facebook outbound wrapper'     => [ 'https://l.facebook.com/l.php?u=https%3A%2F%2Fexample.com', 'Social Media', 'Facebook' ],
@@ -116,6 +123,13 @@ final class SourceDetectorTest extends WP_UnitTestCase {
 			'bravecruz.com (substring "brave")'                   => [ 'bravecruz.com' ],
 			'instagrammers.example.com (substring "instagram")'   => [ 'instagrammers.example.com' ],
 			'redditor-info.com (substring "reddit")'              => [ 'redditor-info.com' ],
+			// AI-channel false-positive guards (research-recommended #9).
+			'tantei-mt.ai (suffix .ai but not on AI list)'        => [ 'tantei-mt.ai' ],
+			'chatgpt-clone.example.com (substring "chatgpt")'     => [ 'chatgpt-clone.example.com' ],
+			'notchatgpt.com'                                      => [ 'notchatgpt.com' ],
+			'fake-claude.com (substring "claude")'                => [ 'fake-claude.com' ],
+			'perplexity-research.example.org'                     => [ 'perplexity-research.example.org' ],
+			'jasper-ai-tutorials.com (substring "jasper.ai")'     => [ 'jasper-ai-tutorials.com' ],
 		];
 	}
 

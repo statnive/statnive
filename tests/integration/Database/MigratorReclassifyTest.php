@@ -126,4 +126,37 @@ final class MigratorReclassifyTest extends WP_UnitTestCase {
 		$this->assertSame( 'Twitter/X', $this->fetch_referrer( $real_x )['name'] );
 		$this->assertSame( 'Organic Search', $this->fetch_referrer( $google )['channel'] );
 	}
+
+	/**
+	 * @testdox AI hosts mis-stored as Twitter/X under the substring bug flip to AI Assistants
+	 *
+	 * Production-data example: row ID 150 had domain `chatgpt.com` stored as
+	 * (Social Media, Twitter/X) because `t.co` matched anywhere in `pt.com`.
+	 * After the fix it must land in (AI Assistants, ChatGPT).
+	 */
+	public function test_chatgpt_flips_from_twitter_false_positive_to_ai(): void {
+		$id = $this->insert_referrer( 'Social Media', 'Twitter/X', 'chatgpt.com' );
+
+		Migrator::migrate_reclassify_referrers();
+
+		$row = $this->fetch_referrer( $id );
+		$this->assertSame( 'AI Assistants', $row['channel'] );
+		$this->assertSame( 'ChatGPT', $row['name'] );
+	}
+
+	/**
+	 * @testdox Gemini referrers (mis-stored as Organic Search/Google) flip to AI Assistants
+	 *
+	 * Pre-fix `gemini.google.com` matched the `.google.com` suffix and was tagged
+	 * as Organic Search/Google. Reclassifier must move it under AI Assistants/Gemini.
+	 */
+	public function test_gemini_flips_from_organic_search_to_ai(): void {
+		$id = $this->insert_referrer( 'Organic Search', 'Google', 'gemini.google.com' );
+
+		Migrator::migrate_reclassify_referrers();
+
+		$row = $this->fetch_referrer( $id );
+		$this->assertSame( 'AI Assistants', $row['channel'] );
+		$this->assertSame( 'Gemini', $row['name'] );
+	}
 }
