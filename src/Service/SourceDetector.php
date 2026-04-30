@@ -17,49 +17,92 @@ if ( ! defined( 'ABSPATH' ) ) {
 final class SourceDetector {
 
 	/**
-	 * Search engine domain patterns.
+	 * Search engine hosts. Match is `domain === host` OR `domain` ends with `.host`,
+	 * so subdomains (`www.google.com`, `mail.google.com`) classify correctly while
+	 * `googleads-merchant.example.com` does not.
 	 *
 	 * @var array<string, string>
 	 */
 	private const SEARCH_ENGINES = [
-		'google'     => 'Google',
-		'bing'       => 'Bing',
-		'duckduckgo' => 'DuckDuckGo',
-		'yahoo'      => 'Yahoo',
-		'baidu'      => 'Baidu',
-		'yandex'     => 'Yandex',
-		'ecosia'     => 'Ecosia',
-		'brave'      => 'Brave',
-		'startpage'  => 'Startpage',
-		'qwant'      => 'Qwant',
-		'sogou'      => 'Sogou',
-		'naver'      => 'Naver',
+		'google.com'       => 'Google',
+		'google.co.uk'     => 'Google',
+		'google.de'        => 'Google',
+		'google.fr'        => 'Google',
+		'google.es'        => 'Google',
+		'google.it'        => 'Google',
+		'google.nl'        => 'Google',
+		'google.pl'        => 'Google',
+		'google.se'        => 'Google',
+		'google.ch'        => 'Google',
+		'google.be'        => 'Google',
+		'google.at'        => 'Google',
+		'google.ru'        => 'Google',
+		'google.ca'        => 'Google',
+		'google.com.au'    => 'Google',
+		'google.com.br'    => 'Google',
+		'google.com.mx'    => 'Google',
+		'google.com.tr'    => 'Google',
+		'google.co.jp'     => 'Google',
+		'google.co.in'     => 'Google',
+		'bing.com'         => 'Bing',
+		'duckduckgo.com'   => 'DuckDuckGo',
+		'yahoo.com'        => 'Yahoo',
+		'search.yahoo.com' => 'Yahoo',
+		'baidu.com'        => 'Baidu',
+		'yandex.com'       => 'Yandex',
+		'yandex.ru'        => 'Yandex',
+		'ecosia.org'       => 'Ecosia',
+		'search.brave.com' => 'Brave',
+		'startpage.com'    => 'Startpage',
+		'qwant.com'        => 'Qwant',
+		'sogou.com'        => 'Sogou',
+		'naver.com'        => 'Naver',
 	];
 
 	/**
-	 * Social media domain patterns.
+	 * Social media hosts (full registrable hosts and known shorteners).
+	 *
+	 * Same suffix-match semantics as SEARCH_ENGINES — entries must be
+	 * complete hosts. Never include short fragments like `'twitter'` or
+	 * `'.com'`: those would match arbitrary domains.
 	 *
 	 * @var array<string, string>
 	 */
 	private const SOCIAL_PLATFORMS = [
-		'facebook'  => 'Facebook',
-		'fb.com'    => 'Facebook',
-		'twitter'   => 'Twitter/X',
-		'x.com'     => 'Twitter/X',
-		't.co'      => 'Twitter/X',
-		'linkedin'  => 'LinkedIn',
-		'reddit'    => 'Reddit',
-		'pinterest' => 'Pinterest',
-		'instagram' => 'Instagram',
-		'youtube'   => 'YouTube',
-		'tiktok'    => 'TikTok',
-		'mastodon'  => 'Mastodon',
-		'threads'   => 'Threads',
-		'tumblr'    => 'Tumblr',
-		'discord'   => 'Discord',
-		'slack'     => 'Slack',
-		'telegram'  => 'Telegram',
-		'whatsapp'  => 'WhatsApp',
+		'facebook.com'     => 'Facebook',
+		'm.facebook.com'   => 'Facebook',
+		'l.facebook.com'   => 'Facebook',
+		'lm.facebook.com'  => 'Facebook',
+		'fb.com'           => 'Facebook',
+		'fb.me'            => 'Facebook',
+		'twitter.com'      => 'Twitter/X',
+		'x.com'            => 'Twitter/X',
+		't.co'             => 'Twitter/X',
+		'linkedin.com'     => 'LinkedIn',
+		'lnkd.in'          => 'LinkedIn',
+		'reddit.com'       => 'Reddit',
+		'old.reddit.com'   => 'Reddit',
+		'out.reddit.com'   => 'Reddit',
+		'redd.it'          => 'Reddit',
+		'pinterest.com'    => 'Pinterest',
+		'pinterest.co.uk'  => 'Pinterest',
+		'pin.it'           => 'Pinterest',
+		'instagram.com'    => 'Instagram',
+		'l.instagram.com'  => 'Instagram',
+		'youtube.com'      => 'YouTube',
+		'youtu.be'         => 'YouTube',
+		'tiktok.com'       => 'TikTok',
+		'vm.tiktok.com'    => 'TikTok',
+		'mastodon.social'  => 'Mastodon',
+		'threads.net'      => 'Threads',
+		'tumblr.com'       => 'Tumblr',
+		'discord.com'      => 'Discord',
+		'discord.gg'       => 'Discord',
+		'slack.com'        => 'Slack',
+		't.me'             => 'Telegram',
+		'telegram.org'     => 'Telegram',
+		'wa.me'            => 'WhatsApp',
+		'web.whatsapp.com' => 'WhatsApp',
 	];
 
 	/**
@@ -100,9 +143,8 @@ final class SourceDetector {
 			];
 		}
 
-		// Check search engines.
-		foreach ( self::SEARCH_ENGINES as $pattern => $name ) {
-			if ( str_contains( $domain, $pattern ) ) {
+		foreach ( self::SEARCH_ENGINES as $host => $name ) {
+			if ( self::host_matches( $domain, $host ) ) {
 				return [
 					'channel' => 'Organic Search',
 					'name'    => $name,
@@ -110,9 +152,8 @@ final class SourceDetector {
 			}
 		}
 
-		// Check social platforms.
-		foreach ( self::SOCIAL_PLATFORMS as $pattern => $name ) {
-			if ( str_contains( $domain, $pattern ) ) {
+		foreach ( self::SOCIAL_PLATFORMS as $host => $name ) {
+			if ( self::host_matches( $domain, $host ) ) {
 				return [
 					'channel' => 'Social Media',
 					'name'    => $name,
@@ -120,9 +161,8 @@ final class SourceDetector {
 			}
 		}
 
-		// Check email services.
 		foreach ( self::EMAIL_DOMAINS as $email_domain ) {
-			if ( $domain === $email_domain || str_ends_with( $domain, '.' . $email_domain ) ) {
+			if ( self::host_matches( $domain, $email_domain ) ) {
 				return [
 					'channel' => 'Email',
 					'name'    => $domain,
@@ -135,6 +175,17 @@ final class SourceDetector {
 			'channel' => 'Referral',
 			'name'    => $domain,
 		];
+	}
+
+	/**
+	 * True when `$domain` is exactly `$host` or a proper subdomain of it.
+	 * Anchored at the domain boundary, so `tantei-mt.com` does not match `t.co`.
+	 *
+	 * @param string $domain Lowercased referrer host to test.
+	 * @param string $host   Full registrable host to compare against.
+	 */
+	private static function host_matches( string $domain, string $host ): bool {
+		return $domain === $host || str_ends_with( $domain, '.' . $host );
 	}
 
 	/**
