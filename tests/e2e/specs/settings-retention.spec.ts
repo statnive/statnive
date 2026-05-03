@@ -81,4 +81,24 @@ test.describe('Settings → Data Retention', () => {
 
 		expect(dbCount('statnive_views')).toBe(before);
 	});
+
+	test('R-archive retention=30 + mode=archive → purge path runs without error', async ({ page, browser }) => {
+		// `archive` mode writes encrypted monthly aggregates to wp_options before
+		// purging. Without DailyAggregationJob populating summary_totals, the
+		// archive returns empty — but the purge itself must still complete and
+		// drop aged rows. This guards the archive code path from SQL/null-pointer
+		// breakage; archive-content assertion would require an aggregation seed
+		// that's out of scope for a single spec.
+		await setSettings(page, { retention_days: 30, retention_mode: 'archive' });
+		await seedTwoPageviews(browser);
+
+		const [older] = dbQuery<{ ID: string }>(
+			`SELECT ID FROM ${env.tablePrefix}statnive_views ORDER BY ID ASC LIMIT 1`
+		);
+		await backdate(page, 'views', 'viewed_at', 60, { ID: Number(older.ID) });
+
+		await runPurge(page);
+
+		expect(dbCount('statnive_views')).toBe(1);
+	});
 });

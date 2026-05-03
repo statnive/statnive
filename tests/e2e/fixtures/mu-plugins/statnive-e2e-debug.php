@@ -18,6 +18,8 @@
  *                                     statnive-consent-stub.php).
  *   POST /debug/settings-snapshot     Save current options into a transient.
  *   POST /debug/settings-restore      Restore the snapshotted options.
+ *   POST /debug/ensure-user           Idempotently create a user with a given
+ *                                     role and return its login credentials.
  *
  * @package Statnive\Tests\E2E
  */
@@ -246,6 +248,56 @@ add_action(
 						}
 					}
 					return new \WP_REST_Response( [ 'ok' => true ], 200 );
+				},
+			]
+		);
+
+		register_rest_route(
+			'statnive/v1',
+			'/debug/ensure-user',
+			[
+				'methods'             => 'POST',
+				'permission_callback' => $perm,
+				'callback'            => static function ( \WP_REST_Request $r ): \WP_REST_Response {
+					$body = (array) $r->get_json_params();
+					$role = sanitize_key( (string) ( $body['role'] ?? '' ) );
+					if ( ! in_array( $role, [ 'subscriber', 'editor', 'author', 'contributor' ], true ) ) {
+						return new \WP_REST_Response( [ 'ok' => false, 'error' => 'bad_role' ], 400 );
+					}
+					$login = 'statnive_e2e_' . $role;
+					$pass  = 'statnive_e2e_pw_' . $role;
+					$user  = get_user_by( 'login', $login );
+					if ( $user instanceof \WP_User ) {
+						wp_set_password( $pass, $user->ID );
+						$user->set_role( $role );
+						$user_id = $user->ID;
+					} else {
+						$user_id = wp_insert_user( [
+							'user_login' => $login,
+							'user_pass'  => $pass,
+							'user_email' => $login . '@e2e.test',
+							'role'       => $role,
+						] );
+						if ( is_wp_error( $user_id ) ) {
+							return new \WP_REST_Response(
+								[
+									'ok'      => false,
+									'error'   => $user_id->get_error_code(),
+									'message' => $user_id->get_error_message(),
+								],
+								500
+							);
+						}
+					}
+					return new \WP_REST_Response(
+						[
+							'ok'         => true,
+							'user_id'    => (int) $user_id,
+							'user_login' => $login,
+							'user_pass'  => $pass,
+						],
+						200
+					);
 				},
 			]
 		);
