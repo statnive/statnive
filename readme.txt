@@ -8,94 +8,85 @@ Stable tag: 0.4.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Privacy-first WordPress analytics. No cookies, no third-party scripts, 100% self-hosted.
+Privacy-first WordPress analytics. No cookies, no third-party scripts, 100% self-hosted. Real-time, GeoIP, AI-source tracking.
 
 == Description ==
 
 **The privacy-first analytics plugin for WordPress.**
 
-Fast, smart, easy-to-understand analytics without complicated setup or confusing dashboards. All data stays on your server — no cookies, no fingerprinting, no third-party transfers.
+See exactly who visits your site, where they come from, and what they do — without cookies, third-party trackers, or sending visitor data to anyone. All analytics live in your own WordPress database.
 
 = Why Statnive? =
 
-* **Channel intelligence** — Auto-groups traffic into Organic Search, Social, Direct, Referral, Email.
-* **Privacy by default** — No cookies, no fingerprinting. Designed to support GDPR/CCPA/APPI. Daily rotating salts.
-* **Zero-config setup** — Install, activate, done. No tracking code, no account, no external service.
+* **No cookies. No fingerprinting. No third-party transfers.** Designed to support GDPR, CCPA, and APPI compliance.
+* **Honors GPC and DNT** server-side, integrates with the WordPress Consent API.
+* **Daily-rotating salted hashes** — cross-day and cross-site tracking are mathematically impossible.
+* **Eight focused dashboard pages.** No clutter, no upsells.
+* **Free forever.** No license validation, no Pro tier, no trial limits. GPL-2.0-or-later.
 
 = Key Features =
 
-* **Real-time dashboard** — See who's on your site right now with live visitor count, active pages, and recent activity feed
-* **Channel grouping** — Traffic sources automatically grouped into Organic Search, Social Media, Direct, Referral, and Email
-* **Geographic data** — Country and city breakdowns using self-hosted GeoIP — no third-party lookups
-* **Device detection** — Browser, OS, and device type breakdowns to understand your audience
-* **Custom events** — Track button clicks, form submissions, file downloads, and outbound links
-* **Bot detection** — Automatic filtering of bots, crawlers, and headless browsers
-* **Privacy compliance** — DNT/GPC respect, configurable data retention, WordPress Privacy API (export/erase)
+* **Real-time** — Active visitor count, active pages, live pageview feed.
+* **Smart channel grouping** — Direct, Organic Search, Social Media, Email, Referral, Paid Search, Paid Social, and a dedicated **AI Assistants** channel for ChatGPT, Claude, Gemini, Perplexity, Copilot, NotebookLM, Meta AI, Le Chat, Deepseek and others.
+* **Custom events + engagement** — Clicks, form submissions, downloads, outbound links, time on page, scroll depth.
+* **Bot vs human separation** — Real visitors and automated traffic in distinct buckets.
+* **Geography in tiers** — Zero-config timezone country mapping; optional CDN headers; optional one-click DB-IP city download (free); optional MaxMind GeoLite2.
+* **Configurable retention** — 30 / 90 / 180 / 365 days, or Forever. Daily WP-Cron purge.
+* **WordPress Privacy API** — Personal-data export and erase registered automatically.
+* **WP-CLI** — `wp statnive cron run` for sites with `DISABLE_WP_CRON`.
+* **Importers** — WP Statistics and CSV.
 
-[Learn more at statnive.com](https://statnive.com)
-
-The full source code is available at [github.com/statnive/statnive](https://github.com/statnive/statnive).
+Source code at [github.com/statnive/statnive](https://github.com/statnive/statnive). Learn more at [statnive.com](https://statnive.com).
 
 == Installation ==
 
-1. Upload the `statnive` folder to `/wp-content/plugins/`
-2. Activate the plugin through the 'Plugins' menu
-3. Visit the Statnive dashboard from the admin menu
+1. Upload the `statnive` folder to `/wp-content/plugins/`.
+2. Activate the plugin through the **Plugins** menu in WordPress.
+3. Open **Statnive** in the admin sidebar.
 
-That's it. Analytics tracking begins immediately — no configuration required.
+That's it. Tracking begins immediately — no configuration, no account, no tracking code to paste.
 
 == Frequently Asked Questions ==
 
 = Does Statnive use cookies? =
 
-No. Statnive is 100% cookie-free. It uses a daily rotating salt hash for visitor identification that cannot be used to track individuals across days or sites.
+No. Statnive is 100% cookie-free. Visitor identification is a daily-rotating salted hash that cannot be used to track individuals across days or sites.
 
-= Is Statnive designed for GDPR compliance? =
+= Is Statnive GDPR compliant? =
 
-Statnive is **designed to support** GDPR, CCPA, and APPI compliance: no cookies, no PII storage, daily rotating hashes, configurable retention, and WordPress Privacy API support. Compliance depends on how you configure the plugin.
-
-= Does it work with WooCommerce? =
-
-Statnive tracks pageviews and visitor analytics on any WordPress site, including WooCommerce stores. Dedicated WooCommerce revenue tracking with Revenue per Visitor (RPV) is planned for a future release.
-
-= How much does it slow down my site? =
-
-The tracker script is under 5KB gzipped. Server-side processing adds less than 25ms to page load (p95). Analytics data is pre-aggregated daily for fast dashboard queries that never touch raw event tables.
-
-= Can I import data from other analytics plugins? =
-
-Yes. Statnive supports importing historical data from WP Statistics and CSV files. Google Analytics 4 import is planned for a future release.
-
-= Can I use Statnive alongside Google Analytics? =
-
-Yes. Statnive runs independently and does not conflict with Google Analytics, Matomo, or any other analytics tool. Many users run Statnive as their privacy-compliant primary analytics while keeping GA4 for advertising attribution.
+Statnive is **designed to support** GDPR, CCPA, APPI, and PIPL compliance: no cookies, no PII storage, daily rotating hashes, configurable retention, WordPress Privacy API export/erase, and server-side respect for GPC and DNT signals. Final compliance always depends on your configuration and your privacy policy.
 
 = How does visitor counting work without cookies? =
 
-A daily-rotating salted hash of the anonymized IP + User-Agent. The same visitor gets a different hash each day, so cross-day tracking is impossible while daily uniques stay accurate.
+A salted SHA-256 hash of the visitor's anonymized IP plus User-Agent. The salt rotates daily, so the same visitor gets a different hash tomorrow — cross-day stitching is impossible while daily uniques stay accurate.
 
-= Where is my analytics data stored? =
+= Where is my data stored? =
 
-All data is stored in your WordPress database on your own server. Statnive creates its own tables (prefixed `statnive_`) and never sends data to external servers. When you uninstall the plugin, all tables are cleanly removed.
+In your WordPress database, in tables prefixed `statnive_`. Nothing leaves your server unless you explicitly enable the optional MaxMind or DB-IP GeoIP downloads (one-time database files, never visitor data). When you uninstall the plugin, all tables and uploaded GeoIP files are removed.
+
+= Does it work with WooCommerce? =
+
+Statnive tracks pageviews, events, sessions, and referrers on WooCommerce stores like any other WordPress site. Dedicated WooCommerce revenue tracking with Revenue per Visitor (RPV) is on the roadmap.
+
+= How much does it slow down my site? =
+
+The tracker script is under 5 KB gzipped. Server-side processing adds well under 25 ms (p95) to page load. Dashboard queries run against pre-aggregated daily summaries, not raw events.
+
+= Can I import data from another analytics plugin? =
+
+Yes. Importers ship for WP Statistics and CSV. A Google Analytics 4 importer is planned for a future release.
+
+= Can I run Statnive alongside Google Analytics or Matomo? =
+
+Yes. Statnive is fully independent. Many users run Statnive as their primary privacy-friendly analytics and keep GA4 for advertising attribution.
 
 = What can cause "no data"? =
 
-Common causes: ad blockers, aggressive page caching, CSP blocking `fetch()`/`sendBeacon()` (allow `connect-src 'self'`), privacy signals (GPC/DNT), or `DISABLE_WP_CRON`. See the [troubleshooting guide](https://statnive.com/docs/troubleshooting).
-
-= Do I need to exclude URLs from page caches? =
-
-Exclude `/wp-json/statnive/v1/hit` and `admin-ajax.php?action=statnive_hit`. Most caching plugins do this by default.
+Common causes: ad blockers, aggressive page caching, CSP rules blocking `fetch`/`sendBeacon` (allow `connect-src 'self'`), GPC or DNT enabled, or `DISABLE_WP_CRON` without a system cron. Exclude `/wp-json/statnive/v1/hit` and `admin-ajax.php?action=statnive_hit` from page caches.
 
 = How does Geography work? =
 
-Statnive resolves geography in tiers, falling through automatically:
-
-1. **Zero-config — browser timezone.** Each tracker payload carries the visitor's IANA timezone. Statnive maps it to a country via a static IANA tzdb lookup shipped in the plugin. No setup, ~80% accurate at country level.
-2. **CDN country headers.** Cloudflare / CloudFront / Vercel set a country header per request. More accurate than timezone when present. Country only.
-3. **DB-IP IP-to-City Lite (one click, free).** Click "Enable city-level geography" on the Geography page. Statnive downloads the free DB-IP city database (~80 MB) to your uploads directory; cities populate from the next hit. No account, no key.
-4. **MaxMind GeoLite2 (paid-grade).** Configure a free MaxMind license key in Settings → GeoIP for the highest-accuracy IP-to-city resolution.
-
-Tiers 1 and 2 require no network call. Tiers 3 and 4 are opt-in via a discrete user action.
+Four tiers, falling through automatically: (1) browser timezone → country, ~80% accurate, no external call; (2) CDN country headers (Cloudflare, CloudFront, Vercel) when present; (3) optional one-click DB-IP IP-to-City Lite (free, CC-BY 4.0); (4) optional MaxMind GeoLite2 (free with an account). Tiers 3 and 4 are opt-in via a discrete user click.
 
 == Screenshots ==
 
@@ -103,40 +94,43 @@ Tiers 1 and 2 require no network call. Tiers 3 and 4 are opt-in via a discrete u
 2. Find what's actually driving results — top sources and top pages side by side
 3. Every page, ranked by what matters — search, sort, find your best content
 4. See where visitors arrive and leave — entry and exit pages side by side
-5. Understand where your traffic comes from — referral, direct, organic, social
+5. Understand where your traffic comes from — referral, direct, organic, social, AI
 6. Desktop, mobile, bots — device, browser and OS breakdowns in one view
 7. Reach across languages and regions — see which languages your visitors speak
 8. Watch your site breathe in real time — active visitors and live pageviews
 
 == External Services ==
 
-This plugin connects to the following third-party services under specific conditions:
+This plugin connects to two third-party services, both **opt-in via explicit user action**. No visitor data is ever sent to either service.
 
-= GeoIP Database Downloads — MaxMind =
-This plugin can download MaxMind GeoLite2 GeoIP databases to enable visitor geolocation.
-Requires a free MaxMind account and license key (user must accept the GeoLite2 EULA).
+= MaxMind GeoLite2 (optional) =
 
-* Source: MaxMind (https://www.maxmind.com), downloaded from https://download.maxmind.com/
-* When: Weekly via WordPress Cron, only when GeoIP feature is enabled in Settings and a license key is configured
-* Data sent: License key and standard HTTP request headers (no visitor data is transmitted)
-* Data received: GeoIP database file, stored locally in your uploads directory
-* Purpose: Determine approximate geographic location of visitors from anonymized IP addresses
+Used to download the MaxMind GeoLite2-City database for high-accuracy visitor geolocation. Requires a free MaxMind account and a license key the user pastes into Settings → GeoIP. Accuracy: coarse country/region only — not for identifying individuals or households.
+
+* Source: MaxMind (https://www.maxmind.com), downloaded from https://download.maxmind.com/app/geoip_download
+* When: Weekly via WP-Cron, only after the user enables GeoIP and configures a license key
+* Data sent: License key + standard HTTP request headers. No visitor data is transmitted.
+* Data received: GeoLite2-City.mmdb file, stored in your `wp-content/uploads/statnive/` directory
+* Purpose: Approximate visitor geolocation (country / region / coarse city)
+* Sign up for a MaxMind account: https://www.maxmind.com/en/geolite2/signup
+* Get your license key: https://www.maxmind.com/en/accounts/current/license-key
 * MaxMind Privacy Policy: https://www.maxmind.com/en/privacy-policy
 * MaxMind Terms of Use: https://www.maxmind.com/en/terms-of-use
 * MaxMind GeoLite2 EULA: https://www.maxmind.com/en/geolite2/eula
 
 This product includes GeoLite Data created by MaxMind, available from https://www.maxmind.com.
 
-= GeoIP Database Downloads — DB-IP IP-to-City Lite =
-This plugin can download the DB-IP IP-to-City Lite database to enable city-level geolocation.
-No account, no license key, no EULA — anonymously downloadable.
+= DB-IP IP-to-City Lite (optional) =
+
+Used to download the free DB-IP IP-to-City Lite database. No account, no license key, no EULA. Accuracy: approximate city/region only — not for identifying individuals or households.
 
 * Source: DB-IP (https://db-ip.com), downloaded from https://download.db-ip.com/free/
-* When: One-shot user click "Enable city-level geography" on the Geography page, then weekly via WordPress Cron for refresh
+* When: One-shot user click "Enable city-level geography" on the Geography page, then monthly via WP-Cron for refresh
 * Data sent: Standard HTTP request headers only (no visitor data, no account, no key)
-* Data received: dbip-city-lite-YYYY-MM.mmdb.gz file, decompressed and stored in your uploads directory
-* Purpose: Resolve approximate city/region from anonymized visitor IPs
+* Data received: dbip-city-lite-YYYY-MM.mmdb.gz file, decompressed to your `wp-content/uploads/statnive/` directory
+* Purpose: Approximate visitor geolocation (city / region / country)
 * DB-IP Terms: https://db-ip.com/db/about/
+* DB-IP Privacy Policy: https://db-ip.com/our_privacy_policy.php
 * License: CC-BY 4.0
 
 GeoIP data © DB-IP under CC-BY 4.0.
@@ -145,26 +139,27 @@ No visitor data is ever sent to any external service. All analytics data remains
 
 == Privacy Policy ==
 
-All analytics data stays in your WordPress database. No cookies, no fingerprinting, no external transfers. Daily-rotating salted hashes prevent cross-day tracking. Raw IPs are used only for GeoIP lookup and never stored. Integrates with the WordPress Privacy API for data export and erasure.
+All analytics data stays in your WordPress database. No cookies, no fingerprinting, no external transfers. Daily-rotating salted hashes prevent cross-day tracking. Raw IP addresses are used only for the optional GeoIP lookup and are never persisted. Statnive registers with the WordPress Privacy API for personal-data export and erasure.
 
 == Changelog ==
 
-= 0.4.6 - 2026-04-30 =
-* Added: AI Assistants traffic channel — ChatGPT, Claude, Gemini, Perplexity, Copilot, NotebookLM, and others.
-* Fixed: Referrer classifier mis-classified any *t.com or *x.com host as Twitter/X. Switched to anchored host-suffix matching.
-* Fixed: All Sources view collapsed multiple Google ccTLDs and Twitter/X variants into a single row per brand.
-* Fixed: Plugin Check WARNING for set_time_limit() in the GeoIP cron callback.
-* Changed: One-shot DB backfill on upgrade re-classifies existing referrer rows; chunked + resumable per WP.org § 27.
+= 0.4.6 =
+First public release on WordPress.org. Privacy-first WordPress analytics with:
 
-= 0.4.5 - 2026-04-28 =
-* Added: One-click DB-IP IP-to-City Lite — free, account-less city-level geography. Click "Enable city-level geography" on the Geography page; ~80 MB downloads to your uploads directory. CC-BY-4.0.
-* Added: New POST /wp-json/statnive/v1/diagnostics/enable-dbip-city endpoint (manage_options).
-* Changed: GeoIPService::get_database_path() returns the first existing .mmdb (MaxMind wins ties, DB-IP is the free fallback).
-* Changed: Weekly GeoIP cron now refreshes both providers when active; @set_time_limit(300) defends against PHP-FPM kills on managed hosts.
+* Real-time dashboard with active visitors, active pages and a live pageview feed
+* Eight channel grouping: Direct, Organic Search, Social Media, **AI Assistants** (ChatGPT, Claude, Gemini, Perplexity, Copilot, NotebookLM, Meta AI, Le Chat, Deepseek and more), Email, Referral, Paid Search, Paid Social
+* Anchored host-suffix referrer matching (no false positives on lookalike domains)
+* Geography in four tiers — browser timezone, CDN country headers, optional DB-IP IP-to-City Lite (one-click free), optional MaxMind GeoLite2 (your own free key)
+* Custom events, engagement (time-on-page + scroll depth), bot vs human separation
+* Cookieless and Disabled-Until-Consent privacy modes; server-side GPC and DNT
+* WordPress Privacy API integration (personal-data export and erase)
+* Configurable retention (30 / 90 / 180 / 365 days, or Forever) with daily purge cron
+* Importers for WP Statistics and CSV
+* `wp statnive cron run` WP-CLI command for sites with `DISABLE_WP_CRON`
 
-For older releases (0.4.4 and earlier), see CHANGELOG.md in the plugin source.
+Source code, issue tracker and full development history: https://github.com/statnive/statnive
 
 == Upgrade Notice ==
 
 = 0.4.6 =
-Tightens referrer classification (fixes the Twitter/X false-positive on every *t.com domain) and adds a dedicated AI Assistants channel for ChatGPT, Claude, Gemini, Perplexity, Copilot, and others. A one-shot DB backfill on upgrade re-labels existing rows.
+First public release on WordPress.org.

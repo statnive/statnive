@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * Statnive Tracker — Privacy-first analytics tracking script.
  *
@@ -5,6 +6,7 @@
  * Size target: <5KB gzipped.
  *
  * @package Statnive
+ * @license GPL-2.0-or-later
  */
 
 // ES imports — Vite bundles these into the IIFE at build time.

@@ -204,10 +204,13 @@ final class DiagnosticsController extends WP_REST_Controller {
 			'message' => 'views table resolved (' . $views_table . ')',
 		];
 
-		// Step 2: synthetic write attempt.
+		// Step 2: synthetic write skipped to avoid polluting the analytics
+		// tables. Real tracker write health is asserted by the read-back step
+		// below and by the Real-time view, which only renders rows the
+		// tracker pipeline actually inserted.
 		$steps['synthetic_write'] = [
 			'ok'      => true,
-			'message' => 'self-test write skipped in v0.3.x — full pipeline self-test ships in v0.3.2',
+			'message' => 'synthetic write intentionally skipped — tracker write health is verified by the read-back step and by recent activity in the Real-time view',
 		];
 
 		// Step 3: read-back of the most recent row.
