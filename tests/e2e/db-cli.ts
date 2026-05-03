@@ -64,7 +64,10 @@ function wp(args: string[], opts: { input?: string } = {}): string {
 
 /** Run an arbitrary SQL query and return tab-separated rows as record objects. */
 export function dbQuery<T = Record<string, string>>(sql: string): T[] {
-	const out = runMysql(sql).trim();
+	// Strip exactly one trailing newline. trim() also kills the row-separator
+	// newline preceding an empty-string value, dropping rows like
+	// `option_value\n\n` (one row, value '') to no rows at all.
+	const out = runMysql(sql).replace(/\n$/, '');
 	if (!out) return [];
 	const [header, ...lines] = out.split('\n');
 	const cols = header.split('\t');
