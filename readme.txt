@@ -4,7 +4,7 @@ Tags: analytics, statistics, privacy, tracking, dashboard
 Requires at least: 6.2
 Tested up to: 6.9
 Requires PHP: 8.0
-Stable tag: 0.4.6
+Stable tag: 0.4.7
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -27,8 +27,8 @@ See exactly who visits your site, where they come from, and what they do — wit
 = Key Features =
 
 * **Real-time** — Active visitor count, active pages, live pageview feed.
-* **Smart channel grouping** — Direct, Organic Search, Social Media, Email, Referral, Paid Search, Paid Social, and a dedicated **AI Assistants** channel for ChatGPT, Claude, Gemini, Perplexity, Copilot, NotebookLM, Meta AI, Le Chat, Deepseek and others.
-* **Custom events + engagement** — Clicks, form submissions, downloads, outbound links, time on page, scroll depth.
+* **Smart channel grouping** — Direct, Organic Search, Social Media, Email, Referral, Paid Search, Paid Social, and a dedicated **AI Assistants** channel for ChatGPT, Claude, Gemini, Perplexity, Copilot, NotebookLM, Meta AI, Le Chat, Deepseek, You, iAsk, Jasper, and Writesonic.
+* **Custom events + engagement** — Link clicks (and tagged button clicks via `statnive-event-*` classes), form submissions, downloads, outbound links, time on page, scroll depth.
 * **Bot vs human separation** — Real visitors and automated traffic in distinct buckets.
 * **Geography in tiers** — Zero-config timezone country mapping; optional CDN headers; optional one-click DB-IP city download (free); optional MaxMind GeoLite2.
 * **Configurable retention** — 30 / 90 / 180 / 365 days, or Forever. Daily WP-Cron purge.
@@ -70,7 +70,7 @@ Statnive tracks pageviews, events, sessions, and referrers on WooCommerce stores
 
 = How much does it slow down my site? =
 
-The tracker script is under 5 KB gzipped. Server-side processing adds well under 25 ms (p95) to page load. Dashboard queries run against pre-aggregated daily summaries, not raw events.
+The tracker script is small (~2 KB gzipped) and loads asynchronously, so it does not block your page render. The hit endpoint writes a single row per pageview. Dashboard queries run against pre-aggregated daily summaries rather than raw events.
 
 = Can I import data from another analytics plugin? =
 
@@ -105,7 +105,7 @@ This plugin connects to two third-party services, both **opt-in via explicit use
 
 = MaxMind GeoLite2 (optional) =
 
-Used to download the MaxMind GeoLite2-City database for high-accuracy visitor geolocation. Requires a free MaxMind account and a license key the user pastes into Settings → GeoIP. Accuracy: coarse country/region only — not for identifying individuals or households.
+Used to download the MaxMind GeoLite2-City database for high-accuracy visitor geolocation. Requires a free MaxMind account and a license key the user pastes into Settings → GeoIP. Accuracy: approximate city/region only — not for identifying individuals or households.
 
 * Source: MaxMind (https://www.maxmind.com), downloaded from https://download.maxmind.com/app/geoip_download
 * When: Weekly via WP-Cron, only after the user enables GeoIP and configures a license key
@@ -143,7 +143,7 @@ All analytics data stays in your WordPress database. No cookies, no fingerprinti
 
 == Changelog ==
 
-= 0.4.6 =
+= 0.4.7 =
 First public release on WordPress.org. Privacy-first WordPress analytics with:
 
 * Real-time dashboard with active visitors, active pages and a live pageview feed
@@ -161,5 +161,5 @@ Source code, issue tracker and full development history: https://github.com/stat
 
 == Upgrade Notice ==
 
-= 0.4.6 =
+= 0.4.7 =
 First public release on WordPress.org.

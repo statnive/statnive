@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.4.6] - 2026-04-30
+## [0.4.7] - 2026-05-03
 
 First public release on WordPress.org. Privacy-first WordPress analytics — no cookies, no third-party scripts, 100% self-hosted.
 
