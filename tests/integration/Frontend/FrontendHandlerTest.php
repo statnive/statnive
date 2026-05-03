@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Statnive\Tests\Integration\Frontend;
 
 use Statnive\Frontend\FrontendHandler;
+use Statnive\Service\ExclusionMatcher;
 use WP_UnitTestCase;
 
 defined( 'ABSPATH' ) || define( 'ABSPATH' , dirname( __DIR__, 6 ) . '/' );
@@ -199,6 +200,53 @@ final class FrontendHandlerTest extends WP_UnitTestCase {
 		$this->assertFalse(
 			wp_script_is( 'statnive-tracker', 'enqueued' ),
 			'Tracker must not enqueue when tracking is disabled.'
+		);
+	}
+
+	/**
+	 * Test that tracker is not enqueued for users in excluded_roles.
+	 *
+	 * The /hit REST endpoint can't enforce role exclusion on its own (the
+	 * tracker omits credentials and X-WP-Nonce, so cookie auth is ignored).
+	 * The enqueue-time gate is the only thing keeping logged-in excluded
+	 * roles out of the analytics.
+	 */
+	public function test_tracker_not_enqueued_for_excluded_role(): void {
+		update_option( 'statnive_excluded_roles', [ 'subscriber' ] );
+		ExclusionMatcher::reset_cache();
+
+		$subscriber_id = self::factory()->user->create( [ 'role' => 'subscriber' ] );
+		wp_set_current_user( $subscriber_id );
+
+		$this->go_to( '/' );
+		FrontendHandler::enqueue_tracker();
+
+		$this->assertFalse(
+			wp_script_is( 'statnive-tracker', 'enqueued' ),
+			'Tracker must not enqueue for users in excluded_roles.'
+		);
+	}
+
+	/**
+	 * Test that tracker IS enqueued for non-excluded roles (control).
+	 */
+	public function test_tracker_enqueued_for_non_excluded_role(): void {
+		if ( ! file_exists( $this->tracker_path ) ) {
+			$this->markTestSkipped( 'Tracker JS not built.' );
+		}
+
+		update_option( 'statnive_excluded_roles', [ 'subscriber' ] );
+		ExclusionMatcher::reset_cache();
+
+		$editor_id = self::factory()->user->create( [ 'role' => 'editor' ] );
+		wp_set_current_user( $editor_id );
+
+		$this->go_to( '/' );
+		FrontendHandler::enqueue_tracker();
+
+		$this->assertTrue(
+			wp_script_is( 'statnive-tracker', 'enqueued' ),
+			'Tracker must enqueue for non-excluded roles.'
 		);
 	}
 }
