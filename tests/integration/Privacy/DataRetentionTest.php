@@ -152,4 +152,33 @@ final class DataRetentionTest extends WP_UnitTestCase {
 		$count = (int) $wpdb->get_var( "SELECT COUNT(*) FROM `{$sessions}`" );
 		$this->assertSame( 2, $count, 'Both sessions should remain in forever mode' );
 	}
+
+	/**
+	 * @testdox Archive mode currently purges like delete
+	 *
+	 * `archive` is enumerated separately from `delete` in
+	 * RETENTION_MODES so the UI and a future archival implementation
+	 * can co-exist without a settings migration. Today, `RetentionManager::should_purge()`
+	 * returns true for both `delete` and `archive`, and `DataPurger::purge()`
+	 * issues a hard DELETE in either case. This test pins that contract:
+	 * if a future change introduces real archival (move-then-delete to
+	 * `*_archive` tables), this test must fail and be updated alongside.
+	 */
+	public function test_archive_mode_currently_purges_like_delete(): void {
+		global $wpdb;
+
+		update_option( 'statnive_retention_mode', 'archive' );
+		update_option( 'statnive_retention_days', 30 );
+		$this->insert_test_data( 120, 5 );
+
+		$result = DataPurger::purge();
+
+		$this->assertGreaterThan( 0, $result['deleted'], 'Archive mode should delete old rows today' );
+
+		$sessions = TableRegistry::get( 'sessions' );
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery
+		$count = (int) $wpdb->get_var( "SELECT COUNT(*) FROM `{$sessions}`" );
+		$this->assertSame( 1, $count, 'Only recent session should remain after archive-mode purge' );
+	}
 }

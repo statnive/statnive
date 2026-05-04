@@ -73,4 +73,40 @@ final class SettingsSanitizationTest extends TestCase {
 
 		$this->assertSame( 'forever', $result );
 	}
+
+	public function test_retention_mode_accepts_archive(): void {
+		// 'archive' is a valid enum value — currently aliased to 'delete' in
+		// DataPurger but enumerated separately so a future archival
+		// implementation can ship without a settings migration.
+		$result = $this->sanitize->invoke( $this->controller, 'retention_mode', 'archive' );
+
+		$this->assertSame( 'archive', $result );
+	}
+
+	public function test_excluded_ips_preserves_multiline_input(): void {
+		$input = "10.0.0.0/8\n192.168.1.1\n2001:db8::/32";
+
+		$result = $this->sanitize->invoke( $this->controller, 'excluded_ips', $input );
+
+		// sanitize_textarea_field preserves newlines but normalises CRLF and
+		// strips control characters — three lines must round-trip intact.
+		$this->assertSame( $input, $result );
+	}
+
+	public function test_excluded_roles_non_array_coerced_to_empty_array(): void {
+		// A scalar slipping past the REST framework's `type: array` check
+		// must be neutralised at the sanitiser layer (defence-in-depth) so
+		// downstream `array_intersect()` callers never see a string.
+		$result = $this->sanitize->invoke( $this->controller, 'excluded_roles', 'administrator' );
+
+		$this->assertSame( [], $result );
+	}
+
+	public function test_tracking_enabled_coerces_truthy_and_falsy_to_bool(): void {
+		$true_result  = $this->sanitize->invoke( $this->controller, 'tracking_enabled', '1' );
+		$false_result = $this->sanitize->invoke( $this->controller, 'tracking_enabled', '' );
+
+		$this->assertTrue( $true_result );
+		$this->assertFalse( $false_result );
+	}
 }
