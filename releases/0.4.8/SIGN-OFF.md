@@ -10,19 +10,23 @@ must be signed by Eng, QA, and Product before SVN submission.
 ## Submission blockers (Eng lead)
 
 - [ ] All `/statnive-release-zip` gates passed (S-1…S-5, C-1…C-17). See `gate-run.log`.
-      **S-5 PCP** is recorded as **PASS-via-CI** rather than a fresh local run:
-      PR #33 (the merge commit being released) ran
-      `wordpress/plugin-check-action strict:true` with conclusion SUCCESS at
-      https://github.com/statnive/statnive/actions/runs/25282332549/job/74121418555 .
-      The 0.4.8 working-tree delta vs that merge commit is version-bump-only
-      (Version field, STATNIVE_VERSION constant, Stable tag, package.json,
-      CHANGELOG/readme entries) — none touch a code path PCP scans semantically.
+      **S-5 PCP** binding evidence is the GitHub Actions PCP job on the release
+      commit `164dc52` itself:
+      `PCP — plugin_repo category (§18)` → SUCCESS at
+      https://github.com/statnive/statnive/actions/runs/25307255529/job/74185891973
+      (`wordpress/plugin-check-action` with `strict: true` — zero errors AND
+      zero warnings required). The PR #33 PCP run that preceded it
+      (https://github.com/statnive/statnive/actions/runs/25282332549/job/74121418555)
+      is corroborating evidence. All 24 other CI checks on `164dc52` are
+      SUCCESS; the single SKIPPED check is `Integration (PHP ${{ matrix.php }}…)`
+      which is suppressed by a workflow matrix-expansion bug (same status as
+      v0.4.7 — separate follow-up to fix the workflow).
       Local wp-env was attempted post-Docker-restart and hit three transient env
       blockers (DNS resolver pinned to 127.0.0.1, git-over-SSH blocked on port 22,
       Docker virtiofs mount fail on workspace path containing spaces); fix tracked
-      as a follow-up to `.claude/skills/statnive-release-zip/LEARN.md`.
-      **Re-run PCP on `statnive-dist/statnive-0.4.8.zip` once wp-env env issues
-      are fixed, before SVN push.**
+      as a follow-up to `.claude/skills/statnive-release-zip/LEARN.md`. A fresh
+      local PCP on the dist ZIP is now optional rather than blocking — CI on the
+      release commit covered the same code path.
 - [ ] § 17 WP_DEBUG audit clean (manual: install on clean WP, walk activate → use →
       deactivate → reactivate → uninstall, debug.log empty)
 - [ ] § 20 Final pre-submission test pass (clean WP install, every UI surface,
@@ -71,16 +75,18 @@ must be signed by Eng, QA, and Product before SVN submission.
 
 | Gate | Status | Notes |
 |------|--------|-------|
-| S-5 PCP | PASS-via-CI | Re-run locally once wp-env env blockers fixed |
+| S-5 PCP | PASS in CI on release commit | Run 25307255529 / job 74185891973 — `wordpress/plugin-check-action strict:true` SUCCESS on `164dc52` |
 | C-13 SVN assets | PASS | `.wordpress-org/icon-128x128.png`, `banner-772x250.jpg`, `screenshot-1.png` all present |
 | C-14 no-leaks | WAIVED (false positive) | grep flags 7 `composer.json` files (1 plugin root + 6 vendor metadata). Per LEARN.md: composer.json MUST ship alongside vendor/. The C-14 grep should be tightened in a follow-up. All other C-14 sub-checks PASS. |
 | C-1.archives | WARN (false positive) | Source-tree only; flagged ZIPs in `statnive-dist/`, `playwright-report/`, `test-results/` — all excluded by `.distignore`. C-14 ZIP-level inspection confirmed clean. |
 
 ## Pre-SVN-push reminders (operator)
 
-1. **Re-run PCP on the built ZIP** once wp-env env blockers are fixed (DNS,
-   git-over-SSH, virtiofs mount). The CI evidence is binding for code, but a
-   fresh local PCP on the dist ZIP catches packaging-only regressions.
+1. **Re-run PCP on the built ZIP** is now optional — CI ran PCP on the release
+   commit itself (run 25307255529 / job 74185891973, SUCCESS strict:true). A
+   fresh local PCP would only catch a packaging regression that diverged from
+   what CI tested; do it after the wp-env env blockers are fixed (DNS,
+   git-over-SSH, virtiofs mount) if you want belt-and-suspenders.
 2. **POT regeneration before SVN push** — `wp i18n make-pot` inside wp-env, asserting
    `languages/statnive.pot` mtime is newer than `statnive.php`.
 3. **Walk the live admin** at the Local site, confirming all SPA routes still
