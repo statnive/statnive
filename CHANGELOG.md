@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.8] - 2026-05-04
+
+### Fixed
+
+- Tracker no longer fires for users in `excluded_roles`. Previously the role check ran only at the `/hit` REST endpoint, where REST cookie auth treats nonce-less tracker beacons as guest, so excluded admins/editors still recorded views. The gate now runs at `wp_enqueue_scripts` time where `wp_get_current_user()` is reliable.
+
+### Added
+
+- E2E coverage for `tracking_enabled`, `excluded_roles`, `maxmind_license_key` (masking + 400 path), GeoIP cron scheduling on enable, and `retention_mode=archive`. New mu-plugin debug endpoint `/debug/ensure-user` and fixture `role-login.ts` for non-admin role test sessions.
+
+### Internal
+
+- Fixed `dbQuery` E2E parser silently dropping rows with empty-string values (mysql `--batch` row-separator newline was being stripped by `.trim()`).
+
 ## [0.4.7] - 2026-05-03
 
 First public release on WordPress.org. Privacy-first WordPress analytics — no cookies, no third-party scripts, 100% self-hosted.

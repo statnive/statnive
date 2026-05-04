@@ -4,7 +4,7 @@ Tags: analytics, statistics, privacy, tracking, dashboard
 Requires at least: 6.2
 Tested up to: 6.9
 Requires PHP: 8.0
-Stable tag: 0.4.7
+Stable tag: 0.4.8
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -142,6 +142,9 @@ No visitor data is ever sent to any external service. All analytics data remains
 All analytics data stays in your WordPress database. No cookies, no fingerprinting, no external transfers. Daily-rotating salted hashes prevent cross-day tracking. Raw IP addresses are used only for the optional GeoIP lookup and are never persisted. Statnive registers with the WordPress Privacy API for personal-data export and erasure.
 
 == Changelog ==
+
+= 0.4.8 - 2026-05-04 =
+* Fix: tracker correctly skips users in excluded_roles (gated at enqueue time). See CHANGELOG.md.
 
 = 0.4.7 =
 First public release on WordPress.org. Privacy-first WordPress analytics with:
