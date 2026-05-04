@@ -61,6 +61,13 @@ final class SettingsController extends WP_REST_Controller {
 	private const RETENTION_MAX   = 3650;
 
 	/**
+	 * Sentinel returned by GET when a license key is set, and treated as
+	 * "no change" by PUT so masked round-trips don't clobber the stored
+	 * key. Mirrored client-side as `MASKED_PLACEHOLDER` in resources/react/types/api.ts.
+	 */
+	public const MASKED_PLACEHOLDER = '********';
+
+	/**
 	 * Register routes.
 	 */
 	public function register_routes(): void {
@@ -118,7 +125,7 @@ final class SettingsController extends WP_REST_Controller {
 				'excluded_ips'        => get_option( 'statnive_excluded_ips', '' ),
 				'excluded_roles'      => get_option( 'statnive_excluded_roles', [] ),
 				'geoip_enabled'       => (bool) get_option( 'statnive_geoip_enabled', false ),
-				'maxmind_license_key' => $has_license_key ? '********' : '',
+				'maxmind_license_key' => $has_license_key ? self::MASKED_PLACEHOLDER : '',
 			],
 			200
 		);
@@ -151,7 +158,7 @@ final class SettingsController extends WP_REST_Controller {
 		];
 
 		// Process maxmind_license_key first so geoip_enabled can check it.
-		if ( isset( $body['maxmind_license_key'] ) && '********' !== $body['maxmind_license_key'] ) {
+		if ( isset( $body['maxmind_license_key'] ) && self::MASKED_PLACEHOLDER !== $body['maxmind_license_key'] ) {
 			update_option( 'statnive_maxmind_license_key', sanitize_text_field( (string) $body['maxmind_license_key'] ) );
 		}
 

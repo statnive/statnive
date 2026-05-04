@@ -21,6 +21,7 @@ import {
 } from '../fixtures/settings';
 import { dbQuery } from '../db-cli';
 import { env } from '../env';
+import { MASKED_PLACEHOLDER } from '../../../resources/react/types/api';
 
 const ALL_ROUTES = [
 	'/',
@@ -132,7 +133,7 @@ test.describe('Settings → GeoIP & MaxMind', () => {
 			headers: { 'X-WP-Nonce': await getDashboardNonce(page) },
 		});
 		const body = (await res.json()) as { maxmind_license_key: string };
-		expect(body.maxmind_license_key, 'license key masked on GET').toBe('********');
+		expect(body.maxmind_license_key, 'license key masked on GET').toBe(MASKED_PLACEHOLDER);
 	});
 
 	test('PUT geoip_enabled=true with empty license key → 400 missing_license_key', async ({ page }) => {

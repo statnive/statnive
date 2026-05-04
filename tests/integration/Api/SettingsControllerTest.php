@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Statnive\Tests\Integration\Api;
 
+use Statnive\Api\SettingsController;
 use Statnive\Service\GeoIPDownloader;
 use WP_Error;
 use WP_REST_Request;
@@ -160,7 +161,7 @@ final class SettingsControllerTest extends WP_UnitTestCase {
 		$response = $this->server->dispatch( $this->build_get() );
 		$data     = $response->get_data();
 
-		$this->assertSame( '********', $data['maxmind_license_key'] );
+		$this->assertSame( SettingsController::MASKED_PLACEHOLDER, $data['maxmind_license_key'] );
 	}
 
 	public function test_get_returns_empty_string_when_license_key_unset(): void {
@@ -174,7 +175,7 @@ final class SettingsControllerTest extends WP_UnitTestCase {
 		update_option( 'statnive_maxmind_license_key', 'real-key-abc' );
 
 		$response = $this->server->dispatch(
-			$this->build_put( [ 'maxmind_license_key' => '********' ] )
+			$this->build_put( [ 'maxmind_license_key' => SettingsController::MASKED_PLACEHOLDER ] )
 		);
 
 		$this->assertSame( 200, $response->get_status() );
