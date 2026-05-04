@@ -3,7 +3,7 @@ import { __ } from '@wordpress/i18n';
 import { getCurrentIp } from '@/lib/api-client';
 import { useSettings, useUpdateSettings } from '@/hooks/use-settings';
 import { HEADING_H2, HEADING_H3 } from '@/lib/typography';
-import type { SettingsState } from '@/types/api';
+import { MASKED_PLACEHOLDER, type SettingsState } from '@/types/api';
 
 const FOREVER_DAYS = 3650;
 const SAVED_FLASH_MS = 2000;
@@ -284,6 +284,73 @@ export function SettingsPage() {
 						</button>
 					</div>
 				)}
+			</div>
+
+			{/* GeoIP */}
+			<div className="rounded-lg border border-border bg-card p-4">
+				<h3 className={`mb-4 ${HEADING_H3}`}>{__('GeoIP', 'statnive')}</h3>
+
+				<div className="space-y-4">
+					<div>
+						<label className="block text-sm" htmlFor="statnive-maxmind-key">
+							<span className="text-muted-foreground">{__('MaxMind License Key', 'statnive')}</span>
+						</label>
+						<input
+							id="statnive-maxmind-key"
+							aria-describedby="statnive-maxmind-key-help"
+							data-testid="maxmind-license-key-input"
+							type="text"
+							spellCheck={false}
+							autoComplete="off"
+							value={form.maxmind_license_key}
+							onChange={(e) => patch({ maxmind_license_key: e.target.value })}
+							placeholder={__('Paste your free MaxMind license key', 'statnive')}
+							className="mt-1 block w-full rounded-md border border-border bg-card px-3 py-2 font-mono text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+						/>
+						<p id="statnive-maxmind-key-help" className="mt-2 text-xs text-muted-foreground">
+							{__('Get a free key:', 'statnive')}{' '}
+							<a
+								href="https://www.maxmind.com/en/geolite2/signup"
+								target="_blank"
+								rel="noreferrer"
+								className="underline"
+							>
+								maxmind.com/en/geolite2/signup
+							</a>
+							{' '}{__('then paste it here.', 'statnive')}
+							{form.maxmind_license_key === MASKED_PLACEHOLDER &&
+								' ' +
+									__(
+										'A key is currently saved. Clear this field to remove it, or paste a new one to replace it.',
+										'statnive'
+									)}
+						</p>
+					</div>
+
+					<label className="grid cursor-pointer grid-cols-[1rem_1fr] items-center gap-x-3 gap-y-1">
+						<input
+							data-testid="geoip-enabled-toggle"
+							type="checkbox"
+							checked={form.geoip_enabled}
+							onChange={(e) => patch({ geoip_enabled: e.target.checked })}
+							className="m-0 h-4 w-4 accent-primary"
+						/>
+						<span className="text-sm font-medium leading-5">{__('Enable MaxMind GeoIP', 'statnive')}</span>
+						<p className="col-start-2 text-xs leading-5 text-muted-foreground">
+							{__(
+								'Activates the weekly MaxMind GeoLite2-City download (~70 MB to your uploads directory). Requires a license key above. The first lookup happens after the next WP-Cron tick.',
+								'statnive'
+							)}
+						</p>
+					</label>
+				</div>
+
+				<p className="mt-2 text-xs text-muted-foreground">
+					{__(
+						'Prefer no account? Use the one-click DB-IP IP-to-City Lite download on the Geography page instead — it is free and account-less.',
+						'statnive'
+					)}
+				</p>
 			</div>
 		</div>
 	);
