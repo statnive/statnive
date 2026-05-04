@@ -186,7 +186,10 @@ export default defineConfig(({ mode }) => {
 		build: {
 			outDir: resolve(__dirname, 'public/react'),
 			emptyOutDir: true,
-			manifest: true,
+			// Custom filename keeps the manifest out of Vite's default
+			// `.vite/` hidden directory — WordPress.org Plugin Check rejects
+			// ZIPs that contain dotfiles (rule: hidden_files).
+			manifest: 'manifest.json',
 			rollupOptions: {
 				input: resolve(__dirname, 'resources/react/main.tsx'),
 				output: {

@@ -165,7 +165,7 @@ final class ReactHandler {
 	 * @return array<string, mixed> Parsed manifest, or empty array on failure.
 	 */
 	private static function read_manifest(): array {
-		$manifest_path = STATNIVE_PATH . 'public/react/.vite/manifest.json';
+		$manifest_path = STATNIVE_PATH . 'public/react/manifest.json';
 		if ( ! file_exists( $manifest_path ) ) {
 			return [];
 		}

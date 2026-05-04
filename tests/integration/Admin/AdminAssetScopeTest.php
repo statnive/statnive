@@ -67,7 +67,7 @@ final class AdminAssetScopeTest extends WP_UnitTestCase {
 	}
 
 	public function test_react_dashboard_assets_load_only_on_statnive_page(): void {
-		$manifest_path = STATNIVE_PATH . 'public/react/.vite/manifest.json';
+		$manifest_path = STATNIVE_PATH . 'public/react/manifest.json';
 		if ( ! file_exists( $manifest_path ) ) {
 			$this->markTestSkipped( 'React bundle not built; run `npm run build` first.' );
 		}

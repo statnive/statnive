@@ -83,6 +83,15 @@ CHANGELOG.md
 .gitignore
 .editorconfig
 
+# Local dev environment — must NEVER ship (contains paths + credentials).
+# WordPress.org Plugin Check rejects any dotfile in the ZIP (hidden_files rule).
+.env
+.env.local
+.env.*
+
+# Git hooks (host-side dev tooling, not runtime)
+.githooks
+
 # Repo-only artifacts (SVN assets staged separately, evidence packs per release)
 .wordpress-org
 /releases
