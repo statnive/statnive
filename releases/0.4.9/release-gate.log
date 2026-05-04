@@ -1,0 +1,7 @@
+phpcs        : PASS  85 files, 0 errors
+phpstan      : PASS  [OK] No errors
+phpunit unit : PASS  244/244, 1035 assertions
+phpunit integ: DEFERRED  needs wp-env (WP_UnitTestCase). CI integration job is
+               currently SKIPPED due to a workflow matrix-expansion bug
+               (`${{ matrix.php }}` literal in job name). v0.4.9 inherits the
+               same coverage envelope as v0.4.7 / v0.4.8.

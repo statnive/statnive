@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.9] - 2026-05-04
+
+### Fixed
+
+- **Packaging — WordPress.org Plugin Check `hidden_files` rejection.** The v0.4.8 dist ZIP shipped three dotfiles that WP.org PCP rejects: `.env.local` (developer's local config + admin credentials), `.githooks/pre-commit` (host-side dev tooling), and `public/react/.vite/manifest.json` (Vite default manifest path). `.env.local` and `.githooks/` are now excluded via `.distignore`. The Vite manifest moves to `public/react/manifest.json` (`manifest: 'manifest.json'`) so it's no longer in a hidden directory; both readers (`ReactHandler::read_manifest()` and `AdminAssetScopeTest`) updated to match.
+
+### Security
+
+- The v0.4.8 ZIP, available on GitHub Releases for ~3 hours before this fix, contained `.env.local` with development credentials (`admin`/`admin` for the dev WordPress site) and the developer's local filesystem path. Anyone who downloaded v0.4.8 from GitHub Releases between publish and this fix has those values. They are not used outside the dev environment, but rotate them if you have any concern.
+
 ## [0.4.8] - 2026-05-04
 
 ### Fixed
