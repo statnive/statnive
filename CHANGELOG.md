@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.10] - 2026-05-05
+
+### Added
+
+- **MaxMind GeoIP card on the admin Settings page.** New card with a license-key text input and an Enable-MaxMind-GeoIP toggle. Drives the existing server-side `maxmind_license_key` and `statnive_geoip_enabled` options that previously had no UI surface (settable only via REST or WP-CLI). Helper copy links to the maxmind.com signup flow and points at the DB-IP IP-to-City Lite fallback on the Geography page. Conditional hint surfaces when the stored key is masked.
+
+### Changed
+
+- **Centralized the masked-license-key sentinel.** The `********` value used to mask `maxmind_license_key` on GET — and recognised as "no change" on PUT — is now the canonical `Statnive\Api\SettingsController::MASKED_PLACEHOLDER` PHP constant, mirrored as the `MASKED_PLACEHOLDER` TypeScript export from `resources/react/types/api.ts`. Tests and the GeoIP e2e spec import the constant rather than duplicating the literal, so any future masking change is a single-point edit.
+
+### Internal
+
+- **Closed test coverage gaps for the admin Settings tab.** New `SettingsControllerTest` integration test (12 cases for the manage_options auth gate, masked-license-key roundtrip, `missing_license_key` 400 path, GeoIP enable/disable cron transitions, REST-framework rejection of out-of-range `retention_days` and invalid `consent_mode`). New `ConsentApiIntegrationTest` unit test (4 cases covering all `has_consent()` branches, with `wp_has_consent` stubbed in the global namespace so `function_exists()` resolves it). Extended `SettingsSanitizationTest` with `archive` enum, multiline IP textarea, non-array role coercion, and bool coercion. Extended `DataRetentionTest` with one case that pins the current `archive`-mode contract (delete-equivalent) so future archival work fails this test instead of regressing silently.
+
 ## [0.4.9] - 2026-05-04
 
 ### Fixed
