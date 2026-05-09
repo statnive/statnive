@@ -26,10 +26,14 @@ playwright.config.ts
 # PHP dev tooling (composer.json ships — PCP expects it alongside vendor/)
 composer.lock
 phpstan.neon
+phpstan-baseline.neon
 .phpcs.xml.dist
 phpunit.xml.dist
 phpunit-integration.xml
 .phpunit.result.cache
+
+# JavaScript dev tooling
+bun.lock
 
 # Vendor dev-only packages (runtime deps: geoip2, matomo, maxmind*, mustangostang, psr)
 # Also exclude test dirs inside runtime packages
@@ -74,9 +78,10 @@ blueprint.json
 /coverage
 screenshot-*.png
 
-# Docs (readme.txt is the WP.org file)
+# Docs (readme.txt is the WP.org file; internal runbooks live in /docs and stay out of dist)
 README.md
 CHANGELOG.md
+/docs
 
 # Meta
 .distignore
