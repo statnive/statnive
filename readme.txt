@@ -4,7 +4,7 @@ Tags: analytics, google-analytics, privacy, statistics, gdpr
 Requires at least: 6.2
 Tested up to: 6.9
 Requires PHP: 8.0
-Stable tag: 0.4.10
+Stable tag: 0.4.11
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -144,6 +144,9 @@ No visitor data is ever sent to any external service. All analytics data remains
 All analytics data stays in your WordPress database. Raw IPs are used only for the optional GeoIP lookup and are never persisted. Statnive registers with the WordPress Privacy API for personal-data export and erasure.
 
 == Changelog ==
+
+= 0.4.11 - 2026-05-09 =
+* Removed: importers (WP Statistics + CSV) — orphan feature whose cron handler was never registered. See CHANGELOG.md.
 
 = 0.4.10 - 2026-05-05 =
 * New: MaxMind GeoIP card on the admin Settings page (license-key input + Enable toggle, drives the existing server-side options).
