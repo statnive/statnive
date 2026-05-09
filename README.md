@@ -2,58 +2,54 @@
 
 **Simple stats, clear decisions.**
 
-[![Version](https://img.shields.io/badge/version-0.1.0-blue.svg)](https://statnive.com)
+[![Version](https://img.shields.io/badge/version-0.4.10-blue.svg)](https://statnive.com)
 [![PHP](https://img.shields.io/badge/PHP-8.0%2B-8892BF.svg)](https://www.php.net/)
-[![WordPress](https://img.shields.io/badge/WordPress-5.6%2B-21759B.svg)](https://wordpress.org/)
+[![WordPress](https://img.shields.io/badge/WordPress-6.2%2B-21759B.svg)](https://wordpress.org/)
 [![License](https://img.shields.io/badge/license-GPL--2.0--or--later-green.svg)](https://www.gnu.org/licenses/gpl-2.0.html)
 
 Privacy-first analytics for WordPress. No cookies, no third-party transfers, no complicated dashboards — just the metrics that matter.
 
 - **Cookieless by design** — No cookies, localStorage, or fingerprinting. Ever.
-- **Real-time dashboard** — See what's happening on your site right now.
-- **Revenue attribution** — Track WooCommerce revenue per traffic source.
-- **Self-hosted** — All data stays on your server. Designed to support GDPR/APPI compliance.
-
-![Statnive Dashboard](screenshot.png)
+- **Real-time dashboard** — Active visitors, active pages, and a live pageview feed.
+- **AI source tracking** — Dedicated channel for ChatGPT, Claude, Gemini, Perplexity and 9 more.
+- **Self-hosted** — All data stays in your own WordPress database. Designed to support GDPR, CCPA and APPI compliance.
 
 ## Features
 
 ### Analytics Dashboard
 - **8 dashboard screens**: Overview, Pages, Referrers, Geography, Devices, Languages, Real-time, Settings
-- Real-time visitor counter with 5-second polling
+- Real-time visitor counter and live pageview feed
 - Comparison mode (current vs previous period)
 - CSV export for all data views
 
 ### Privacy & Compliance
-- Cookieless tracking with daily rotating salts (two-salt system, 48h overlap)
-- IP anonymization with ephemeral lifecycle — raw IPs are never stored
-- WordPress Privacy API compliance (data exporter, eraser, policy generator)
-- Privacy audit dashboard with 10 compliance checks and score
+- Cookieless tracking with daily-rotating SHA-256 salt
+- Raw IPs never persisted — used only for the optional GeoIP lookup, then discarded
+- WordPress Privacy API integration (personal-data exporter, eraser, policy generator)
 - WP Consent API integration (Real Cookie Banner, Complianz, CookieYes)
-- 3 consent modes: full, cookieless, disabled-until-consent
-- DNT and GPC header support enabled by default
+- Three consent modes: full, cookieless, disabled-until-consent
+- DNT and GPC respected server-side, on by default
 
 ### Tracking
-- GeoIP resolution via MaxMind GeoLite2-City
+- Eight-channel referrer grouping including a dedicated **AI Assistants** channel (ChatGPT, Claude, Gemini, Perplexity, Copilot, NotebookLM, Meta AI, Le Chat, Deepseek, You, iAsk, Jasper, Writesonic)
+- Geography in four tiers — browser timezone, CDN country headers, optional one-click DB-IP IP-to-City Lite (free, CC-BY 4.0), optional MaxMind GeoLite2 (your own free key)
 - Device detection via matomo/device-detector
-- Referrer classification into 7 channels (Organic Search, Social Media, Direct, Referral, Email, Paid Search, Paid Social)
 - UTM parameter extraction and campaign tracking
-- Custom event tracking with auto-tracking (outbound links, forms, downloads)
-- Engagement tracking (scroll depth, time-on-page)
+- Custom events with auto-tracking (outbound links, form submissions, downloads)
+- Engagement tracking (scroll depth, time-on-page via Visibility API — no heartbeats)
 - Bot detection (UA patterns, webdriver, Math.random entropy)
 
-### Integrations
-- WooCommerce revenue tracking
-- Data import from WP Statistics and CSV
-- Email reports (weekly/monthly)
-- API key authentication for external access
+### Integrations & Tools
+- Data importers for WP Statistics and CSV
 - WordPress Site Health integration
-- Keyboard shortcuts and WP Command Palette
+- Keyboard shortcuts and WP Command Palette (`Ctrl/Cmd + K`)
+- WP-CLI command `wp statnive cron run` for sites with `DISABLE_WP_CRON`
+- Configurable retention (30 / 90 / 180 / 365 days, or Forever) with daily purge cron
 
 ## Requirements
 
 - PHP 8.0 or higher
-- WordPress 5.6 or higher
+- WordPress 6.2 or higher
 
 ## Installation
 
@@ -121,27 +117,11 @@ composer phpcs            # WordPress Coding Standards
 | **Frontend** | React 18, TypeScript, TanStack Router/Query, Tailwind CSS, shadcn/ui, Recharts |
 | **Tracker** | Vanilla JS, IIFE bundle (<5KB gzipped), compile-time feature flags |
 | **Database** | 21+ normalized tables, star schema, binary visitor hashes, pre-aggregated summaries |
-| **Privacy** | SHA-256 hashing, daily rotating CSPRNG salts, zero persistent PII |
+| **Privacy** | SHA-256 hashing, daily-rotating CSPRNG salt, zero persistent PII |
 
-## Pricing
+## License model
 
-| | Free | Starter | Professional | Agency |
-|---|---|---|---|---|
-| **Price** | $0 | $49/yr | $99/yr | $199/yr |
-| Real-time dashboard | ✓ | ✓ | ✓ | ✓ |
-| Basic sources | ✓ | ✓ | ✓ | ✓ |
-| Geo data | ✓ | ✓ | ✓ | ✓ |
-| Data retention | 30 days | 1 year | Unlimited | Unlimited |
-| Form tracking | — | ✓ | ✓ | ✓ |
-| Custom events | — | 5 | Unlimited | Unlimited |
-| Weekly email reports | — | ✓ | ✓ | ✓ |
-| WooCommerce revenue | — | — | ✓ | ✓ |
-| API access | — | — | ✓ | ✓ |
-| WPML support | — | — | ✓ | ✓ |
-| Heatmaps | — | — | — | ✓ |
-| Meta CAPI | — | — | — | ✓ |
-| White-label | — | — | — | ✓ |
-| AI insights | — | — | — | ✓ |
+Statnive ships fully open-source under GPLv2 or later. There is no licensing system in this codebase and no paywalled features — every screen, integration and tracking capability described above is available to every user who installs the plugin.
 
 ## Contributing
 

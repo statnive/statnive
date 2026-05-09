@@ -1,6 +1,6 @@
-=== Statnive ===
-Contributors: statnive
-Tags: analytics, statistics, privacy, tracking, dashboard
+=== Statnive – Simple, Real-time, Privacy-first Web Analytics ===
+Contributors: parhumm
+Tags: analytics, google-analytics, privacy, statistics, gdpr
 Requires at least: 6.2
 Tested up to: 6.9
 Requires PHP: 8.0
@@ -8,7 +8,7 @@ Stable tag: 0.4.10
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Privacy-first WordPress analytics. No cookies, no third-party scripts, 100% self-hosted. Real-time, GeoIP, AI-source tracking.
+Privacy-first WordPress analytics — cookieless, self-hosted, real-time. A simple Google Analytics alternative with GeoIP and AI-source tracking.
 
 == Description ==
 
@@ -16,13 +16,16 @@ Privacy-first WordPress analytics. No cookies, no third-party scripts, 100% self
 
 See exactly who visits your site, where they come from, and what they do — without cookies, third-party trackers, or sending visitor data to anyone. All analytics live in your own WordPress database.
 
+Open source under GPLv2. Self-hosted in your own database — nothing ever leaves your server.
+
+Install, activate, open Statnive — your dashboard fills up within minutes. No tracking code to paste, no account to create.
+
 = Why Statnive? =
 
 * **No cookies. No fingerprinting. No third-party transfers.** Designed to support GDPR, CCPA, and APPI compliance.
 * **Honors GPC and DNT** server-side, integrates with the WordPress Consent API.
 * **Daily-rotating salted hashes** — cross-day and cross-site tracking are mathematically impossible.
 * **Eight focused dashboard pages.** No clutter, no upsells.
-* **Free forever.** No license validation, no Pro tier, no trial limits. GPL-2.0-or-later.
 
 = Key Features =
 
@@ -34,7 +37,6 @@ See exactly who visits your site, where they come from, and what they do — wit
 * **Configurable retention** — 30 / 90 / 180 / 365 days, or Forever. Daily WP-Cron purge.
 * **WordPress Privacy API** — Personal-data export and erase registered automatically.
 * **WP-CLI** — `wp statnive cron run` for sites with `DISABLE_WP_CRON`.
-* **Importers** — WP Statistics and CSV.
 
 Source code at [github.com/statnive/statnive](https://github.com/statnive/statnive). Learn more at [statnive.com](https://statnive.com).
 
@@ -88,6 +90,10 @@ Common causes: ad blockers, aggressive page caching, CSP rules blocking `fetch`/
 
 Four tiers, falling through automatically: (1) browser timezone → country, ~80% accurate, no external call; (2) CDN country headers (Cloudflare, CloudFront, Vercel) when present; (3) optional one-click DB-IP IP-to-City Lite (free, CC-BY 4.0); (4) optional MaxMind GeoLite2 (free with an account). Tiers 3 and 4 are opt-in via a discrete user click.
 
+= Does Statnive count bots as real visitors? =
+
+No. ~200 server-side bot UA patterns and tracker-side fingerprints (webdriver, automation flags) bucket bots separately, so "Visitors" and "Pageviews" reflect humans only.
+
 == Screenshots ==
 
 1. Know your traffic at a glance — visitors, sessions, pageviews and trends that matter
@@ -139,7 +145,7 @@ No visitor data is ever sent to any external service. All analytics data remains
 
 == Privacy Policy ==
 
-All analytics data stays in your WordPress database. No cookies, no fingerprinting, no external transfers. Daily-rotating salted hashes prevent cross-day tracking. Raw IP addresses are used only for the optional GeoIP lookup and are never persisted. Statnive registers with the WordPress Privacy API for personal-data export and erasure.
+All analytics data stays in your WordPress database. Raw IPs are used only for the optional GeoIP lookup and are never persisted. Statnive registers with the WordPress Privacy API for personal-data export and erasure.
 
 == Changelog ==
 
@@ -151,20 +157,7 @@ All analytics data stays in your WordPress database. No cookies, no fingerprinti
 * Fix: tracker skips excluded_roles + dist ZIP excludes hidden files. See CHANGELOG.md.
 
 = 0.4.7 =
-First public release on WordPress.org. Privacy-first WordPress analytics with:
-
-* Real-time dashboard with active visitors, active pages and a live pageview feed
-* Eight channel grouping: Direct, Organic Search, Social Media, **AI Assistants** (ChatGPT, Claude, Gemini, Perplexity, Copilot, NotebookLM, Meta AI, Le Chat, Deepseek and more), Email, Referral, Paid Search, Paid Social
-* Anchored host-suffix referrer matching (no false positives on lookalike domains)
-* Geography in four tiers — browser timezone, CDN country headers, optional DB-IP IP-to-City Lite (one-click free), optional MaxMind GeoLite2 (your own free key)
-* Custom events, engagement (time-on-page + scroll depth), bot vs human separation
-* Cookieless and Disabled-Until-Consent privacy modes; server-side GPC and DNT
-* WordPress Privacy API integration (personal-data export and erase)
-* Configurable retention (30 / 90 / 180 / 365 days, or Forever) with daily purge cron
-* Importers for WP Statistics and CSV
-* `wp statnive cron run` WP-CLI command for sites with `DISABLE_WP_CRON`
-
-Source code, issue tracker and full development history: https://github.com/statnive/statnive
+First public release on WordPress.org. Real-time dashboard, eight-channel grouping with a dedicated AI Assistants channel, four-tier geography, custom events + engagement, cookieless privacy modes, WordPress Privacy API, configurable retention, WP Statistics + CSV importers, and the `wp statnive cron run` WP-CLI command. Source code and full history: https://github.com/statnive/statnive.
 
 == Upgrade Notice ==
 
