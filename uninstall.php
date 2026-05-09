@@ -81,9 +81,9 @@ delete_option( 'statnive_db_version' );
 delete_option( 'statnive_version' );
 
 // Delete scheduled cron events.
-// Legacy hooks (statnive_weekly_license_check, statnive_email_report) are
-// cleared unconditionally so sites upgrading from earlier versions don't
-// leave orphan schedules behind.
+// Legacy hooks (statnive_weekly_license_check, statnive_email_report,
+// statnive_import_batch) are cleared unconditionally so sites upgrading
+// from earlier versions don't leave orphan schedules behind.
 wp_clear_scheduled_hook( 'statnive_daily_salt_rotation' );
 wp_clear_scheduled_hook( 'statnive_daily_aggregation' );
 wp_clear_scheduled_hook( 'statnive_daily_data_purge' );

@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Removed
+
+- **Importers** — WP Statistics and CSV historical-data import. The cron handler for `statnive_import_batch` was never registered, so scheduled batches never ran; the REST endpoints returned `200 "started"` but no data was ever ingested. Feature removed entirely; the `wp_clear_scheduled_hook( 'statnive_import_batch' )` call in `uninstall.php` is retained as legacy cleanup for sites upgrading from versions that scheduled the orphan event.
+
 ## [0.4.10] - 2026-05-05
 
 ### Added
