@@ -40,7 +40,6 @@ Privacy-first analytics for WordPress. No cookies, no third-party transfers, no 
 - Bot detection (UA patterns, webdriver, Math.random entropy)
 
 ### Integrations & Tools
-- Data importers for WP Statistics and CSV
 - WordPress Site Health integration
 - Keyboard shortcuts and WP Command Palette (`Ctrl/Cmd + K`)
 - WP-CLI command `wp statnive cron run` for sites with `DISABLE_WP_CRON`

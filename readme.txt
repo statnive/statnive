@@ -74,10 +74,6 @@ Statnive tracks pageviews, events, sessions, and referrers on WooCommerce stores
 
 The tracker script is small (~2 KB gzipped) and loads asynchronously, so it does not block your page render. The hit endpoint writes a single row per pageview. Dashboard queries run against pre-aggregated daily summaries rather than raw events.
 
-= Can I import data from another analytics plugin? =
-
-Yes. Importers ship for WP Statistics and CSV. A Google Analytics 4 importer is planned for a future release.
-
 = Can I run Statnive alongside Google Analytics or Matomo? =
 
 Yes. Statnive is fully independent. Many users run Statnive as their primary privacy-friendly analytics and keep GA4 for advertising attribution.
@@ -157,7 +153,7 @@ All analytics data stays in your WordPress database. Raw IPs are used only for t
 * Fix: tracker skips excluded_roles + dist ZIP excludes hidden files. See CHANGELOG.md.
 
 = 0.4.7 =
-First public release on WordPress.org. Real-time dashboard, eight-channel grouping with a dedicated AI Assistants channel, four-tier geography, custom events + engagement, cookieless privacy modes, WordPress Privacy API, configurable retention, WP Statistics + CSV importers, and the `wp statnive cron run` WP-CLI command. Source code and full history: https://github.com/statnive/statnive.
+First public release on WordPress.org. Real-time dashboard, eight-channel grouping with a dedicated AI Assistants channel, four-tier geography, custom events + engagement, cookieless privacy modes, WordPress Privacy API, configurable retention, and the `wp statnive cron run` WP-CLI command. Source code and full history: https://github.com/statnive/statnive.
 
 == Upgrade Notice ==
 
