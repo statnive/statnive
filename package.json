@@ -19,6 +19,7 @@
 		"gate:e2e": "playwright test",
 		"i18n:react": "node bin/extract-react-pot.mjs",
 		"i18n:react:check": "node bin/extract-react-pot.mjs --check",
+		"lint:dist": "node bin/lint-dist-zip.mjs",
 		"prepare": "git config core.hooksPath .githooks || true"
 	},
 	"devDependencies": {

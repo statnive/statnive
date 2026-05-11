@@ -64,6 +64,45 @@ phpunit.xml
 /vendor/*/examples
 /vendor/*/*/examples
 
+# Dev-only scripts and CI configs that ship inside runtime composer packages.
+# WordPress.org's automated submission gate rejects release.sh, build scripts,
+# and similar maintainer artifacts even when nested in vendor/ — caught by
+# v0.4.12 first upload (maxmind/web-service-common/dev-bin/release.sh).
+/vendor/*/dev-bin
+/vendor/*/*/dev-bin
+/vendor/*/.github
+/vendor/*/*/.github
+/vendor/*/.gitlab-ci.yml
+/vendor/*/*/.gitlab-ci.yml
+/vendor/*/.travis.yml
+/vendor/*/*/.travis.yml
+/vendor/*/.circleci
+/vendor/*/*/.circleci
+/vendor/*/Makefile
+/vendor/*/*/Makefile
+/vendor/*/CHANGELOG.md
+/vendor/*/*/CHANGELOG.md
+/vendor/*/CONTRIBUTING.md
+/vendor/*/*/CONTRIBUTING.md
+
+# Legacy PHP-4 directories in vendor packages. spyc and similar libs ship
+# a php4/ subdir with .php4-extension files that composer never autoloads
+# (the autoload manifest points at Spyc.php only). .php4 is non-standard
+# and a likely future WP.org reviewer flag.
+/vendor/*/php4
+/vendor/*/*/php4
+
+# PECL C-extension build artefacts inside vendor packages. maxmind-db/reader
+# ships an optional ext/ subdir (maxminddb.c, php_maxminddb.h, config.m4,
+# config.w32) for users who compile the speed-optimised C reader via PECL.
+# WordPress plugins never compile C extensions, the composer autoload points
+# only at src/, and unusual extensions like .c / .h / .m4 / .w32 are likely
+# WP.org reviewer flags. package.xml is the PECL package manifest.
+/vendor/*/ext
+/vendor/*/*/ext
+/vendor/*/package.xml
+/vendor/*/*/package.xml
+
 # Tests
 /tests
 /bin
