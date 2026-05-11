@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.12] - 2026-05-11
+
+### Fixed
+
+- **readme.txt Tags line.** Replaced `google-analytics` with `cookieless`. WordPress.org plugin guidelines and the project's own forbidden-tag list (`.claude/skills/statnive-release-zip/checks/c05-readme.md`) disallow competitor product names in the `Tags:` header — submission would have been flagged on automated screening. New tags line: `analytics, privacy, statistics, gdpr, cookieless` (5 generic tags, all within policy). The description body's "Google Analytics alternative" framing is unaffected — that's allowed in body copy, only forbidden as a tag.
+
 ## [0.4.11] - 2026-05-09
 
 ### Removed

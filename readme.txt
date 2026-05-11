@@ -1,10 +1,10 @@
 === Statnive – Simple, Real-time, Privacy-first Web Analytics ===
 Contributors: parhumm
-Tags: analytics, google-analytics, privacy, statistics, gdpr
+Tags: analytics, privacy, statistics, gdpr, cookieless
 Requires at least: 6.2
 Tested up to: 6.9
 Requires PHP: 8.0
-Stable tag: 0.4.11
+Stable tag: 0.4.12
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -144,6 +144,9 @@ No visitor data is ever sent to any external service. All analytics data remains
 All analytics data stays in your WordPress database. Raw IPs are used only for the optional GeoIP lookup and are never persisted. Statnive registers with the WordPress Privacy API for personal-data export and erasure.
 
 == Changelog ==
+
+= 0.4.12 - 2026-05-11 =
+* Fix: replace competitor name in Tags line with `cookieless` for WP.org policy compliance. See CHANGELOG.md.
 
 = 0.4.11 - 2026-05-09 =
 * Removed: importers (WP Statistics + CSV) — orphan feature whose cron handler was never registered. See CHANGELOG.md.
