@@ -17,6 +17,8 @@
 		"typecheck": "tsc --noEmit",
 		"gate": "npm run test",
 		"gate:e2e": "playwright test",
+		"i18n:react": "node bin/extract-react-pot.mjs",
+		"i18n:react:check": "node bin/extract-react-pot.mjs --check",
 		"prepare": "git config core.hooksPath .githooks || true"
 	},
 	"devDependencies": {
