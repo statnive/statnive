@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: Statnive – Simple, Real-time, Privacy-first Web Analytics
- * Plugin URI:  https://statnive.com
+ * Plugin URI:  https://github.com/statnive/statnive
  * Description: Simple stats, clear decisions. Privacy-first analytics for WordPress.
  * Version:     0.4.12
  * Requires PHP: 8.0

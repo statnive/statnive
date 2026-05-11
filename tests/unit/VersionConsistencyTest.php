@@ -72,4 +72,30 @@ final class VersionConsistencyTest extends TestCase {
 			"package.json version ({$package_version}) must match STATNIVE_VERSION constant ({$const_version})."
 		);
 	}
+
+	/**
+	 * WordPress.org rejects plugin submissions where Plugin URI and Author URI
+	 * resolve to the same string. Added after v0.4.12 was bounced from the
+	 * automated submission gate for having both set to https://statnive.com.
+	 */
+	public function test_plugin_uri_differs_from_author_uri(): void {
+		$contents = file_get_contents( $this->plugin_root . '/statnive.php' );
+		$this->assertNotFalse( $contents, 'statnive.php must be readable.' );
+
+		preg_match( '/Plugin URI:\s+(\S+)/', $contents, $plugin_match );
+		preg_match( '/Author URI:\s+(\S+)/', $contents, $author_match );
+
+		$plugin_uri = $plugin_match[1] ?? null;
+		$author_uri = $author_match[1] ?? null;
+
+		if ( $plugin_uri === null || $author_uri === null ) {
+			return; // One side absent — WP.org accepts a missing URI; conflict only fires when both are present.
+		}
+
+		$this->assertNotSame(
+			$plugin_uri,
+			$author_uri,
+			"WordPress.org rejects plugins where Plugin URI ({$plugin_uri}) and Author URI ({$author_uri}) are identical."
+		);
+	}
 }
