@@ -283,7 +283,8 @@ final class GeoIPService {
 	 * dashboard states that may surface it (e.g. when the tracker payload
 	 * carried no timezone at all).
 	 *
-	 * MaxMind wins ties when both .mmdb files are on disk (paid > free tier).
+	 * MaxMind wins ties when both .mmdb files are on disk (MaxMind ranks above
+	 * DB-IP on city-level accuracy when both providers' databases are present).
 	 *
 	 * @return string 'maxmind' | 'dbip_city' | 'cdn_headers' | 'timezone' | 'none'
 	 */
@@ -314,7 +315,7 @@ final class GeoIPService {
 	/**
 	 * Get the path to the active GeoIP .mmdb database.
 	 *
-	 * MaxMind wins ties (paid > free). When neither file exists the legacy
+	 * MaxMind ranks above DB-IP. When neither file exists the legacy
 	 * MaxMind path is returned so diagnostic callers still get a meaningful
 	 * value — `is_available()` will then correctly return false.
 	 *
