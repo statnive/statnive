@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * `wp_upload_dir()/statnive/`.
  *
  * @see https://www.maxmind.com/en/geolite2/eula
- * @see https://db-ip.com/db/about/
+ * @see https://db-ip.com/tos.php
  */
 final class GeoIPDownloader {
 

@@ -131,7 +131,7 @@ Used to download the free DB-IP IP-to-City Lite database. No account, no license
 * Data sent: Standard HTTP request headers only (no visitor data, no account, no key)
 * Data received: dbip-city-lite-YYYY-MM.mmdb.gz file, decompressed to your `wp-content/uploads/statnive/` directory
 * Purpose: Approximate visitor geolocation (city / region / country)
-* DB-IP Terms: https://db-ip.com/db/about/
+* DB-IP Terms: https://db-ip.com/tos.php
 * DB-IP Privacy Policy: https://db-ip.com/privacy.php
 * License: CC-BY 4.0
 
