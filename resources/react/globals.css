@@ -13,8 +13,6 @@
  * Tailwind unchanged.
  */
 
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=DM+Sans:wght@400;500;600&display=swap');
-
 @layer theme, base, components, utilities;
 
 @import "tailwindcss/theme.css" layer(theme);
@@ -58,10 +56,12 @@
 	--radius-md: 0.1875rem;  /* 3px — buttons, cards */
 	--radius-lg: 0.5rem;     /* 8px — modals, tiles */
 
-	/* Typography stacks. */
-	--font-sans: 'DM Sans', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
-	--font-display: 'Space Grotesk', 'DM Sans', sans-serif;
-	--font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+	/* Typography stacks — system fonts only. The plugin is self-contained;
+	 * no external font CDN is loaded. Matches WordPress core's admin font
+	 * preference list so the Statnive dashboard feels native. */
+	--font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+	--font-display: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+	--font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
 
 /*
