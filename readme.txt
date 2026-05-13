@@ -3,8 +3,8 @@ Contributors: parhumm
 Tags: analytics, privacy, statistics, gdpr, cookieless
 Requires at least: 6.2
 Tested up to: 6.9
-Requires PHP: 8.0
-Stable tag: 0.4.12
+Requires PHP: 8.1
+Stable tag: 0.4.13
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -132,7 +132,7 @@ Used to download the free DB-IP IP-to-City Lite database. No account, no license
 * Data received: dbip-city-lite-YYYY-MM.mmdb.gz file, decompressed to your `wp-content/uploads/statnive/` directory
 * Purpose: Approximate visitor geolocation (city / region / country)
 * DB-IP Terms: https://db-ip.com/db/about/
-* DB-IP Privacy Policy: https://db-ip.com/our_privacy_policy.php
+* DB-IP Privacy Policy: https://db-ip.com/privacy.php
 * License: CC-BY 4.0
 
 GeoIP data © DB-IP under CC-BY 4.0.
@@ -144,6 +144,11 @@ No visitor data is ever sent to any external service. All analytics data remains
 All analytics data stays in your WordPress database. Raw IPs are used only for the optional GeoIP lookup and are never persisted. Statnive registers with the WordPress Privacy API for personal-data export and erasure.
 
 == Changelog ==
+
+= 0.4.13 - 2026-05-13 =
+* Changed: PHP floor raised from 8.0 to 8.1 (PHP 8.0 EOL was Nov 2023).
+* Changed: `geoip2/geoip2` bumped ^2.13 → ^3.0; `maxmind/web-service-common` bumped ~0.9.0 → ^0.11.
+* Fix: DB-IP privacy-policy URL in External Services disclosure (404 → canonical). See CHANGELOG.md.
 
 = 0.4.12 - 2026-05-11 =
 * Fix: replace competitor name in Tags line with `cookieless` for WP.org policy compliance. See CHANGELOG.md.

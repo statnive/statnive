@@ -3,7 +3,7 @@
 **Simple stats, clear decisions.**
 
 [![Version](https://img.shields.io/badge/version-0.4.10-blue.svg)](https://statnive.com)
-[![PHP](https://img.shields.io/badge/PHP-8.0%2B-8892BF.svg)](https://www.php.net/)
+[![PHP](https://img.shields.io/badge/PHP-8.1%2B-8892BF.svg)](https://www.php.net/)
 [![WordPress](https://img.shields.io/badge/WordPress-6.2%2B-21759B.svg)](https://wordpress.org/)
 [![License](https://img.shields.io/badge/license-GPL--2.0--or--later-green.svg)](https://www.gnu.org/licenses/gpl-2.0.html)
 
@@ -47,7 +47,7 @@ Privacy-first analytics for WordPress. No cookies, no third-party transfers, no 
 
 ## Requirements
 
-- PHP 8.0 or higher
+- PHP 8.1 or higher
 - WordPress 6.2 or higher
 
 ## Installation
@@ -71,7 +71,7 @@ npx @wp-playground/cli server --blueprint=blueprint.json
 
 ### Prerequisites
 
-- PHP 8.0+ (dev/CI requires PHP 8.2+ because PHPUnit 11.5 needs 8.2+)
+- PHP 8.1+ (dev/CI requires PHP 8.2+ because PHPUnit 11.5 needs 8.2+)
 - Node.js 18+
 - Composer
 
@@ -112,7 +112,7 @@ composer phpcs            # WordPress Coding Standards
 
 | Layer | Stack |
 |-------|-------|
-| **Backend** | PHP 8.0+, WordPress Plugin API, PSR-4 autoloading, service container |
+| **Backend** | PHP 8.1+, WordPress Plugin API, PSR-4 autoloading, service container |
 | **Frontend** | React 18, TypeScript, TanStack Router/Query, Tailwind CSS, shadcn/ui, Recharts |
 | **Tracker** | Vanilla JS, IIFE bundle (<5KB gzipped), compile-time feature flags |
 | **Database** | 21+ normalized tables, star schema, binary visitor hashes, pre-aggregated summaries |

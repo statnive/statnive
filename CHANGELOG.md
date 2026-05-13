@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.13] - 2026-05-13
+
+### Changed
+
+- **PHP floor raised from 8.0 to 8.1.** PHP 8.0 reached end-of-life in November 2023. Bumped in `statnive.php` (header `Requires PHP` + `STATNIVE_MIN_PHP` define), `readme.txt`, `composer.json`, `package.json`, `phpstan.neon` (`phpVersion: 80100`), `.phpcs.xml.dist` (`testVersion: 8.1-`), `blueprint.json`, both test bootstraps, and all three GitHub Actions workflows (matrix entries + cache keys + explanatory comments). Required for the MaxMind library bumps below; also closes the gap with WordPress core's own PHP support timeline.
+- **`geoip2/geoip2` bumped from `^2.13` to `^3.0`** (installed v3.3.0). v3 introduces readonly typed properties on the City/Country/Continent/Subdivision record classes; Statnive's narrow API surface (`\GeoIp2\Database\Reader::city()`, `->close()`, six property reads on the result) is fully v3-compatible — no production code changes needed.
+- **`maxmind/web-service-common` bumped from `~0.9.0` to `^0.11`** (installed v0.11.1). Transitive dependency of `geoip2/geoip2`; v0.10+ raised the PHP floor to 8.1, which is why the bumps had to land together.
+
+### Fixed
+
+- **DB-IP privacy-policy URL.** `readme.txt:135` updated from `https://db-ip.com/our_privacy_policy.php` (now returns HTTP 404) to the current canonical URL `https://db-ip.com/privacy.php` (HTTP 200, linked from db-ip.com homepage footer). External Services disclosure now resolves.
+
 ## [0.4.12] - 2026-05-11
 
 ### Fixed

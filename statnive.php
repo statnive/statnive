@@ -3,8 +3,8 @@
  * Plugin Name: Statnive – Simple, Real-time, Privacy-first Web Analytics
  * Plugin URI:  https://github.com/statnive/statnive
  * Description: Simple stats, clear decisions. Privacy-first analytics for WordPress.
- * Version:     0.4.12
- * Requires PHP: 8.0
+ * Version:     0.4.13
+ * Requires PHP: 8.1
  * Requires at least: 6.2
  * Author:      Statnive
  * Author URI:  https://statnive.com
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Plugin version.
  */
-define( 'STATNIVE_VERSION', '0.4.12' );
+define( 'STATNIVE_VERSION', '0.4.13' );
 
 /**
  * Plugin root directory path.
@@ -41,7 +41,7 @@ define( 'STATNIVE_FILE', __FILE__ );
 /**
  * Minimum required PHP version.
  */
-define( 'STATNIVE_MIN_PHP', '8.0' );
+define( 'STATNIVE_MIN_PHP', '8.1' );
 
 /**
  * Minimum required WordPress version.
