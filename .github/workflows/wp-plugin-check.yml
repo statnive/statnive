@@ -61,7 +61,7 @@ jobs:
 
       # Step 1: Run the official action for GitHub annotations (errors fail here).
       - name: Run official Plugin Check (plugin_repo category)
-        uses: wordpress/plugin-check-action@6f5a57e173c065a394b78688f75df543e4011902 # v1
+        uses: wordpress/plugin-check-action@18573eb38f13543484a1f095672dae3849a4fbb0 # v1.1.6
         with:
           build-dir: ../statnive-dist/statnive
           categories: plugin_repo
