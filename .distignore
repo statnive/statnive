@@ -138,6 +138,7 @@ CHANGELOG.md
 
 # Repo-only artifacts (SVN assets staged separately, evidence packs per release)
 .wordpress-org
+.wordpress-org-source
 /releases
 /statnive-dist
 
