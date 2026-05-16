@@ -11,6 +11,10 @@ msgstr ""
 "Language: fr_FR\n"
 "Project-Id-Version: Plugins - Statnive - Stable Readme (latest release)\n"
 
+#. Plugin title (from === Statnive ... === line).
+msgid "Statnive – Simple, Real-time, Privacy-first Web Analytics"
+msgstr "Statnive – Analyse web simple, en temps réel et respectueuse de la vie privée"
+
 #. Short description
 #: readme.txt:short-description
 msgid "Privacy-first WordPress analytics — cookieless, self-hosted, real-time. A simple Google Analytics alternative with GeoIP and AI-source tracking."
@@ -445,3 +449,8 @@ msgstr "Journal des modifications"
 #: readme.txt:section-upgrade-notice
 msgid "Upgrade Notice"
 msgstr "Notice de mise à jour"
+
+#. Upgrade Notice body for the latest version.
+#: readme.txt:upgrade-notice-body
+msgid "First public release on WordPress.org."
+msgstr "Première version publique sur WordPress.org."

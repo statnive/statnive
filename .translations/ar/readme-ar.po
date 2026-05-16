@@ -11,6 +11,10 @@ msgstr ""
 "Language: ar\n"
 "Project-Id-Version: Plugins - Statnive - Stable Readme (latest release)\n"
 
+#. Plugin title (from === Statnive ... === line).
+msgid "Statnive – Simple, Real-time, Privacy-first Web Analytics"
+msgstr "Statnive – تحليلات ويب بسيطة ولحظية تحترم الخصوصية"
+
 #. Short description.
 msgid "Privacy-first WordPress analytics — cookieless, self-hosted, real-time. A simple Google Analytics alternative with GeoIP and AI-source tracking."
 msgstr "تحليلات WordPress تحترم الخصوصية — بدون كوكيز، ذاتية الاستضافة، لحظية. بديل بسيط لـ Google Analytics مع GeoIP وقياس مصادر الذكاء الاصطناعي."
@@ -20,8 +24,8 @@ msgid "Description"
 msgstr "الوصف"
 
 #. Found in description paragraph.
-msgid "<strong>The privacy-first analytics plugin for WordPress.</strong>"
-msgstr "<strong>إضافة التحليلات التي تحترم الخصوصية لـ WordPress.</strong>"
+msgid "**The privacy-first analytics plugin for WordPress.**"
+msgstr "**إضافة التحليلات التي تحترم الخصوصية لـ WordPress.**"
 
 #. Found in description paragraph.
 msgid "See exactly who visits your site, where they come from, and what they do — without cookies, third-party trackers, or sending visitor data to anyone. All analytics live in your own WordPress database."
@@ -40,56 +44,56 @@ msgid "Why Statnive?"
 msgstr "لماذا Statnive؟"
 
 #. Found in description list item.
-msgid "<strong>No cookies. No fingerprinting. No third-party transfers.</strong> Designed to support GDPR, CCPA, and APPI compliance."
-msgstr "<strong>بدون كوكيز. بدون بصمة متصفح. بدون نقل إلى أطراف ثالثة.</strong> مصمَّمة لدعم الامتثال لـ GDPR و CCPA و APPI."
+msgid "**No cookies. No fingerprinting. No third-party transfers.** Designed to support GDPR, CCPA, and APPI compliance."
+msgstr "**بدون كوكيز. بدون بصمة متصفح. بدون نقل إلى أطراف ثالثة.** مصمَّمة لدعم الامتثال لـ GDPR و CCPA و APPI."
 
 #. Found in description list item.
-msgid "<strong>Honors GPC and DNT</strong> server-side, integrates with the WordPress Consent API."
-msgstr "<strong>تحترم إشارتي GPC و DNT</strong> على جانب الخادم، وتتكامل مع WordPress Consent API."
+msgid "**Honors GPC and DNT** server-side, integrates with the WordPress Consent API."
+msgstr "**تحترم إشارتي GPC و DNT** على جانب الخادم، وتتكامل مع WordPress Consent API."
 
 #. Found in description list item.
-msgid "<strong>Daily-rotating salted hashes</strong> — cross-day and cross-site tracking are mathematically impossible."
-msgstr "<strong>تجزئات بـ Salt تتغير يوميًا</strong> — تتبع الزائر عبر الأيام والمواقع المختلفة مستحيل رياضيًا."
+msgid "**Daily-rotating salted hashes** — cross-day and cross-site tracking are mathematically impossible."
+msgstr "**تجزئات بـ Salt تتغير يوميًا** — تتبع الزائر عبر الأيام والمواقع المختلفة مستحيل رياضيًا."
 
 #. Found in description list item.
-msgid "<strong>Eight focused dashboard pages.</strong> No clutter, no upsells."
-msgstr "<strong>ثماني صفحات مركَّزة في لوحة التحكم.</strong> بدون فوضى وبدون عروض ترقية."
+msgid "**Eight focused dashboard pages.** No clutter, no upsells."
+msgstr "**ثماني صفحات مركَّزة في لوحة التحكم.** بدون فوضى وبدون عروض ترقية."
 
 #. Found in description list-item header.
 msgid "Key Features"
 msgstr "الميزات الرئيسية"
 
 #. Found in description list item.
-msgid "<strong>Real-time</strong> — Active visitor count, active pages, live pageview feed."
-msgstr "<strong>لحظي</strong> — عدد الزوار النشطين، والصفحات النشطة، وتدفق مشاهدات الصفحة المباشر."
+msgid "**Real-time** — Active visitor count, active pages, live pageview feed."
+msgstr "**لحظي** — عدد الزوار النشطين، والصفحات النشطة، وتدفق مشاهدات الصفحة المباشر."
 
 #. Found in description list item.
-msgid "<strong>Smart channel grouping</strong> — Direct, Organic Search, Social Media, Email, Referral, Paid Search, Paid Social, and a dedicated <strong>AI Assistants</strong> channel for ChatGPT, Claude, Gemini, Perplexity, Copilot, NotebookLM, Meta AI, Le Chat, Deepseek, You, iAsk, Jasper, and Writesonic."
-msgstr "<strong>تجميع قنوات ذكي</strong> — مباشر، البحث العضوي، وسائل التواصل الاجتماعي، البريد الإلكتروني، الإحالة، البحث المدفوع، التواصل الاجتماعي المدفوع، وقناة <strong>مساعدات الذكاء الاصطناعي</strong> المخصصة لـ ChatGPT و Claude و Gemini و Perplexity و Copilot و NotebookLM و Meta AI و Le Chat و Deepseek و You و iAsk و Jasper و Writesonic."
+msgid "**Smart channel grouping** — Direct, Organic Search, Social Media, Email, Referral, Paid Search, Paid Social, and a dedicated **AI Assistants** channel for ChatGPT, Claude, Gemini, Perplexity, Copilot, NotebookLM, Meta AI, Le Chat, Deepseek, You, iAsk, Jasper, and Writesonic."
+msgstr "**تجميع قنوات ذكي** — مباشر، البحث العضوي، وسائل التواصل الاجتماعي، البريد الإلكتروني، الإحالة، البحث المدفوع، التواصل الاجتماعي المدفوع، وقناة **مساعدات الذكاء الاصطناعي** المخصصة لـ ChatGPT و Claude و Gemini و Perplexity و Copilot و NotebookLM و Meta AI و Le Chat و Deepseek و You و iAsk و Jasper و Writesonic."
 
 #. Found in description list item.
-msgid "<strong>Custom events + engagement</strong> — Link clicks (and tagged button clicks via <code>statnive-event-*</code> classes), form submissions, downloads, outbound links, time on page, scroll depth."
-msgstr "<strong>أحداث مخصّصة + تفاعل</strong> — نقرات الروابط (ونقرات الأزرار الموسومة عبر فئات <code>statnive-event-*</code>) وإرسال النماذج والتنزيلات والروابط الصادرة ومدة البقاء في الصفحة وعمق التمرير."
+msgid "**Custom events + engagement** — Link clicks (and tagged button clicks via `statnive-event-*` classes), form submissions, downloads, outbound links, time on page, scroll depth."
+msgstr "**أحداث مخصّصة + تفاعل** — نقرات الروابط (ونقرات الأزرار الموسومة عبر فئات `statnive-event-*`) وإرسال النماذج والتنزيلات والروابط الصادرة ومدة البقاء في الصفحة وعمق التمرير."
 
 #. Found in description list item.
-msgid "<strong>Bot vs human separation</strong> — Real visitors and automated traffic in distinct buckets."
-msgstr "<strong>الفصل بين الروبوتات والبشر</strong> — الزوار الحقيقيون والزيارات الآلية في مجموعتين منفصلتين."
+msgid "**Bot vs human separation** — Real visitors and automated traffic in distinct buckets."
+msgstr "**الفصل بين الروبوتات والبشر** — الزوار الحقيقيون والزيارات الآلية في مجموعتين منفصلتين."
 
 #. Found in description list item.
-msgid "<strong>Geography in tiers</strong> — Zero-config timezone country mapping; optional CDN headers; optional one-click DB-IP city download (free); optional MaxMind GeoLite2."
-msgstr "<strong>جغرافيا متعددة المستويات</strong> — تحديد الدولة عبر المنطقة الزمنية بلا تهيئة؛ ترويسات CDN اختيارية؛ تنزيل اختياري بنقرة واحدة لبيانات مدن DB-IP (مجاني)؛ أو MaxMind GeoLite2 اختياري."
+msgid "**Geography in tiers** — Zero-config timezone country mapping; optional CDN headers; optional one-click DB-IP city download (free); optional MaxMind GeoLite2."
+msgstr "**جغرافيا متعددة المستويات** — تحديد الدولة عبر المنطقة الزمنية بلا تهيئة؛ ترويسات CDN اختيارية؛ تنزيل اختياري بنقرة واحدة لبيانات مدن DB-IP (مجاني)؛ أو MaxMind GeoLite2 اختياري."
 
 #. Found in description list item.
-msgid "<strong>Configurable retention</strong> — 30 / 90 / 180 / 365 days, or Forever. Daily WP-Cron purge."
-msgstr "<strong>مدة احتفاظ قابلة للتهيئة</strong> — 30 / 90 / 180 / 365 يومًا، أو إلى الأبد. تنقية يومية عبر WP-Cron."
+msgid "**Configurable retention** — 30 / 90 / 180 / 365 days, or Forever. Daily WP-Cron purge."
+msgstr "**مدة احتفاظ قابلة للتهيئة** — 30 / 90 / 180 / 365 يومًا، أو إلى الأبد. تنقية يومية عبر WP-Cron."
 
 #. Found in description list item.
-msgid "<strong>WordPress Privacy API</strong> — Personal-data export and erase registered automatically."
-msgstr "<strong>WordPress Privacy API</strong> — تسجيل تصدير البيانات الشخصية ومحوها تلقائيًا."
+msgid "**WordPress Privacy API** — Personal-data export and erase registered automatically."
+msgstr "**WordPress Privacy API** — تسجيل تصدير البيانات الشخصية ومحوها تلقائيًا."
 
 #. Found in description list item.
-msgid "<strong>WP-CLI</strong> — <code>wp statnive cron run</code> for sites with <code>DISABLE_WP_CRON</code>."
-msgstr "<strong>WP-CLI</strong> — <code>wp statnive cron run</code> للمواقع التي تستخدم <code>DISABLE_WP_CRON</code>."
+msgid "**WP-CLI** — `wp statnive cron run` for sites with `DISABLE_WP_CRON`."
+msgstr "**WP-CLI** — `wp statnive cron run` للمواقع التي تستخدم `DISABLE_WP_CRON`."
 
 #. Found in description paragraph.
 msgid "Source code at [github.com/statnive/statnive](https://github.com/statnive/statnive). Learn more at [statnive.com](https://statnive.com)."
@@ -100,16 +104,16 @@ msgid "Installation"
 msgstr "التثبيت"
 
 #. Found in installation list item.
-msgid "Upload the <code>statnive</code> folder to <code>/wp-content/plugins/</code>."
-msgstr "ارفع مجلد <code>statnive</code> إلى <code>/wp-content/plugins/</code>."
+msgid "Upload the `statnive` folder to `/wp-content/plugins/`."
+msgstr "ارفع مجلد `statnive` إلى `/wp-content/plugins/`."
 
 #. Found in installation list item.
-msgid "Activate the plugin through the <strong>Plugins</strong> menu in WordPress."
-msgstr "فعّل الإضافة من قائمة <strong>الإضافات</strong> داخل WordPress."
+msgid "Activate the plugin through the **Plugins** menu in WordPress."
+msgstr "فعّل الإضافة من قائمة **الإضافات** داخل WordPress."
 
 #. Found in installation list item.
-msgid "Open <strong>Statnive</strong> in the admin sidebar."
-msgstr "افتح <strong>Statnive</strong> من القائمة الجانبية لـ admin."
+msgid "Open **Statnive** in the admin sidebar."
+msgstr "افتح **Statnive** من القائمة الجانبية لـ admin."
 
 #. Found in installation paragraph.
 msgid "That's it. Tracking begins immediately — no configuration, no account, no tracking code to paste."
@@ -132,8 +136,8 @@ msgid "Is Statnive GDPR compliant?"
 msgstr "هل Statnive متوافقة مع GDPR؟"
 
 #. Found in faq answer.
-msgid "Statnive is <strong>designed to support</strong> GDPR, CCPA, APPI, and PIPL compliance: no cookies, no PII storage, daily rotating hashes, configurable retention, WordPress Privacy API export/erase, and server-side respect for GPC and DNT signals. Final compliance always depends on your configuration and your privacy policy."
-msgstr "Statnive <strong>مصمَّمة لدعم</strong> الامتثال لـ GDPR و CCPA و APPI و PIPL: بدون كوكيز، بدون تخزين معلومات تعريف شخصية، تجزئات تتغير يوميًا، مدة احتفاظ قابلة للتهيئة، تصدير ومحو البيانات الشخصية عبر WordPress Privacy API، واحترام إشارتي GPC و DNT على جانب الخادم. يظل الامتثال النهائي معتمدًا دائمًا على تهيئتك وعلى سياسة الخصوصية الخاصة بك."
+msgid "Statnive is **designed to support** GDPR, CCPA, APPI, and PIPL compliance: no cookies, no PII storage, daily rotating hashes, configurable retention, WordPress Privacy API export/erase, and server-side respect for GPC and DNT signals. Final compliance always depends on your configuration and your privacy policy."
+msgstr "Statnive **مصمَّمة لدعم** الامتثال لـ GDPR و CCPA و APPI و PIPL: بدون كوكيز، بدون تخزين معلومات تعريف شخصية، تجزئات تتغير يوميًا، مدة احتفاظ قابلة للتهيئة، تصدير ومحو البيانات الشخصية عبر WordPress Privacy API، واحترام إشارتي GPC و DNT على جانب الخادم. يظل الامتثال النهائي معتمدًا دائمًا على تهيئتك وعلى سياسة الخصوصية الخاصة بك."
 
 #. Found in faq question.
 msgid "How does visitor counting work without cookies?"
@@ -148,8 +152,8 @@ msgid "Where is my data stored?"
 msgstr "أين تُخزَّن بياناتي؟"
 
 #. Found in faq answer.
-msgid "In your WordPress database, in tables prefixed <code>statnive_</code>. Nothing leaves your server unless you explicitly enable the optional MaxMind or DB-IP GeoIP downloads (one-time database files, never visitor data). When you uninstall the plugin, all tables and uploaded GeoIP files are removed."
-msgstr "داخل قاعدة بيانات WordPress لديك، في جداول تبدأ بـ <code>statnive_</code>. لا يغادر شيء خادمك إلا إذا فعّلت صراحةً تنزيلات GeoIP الاختيارية من MaxMind أو DB-IP (ملفات قاعدة بيانات تُنزَّل لمرة واحدة، وليست بيانات زوار أبدًا). عند إلغاء تثبيت الإضافة تُحذَف جميع الجداول وملفات GeoIP المُنزَّلة."
+msgid "In your WordPress database, in tables prefixed `statnive_`. Nothing leaves your server unless you explicitly enable the optional MaxMind or DB-IP GeoIP downloads (one-time database files, never visitor data). When you uninstall the plugin, all tables and uploaded GeoIP files are removed."
+msgstr "داخل قاعدة بيانات WordPress لديك، في جداول تبدأ بـ `statnive_`. لا يغادر شيء خادمك إلا إذا فعّلت صراحةً تنزيلات GeoIP الاختيارية من MaxMind أو DB-IP (ملفات قاعدة بيانات تُنزَّل لمرة واحدة، وليست بيانات زوار أبدًا). عند إلغاء تثبيت الإضافة تُحذَف جميع الجداول وملفات GeoIP المُنزَّلة."
 
 #. Found in faq question.
 msgid "Does it work with WooCommerce?"
@@ -180,8 +184,8 @@ msgid "What can cause \"no data\"?"
 msgstr "ما الأسباب التي قد تؤدي إلى ظهور «لا توجد بيانات»؟"
 
 #. Found in faq answer.
-msgid "Common causes: ad blockers, aggressive page caching, CSP rules blocking <code>fetch</code>/<code>sendBeacon</code> (allow <code>connect-src 'self'</code>), GPC or DNT enabled, or <code>DISABLE_WP_CRON</code> without a system cron. Exclude <code>/wp-json/statnive/v1/hit</code> and <code>admin-ajax.php?action=statnive_hit</code> from page caches."
-msgstr "الأسباب الشائعة: مانعات الإعلانات، التخزين المؤقت الصارم للصفحات، قواعد CSP التي تحجب <code>fetch</code>/<code>sendBeacon</code> (اسمح بـ <code>connect-src 'self'</code>)، تفعيل GPC أو DNT، أو استخدام <code>DISABLE_WP_CRON</code> بدون Cron على مستوى النظام. استثنِ <code>/wp-json/statnive/v1/hit</code> و <code>admin-ajax.php?action=statnive_hit</code> من ذاكرة التخزين المؤقت للصفحات."
+msgid "Common causes: ad blockers, aggressive page caching, CSP rules blocking `fetch`/`sendBeacon` (allow `connect-src 'self'`), GPC or DNT enabled, or `DISABLE_WP_CRON` without a system cron. Exclude `/wp-json/statnive/v1/hit` and `admin-ajax.php?action=statnive_hit` from page caches."
+msgstr "الأسباب الشائعة: مانعات الإعلانات، التخزين المؤقت الصارم للصفحات، قواعد CSP التي تحجب `fetch`/`sendBeacon` (اسمح بـ `connect-src 'self'`)، تفعيل GPC أو DNT، أو استخدام `DISABLE_WP_CRON` بدون Cron على مستوى النظام. استثنِ `/wp-json/statnive/v1/hit` و `admin-ajax.php?action=statnive_hit` من ذاكرة التخزين المؤقت للصفحات."
 
 #. Found in faq question.
 msgid "How does Geography work?"
@@ -240,8 +244,8 @@ msgid "External Services"
 msgstr "الخدمات الخارجية"
 
 #. Found in external-services paragraph.
-msgid "This plugin connects to two third-party services, both <strong>opt-in via explicit user action</strong>. No visitor data is ever sent to either service."
-msgstr "تتصل هذه الإضافة بخدمتين تابعتين لطرف ثالث، كلتاهما <strong>اختيارية ولا يتم تفعيلهما إلا بإجراء صريح من المستخدم</strong>. لا يتم إرسال أي بيانات زوار إلى أي من الخدمتين."
+msgid "This plugin connects to two third-party services, both **opt-in via explicit user action**. No visitor data is ever sent to either service."
+msgstr "تتصل هذه الإضافة بخدمتين تابعتين لطرف ثالث، كلتاهما **اختيارية ولا يتم تفعيلهما إلا بإجراء صريح من المستخدم**. لا يتم إرسال أي بيانات زوار إلى أي من الخدمتين."
 
 #. Found in external-services list-item header.
 msgid "MaxMind GeoLite2 (optional)"
@@ -264,8 +268,8 @@ msgid "Data sent: License key + standard HTTP request headers. No visitor data i
 msgstr "البيانات المُرسَلة: مفتاح الترخيص + ترويسات طلب HTTP القياسية. لا يتم نقل أي بيانات زوار."
 
 #. Found in external-services list item.
-msgid "Data received: GeoLite2-City.mmdb file, stored in your <code>wp-content/uploads/statnive/</code> directory"
-msgstr "البيانات المُستقبَلة: ملف GeoLite2-City.mmdb يُخزَّن في مجلد <code>wp-content/uploads/statnive/</code> لديك"
+msgid "Data received: GeoLite2-City.mmdb file, stored in your `wp-content/uploads/statnive/` directory"
+msgstr "البيانات المُستقبَلة: ملف GeoLite2-City.mmdb يُخزَّن في مجلد `wp-content/uploads/statnive/` لديك"
 
 #. Found in external-services list item.
 msgid "Purpose: Approximate visitor geolocation (country / region / coarse city)"
@@ -316,8 +320,8 @@ msgid "Data sent: Standard HTTP request headers only (no visitor data, no accoun
 msgstr "البيانات المُرسَلة: ترويسات طلب HTTP القياسية فقط (بدون بيانات زوار وبدون حساب وبدون مفتاح)"
 
 #. Found in external-services list item.
-msgid "Data received: dbip-city-lite-YYYY-MM.mmdb.gz file, decompressed to your <code>wp-content/uploads/statnive/</code> directory"
-msgstr "البيانات المُستقبَلة: ملف dbip-city-lite-YYYY-MM.mmdb.gz يُفك ضغطه إلى مجلد <code>wp-content/uploads/statnive/</code> لديك"
+msgid "Data received: dbip-city-lite-YYYY-MM.mmdb.gz file, decompressed to your `wp-content/uploads/statnive/` directory"
+msgstr "البيانات المُستقبَلة: ملف dbip-city-lite-YYYY-MM.mmdb.gz يُفك ضغطه إلى مجلد `wp-content/uploads/statnive/` لديك"
 
 #. Found in external-services list item.
 msgid "Purpose: Approximate visitor geolocation (city / region / country)"
@@ -350,6 +354,10 @@ msgstr "سياسة الخصوصية"
 #. Found in privacy-policy paragraph.
 msgid "All analytics data stays in your WordPress database. Raw IPs are used only for the optional GeoIP lookup and are never persisted. Statnive registers with the WordPress Privacy API for personal-data export and erasure."
 msgstr "تبقى جميع بيانات التحليلات داخل قاعدة بيانات WordPress الخاصة بك. تُستخدَم عناوين IP الخام فقط لعملية البحث الاختيارية في GeoIP، ولا يتم حفظها أبدًا. تُسجِّل Statnive نفسها في WordPress Privacy API لتصدير البيانات الشخصية ومحوها."
+
+#. Found in changelog header.
+msgid "Changelog"
+msgstr "سجل التغييرات"
 
 #. Found in upgrade-notice header.
 msgid "Upgrade Notice"

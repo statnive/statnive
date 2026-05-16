@@ -11,6 +11,10 @@ msgstr ""
 "Language: zh_CN\n"
 "Project-Id-Version: Plugins - Statnive - Stable Readme (latest release)\n"
 
+#. Plugin title
+msgid "Statnive – Simple, Real-time, Privacy-first Web Analytics"
+msgstr "Statnive — 简单、实时、注重隐私的网站分析"
+
 #. Short description
 msgid "Privacy-first WordPress analytics — cookieless, self-hosted, real-time. A simple Google Analytics alternative with GeoIP and AI-source tracking."
 msgstr "注重隐私的 WordPress 网站分析 — 无 Cookie、自托管、实时。一款简单的 Google Analytics 替代方案，支持 GeoIP 与 AI 来源识别。"

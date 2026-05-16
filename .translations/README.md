@@ -1,4 +1,4 @@
-# Statnive — pre-listing translation seeds
+how# Statnive — pre-listing translation seeds
 
 This directory holds **draft PO files** for the six priority Statnive locales — `de_DE`, `fr_FR`, `ja`, `zh_CN`, `fa_IR`, `ar`. They are generated from `statnive/languages/statnive.pot` and `statnive/readme.txt` against the per-locale style guides in `jaan-to/docs/research/47–52-*.md`.
 

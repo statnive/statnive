@@ -11,9 +11,17 @@ msgstr ""
 "Language: fa_IR\n"
 "Project-Id-Version: Plugins - Statnive - Stable (latest release)\n"
 
+#. Plugin name / readme title.
+msgid "Statnive – Simple, Real-time, Privacy-first Web Analytics"
+msgstr "Statnive – آنالیتیکس وب ساده، بی‌درنگ و حریم‌خصوصی‌محور"
+
 #. Short description.
 msgid "Privacy-first WordPress analytics — cookieless, self-hosted, real-time. A simple Google Analytics alternative with GeoIP and AI-source tracking."
 msgstr "آنالیتیکس WordPress حریم‌خصوصی‌محور — بدون کوکی، خودمیزبان، بی‌درنگ. جایگزینی ساده برای Google Analytics با GeoIP و اندازه‌گیری منابع AI."
+
+#. Description section heading.
+msgid "Description"
+msgstr "توضیحات"
 
 #. Description section, paragraph 1 (heading).
 msgid "**The privacy-first analytics plugin for WordPress.**"
@@ -346,3 +354,15 @@ msgstr "سیاست حریم خصوصی"
 #. Privacy Policy body.
 msgid "All analytics data stays in your WordPress database. Raw IPs are used only for the optional GeoIP lookup and are never persisted. Statnive registers with the WordPress Privacy API for personal-data export and erasure."
 msgstr "همه داده‌های آنالیتیکس در پایگاه داده WordPress شما باقی می‌مانند. IPهای خام تنها برای جست‌وجوی اختیاری GeoIP استفاده می‌شوند و هرگز ذخیره نمی‌شوند. Statnive برای خروجی و حذف داده‌های شخصی با WordPress Privacy API ثبت می‌شود."
+
+#. Changelog section heading.
+msgid "Changelog"
+msgstr "تاریخچه تغییرات"
+
+#. Upgrade Notice section heading.
+msgid "Upgrade Notice"
+msgstr "اطلاعیه به‌روزرسانی"
+
+#. Upgrade Notice body for 0.4.7.
+msgid "First public release on WordPress.org."
+msgstr "نخستین انتشار عمومی در WordPress.org."
