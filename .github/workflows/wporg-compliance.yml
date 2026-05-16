@@ -534,8 +534,10 @@ jobs:
           fi
 
           # statnive.com is the plugin's own homepage/author URI in the
-          # statnive.php header — it's metadata, not an external service call.
-          ALLOWLIST='^(schema\.org|www\.w3\.org|wordpress\.org|api\.wordpress\.org|www\.gnu\.org|statnive\.com)$'
+          # statnive.php header. github.com is the Plugin URI in the same
+          # header (distinct from Author URI per WP.org guideline). Both are
+          # static metadata, not external service calls.
+          ALLOWLIST='^(schema\.org|www\.w3\.org|wordpress\.org|api\.wordpress\.org|www\.gnu\.org|statnive\.com|github\.com)$'
           for host in $CODE_HOSTS; do
             if echo "$host" | grep -qE "$ALLOWLIST"; then
               continue
