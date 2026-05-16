@@ -149,3 +149,9 @@ CHANGELOG.md
 *.swo
 .DS_Store
 Thumbs.db
+
+# Pre-listing translation seeds — uploaded to translate.wordpress.org
+# via Import Translations UI. NOT bundled in the WP.org ZIP (translations
+# are delivered server-side as language packs once locales reach 90% threshold).
+# See statnive/.translations/README.md.
+/.translations

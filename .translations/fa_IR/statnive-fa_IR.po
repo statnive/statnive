@@ -1,0 +1,1045 @@
+# Translation of Plugins - Statnive - Stable (latest release) in Persian
+# This file is distributed under the same license as the Plugins - Statnive - Stable (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2026-05-16 10:00+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Statnive translation seed v0.4.13\n"
+"Language: fa_IR\n"
+"Project-Id-Version: Plugins - Statnive - Stable (latest release)\n"
+
+#. Plugin Name of the plugin
+#: statnive.php
+msgid "Statnive – Simple, Real-time, Privacy-first Web Analytics"
+msgstr "Statnive – آنالیتیکس وب ساده، بی‌درنگ و حریم‌خصوصی‌محور"
+
+#. Plugin URI of the plugin
+#. Author URI of the plugin
+#: statnive.php
+msgid "https://statnive.com"
+msgstr ""
+
+#. Description of the plugin
+#: statnive.php
+msgid "Simple stats, clear decisions. Privacy-first analytics for WordPress."
+msgstr "آمار ساده، تصمیم‌های روشن. آنالیتیکس حریم‌خصوصی‌محور برای WordPress."
+
+#. Author of the plugin
+#: statnive.php
+#: src/Admin/AdminMenuManager.php:39
+msgid "Statnive"
+msgstr "Statnive"
+
+#: src/Admin/AdminBarWidget.php:56
+msgid "Statnive — Today's visitors"
+msgstr "Statnive — بازدیدکنندگان امروز"
+
+#: src/Admin/AdminMenuManager.php:38
+#: src/Privacy/PrivacyEraser.php:43
+#: src/Privacy/PrivacyExporter.php:43
+msgid "Statnive Analytics"
+msgstr "آنالیتیکس Statnive"
+
+#: src/Admin/CronHealth.php:86
+msgid "Daily salt rotation"
+msgstr "چرخش روزانه salt"
+
+#: src/Admin/CronHealth.php:91
+msgid "Daily data aggregation"
+msgstr "تجمیع روزانه داده‌ها"
+
+#: src/Admin/CronHealth.php:96
+msgid "Retention cleanup"
+msgstr "پاک‌سازی نگهداری داده‌ها"
+
+#: src/Admin/CronHealth.php:101
+msgid "Weekly GeoIP database update"
+msgstr "به‌روزرسانی هفتگی پایگاه داده GeoIP"
+
+#: src/Admin/GeoIPNotice.php:96
+msgid "Statnive: GeoIP is enabled but no MaxMind license key is configured."
+msgstr "Statnive: GeoIP فعال است اما هیچ کلید مجوز MaxMind پیکربندی نشده است."
+
+#: src/Admin/GeoIPNotice.php:97
+msgid "Impact: visitor country/region data will not appear in your reports. Page tracking, sources, devices and all other metrics continue to work normally."
+msgstr "تأثیر: داده‌های کشور/منطقه بازدیدکنندگان در گزارش‌های شما نمایش داده نخواهد شد. اندازه‌گیری صفحات، منابع، دستگاه‌ها و سایر معیارها به‌صورت عادی به کار خود ادامه می‌دهند."
+
+#: src/Admin/GeoIPNotice.php:98
+msgid "What Statnive will do: retry the GeoIP database download every week. No additional alerts will be raised until the key is added or GeoIP is disabled."
+msgstr "آنچه Statnive انجام خواهد داد: هر هفته دانلود پایگاه داده GeoIP را دوباره تلاش می‌کند. تا زمانی که کلید اضافه شود یا GeoIP غیرفعال گردد، هیچ هشدار اضافی صادر نخواهد شد."
+
+#. translators: 1: MaxMind signup URL, 2: MaxMind EULA URL
+#: src/Admin/GeoIPNotice.php:102
+#, php-format
+msgid "<strong>To fix:</strong> <a href=\"%1$s\" target=\"_blank\" rel=\"noopener\">get a free MaxMind license key</a> (requires accepting the <a href=\"%2$s\" target=\"_blank\" rel=\"noopener\">GeoLite2 EULA</a>) and paste it into Settings → GeoIP. Or disable GeoIP in Settings to dismiss this notice."
+msgstr "<strong>برای رفع:</strong> <a href=\"%1$s\" target=\"_blank\" rel=\"noopener\">یک کلید مجوز رایگان MaxMind دریافت کنید</a> (نیازمند پذیرش <a href=\"%2$s\" target=\"_blank\" rel=\"noopener\">GeoLite2 EULA</a>) و آن را در تنظیمات ← GeoIP وارد کنید. یا برای پنهان کردن این اعلان، GeoIP را در تنظیمات غیرفعال کنید."
+
+#: src/Admin/GeoIPNotice.php:139
+msgid "Statnive: WordPress cron jobs are not running on time."
+msgstr "Statnive: کارهای cron در WordPress به‌موقع اجرا نمی‌شوند."
+
+#: src/Admin/GeoIPNotice.php:143
+msgid "These Statnive background jobs have not completed within their normal window:"
+msgstr "این کارهای پس‌زمینه Statnive در بازه زمانی عادی خود تکمیل نشده‌اند:"
+
+#. translators: 1: example crontab line, 2: WP-CLI command
+#: src/Admin/GeoIPNotice.php:154
+#, php-format
+msgid "<strong>To fix:</strong> add a system cron that pings <code>wp-cron.php</code> every five minutes — for example <code>%1$s</code> — or run <code>%2$s</code> via WP-CLI."
+msgstr "<strong>برای رفع:</strong> یک cron سیستمی اضافه کنید که هر پنج دقیقه به <code>wp-cron.php</code> درخواست بزند — برای نمونه <code>%1$s</code> — یا <code>%2$s</code> را از طریق WP-CLI اجرا کنید."
+
+#: src/Admin/GeoIPNotice.php:166
+msgid "What Statnive will do automatically: this notice self-dismisses as soon as every job runs again within its normal window. Clicking \"Run cleanup now\" below records a fresh heartbeat, which clears the warning until the next scheduled cycle."
+msgstr "آنچه Statnive به‌صورت خودکار انجام خواهد داد: این اعلان به‌محض اینکه همه کارها دوباره در بازه عادی خود اجرا شوند، خود را پنهان می‌کند. کلیک روی «اکنون پاک‌سازی را اجرا کن» در پایین، یک ضربان تازه ثبت می‌کند که هشدار را تا چرخه زمان‌بندی‌شده بعدی پاک می‌کند."
+
+#: src/Admin/GeoIPNotice.php:172
+msgid "Run cleanup now"
+msgstr "اکنون پاک‌سازی را اجرا کن"
+
+#: src/Admin/GeoIPNotice.php:177
+msgid "Dismiss"
+msgstr "پنهان کردن"
+
+#: src/Admin/GeoIPNotice.php:179
+msgid "Dismiss this Statnive cron warning"
+msgstr "این هشدار cron در Statnive را پنهان کن"
+
+#. translators: %s = job label, e.g. "Daily data aggregation"
+#: src/Admin/GeoIPNotice.php:273
+#, php-format
+msgid "%s — has not run yet."
+msgstr "%s — هنوز اجرا نشده است."
+
+#. translators: 1: job label, 2: localised date/time of last successful run
+#: src/Admin/GeoIPNotice.php:287
+#, php-format
+msgid "%1$s — last ran %2$s."
+msgstr "%1$s — آخرین اجرا %2$s."
+
+#: src/Admin/GeoIPNotice.php:307
+msgid "You do not have permission to run Statnive cron jobs."
+msgstr "شما اجازه اجرای کارهای cron در Statnive را ندارید."
+
+#: src/Admin/GeoIPNotice.php:316
+msgid "Statnive cron jobs ran successfully. The warning will reappear if cron stops firing again."
+msgstr "کارهای cron در Statnive با موفقیت اجرا شدند. در صورت توقف مجدد cron، هشدار دوباره ظاهر خواهد شد."
+
+#. translators: %s = error message
+#: src/Admin/GeoIPNotice.php:321
+#, php-format
+msgid "Statnive cron run failed: %s"
+msgstr "اجرای cron در Statnive ناموفق بود: %s"
+
+#: src/Admin/GeoIPNotice.php:353
+msgid "You do not have permission to dismiss this notice."
+msgstr "شما اجازه پنهان کردن این اعلان را ندارید."
+
+#: src/Cron/CronRegistrar.php:32
+msgid "Once Weekly"
+msgstr "یک بار در هفته"
+
+#: src/Database/Migrator.php:259
+msgid "Statnive: plugin version mismatch detected."
+msgstr "Statnive: عدم تطابق نسخه افزونه شناسایی شد."
+
+#. translators: 1: stored schema version, 2: running plugin version
+#: src/Database/Migrator.php:263
+#, php-format
+msgid "Your database schema is at version %1$s but the running plugin is version %2$s. This may happen if you downgraded the plugin. Please re-install the latest version to avoid data inconsistencies."
+msgstr "طرح‌واره پایگاه داده شما در نسخه %1$s است اما افزونه در حال اجرا نسخه %2$s است. این ممکن است در صورتی رخ دهد که افزونه را به نسخه پایین‌تری برگردانده باشید. لطفاً برای جلوگیری از ناسازگاری داده‌ها، آخرین نسخه را دوباره نصب کنید."
+
+#: src/Plugin.php:124
+msgid "You do not have permission to activate plugins."
+msgstr "شما اجازه فعال‌سازی افزونه‌ها را ندارید."
+
+#: src/Plugin.php:125
+#: src/Plugin.php:141
+#: src/Plugin.php:157
+msgid "Plugin Activation Error"
+msgstr "خطای فعال‌سازی افزونه"
+
+#. translators: 1: Required PHP version, 2: Current PHP version
+#: src/Plugin.php:136
+#: statnive.php:68
+#, php-format
+msgid "Statnive requires PHP %1$s or higher. You are running PHP %2$s."
+msgstr "Statnive به PHP %1$s یا بالاتر نیاز دارد. شما در حال اجرای PHP %2$s هستید."
+
+#. translators: 1: Required WordPress version, 2: Current WordPress version
+#: src/Plugin.php:152
+#: statnive.php:93
+#, php-format
+msgid "Statnive requires WordPress %1$s or higher. You are running WordPress %2$s."
+msgstr "Statnive به WordPress %1$s یا بالاتر نیاز دارد. شما در حال اجرای WordPress %2$s هستید."
+
+#: src/Privacy/ComplianceAuditor.php:70
+msgid "Consent mode configured"
+msgstr "حالت رضایت پیکربندی شد"
+
+#. translators: %s: consent mode name.
+#: src/Privacy/ComplianceAuditor.php:74
+#, php-format
+msgid "Consent mode: %s"
+msgstr "حالت رضایت: %s"
+
+#: src/Privacy/ComplianceAuditor.php:75
+msgid "No consent mode configured. Set one in Settings."
+msgstr "هیچ حالت رضایتی پیکربندی نشده است. یکی را در تنظیمات تعیین کنید."
+
+#: src/Privacy/ComplianceAuditor.php:88
+msgid "Do Not Track honored"
+msgstr "Do Not Track رعایت می‌شود"
+
+#: src/Privacy/ComplianceAuditor.php:91
+msgid "DNT header is respected."
+msgstr "هدر DNT رعایت می‌شود."
+
+#: src/Privacy/ComplianceAuditor.php:92
+msgid "DNT header is not honored. Consider enabling for privacy compliance."
+msgstr "هدر DNT رعایت نمی‌شود. برای انطباق با حریم خصوصی، فعال کردن آن را در نظر بگیرید."
+
+#: src/Privacy/ComplianceAuditor.php:105
+msgid "Global Privacy Control honored"
+msgstr "Global Privacy Control رعایت می‌شود"
+
+#: src/Privacy/ComplianceAuditor.php:108
+msgid "GPC header is respected."
+msgstr "هدر GPC رعایت می‌شود."
+
+#: src/Privacy/ComplianceAuditor.php:109
+msgid "GPC header is not honored. Required under some US state laws."
+msgstr "هدر GPC رعایت نمی‌شود. بر اساس برخی قوانین ایالتی آمریکا الزامی است."
+
+#: src/Privacy/ComplianceAuditor.php:123
+msgid "Data retention configured"
+msgstr "نگهداری داده‌ها پیکربندی شد"
+
+#. translators: %1$d: number of days, %2$s: retention mode.
+#: src/Privacy/ComplianceAuditor.php:127
+#, php-format
+msgid "Data retained for %1$d days (%2$s mode)."
+msgstr "داده‌ها برای %1$d روز نگهداری می‌شوند (حالت %2$s)."
+
+#: src/Privacy/ComplianceAuditor.php:128
+msgid "Data retained forever. Consider setting a retention period for compliance."
+msgstr "داده‌ها برای همیشه نگهداری می‌شوند. برای انطباق، تعیین یک دوره نگهداری را در نظر بگیرید."
+
+#: src/Privacy/ComplianceAuditor.php:142
+msgid "Privacy policy page published"
+msgstr "صفحه سیاست حریم خصوصی منتشر شد"
+
+#: src/Privacy/ComplianceAuditor.php:145
+msgid "Privacy policy page is published. Statnive content auto-generated."
+msgstr "صفحه سیاست حریم خصوصی منتشرشده است. محتوای Statnive به‌صورت خودکار تولید شد."
+
+#: src/Privacy/ComplianceAuditor.php:146
+msgid "No published privacy policy page found. Create one in Settings → Privacy."
+msgstr "هیچ صفحه سیاست حریم خصوصی منتشرشده‌ای یافت نشد. یکی را در تنظیمات ← حریم خصوصی ایجاد کنید."
+
+#: src/Privacy/ComplianceAuditor.php:159
+msgid "No raw IP addresses stored"
+msgstr "هیچ آدرس IP خامی ذخیره نمی‌شود"
+
+#: src/Privacy/ComplianceAuditor.php:161
+msgid "IP addresses are discarded immediately after hashing and GeoIP lookup."
+msgstr "آدرس‌های IP بلافاصله پس از hash شدن و جست‌وجوی GeoIP دور انداخته می‌شوند."
+
+#: src/Privacy/ComplianceAuditor.php:181
+msgid "Daily salt rotation active"
+msgstr "چرخش روزانه salt فعال است"
+
+#. translators: %s: datetime of last salt rotation.
+#: src/Privacy/ComplianceAuditor.php:185
+#, php-format
+msgid "Last rotation: %s"
+msgstr "آخرین چرخش: %s"
+
+#: src/Privacy/ComplianceAuditor.php:186
+msgid "Salt rotation may not be running. Check WP-Cron."
+msgstr "ممکن است چرخش salt در حال اجرا نباشد. WP-Cron را بررسی کنید."
+
+#: src/Privacy/ComplianceAuditor.php:198
+msgid "Cookie-free tracking"
+msgstr "اندازه‌گیری بدون کوکی"
+
+#: src/Privacy/ComplianceAuditor.php:200
+msgid "Statnive uses no cookies, localStorage, or sessionStorage by design."
+msgstr "Statnive بنا به طراحی از هیچ کوکی، localStorage یا sessionStorage استفاده نمی‌کند."
+
+#: src/Privacy/ComplianceAuditor.php:213
+#: src/Privacy/ComplianceAuditor.php:222
+msgid "Data purge operational"
+msgstr "پاک‌سازی داده‌ها فعال است"
+
+#: src/Privacy/ComplianceAuditor.php:215
+msgid "Retention mode is \"forever\" — no purge needed."
+msgstr "حالت نگهداری روی «همیشه» تنظیم شده است — به پاک‌سازی نیازی نیست."
+
+#: src/Privacy/ComplianceAuditor.php:225
+msgid "Data purge cron is scheduled."
+msgstr "cron پاک‌سازی داده‌ها زمان‌بندی شده است."
+
+#: src/Privacy/ComplianceAuditor.php:226
+msgid "Data purge cron not scheduled. Deactivate and reactivate the plugin."
+msgstr "cron پاک‌سازی داده‌ها زمان‌بندی نشده است. افزونه را غیرفعال و دوباره فعال کنید."
+
+#: src/Privacy/ComplianceAuditor.php:239
+msgid "HTTPS enabled"
+msgstr "HTTPS فعال است"
+
+#: src/Privacy/ComplianceAuditor.php:242
+msgid "Site is served over HTTPS."
+msgstr "وب‌سایت بر روی HTTPS ارائه می‌شود."
+
+#: src/Privacy/ComplianceAuditor.php:243
+msgid "Site not using HTTPS. Analytics data transmitted in plaintext."
+msgstr "وب‌سایت از HTTPS استفاده نمی‌کند. داده‌های آنالیتیکس به‌صورت متن ساده منتقل می‌شوند."
+
+#. translators: %d: number of sessions anonymized
+#: src/Privacy/PrivacyEraser.php:124
+#, php-format
+msgid "Anonymized %d analytics session(s). Aggregate statistics preserved."
+msgstr "%d جلسه آنالیتیکس ناشناس‌سازی شد. آمار تجمیعی حفظ شد."
+
+#: src/Privacy/PrivacyExporter.php:102
+msgid "Session Start"
+msgstr "شروع جلسه"
+
+#: src/Privacy/PrivacyExporter.php:106
+msgid "Session End"
+msgstr "پایان جلسه"
+
+#: src/Privacy/PrivacyExporter.php:107
+msgid "Active"
+msgstr "فعال"
+
+#: src/Privacy/PrivacyExporter.php:110
+msgid "Pages Viewed"
+msgstr "صفحات مشاهده‌شده"
+
+#: src/Privacy/PrivacyExporter.php:114
+msgid "Duration (seconds)"
+msgstr "مدت زمان (ثانیه)"
+
+#: src/Privacy/PrivacyExporter.php:139
+msgid "Pages Visited"
+msgstr "صفحات بازدیدشده"
+
+#: src/Privacy/PrivacyExporter.php:146
+msgid "Statnive Analytics Sessions"
+msgstr "جلسات آنالیتیکس Statnive"
+
+#: src/Privacy/PrivacyExporter.php:147
+msgid "Analytics sessions recorded by Statnive. No IP addresses or cookies are stored."
+msgstr "جلسات آنالیتیکس ثبت‌شده توسط Statnive. هیچ آدرس IP یا کوکی ذخیره نمی‌شود."
+
+#: src/Privacy/PrivacyPolicyGenerator.php:55
+msgid "Analytics (Statnive)"
+msgstr "آنالیتیکس (Statnive)"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:56
+msgid "This website uses Statnive, a privacy-first analytics plugin that runs entirely on our server. No data is shared with third-party services."
+msgstr "این وب‌سایت از Statnive استفاده می‌کند، یک افزونه آنالیتیکس حریم‌خصوصی‌محور که به‌طور کامل بر روی سرور ما اجرا می‌شود. هیچ داده‌ای با سرویس‌های شخص ثالث به اشتراک گذاشته نمی‌شود."
+
+#: src/Privacy/PrivacyPolicyGenerator.php:59
+msgid "Cookies & Tracking"
+msgstr "کوکی‌ها و اندازه‌گیری"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:60
+msgid "Statnive does not use cookies, localStorage, sessionStorage, or any form of browser fingerprinting. Visitor identification uses a daily-rotating cryptographic hash that cannot be reversed or used to track individuals across days."
+msgstr "Statnive از کوکی، localStorage، sessionStorage یا هیچ‌گونه اثرانگشت‌گیری مرورگر استفاده نمی‌کند. شناسایی بازدیدکنندگان با یک hash رمزنگاری‌شده با چرخش روزانه انجام می‌شود که قابل بازگشت نیست و نمی‌توان از آن برای پیگیری افراد در طول روزها استفاده کرد."
+
+#: src/Privacy/PrivacyPolicyGenerator.php:63
+msgid "Data Collected"
+msgstr "داده‌های جمع‌آوری‌شده"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:64
+msgid "We collect the following anonymized data for each page visit:"
+msgstr "ما داده‌های ناشناس‌سازی‌شده زیر را برای هر بازدید صفحه جمع‌آوری می‌کنیم:"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:66
+msgid "Page URL visited (without query parameters)"
+msgstr "نشانی URL صفحه بازدیدشده (بدون پارامترهای پرس‌وجو)"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:67
+msgid "Referrer URL (domain only, query parameters stripped)"
+msgstr "نشانی URL ارجاع‌دهنده (تنها دامنه، پارامترهای پرس‌وجو حذف می‌شوند)"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:68
+msgid "Country and city (derived from IP, which is immediately discarded)"
+msgstr "کشور و شهر (استخراج‌شده از IP که بلافاصله دور انداخته می‌شود)"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:69
+msgid "Device type, browser, and operating system"
+msgstr "نوع دستگاه، مرورگر و سیستم‌عامل"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:70
+msgid "Screen resolution, language, and timezone"
+msgstr "رزولوشن صفحه، زبان و منطقه زمانی"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:74
+msgid "IP Address Handling"
+msgstr "مدیریت آدرس IP"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:75
+msgid "Your IP address is never stored. It is used only momentarily to determine your approximate geographic location and to generate a one-way cryptographic hash for visit counting. The IP is discarded immediately after processing and cannot be recovered from the stored hash."
+msgstr "آدرس IP شما هرگز ذخیره نمی‌شود. تنها لحظه‌ای برای تعیین موقعیت جغرافیایی تقریبی شما و تولید یک hash رمزنگاری‌شده یک‌طرفه برای شمارش بازدید استفاده می‌شود. IP بلافاصله پس از پردازش دور انداخته می‌شود و از hash ذخیره‌شده قابل بازیابی نیست."
+
+#: src/Privacy/PrivacyPolicyGenerator.php:76
+msgid "When no IP-derived geolocation source is configured, an approximate country may be inferred from your browser’s timezone setting. The timezone string is processed on this site’s server only and is not transmitted to any third party."
+msgstr "زمانی که هیچ منبع موقعیت‌یابی جغرافیایی مبتنی بر IP پیکربندی نشده باشد، ممکن است کشوری تقریبی از تنظیمات منطقه زمانی مرورگر شما استنباط شود. رشته منطقه زمانی تنها بر روی سرور این وب‌سایت پردازش می‌شود و به هیچ شخص ثالثی منتقل نمی‌شود."
+
+#: src/Privacy/PrivacyPolicyGenerator.php:79
+msgid "Consent"
+msgstr "رضایت"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:81
+msgid "Because Statnive uses no cookies and stores no personal data, analytics run in cookieless mode without requiring consent under most privacy regulations."
+msgstr "از آنجا که Statnive از هیچ کوکی استفاده نمی‌کند و هیچ داده شخصی ذخیره نمی‌کند، آنالیتیکس در حالت بدون کوکی اجرا می‌شود و بر اساس بیشتر مقررات حریم خصوصی نیازی به رضایت ندارد."
+
+#: src/Privacy/PrivacyPolicyGenerator.php:83
+msgid "Analytics are disabled until you provide explicit consent through our cookie/consent banner. No data is collected before consent is granted."
+msgstr "آنالیتیکس تا زمانی که شما از طریق بنر کوکی/رضایت ما اجازه صریح ندهید، غیرفعال است. پیش از اعطای رضایت هیچ داده‌ای جمع‌آوری نمی‌شود."
+
+#: src/Privacy/PrivacyPolicyGenerator.php:85
+msgid "Analytics are active for all visitors. You may opt out using your browser's Do Not Track or Global Privacy Control settings."
+msgstr "آنالیتیکس برای همه بازدیدکنندگان فعال است. می‌توانید با استفاده از تنظیمات Do Not Track یا Global Privacy Control مرورگر خود انصراف دهید."
+
+#: src/Privacy/PrivacyPolicyGenerator.php:90
+msgid "Do Not Track & Global Privacy Control"
+msgstr "Do Not Track و Global Privacy Control"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:93
+msgid "Do Not Track (DNT)"
+msgstr "Do Not Track (DNT)"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:96
+msgid "Global Privacy Control (GPC)"
+msgstr "Global Privacy Control (GPC)"
+
+#. translators: %s: comma-separated list of privacy signals
+#: src/Privacy/PrivacyPolicyGenerator.php:100
+#, php-format
+msgid "We honor the following browser privacy signals: %s. When enabled, no analytics data is collected."
+msgstr "ما سیگنال‌های حریم خصوصی مرورگر زیر را رعایت می‌کنیم: %s. زمانی که فعال باشند، هیچ داده آنالیتیکسی جمع‌آوری نمی‌شود."
+
+#: src/Privacy/PrivacyPolicyGenerator.php:106
+msgid "Data Retention"
+msgstr "نگهداری داده‌ها"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:108
+msgid "Aggregated analytics data is retained indefinitely. No personal data is stored."
+msgstr "داده‌های تجمیعی آنالیتیکس به‌صورت نامحدود نگهداری می‌شوند. هیچ داده شخصی ذخیره نمی‌شود."
+
+#. translators: %d: number of days
+#: src/Privacy/PrivacyPolicyGenerator.php:112
+#, php-format
+msgid "Raw analytics data is automatically deleted after %d days. Only aggregated statistics are retained for historical reporting."
+msgstr "داده‌های خام آنالیتیکس پس از %d روز به‌صورت خودکار حذف می‌شوند. تنها آمار تجمیعی برای گزارش‌گیری تاریخی نگهداری می‌شوند."
+
+#: src/Privacy/PrivacyPolicyGenerator.php:118
+msgid "Your Rights"
+msgstr "حقوق شما"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:119
+msgid "You may request export or deletion of any analytics data associated with your user account through the WordPress personal data tools. Anonymous visitor data cannot be attributed to individuals due to the cookieless, hash-based architecture."
+msgstr "شما می‌توانید از طریق ابزارهای داده شخصی WordPress، خروجی گرفتن یا حذف هرگونه داده آنالیتیکس مرتبط با حساب کاربری خود را درخواست کنید. به‌دلیل معماری بدون کوکی و مبتنی بر hash، داده‌های ناشناس بازدیدکنندگان قابل انتساب به افراد نیست."
+
+#: src/Privacy/SiteHealthIntegration.php:33
+msgid "Statnive Privacy Compliance"
+msgstr "انطباق حریم خصوصی Statnive"
+
+#: src/Privacy/SiteHealthIntegration.php:38
+msgid "Statnive Data Retention"
+msgstr "نگهداری داده‌های Statnive"
+
+#: src/Privacy/SiteHealthIntegration.php:55
+msgid "Statnive privacy compliance is strong."
+msgstr "انطباق حریم خصوصی Statnive قوی است."
+
+#: src/Privacy/SiteHealthIntegration.php:58
+msgid "Statnive privacy settings could be improved. Review the Privacy Audit in your dashboard."
+msgstr "تنظیمات حریم خصوصی Statnive می‌توانند بهبود یابند. بازرسی حریم خصوصی را در داشبورد خود بررسی کنید."
+
+#: src/Privacy/SiteHealthIntegration.php:61
+msgid "Statnive privacy compliance needs attention. Open Settings to configure privacy options."
+msgstr "انطباق حریم خصوصی Statnive نیازمند توجه است. برای پیکربندی گزینه‌های حریم خصوصی، تنظیمات را باز کنید."
+
+#. translators: %d: compliance score
+#: src/Privacy/SiteHealthIntegration.php:67
+#, php-format
+msgid "Statnive Privacy Score: %d/100"
+msgstr "امتیاز حریم خصوصی Statnive: %d/100"
+
+#: src/Privacy/SiteHealthIntegration.php:79
+msgid "Review Privacy Settings"
+msgstr "بررسی تنظیمات حریم خصوصی"
+
+#: src/Privacy/SiteHealthIntegration.php:96
+msgid "Statnive: Data retained indefinitely"
+msgstr "Statnive: داده‌ها به‌صورت نامحدود نگهداری می‌شوند"
+
+#: src/Privacy/SiteHealthIntegration.php:102
+msgid "Analytics data is retained forever. Consider setting a retention period for data minimization best practices."
+msgstr "داده‌های آنالیتیکس برای همیشه نگهداری می‌شوند. برای رعایت بهترین روش‌های کمینه‌سازی داده، تعیین یک دوره نگهداری را در نظر بگیرید."
+
+#: src/Privacy/SiteHealthIntegration.php:106
+msgid "Configure Retention"
+msgstr "پیکربندی نگهداری"
+
+#. translators: %1$d: days, %2$s: mode
+#: src/Privacy/SiteHealthIntegration.php:115
+#, php-format
+msgid "Statnive: %1$d-day retention (%2$s)"
+msgstr "Statnive: نگهداری %1$d روزه (%2$s)"
+
+#: src/Privacy/SiteHealthIntegration.php:124
+msgid "Data retention is configured with automatic cleanup."
+msgstr "نگهداری داده‌ها با پاک‌سازی خودکار پیکربندی‌شده است."
+
+#: statnive.php:111
+msgid "Statnive: Composer autoloader not found. Please run \"composer install\" in the plugin directory."
+msgstr "Statnive: بارگذار خودکار Composer یافت نشد. لطفاً «composer install» را در پوشه افزونه اجرا کنید."
+
+# React/TypeScript-source strings (merged by bin/extract-react-pot.mjs).
+
+#: resources/react/components/charts/pie-chart-card.tsx:88
+msgid "Total"
+msgstr "کل"
+
+#: resources/react/components/charts/pie-chart-card.tsx:101
+#: resources/react/pages/devices.tsx:57
+#: resources/react/pages/devices.tsx:64
+msgid "Name"
+msgstr "نام"
+
+#: resources/react/components/charts/pie-chart-card.tsx:102
+#: resources/react/components/charts/time-series-chart.tsx:44
+#: resources/react/components/shared/dual-bar-cell.tsx:22
+#: resources/react/pages/overview.tsx:115
+msgid "Visitors"
+msgstr "بازدیدکنندگان"
+
+#: resources/react/components/charts/pie-chart-card.tsx:103
+msgid "Percentage"
+msgstr "درصد"
+
+#: resources/react/components/charts/time-series-chart.tsx:45
+#: resources/react/components/shared/dual-bar-cell.tsx:31
+#: resources/react/pages/overview.tsx:121
+msgid "Sessions"
+msgstr "جلسات"
+
+#: resources/react/components/charts/time-series-chart.tsx:89
+msgid "Visitors and sessions over time"
+msgstr "بازدیدکنندگان و جلسات در طول زمان"
+
+#: resources/react/components/charts/time-series-chart.tsx:92
+msgid "Date"
+msgstr "تاریخ"
+
+#: resources/react/components/layouts/dashboard-layout.tsx:81
+msgid "Skip to content"
+msgstr "پرش به محتوا"
+
+#: resources/react/components/layouts/dashboard-layout.tsx:107
+msgid "Dashboard navigation"
+msgstr "ناوبری داشبورد"
+
+#: resources/react/components/shared/data-table.tsx:40
+msgid "No data available"
+msgstr "هیچ داده‌ای در دسترس نیست"
+
+#: resources/react/components/shared/date-range-picker.tsx:20
+msgid "Date range"
+msgstr "بازه تاریخ"
+
+#: resources/react/components/shared/kpi-card.tsx:39
+msgid "Change %1$s %2$s versus previous period"
+msgstr "تغییر %1$s %2$s نسبت به دوره قبلی"
+
+#: resources/react/components/shared/kpi-card.tsx:40
+msgid "up"
+msgstr "افزایش"
+
+#: resources/react/components/shared/kpi-card.tsx:40
+msgid "down"
+msgstr "کاهش"
+
+#: resources/react/components/shared/realtime-counter.tsx:14
+msgid "%d active visitors"
+msgstr "%d بازدیدکننده فعال"
+
+#: resources/react/components/shared/realtime-counter.tsx:25
+msgid "online"
+msgstr "آنلاین"
+
+#: resources/react/lib/wp-commands.ts:26
+msgid "Statnive: Go to Overview"
+msgstr "Statnive: رفتن به نمای کلی"
+
+#: resources/react/lib/wp-commands.ts:27
+msgid "Statnive: Go to Pages"
+msgstr "Statnive: رفتن به صفحات"
+
+#: resources/react/lib/wp-commands.ts:28
+msgid "Statnive: Go to Referrers"
+msgstr "Statnive: رفتن به ارجاع‌دهندگان"
+
+#: resources/react/lib/wp-commands.ts:29
+msgid "Statnive: Go to Geography"
+msgstr "Statnive: رفتن به جغرافیا"
+
+#: resources/react/lib/wp-commands.ts:30
+msgid "Statnive: Go to Devices"
+msgstr "Statnive: رفتن به دستگاه‌ها"
+
+#: resources/react/lib/wp-commands.ts:31
+msgid "Statnive: Go to Real-time"
+msgstr "Statnive: رفتن به بی‌درنگ"
+
+#: resources/react/lib/wp-commands.ts:32
+msgid "Statnive: Go to Settings"
+msgstr "Statnive: رفتن به تنظیمات"
+
+#: resources/react/pages/devices.tsx:32
+msgid "Unknown"
+msgstr "ناشناخته"
+
+#: resources/react/pages/devices.tsx:40
+msgid "Human"
+msgstr "انسان"
+
+#: resources/react/pages/devices.tsx:41
+msgid "Bot"
+msgstr "ربات"
+
+#: resources/react/pages/devices.tsx:58
+#: resources/react/pages/devices.tsx:65
+#: resources/react/pages/geography.tsx:39
+#: resources/react/pages/geography.tsx:48
+#: resources/react/pages/languages.tsx:22
+#: resources/react/pages/overview.tsx:58
+#: resources/react/pages/referrers.tsx:40
+msgid "Visitors / Sessions"
+msgstr "بازدیدکنندگان / جلسات"
+
+#: resources/react/pages/devices.tsx:70
+msgid "No device data for this period. If your site has traffic, data should appear within minutes. If nothing shows after 10 minutes, check Settings → Diagnostics."
+msgstr "هیچ داده‌ای از دستگاه‌ها برای این دوره وجود ندارد. اگر وب‌سایت شما ترافیک دارد، داده‌ها باید ظرف چند دقیقه نمایش داده شوند. اگر پس از 10 دقیقه چیزی نشان داده نشد، تنظیمات ← تشخیص را بررسی کنید."
+
+#: resources/react/pages/devices.tsx:74
+msgid "Devices"
+msgstr "دستگاه‌ها"
+
+#: resources/react/pages/devices.tsx:79
+msgid "Device Distribution"
+msgstr "توزیع دستگاه‌ها"
+
+#: resources/react/pages/devices.tsx:84
+msgid "Bot vs Human"
+msgstr "ربات در برابر انسان"
+
+#: resources/react/pages/devices.tsx:93
+msgid "Browsers"
+msgstr "مرورگرها"
+
+#: resources/react/pages/devices.tsx:96
+msgid "Operating Systems"
+msgstr "سیستم‌عامل‌ها"
+
+#: resources/react/pages/geography.tsx:38
+#: resources/react/pages/geography.tsx:47
+msgid "Country"
+msgstr "کشور"
+
+#: resources/react/pages/geography.tsx:46
+msgid "City"
+msgstr "شهر"
+
+#: resources/react/pages/geography.tsx:54
+msgid "No geography data for this period. If your site has traffic, data should appear within minutes. If nothing shows after 10 minutes, check Settings → Diagnostics."
+msgstr "هیچ داده جغرافیایی برای این دوره وجود ندارد. اگر وب‌سایت شما ترافیک دارد، داده‌ها باید ظرف چند دقیقه نمایش داده شوند. اگر پس از 10 دقیقه چیزی نشان داده نشد، تنظیمات ← تشخیص را بررسی کنید."
+
+#: resources/react/pages/geography.tsx:55
+msgid "No geography data for this period. The free DB-IP city database is active; data will appear as traffic arrives."
+msgstr "هیچ داده جغرافیایی برای این دوره وجود ندارد. پایگاه داده شهری رایگان DB-IP فعال است؛ داده‌ها با ورود ترافیک نمایش داده خواهند شد."
+
+#: resources/react/pages/geography.tsx:56
+msgid "No visitors with a resolvable country in this period. Country detection via your CDN is active; data will appear as traffic arrives."
+msgstr "هیچ بازدیدکننده‌ای با کشور قابل تشخیص در این دوره وجود ندارد. تشخیص کشور از طریق CDN شما فعال است؛ داده‌ها با ورود ترافیک نمایش داده خواهند شد."
+
+#: resources/react/pages/geography.tsx:57
+msgid "No visitors with a resolvable country in this period. Approximate country is being derived from each visitor’s browser timezone; for precise city-level data, enable DB-IP below or configure MaxMind GeoIP in Settings → GeoIP."
+msgstr "هیچ بازدیدکننده‌ای با کشور قابل تشخیص در این دوره وجود ندارد. کشور تقریبی از منطقه زمانی مرورگر هر بازدیدکننده استخراج می‌شود؛ برای داده‌های دقیق در سطح شهر، DB-IP را در پایین فعال کنید یا MaxMind GeoIP را در تنظیمات ← GeoIP پیکربندی کنید."
+
+#: resources/react/pages/geography.tsx:58
+msgid "Geography resolution is currently disabled. Re-enable the timezone fallback, configure MaxMind GeoIP, or place your site behind a CDN that sets a country header."
+msgstr "تشخیص جغرافیا در حال حاضر غیرفعال است. بازگشت به منطقه زمانی را دوباره فعال کنید، MaxMind GeoIP را پیکربندی کنید، یا وب‌سایت خود را پشت یک CDN که هدر کشور را تنظیم می‌کند قرار دهید."
+
+#: resources/react/pages/geography.tsx:67
+msgid "Geography"
+msgstr "جغرافیا"
+
+#: resources/react/pages/geography.tsx:73
+msgid "Want city-level data?"
+msgstr "داده در سطح شهر می‌خواهید؟"
+
+#: resources/react/pages/geography.tsx:75
+msgid "Enable the free DB-IP city database. No account, no key — one click. ~80 MB downloads to your uploads directory. CC-BY-4.0."
+msgstr "پایگاه داده شهری رایگان DB-IP را فعال کنید. بدون حساب، بدون کلید — تنها یک کلیک. حدود 80 MB در پوشه بارگذاری‌های شما دانلود می‌شود. CC-BY-4.0."
+
+#: resources/react/pages/geography.tsx:85
+msgid "Enabling…"
+msgstr "در حال فعال‌سازی…"
+
+#: resources/react/pages/geography.tsx:86
+msgid "Enable city-level geography"
+msgstr "فعال‌سازی جغرافیا در سطح شهر"
+
+#: resources/react/pages/geography.tsx:91
+msgid "Could not enable DB-IP. Try again, or configure MaxMind in Settings → GeoIP."
+msgstr "نمی‌توان DB-IP را فعال کرد. دوباره تلاش کنید، یا MaxMind را در تنظیمات ← GeoIP پیکربندی کنید."
+
+#: resources/react/pages/geography.tsx:99
+msgid "Countries"
+msgstr "کشورها"
+
+#: resources/react/pages/geography.tsx:102
+msgid "Cities"
+msgstr "شهرها"
+
+#: resources/react/pages/geography.tsx:108
+msgid "GeoIP data © DB-IP under CC-BY 4.0"
+msgstr "داده‌های GeoIP © DB-IP تحت CC-BY 4.0"
+
+#: resources/react/pages/languages.tsx:21
+msgid "Language"
+msgstr "زبان"
+
+#: resources/react/pages/languages.tsx:29
+msgid "Languages"
+msgstr "زبان‌ها"
+
+#: resources/react/pages/languages.tsx:32
+msgid "Visitor Languages"
+msgstr "زبان‌های بازدیدکنندگان"
+
+#: resources/react/pages/languages.tsx:38
+msgid "No language data for this period. If your site has traffic, data should appear within minutes. If nothing shows after 10 minutes, check Settings → Diagnostics."
+msgstr "هیچ داده‌ای از زبان برای این دوره وجود ندارد. اگر وب‌سایت شما ترافیک دارد، داده‌ها باید ظرف چند دقیقه نمایش داده شوند. اگر پس از 10 دقیقه چیزی نشان داده نشد، تنظیمات ← تشخیص را بررسی کنید."
+
+#: resources/react/pages/overview.tsx:46
+#: resources/react/pages/referrers.tsx:38
+msgid "Source"
+msgstr "منبع"
+
+#: resources/react/pages/overview.tsx:49
+#: resources/react/pages/overview.tsx:51
+#: resources/react/pages/referrers.tsx:104
+msgid "Direct"
+msgstr "مستقیم"
+
+#: resources/react/pages/overview.tsx:81
+#: resources/react/pages/pages.tsx:57
+#: resources/react/pages/pages.tsx:72
+msgid "Page"
+msgstr "صفحه"
+
+#: resources/react/pages/overview.tsx:90
+#: resources/react/pages/pages.tsx:65
+msgid "Visitors / Views"
+msgstr "بازدیدکنندگان / نمایش‌ها"
+
+#: resources/react/pages/overview.tsx:101
+msgid "Today"
+msgstr "امروز"
+
+#: resources/react/pages/overview.tsx:104
+msgid "Last %s"
+msgstr "%s گذشته"
+
+#: resources/react/pages/overview.tsx:110
+msgid "Overview"
+msgstr "نمای کلی"
+
+#: resources/react/pages/overview.tsx:127
+msgid "Pageviews"
+msgstr "بازدیدهای صفحه"
+
+#: resources/react/pages/overview.tsx:133
+#: resources/react/pages/pages.tsx:66
+msgid "Avg Duration"
+msgstr "میانگین مدت زمان"
+
+#: resources/react/pages/overview.tsx:145
+msgid "Visitors & Sessions — %s"
+msgstr "بازدیدکنندگان و جلسات — %s"
+
+#: resources/react/pages/overview.tsx:156
+msgid "Top Sources"
+msgstr "منابع برتر"
+
+#: resources/react/pages/overview.tsx:162
+msgid "No traffic sources recorded yet. New visits will appear within a few minutes — if nothing shows after 10 minutes, run the self-test under Settings → Diagnostics or check Settings → Tracking is enabled."
+msgstr "هنوز هیچ منبع ترافیکی ثبت نشده است. بازدیدهای جدید ظرف چند دقیقه نمایش داده خواهند شد — اگر پس از 10 دقیقه چیزی نشان داده نشد، خودآزمایی را از تنظیمات ← تشخیص اجرا کنید یا بررسی کنید که تنظیمات ← اندازه‌گیری فعال باشد."
+
+#: resources/react/pages/overview.tsx:167
+msgid "Top Pages"
+msgstr "صفحات برتر"
+
+#: resources/react/pages/overview.tsx:173
+msgid "No page data recorded yet. Tracking is active — pageviews will appear after the next visit. If nothing shows after 10 minutes, run the self-test under Settings → Diagnostics."
+msgstr "هنوز هیچ داده‌ای از صفحه ثبت نشده است. اندازه‌گیری فعال است — بازدیدهای صفحه پس از بازدید بعدی نمایش داده خواهند شد. اگر پس از 10 دقیقه چیزی نشان داده نشد، خودآزمایی را از تنظیمات ← تشخیص اجرا کنید."
+
+#: resources/react/pages/pages.tsx:76
+msgid "Entries / Visitors"
+msgstr "ورودی‌ها / بازدیدکنندگان"
+
+#: resources/react/pages/pages.tsx:77
+msgid "Exits / Visitors"
+msgstr "خروجی‌ها / بازدیدکنندگان"
+
+#: resources/react/pages/pages.tsx:79
+msgid "No page data for this period. If your site has traffic, data should appear within minutes. If nothing shows after 10 minutes, check Settings → Diagnostics."
+msgstr "هیچ داده‌ای از صفحه برای این دوره وجود ندارد. اگر وب‌سایت شما ترافیک دارد، داده‌ها باید ظرف چند دقیقه نمایش داده شوند. اگر پس از 10 دقیقه چیزی نشان داده نشد، تنظیمات ← تشخیص را بررسی کنید."
+
+#: resources/react/pages/pages.tsx:83
+msgid "Pages"
+msgstr "صفحات"
+
+#: resources/react/pages/pages.tsx:90
+msgid "Search pages"
+msgstr "جست‌وجوی صفحات"
+
+#: resources/react/pages/pages.tsx:91
+msgid "Search pages..."
+msgstr "جست‌وجوی صفحات..."
+
+#: resources/react/pages/pages.tsx:101
+msgid "Top Content"
+msgstr "محتوای برتر"
+
+#: resources/react/pages/pages.tsx:115
+msgid "Entry Pages"
+msgstr "صفحات ورودی"
+
+#: resources/react/pages/pages.tsx:126
+msgid "Exit Pages"
+msgstr "صفحات خروجی"
+
+#: resources/react/pages/realtime.tsx:12
+msgid "Real-time"
+msgstr "بی‌درنگ"
+
+#: resources/react/pages/realtime.tsx:22
+msgid "Active Visitors"
+msgstr "بازدیدکنندگان فعال"
+
+#: resources/react/pages/realtime.tsx:30
+msgid "%s active visitors"
+msgstr "%s بازدیدکننده فعال"
+
+#: resources/react/pages/realtime.tsx:41
+msgid "Active Pages"
+msgstr "صفحات فعال"
+
+#: resources/react/pages/realtime.tsx:60
+msgid "No active pages"
+msgstr "هیچ صفحه فعالی وجود ندارد"
+
+#: resources/react/pages/realtime.tsx:68
+msgid "Recent Pageviews"
+msgstr "بازدیدهای اخیر صفحه"
+
+#: resources/react/pages/realtime.tsx:89
+msgid "No recent activity"
+msgstr "هیچ فعالیت اخیری وجود ندارد"
+
+#: resources/react/pages/referrers.tsx:37
+msgid "Campaign"
+msgstr "کمپین"
+
+#: resources/react/pages/referrers.tsx:39
+msgid "Medium"
+msgstr "رسانه"
+
+#: resources/react/pages/referrers.tsx:45
+msgid "No referrer data for this period. If your site has traffic, data should appear within minutes. If nothing shows after 10 minutes, check Settings → Diagnostics."
+msgstr "هیچ داده ارجاع‌دهنده برای این دوره وجود ندارد. اگر وب‌سایت شما ترافیک دارد، داده‌ها باید ظرف چند دقیقه نمایش داده شوند. اگر پس از 10 دقیقه چیزی نشان داده نشد، تنظیمات ← تشخیص را بررسی کنید."
+
+#: resources/react/pages/referrers.tsx:49
+msgid "Referrers"
+msgstr "ارجاع‌دهندگان"
+
+#: resources/react/pages/referrers.tsx:60
+msgid "%s sessions"
+msgstr "%s جلسه"
+
+#: resources/react/pages/referrers.tsx:70
+msgid "All Sources"
+msgstr "همه منابع"
+
+#: resources/react/pages/referrers.tsx:72
+msgid "Loading sources"
+msgstr "در حال بارگذاری منابع"
+
+#: resources/react/pages/referrers.tsx:94
+msgid "%1$s visitors · %2$s sessions"
+msgstr "%1$s بازدیدکننده · %2$s جلسه"
+
+#: resources/react/pages/referrers.tsx:119
+msgid "UTM Campaigns"
+msgstr "کمپین‌های UTM"
+
+#: resources/react/pages/referrers.tsx:119
+msgid "No UTM parameters tracked yet. UTM-tagged links will appear here once visitors arrive through them."
+msgstr "هنوز هیچ پارامتر UTM اندازه‌گیری نشده است. پیوندهای دارای برچسب UTM پس از ورود بازدیدکنندگان از طریق آن‌ها در اینجا نمایش داده خواهند شد."
+
+#: resources/react/pages/settings.tsx:12
+msgid "30 days"
+msgstr "30 روز"
+
+#: resources/react/pages/settings.tsx:13
+msgid "90 days"
+msgstr "90 روز"
+
+#: resources/react/pages/settings.tsx:14
+msgid "180 days"
+msgstr "180 روز"
+
+#: resources/react/pages/settings.tsx:15
+msgid "1 year"
+msgstr "1 سال"
+
+#: resources/react/pages/settings.tsx:16
+msgid "Forever"
+msgstr "همیشه"
+
+#: resources/react/pages/settings.tsx:115
+#: resources/react/pages/settings.tsx:70
+msgid "Settings"
+msgstr "تنظیمات"
+
+#: resources/react/pages/settings.tsx:95
+msgid "Save failed."
+msgstr "ذخیره‌سازی ناموفق بود."
+
+#: resources/react/pages/settings.tsx:123
+msgid "Saved ✓"
+msgstr "ذخیره شد ✓"
+
+#: resources/react/pages/settings.tsx:138
+msgid "Saving…"
+msgstr "در حال ذخیره…"
+
+#: resources/react/pages/settings.tsx:138
+msgid "Save"
+msgstr "ذخیره"
+
+#: resources/react/pages/settings.tsx:145
+msgid "Privacy"
+msgstr "حریم خصوصی"
+
+#: resources/react/pages/settings.tsx:158
+msgid "Cookieless"
+msgstr "بدون کوکی"
+
+#: resources/react/pages/settings.tsx:160
+msgid "Recommended"
+msgstr "پیشنهادی"
+
+#: resources/react/pages/settings.tsx:164
+msgid "No cookies, privacy-first. Designed to support GDPR/CCPA/APPI compliance."
+msgstr "بدون کوکی، حریم‌خصوصی‌محور. طراحی‌شده برای پشتیبانی از انطباق GDPR/CCPA/APPI."
+
+#: resources/react/pages/settings.tsx:176
+msgid "Disabled Until Consent"
+msgstr "غیرفعال تا کسب رضایت"
+
+#: resources/react/pages/settings.tsx:178
+msgid "Tracking stays off until a consent-banner plugin signals approval. Also honors plugins that implement the WordPress Consent API."
+msgstr "اندازه‌گیری تا زمانی که یک افزونه بنر رضایت تأیید را اعلام کند، خاموش می‌ماند. همچنین افزونه‌هایی را که WordPress Consent API را پیاده‌سازی می‌کنند رعایت می‌کند."
+
+#: resources/react/pages/settings.tsx:187
+msgid "Works with Real Cookie Banner, Complianz, CookieYes, or any WordPress Consent API plugin."
+msgstr "با Real Cookie Banner، Complianz، CookieYes یا هر افزونه WordPress Consent API کار می‌کند."
+
+#: resources/react/pages/settings.tsx:204
+msgid "Respect Do Not Track"
+msgstr "رعایت Do Not Track"
+
+#: resources/react/pages/settings.tsx:206
+msgid "Skip visitors whose browser sends the DNT signal."
+msgstr "بازدیدکنندگانی که مرورگرشان سیگنال DNT را ارسال می‌کند، نادیده گرفته شوند."
+
+#: resources/react/pages/settings.tsx:217
+msgid "Respect Global Privacy Control"
+msgstr "رعایت Global Privacy Control"
+
+#: resources/react/pages/settings.tsx:219
+msgid "Skip visitors whose browser sends the GPC signal. Legally recognized in California and other regions."
+msgstr "بازدیدکنندگانی که مرورگرشان سیگنال GPC را ارسال می‌کند، نادیده گرفته شوند. به‌طور قانونی در کالیفرنیا و سایر مناطق به رسمیت شناخته شده است."
+
+#: resources/react/pages/settings.tsx:244
+msgid "How long stats are kept before deletion. Shorter = more privacy-friendly and a smaller database. Longer = year-over-year comparisons."
+msgstr "آمار پیش از حذف چه مدت نگهداری می‌شود. کوتاه‌تر = سازگارتر با حریم خصوصی و پایگاه داده کوچک‌تر. طولانی‌تر = امکان مقایسه سال‌به‌سال."
+
+#: resources/react/pages/settings.tsx:253
+msgid "Exclusions"
+msgstr "موارد مستثنی"
+
+#: resources/react/pages/settings.tsx:255
+msgid "Excluded IP Addresses"
+msgstr "آدرس‌های IP مستثنی‌شده"
+
+#: resources/react/pages/settings.tsx:266
+msgid "Tracking requests from these IPs or ranges are ignored — handy for hiding your own team. One per line. Supports CIDR (e.g., 10.0.0.0/8) and IPv6."
+msgstr "درخواست‌های اندازه‌گیری از این IPها یا بازه‌ها نادیده گرفته می‌شوند — مفید برای پنهان کردن تیم خودتان. هر مورد در یک خط. از CIDR (برای نمونه 10.0.0.0/8) و IPv6 پشتیبانی می‌کند."
+
+#: resources/react/pages/settings.tsx:273
+msgid "Your IP right now:"
+msgstr "IP شما در حال حاضر:"
+
+#: resources/react/pages/settings.tsx:283
+msgid "Add to exclusions"
+msgstr "افزودن به موارد مستثنی"
+
+#: resources/react/pages/settings.tsx:291
+msgid "GeoIP"
+msgstr "GeoIP"
+
+#: resources/react/pages/settings.tsx:296
+msgid "MaxMind License Key"
+msgstr "کلید مجوز MaxMind"
+
+#: resources/react/pages/settings.tsx:307
+msgid "Paste your free MaxMind license key"
+msgstr "کلید مجوز رایگان MaxMind خود را وارد کنید"
+
+#: resources/react/pages/settings.tsx:311
+msgid "Get a free key:"
+msgstr "یک کلید رایگان دریافت کنید:"
+
+#: resources/react/pages/settings.tsx:320
+msgid "then paste it here."
+msgstr "سپس آن را در اینجا وارد کنید."
+
+#: resources/react/pages/settings.tsx:323
+msgid "A key is currently saved. Clear this field to remove it, or paste a new one to replace it."
+msgstr "یک کلید در حال حاضر ذخیره شده است. برای حذف، این فیلد را پاک کنید، یا برای جایگزینی، کلید جدیدی وارد کنید."
+
+#: resources/react/pages/settings.tsx:338
+msgid "Enable MaxMind GeoIP"
+msgstr "فعال‌سازی MaxMind GeoIP"
+
+#: resources/react/pages/settings.tsx:340
+msgid "Activates the weekly MaxMind GeoLite2-City download (~70 MB to your uploads directory). Requires a license key above. The first lookup happens after the next WP-Cron tick."
+msgstr "دانلود هفتگی MaxMind GeoLite2-City را فعال می‌کند (حدود 70 MB در پوشه بارگذاری‌های شما). نیازمند یک کلید مجوز در بالا است. اولین جست‌وجو پس از تیک بعدی WP-Cron انجام می‌شود."
+
+#: resources/react/pages/settings.tsx:349
+msgid "Prefer no account? Use the one-click DB-IP IP-to-City Lite download on the Geography page instead — it is free and account-less."
+msgstr "بدون حساب کاربری ترجیح می‌دهید؟ به‌جای آن از دانلود تک‌کلیکی DB-IP IP-to-City Lite در صفحه جغرافیا استفاده کنید — رایگان و بدون حساب کاربری است."

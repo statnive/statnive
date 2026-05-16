@@ -1,0 +1,364 @@
+# Translation of Plugins - Statnive - Stable Readme (latest release) in Chinese (China)
+# This file is distributed under the same license as the Plugins - Statnive - Stable Readme (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2026-05-16 10:00+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Statnive translation seed v0.4.13\n"
+"Language: zh_CN\n"
+"Project-Id-Version: Plugins - Statnive - Stable Readme (latest release)\n"
+
+#. Short description
+msgid "Privacy-first WordPress analytics — cookieless, self-hosted, real-time. A simple Google Analytics alternative with GeoIP and AI-source tracking."
+msgstr "注重隐私的 WordPress 网站分析 — 无 Cookie、自托管、实时。一款简单的 Google Analytics 替代方案，支持 GeoIP 与 AI 来源识别。"
+
+#. Description section heading
+msgid "Description"
+msgstr "描述"
+
+#. Description lead
+msgid "**The privacy-first analytics plugin for WordPress.**"
+msgstr "**注重隐私的 WordPress 网站分析插件。**"
+
+#. Description paragraph 1
+msgid "See exactly who visits your site, where they come from, and what they do — without cookies, third-party trackers, or sending visitor data to anyone. All analytics live in your own WordPress database."
+msgstr "清晰了解谁访问了您的网站、他们从何而来、又做了什么 — 无需 Cookie、无需第三方跟踪脚本、也不会将访客数据发送给任何人。所有网站分析数据都保存在您自己的 WordPress 数据库中。"
+
+#. Description paragraph 2
+msgid "Open source under GPLv2. Self-hosted in your own database — nothing ever leaves your server."
+msgstr "在 GPLv2 协议下开源。自托管在您自己的数据库中 — 数据始终不会离开您的服务器。"
+
+#. Description paragraph 3
+msgid "Install, activate, open Statnive — your dashboard fills up within minutes. No tracking code to paste, no account to create."
+msgstr "安装、启用、打开 Statnive — 仪表盘将在数分钟内填满数据。无需粘贴任何跟踪代码，也无需注册账号。"
+
+#. Subsection heading
+msgid "Why Statnive?"
+msgstr "为什么选择 Statnive？"
+
+#. Why bullet 1
+msgid "**No cookies. No fingerprinting. No third-party transfers.** Designed to support GDPR, CCPA, and APPI compliance."
+msgstr "**无 Cookie。无指纹识别。无第三方数据传输。**旨在支持 GDPR、CCPA 与 APPI 合规要求。"
+
+#. Why bullet 2
+msgid "**Honors GPC and DNT** server-side, integrates with the WordPress Consent API."
+msgstr "**在服务器端遵循 GPC 与 DNT** 信号，并与 WordPress Consent API 集成。"
+
+#. Why bullet 3
+msgid "**Daily-rotating salted hashes** — cross-day and cross-site tracking are mathematically impossible."
+msgstr "**每日轮换的加盐哈希** — 跨日与跨站点识别在数学上无法实现。"
+
+#. Why bullet 4
+msgid "**Eight focused dashboard pages.** No clutter, no upsells."
+msgstr "**八个聚焦的仪表盘页面。**无冗余、无升级推销。"
+
+#. Subsection heading
+msgid "Key Features"
+msgstr "核心功能"
+
+#. Feature: real-time
+msgid "**Real-time** — Active visitor count, active pages, live pageview feed."
+msgstr "**实时** — 在线访客数、活跃页面、实时浏览量动态。"
+
+#. Feature: channels (kept brand names intact)
+msgid "**Smart channel grouping** — Direct, Organic Search, Social Media, Email, Referral, Paid Search, Paid Social, and a dedicated **AI Assistants** channel for ChatGPT, Claude, Gemini, Perplexity, Copilot, NotebookLM, Meta AI, Le Chat, Deepseek, You, iAsk, Jasper, and Writesonic."
+msgstr "**智能渠道分组** — 直接访问、自然搜索、社交媒体、电子邮件、引荐流量、付费搜索、付费社交，以及专门为 ChatGPT、Claude、Gemini、Perplexity、Copilot、NotebookLM、Meta AI、Le Chat、Deepseek、You、iAsk、Jasper 和 Writesonic 设立的 **AI 助手** 渠道。"
+
+#. Feature: events
+msgid "**Custom events + engagement** — Link clicks (and tagged button clicks via `statnive-event-*` classes), form submissions, downloads, outbound links, time on page, scroll depth."
+msgstr "**自定义事件与互动指标** — 链接点击（以及通过 `statnive-event-*` 类标记的按钮点击）、表单提交、下载、外链点击、页面停留时间、滚动深度。"
+
+#. Feature: bots
+msgid "**Bot vs human separation** — Real visitors and automated traffic in distinct buckets."
+msgstr "**机器人与真人分流** — 真实访客与自动化流量分别归类。"
+
+#. Feature: geography
+msgid "**Geography in tiers** — Zero-config timezone country mapping; optional CDN headers; optional one-click DB-IP city download (free); optional MaxMind GeoLite2."
+msgstr "**分层地理位置识别** — 零配置的时区到国家/地区映射；可选的 CDN 标头；可选的一键 DB-IP 城市级数据库下载（免费）；可选的 MaxMind GeoLite2。"
+
+#. Feature: retention
+msgid "**Configurable retention** — 30 / 90 / 180 / 365 days, or Forever. Daily WP-Cron purge."
+msgstr "**可配置的保留期** — 30 / 90 / 180 / 365 天，或永久保留。每日通过 WP-Cron 清理。"
+
+#. Feature: privacy API
+msgid "**WordPress Privacy API** — Personal-data export and erase registered automatically."
+msgstr "**WordPress Privacy API** — 自动注册个人数据导出与删除功能。"
+
+#. Feature: WP-CLI
+msgid "**WP-CLI** — `wp statnive cron run` for sites with `DISABLE_WP_CRON`."
+msgstr "**WP-CLI** — 为设置了 `DISABLE_WP_CRON` 的网站提供 `wp statnive cron run` 命令。"
+
+#. Description outro
+msgid "Source code at [github.com/statnive/statnive](https://github.com/statnive/statnive). Learn more at [statnive.com](https://statnive.com)."
+msgstr "源代码位于 [github.com/statnive/statnive](https://github.com/statnive/statnive)。了解更多请访问 [statnive.com](https://statnive.com)。"
+
+#. Installation section heading
+msgid "Installation"
+msgstr "安装"
+
+#. Installation step 1
+msgid "Upload the `statnive` folder to `/wp-content/plugins/`."
+msgstr "将 `statnive` 文件夹上传到 `/wp-content/plugins/`。"
+
+#. Installation step 2
+msgid "Activate the plugin through the **Plugins** menu in WordPress."
+msgstr "在 WordPress 的**插件**菜单中启用本插件。"
+
+#. Installation step 3
+msgid "Open **Statnive** in the admin sidebar."
+msgstr "在后台侧边栏中打开 **Statnive**。"
+
+#. Installation outro
+msgid "That's it. Tracking begins immediately — no configuration, no account, no tracking code to paste."
+msgstr "完成。统计立即开始 — 无需配置、无需账号、无需粘贴任何跟踪代码。"
+
+#. FAQ section heading
+msgid "Frequently Asked Questions"
+msgstr "常见问题"
+
+#. FAQ Q1
+msgid "Does Statnive use cookies?"
+msgstr "Statnive 是否使用 Cookie？"
+
+#. FAQ A1
+msgid "No. Statnive is 100% cookie-free. Visitor identification is a daily-rotating salted hash that cannot be used to track individuals across days or sites."
+msgstr "不使用。Statnive 完全不使用 Cookie。访客识别采用每日轮换的加盐哈希，无法用于跨日或跨站点识别同一访客。"
+
+#. FAQ Q2
+msgid "Is Statnive GDPR compliant?"
+msgstr "Statnive 是否符合 GDPR？"
+
+#. FAQ A2
+msgid "Statnive is **designed to support** GDPR, CCPA, APPI, and PIPL compliance: no cookies, no PII storage, daily rotating hashes, configurable retention, WordPress Privacy API export/erase, and server-side respect for GPC and DNT signals. Final compliance always depends on your configuration and your privacy policy."
+msgstr "Statnive 的设计**旨在支持** GDPR、CCPA、APPI 与 PIPL 合规：不使用 Cookie、不存储任何 PII、每日轮换哈希、可配置的保留期、WordPress Privacy API 导出/删除功能，以及在服务器端遵循 GPC 与 DNT 信号。最终合规性始终取决于您的配置以及您的隐私政策。"
+
+#. FAQ Q3
+msgid "How does visitor counting work without cookies?"
+msgstr "在不使用 Cookie 的情况下，访客计数是如何工作的？"
+
+#. FAQ A3
+msgid "A salted SHA-256 hash of the visitor's anonymized IP plus User-Agent. The salt rotates daily, so the same visitor gets a different hash tomorrow — cross-day stitching is impossible while daily uniques stay accurate."
+msgstr "对访客匿名化后的 IP 与 User-Agent 计算加盐 SHA-256 哈希。盐值每天轮换，因此同一访客次日会得到不同的哈希值 — 跨日拼接无法实现，而每日独立访客数仍可保持准确。"
+
+#. FAQ Q4
+msgid "Where is my data stored?"
+msgstr "我的数据存储在哪里？"
+
+#. FAQ A4
+msgid "In your WordPress database, in tables prefixed `statnive_`. Nothing leaves your server unless you explicitly enable the optional MaxMind or DB-IP GeoIP downloads (one-time database files, never visitor data). When you uninstall the plugin, all tables and uploaded GeoIP files are removed."
+msgstr "存储在您的 WordPress 数据库中，表名前缀为 `statnive_`。除非您明确启用可选的 MaxMind 或 DB-IP GeoIP 数据库下载（仅一次性下载数据库文件，绝不传输访客数据），否则任何数据都不会离开您的服务器。卸载本插件时，所有相关数据表与已下载的 GeoIP 文件都会被移除。"
+
+#. FAQ Q5
+msgid "Does it work with WooCommerce?"
+msgstr "本插件是否兼容 WooCommerce？"
+
+#. FAQ A5
+msgid "Statnive tracks pageviews, events, sessions, and referrers on WooCommerce stores like any other WordPress site. Dedicated WooCommerce revenue tracking with Revenue per Visitor (RPV) is on the roadmap."
+msgstr "Statnive 会像在普通 WordPress 网站一样，统计 WooCommerce 商店的浏览量、事件、会话与引荐来源。专门面向 WooCommerce 的收入统计与单访客收入（RPV）功能已列入开发计划。"
+
+#. FAQ Q6
+msgid "How much does it slow down my site?"
+msgstr "本插件会让网站变慢多少？"
+
+#. FAQ A6
+msgid "The tracker script is small (~2 KB gzipped) and loads asynchronously, so it does not block your page render. The hit endpoint writes a single row per pageview. Dashboard queries run against pre-aggregated daily summaries rather than raw events."
+msgstr "统计脚本体积很小（gzip 后约 2 KB），且以异步方式加载，因此不会阻塞页面渲染。命中数据接口每次浏览仅写入一行记录。仪表盘查询基于预聚合的每日汇总数据，而非原始事件。"
+
+#. FAQ Q7
+msgid "Can I run Statnive alongside Google Analytics or Matomo?"
+msgstr "可以同时使用 Statnive 与 Google Analytics 或 Matomo 吗？"
+
+#. FAQ A7
+msgid "Yes. Statnive is fully independent. Many users run Statnive as their primary privacy-friendly analytics and keep GA4 for advertising attribution."
+msgstr "可以。Statnive 完全独立。许多用户会将 Statnive 作为主要的隐私友好型网站分析工具，同时保留 GA4 用于广告归因。"
+
+#. FAQ Q8
+msgid "What can cause \"no data\"?"
+msgstr "什么情况下会出现“没有数据”？"
+
+#. FAQ A8
+msgid "Common causes: ad blockers, aggressive page caching, CSP rules blocking `fetch`/`sendBeacon` (allow `connect-src 'self'`), GPC or DNT enabled, or `DISABLE_WP_CRON` without a system cron. Exclude `/wp-json/statnive/v1/hit` and `admin-ajax.php?action=statnive_hit` from page caches."
+msgstr "常见原因包括：广告拦截器、激进的页面缓存、阻止 `fetch`/`sendBeacon` 的 CSP 规则（请允许 `connect-src 'self'`）、启用了 GPC 或 DNT，或者设置了 `DISABLE_WP_CRON` 却未配置系统 cron。请将 `/wp-json/statnive/v1/hit` 与 `admin-ajax.php?action=statnive_hit` 从页面缓存中排除。"
+
+#. FAQ Q9
+msgid "How does Geography work?"
+msgstr "地理位置功能是如何工作的？"
+
+#. FAQ A9
+msgid "Four tiers, falling through automatically: (1) browser timezone → country, ~80% accurate, no external call; (2) CDN country headers (Cloudflare, CloudFront, Vercel) when present; (3) optional one-click DB-IP IP-to-City Lite (free, CC-BY 4.0); (4) optional MaxMind GeoLite2 (free with an account). Tiers 3 and 4 are opt-in via a discrete user click."
+msgstr "采用四级回退机制，并自动依次降级：(1) 浏览器时区 → 国家/地区，准确率约 80%，无需任何外部调用；(2) 在存在 CDN 国家/地区标头时使用（Cloudflare、CloudFront、Vercel）；(3) 可选的一键 DB-IP IP-to-City Lite（免费，CC-BY 4.0 许可）；(4) 可选的 MaxMind GeoLite2（注册账号后免费使用）。第 3 与第 4 级均需通过用户明确点击启用。"
+
+#. FAQ Q10
+msgid "Does Statnive count bots as real visitors?"
+msgstr "Statnive 会把机器人计为真实访客吗？"
+
+#. FAQ A10
+msgid "No. ~200 server-side bot UA patterns and tracker-side fingerprints (webdriver, automation flags) bucket bots separately, so \"Visitors\" and \"Pageviews\" reflect humans only."
+msgstr "不会。服务器端约有 200 条机器人 User-Agent 规则，加上脚本端识别的特征（如 webdriver、自动化标志），机器人会被单独归类，因此“访客”与“浏览量”仅反映真人。"
+
+#. Screenshots section heading
+msgid "Screenshots"
+msgstr "截图"
+
+#. Screenshot 1
+msgid "Know your traffic at a glance — visitors, sessions, pageviews and trends that matter"
+msgstr "一目了然了解网站流量 — 访客、会话、浏览量与值得关注的趋势"
+
+#. Screenshot 2
+msgid "Find what's actually driving results — top sources and top pages side by side"
+msgstr "找出真正驱动结果的内容 — 热门来源与热门页面并排展示"
+
+#. Screenshot 3
+msgid "Every page, ranked by what matters — search, sort, find your best content"
+msgstr "按关键指标对每一个页面排名 — 搜索、排序，找到您最佳的内容"
+
+#. Screenshot 4
+msgid "See where visitors arrive and leave — entry and exit pages side by side"
+msgstr "了解访客的入站与离开位置 — 入站页面与离开页面并排展示"
+
+#. Screenshot 5
+msgid "Understand where your traffic comes from — referral, direct, organic, social, AI"
+msgstr "了解您的流量来自何处 — 引荐、直接访问、自然搜索、社交、AI"
+
+#. Screenshot 6
+msgid "Desktop, mobile, bots — device, browser and OS breakdowns in one view"
+msgstr "桌面、移动、机器人 — 在一个视图中查看设备、浏览器与操作系统分布"
+
+#. Screenshot 7
+msgid "Reach across languages and regions — see which languages your visitors speak"
+msgstr "覆盖多语言与多地区 — 查看您的访客使用哪些语言"
+
+#. Screenshot 8
+msgid "Watch your site breathe in real time — active visitors and live pageviews"
+msgstr "实时感受您网站的脉动 — 在线访客与实时浏览量"
+
+#. External Services section heading
+msgid "External Services"
+msgstr "外部服务"
+
+#. External Services intro
+msgid "This plugin connects to two third-party services, both **opt-in via explicit user action**. No visitor data is ever sent to either service."
+msgstr "本插件会连接两个第三方服务，两者均**需要由用户明确操作后才会启用**。任何情况下都不会向这两个服务发送访客数据。"
+
+#. MaxMind section heading
+msgid "MaxMind GeoLite2 (optional)"
+msgstr "MaxMind GeoLite2（可选）"
+
+#. MaxMind description
+msgid "Used to download the MaxMind GeoLite2-City database for high-accuracy visitor geolocation. Requires a free MaxMind account and a license key the user pastes into Settings → GeoIP. Accuracy: approximate city/region only — not for identifying individuals or households."
+msgstr "用于下载 MaxMind GeoLite2-City 数据库，以提供较高精度的访客地理定位。需要一个免费的 MaxMind 账号，以及用户在“设置 → GeoIP”中粘贴的许可密钥。精度：仅为近似的城市/地区级别，不可用于识别个人或家庭。"
+
+#. MaxMind bullet: source
+msgid "Source: MaxMind (https://www.maxmind.com), downloaded from https://download.maxmind.com/app/geoip_download"
+msgstr "来源：MaxMind（https://www.maxmind.com），下载地址为 https://download.maxmind.com/app/geoip_download"
+
+#. MaxMind bullet: when
+msgid "When: Weekly via WP-Cron, only after the user enables GeoIP and configures a license key"
+msgstr "时间：在用户启用 GeoIP 并配置许可密钥后，通过 WP-Cron 每周下载一次"
+
+#. MaxMind bullet: data sent
+msgid "Data sent: License key + standard HTTP request headers. No visitor data is transmitted."
+msgstr "发送的数据：许可密钥与标准 HTTP 请求头。不会传输任何访客数据。"
+
+#. MaxMind bullet: data received
+msgid "Data received: GeoLite2-City.mmdb file, stored in your `wp-content/uploads/statnive/` directory"
+msgstr "接收的数据：GeoLite2-City.mmdb 文件，存储在您的 `wp-content/uploads/statnive/` 目录中"
+
+#. MaxMind bullet: purpose
+msgid "Purpose: Approximate visitor geolocation (country / region / coarse city)"
+msgstr "用途：近似的访客地理定位（国家/地区 / 地区 / 大致城市）"
+
+#. MaxMind bullet: signup
+msgid "Sign up for a MaxMind account: https://www.maxmind.com/en/geolite2/signup"
+msgstr "注册 MaxMind 账号：https://www.maxmind.com/en/geolite2/signup"
+
+#. MaxMind bullet: license key
+msgid "Get your license key: https://www.maxmind.com/en/accounts/current/license-key"
+msgstr "获取您的许可密钥：https://www.maxmind.com/en/accounts/current/license-key"
+
+#. MaxMind bullet: privacy
+msgid "MaxMind Privacy Policy: https://www.maxmind.com/en/privacy-policy"
+msgstr "MaxMind 隐私政策：https://www.maxmind.com/en/privacy-policy"
+
+#. MaxMind bullet: terms
+msgid "MaxMind Terms of Use: https://www.maxmind.com/en/terms-of-use"
+msgstr "MaxMind 使用条款：https://www.maxmind.com/en/terms-of-use"
+
+#. MaxMind bullet: EULA
+msgid "MaxMind GeoLite2 EULA: https://www.maxmind.com/en/geolite2/eula"
+msgstr "MaxMind GeoLite2 EULA：https://www.maxmind.com/en/geolite2/eula"
+
+#. MaxMind attribution
+msgid "This product includes GeoLite Data created by MaxMind, available from https://www.maxmind.com."
+msgstr "本产品包含由 MaxMind 创建的 GeoLite 数据，可在 https://www.maxmind.com 获取。"
+
+#. DB-IP section heading
+msgid "DB-IP IP-to-City Lite (optional)"
+msgstr "DB-IP IP-to-City Lite（可选）"
+
+#. DB-IP description
+msgid "Used to download the free DB-IP IP-to-City Lite database. No account, no license key, no EULA. Accuracy: approximate city/region only — not for identifying individuals or households."
+msgstr "用于下载免费的 DB-IP IP-to-City Lite 数据库。无需账号、无需许可密钥、无需 EULA。精度：仅为近似的城市/地区级别，不可用于识别个人或家庭。"
+
+#. DB-IP bullet: source
+msgid "Source: DB-IP (https://db-ip.com), downloaded from https://download.db-ip.com/free/"
+msgstr "来源：DB-IP（https://db-ip.com），下载地址为 https://download.db-ip.com/free/"
+
+#. DB-IP bullet: when
+msgid "When: One-shot user click \"Enable city-level geography\" on the Geography page, then monthly via WP-Cron for refresh"
+msgstr "时间：用户在“地理位置”页面一键点击“启用城市级地理位置”后下载一次，之后通过 WP-Cron 每月刷新一次"
+
+#. DB-IP bullet: data sent
+msgid "Data sent: Standard HTTP request headers only (no visitor data, no account, no key)"
+msgstr "发送的数据：仅标准 HTTP 请求头（不发送访客数据、不使用账号、不使用密钥）"
+
+#. DB-IP bullet: data received
+msgid "Data received: dbip-city-lite-YYYY-MM.mmdb.gz file, decompressed to your `wp-content/uploads/statnive/` directory"
+msgstr "接收的数据：dbip-city-lite-YYYY-MM.mmdb.gz 文件，解压后存储到您的 `wp-content/uploads/statnive/` 目录中"
+
+#. DB-IP bullet: purpose
+msgid "Purpose: Approximate visitor geolocation (city / region / country)"
+msgstr "用途：近似的访客地理定位（城市 / 地区 / 国家）"
+
+#. DB-IP bullet: terms
+msgid "DB-IP Terms: https://db-ip.com/tos.php"
+msgstr "DB-IP 服务条款：https://db-ip.com/tos.php"
+
+#. DB-IP bullet: privacy
+msgid "DB-IP Privacy Policy: https://db-ip.com/privacy.php"
+msgstr "DB-IP 隐私政策：https://db-ip.com/privacy.php"
+
+#. DB-IP bullet: license
+msgid "License: CC-BY 4.0"
+msgstr "许可证：CC-BY 4.0"
+
+#. DB-IP attribution
+msgid "GeoIP data © DB-IP under CC-BY 4.0."
+msgstr "GeoIP 数据 © DB-IP，依据 CC-BY 4.0 许可协议。"
+
+#. External Services outro
+msgid "No visitor data is ever sent to any external service. All analytics data remains in your WordPress database."
+msgstr "任何情况下都不会向任何外部服务发送访客数据。所有网站分析数据均保留在您的 WordPress 数据库中。"
+
+#. Privacy Policy section heading
+msgid "Privacy Policy"
+msgstr "隐私政策"
+
+#. Privacy Policy body
+msgid "All analytics data stays in your WordPress database. Raw IPs are used only for the optional GeoIP lookup and are never persisted. Statnive registers with the WordPress Privacy API for personal-data export and erasure."
+msgstr "所有网站分析数据均保留在您的 WordPress 数据库中。原始 IP 仅用于可选的 GeoIP 查询，绝不会被持久化存储。Statnive 已向 WordPress Privacy API 注册，用于个人数据的导出与删除。"
+
+#. Changelog section heading
+msgid "Changelog"
+msgstr "更新日志"
+
+#. Upgrade Notice section heading
+msgid "Upgrade Notice"
+msgstr "升级提示"
+
+#. Upgrade Notice 0.4.7 body
+msgid "First public release on WordPress.org."
+msgstr "在 WordPress.org 上的首个公开发布版本。"

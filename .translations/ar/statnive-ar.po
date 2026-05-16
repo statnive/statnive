@@ -1,0 +1,1045 @@
+# Translation of Plugins - Statnive - Stable (latest release) in Arabic
+# This file is distributed under the same license as the Plugins - Statnive - Stable (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2026-05-16 10:00+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=(n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 ? 4 : 5);\n"
+"X-Generator: Statnive translation seed v0.4.13\n"
+"Language: ar\n"
+"Project-Id-Version: Plugins - Statnive - Stable (latest release)\n"
+
+#. Plugin Name of the plugin
+#: statnive.php
+msgid "Statnive – Simple, Real-time, Privacy-first Web Analytics"
+msgstr "Statnive – تحليلات ويب بسيطة ولحظية تحترم الخصوصية"
+
+#. Plugin URI of the plugin
+#. Author URI of the plugin
+#: statnive.php
+msgid "https://statnive.com"
+msgstr ""
+
+#. Description of the plugin
+#: statnive.php
+msgid "Simple stats, clear decisions. Privacy-first analytics for WordPress."
+msgstr "إحصاءات بسيطة وقرارات واضحة. تحليلات تحترم الخصوصية لـ WordPress."
+
+#. Author of the plugin
+#: statnive.php
+#: src/Admin/AdminMenuManager.php:39
+msgid "Statnive"
+msgstr "Statnive"
+
+#: src/Admin/AdminBarWidget.php:56
+msgid "Statnive — Today's visitors"
+msgstr "Statnive — زوار اليوم"
+
+#: src/Admin/AdminMenuManager.php:38
+#: src/Privacy/PrivacyEraser.php:43
+#: src/Privacy/PrivacyExporter.php:43
+msgid "Statnive Analytics"
+msgstr "تحليلات Statnive"
+
+#: src/Admin/CronHealth.php:86
+msgid "Daily salt rotation"
+msgstr "تدوير الـ Salt اليومي"
+
+#: src/Admin/CronHealth.php:91
+msgid "Daily data aggregation"
+msgstr "تجميع البيانات اليومي"
+
+#: src/Admin/CronHealth.php:96
+msgid "Retention cleanup"
+msgstr "تنظيف الاحتفاظ بالبيانات"
+
+#: src/Admin/CronHealth.php:101
+msgid "Weekly GeoIP database update"
+msgstr "تحديث قاعدة بيانات GeoIP الأسبوعي"
+
+#: src/Admin/GeoIPNotice.php:96
+msgid "Statnive: GeoIP is enabled but no MaxMind license key is configured."
+msgstr "Statnive: خاصية GeoIP مفعّلة ولكن لا يوجد مفتاح ترخيص MaxMind مُهيَّأ."
+
+#: src/Admin/GeoIPNotice.php:97
+msgid "Impact: visitor country/region data will not appear in your reports. Page tracking, sources, devices and all other metrics continue to work normally."
+msgstr "الأثر: لن تظهر بيانات دولة/منطقة الزائر في تقاريرك. قياس الصفحات والمصادر والأجهزة وجميع المقاييس الأخرى تواصل العمل بشكل طبيعي."
+
+#: src/Admin/GeoIPNotice.php:98
+msgid "What Statnive will do: retry the GeoIP database download every week. No additional alerts will be raised until the key is added or GeoIP is disabled."
+msgstr "ما الذي ستفعله Statnive: إعادة محاولة تنزيل قاعدة بيانات GeoIP كل أسبوع. لن تظهر أي تنبيهات إضافية إلى أن تضيف المفتاح أو تعطّل GeoIP."
+
+#. translators: 1: MaxMind signup URL, 2: MaxMind EULA URL
+#: src/Admin/GeoIPNotice.php:102
+#, php-format
+msgid "<strong>To fix:</strong> <a href=\"%1$s\" target=\"_blank\" rel=\"noopener\">get a free MaxMind license key</a> (requires accepting the <a href=\"%2$s\" target=\"_blank\" rel=\"noopener\">GeoLite2 EULA</a>) and paste it into Settings → GeoIP. Or disable GeoIP in Settings to dismiss this notice."
+msgstr "<strong>للإصلاح:</strong> <a href=\"%1$s\" target=\"_blank\" rel=\"noopener\">احصل على مفتاح ترخيص MaxMind مجاني</a> (يستلزم قبول <a href=\"%2$s\" target=\"_blank\" rel=\"noopener\">اتفاقية ترخيص GeoLite2</a>) ثم ألصقه في الإعدادات ← GeoIP. أو عطّل GeoIP من الإعدادات لإخفاء هذا الإشعار."
+
+#: src/Admin/GeoIPNotice.php:139
+msgid "Statnive: WordPress cron jobs are not running on time."
+msgstr "Statnive: مهام Cron الخاصة بـ WordPress لا تعمل في الوقت المحدد."
+
+#: src/Admin/GeoIPNotice.php:143
+msgid "These Statnive background jobs have not completed within their normal window:"
+msgstr "لم تكتمل مهام Statnive الخلفية التالية ضمن نافذتها الطبيعية:"
+
+#. translators: 1: example crontab line, 2: WP-CLI command
+#: src/Admin/GeoIPNotice.php:154
+#, php-format
+msgid "<strong>To fix:</strong> add a system cron that pings <code>wp-cron.php</code> every five minutes — for example <code>%1$s</code> — or run <code>%2$s</code> via WP-CLI."
+msgstr "<strong>للإصلاح:</strong> أضف مهمة Cron على مستوى النظام تستدعي <code>wp-cron.php</code> كل خمس دقائق — على سبيل المثال <code>%1$s</code> — أو شغّل <code>%2$s</code> عبر WP-CLI."
+
+#: src/Admin/GeoIPNotice.php:166
+msgid "What Statnive will do automatically: this notice self-dismisses as soon as every job runs again within its normal window. Clicking \"Run cleanup now\" below records a fresh heartbeat, which clears the warning until the next scheduled cycle."
+msgstr "ما الذي ستفعله Statnive تلقائيًا: يختفي هذا الإشعار من تلقاء نفسه فور أن تعود كل مهمة إلى العمل ضمن نافذتها الطبيعية. عند النقر على «شغّل التنظيف الآن» أدناه يُسجَّل نبض جديد يُزيل التحذير حتى الدورة المجدولة التالية."
+
+#: src/Admin/GeoIPNotice.php:172
+msgid "Run cleanup now"
+msgstr "شغّل التنظيف الآن"
+
+#: src/Admin/GeoIPNotice.php:177
+msgid "Dismiss"
+msgstr "إخفاء"
+
+#: src/Admin/GeoIPNotice.php:179
+msgid "Dismiss this Statnive cron warning"
+msgstr "إخفاء تحذير Cron الخاص بـ Statnive"
+
+#. translators: %s = job label, e.g. "Daily data aggregation"
+#: src/Admin/GeoIPNotice.php:273
+#, php-format
+msgid "%s — has not run yet."
+msgstr "%s — لم تُنفَّذ بعد."
+
+#. translators: 1: job label, 2: localised date/time of last successful run
+#: src/Admin/GeoIPNotice.php:287
+#, php-format
+msgid "%1$s — last ran %2$s."
+msgstr "%1$s — آخر تنفيذ %2$s."
+
+#: src/Admin/GeoIPNotice.php:307
+msgid "You do not have permission to run Statnive cron jobs."
+msgstr "ليست لديك صلاحية تشغيل مهام Cron الخاصة بـ Statnive."
+
+#: src/Admin/GeoIPNotice.php:316
+msgid "Statnive cron jobs ran successfully. The warning will reappear if cron stops firing again."
+msgstr "اكتملت مهام Cron الخاصة بـ Statnive بنجاح. سيظهر التحذير مجددًا إذا توقف Cron عن العمل."
+
+#. translators: %s = error message
+#: src/Admin/GeoIPNotice.php:321
+#, php-format
+msgid "Statnive cron run failed: %s"
+msgstr "فشل تنفيذ Cron الخاص بـ Statnive: %s"
+
+#: src/Admin/GeoIPNotice.php:353
+msgid "You do not have permission to dismiss this notice."
+msgstr "ليست لديك صلاحية إخفاء هذا الإشعار."
+
+#: src/Cron/CronRegistrar.php:32
+msgid "Once Weekly"
+msgstr "مرة أسبوعيًا"
+
+#: src/Database/Migrator.php:259
+msgid "Statnive: plugin version mismatch detected."
+msgstr "Statnive: تم اكتشاف عدم تطابق في إصدار الإضافة."
+
+#. translators: 1: stored schema version, 2: running plugin version
+#: src/Database/Migrator.php:263
+#, php-format
+msgid "Your database schema is at version %1$s but the running plugin is version %2$s. This may happen if you downgraded the plugin. Please re-install the latest version to avoid data inconsistencies."
+msgstr "مخطط قاعدة البيانات لديك في الإصدار %1$s بينما الإضافة قيد التشغيل في الإصدار %2$s. قد يحدث هذا إذا قمت بتخفيض إصدار الإضافة. أعد تثبيت أحدث إصدار لتجنب عدم اتساق البيانات."
+
+#: src/Plugin.php:124
+msgid "You do not have permission to activate plugins."
+msgstr "ليست لديك صلاحية تفعيل الإضافات."
+
+#: src/Plugin.php:125
+#: src/Plugin.php:141
+#: src/Plugin.php:157
+msgid "Plugin Activation Error"
+msgstr "خطأ في تفعيل الإضافة"
+
+#. translators: 1: Required PHP version, 2: Current PHP version
+#: src/Plugin.php:136
+#: statnive.php:68
+#, php-format
+msgid "Statnive requires PHP %1$s or higher. You are running PHP %2$s."
+msgstr "تستلزم Statnive إصدار PHP %1$s أو أعلى. أنت تستخدم PHP %2$s."
+
+#. translators: 1: Required WordPress version, 2: Current WordPress version
+#: src/Plugin.php:152
+#: statnive.php:93
+#, php-format
+msgid "Statnive requires WordPress %1$s or higher. You are running WordPress %2$s."
+msgstr "تستلزم Statnive إصدار WordPress %1$s أو أعلى. أنت تستخدم WordPress %2$s."
+
+#: src/Privacy/ComplianceAuditor.php:70
+msgid "Consent mode configured"
+msgstr "وضع الموافقة مُهيَّأ"
+
+#. translators: %s: consent mode name.
+#: src/Privacy/ComplianceAuditor.php:74
+#, php-format
+msgid "Consent mode: %s"
+msgstr "وضع الموافقة: %s"
+
+#: src/Privacy/ComplianceAuditor.php:75
+msgid "No consent mode configured. Set one in Settings."
+msgstr "لم يتم تهيئة وضع الموافقة. اضبط وضعًا من الإعدادات."
+
+#: src/Privacy/ComplianceAuditor.php:88
+msgid "Do Not Track honored"
+msgstr "احترام إشارة Do Not Track"
+
+#: src/Privacy/ComplianceAuditor.php:91
+msgid "DNT header is respected."
+msgstr "يتم احترام ترويسة DNT."
+
+#: src/Privacy/ComplianceAuditor.php:92
+msgid "DNT header is not honored. Consider enabling for privacy compliance."
+msgstr "ترويسة DNT لا يتم احترامها. ننصح بتفعيلها للامتثال للخصوصية."
+
+#: src/Privacy/ComplianceAuditor.php:105
+msgid "Global Privacy Control honored"
+msgstr "احترام إشارة Global Privacy Control"
+
+#: src/Privacy/ComplianceAuditor.php:108
+msgid "GPC header is respected."
+msgstr "يتم احترام ترويسة GPC."
+
+#: src/Privacy/ComplianceAuditor.php:109
+msgid "GPC header is not honored. Required under some US state laws."
+msgstr "ترويسة GPC لا يتم احترامها. مطلوبة بموجب بعض قوانين الولايات الأمريكية."
+
+#: src/Privacy/ComplianceAuditor.php:123
+msgid "Data retention configured"
+msgstr "مدة الاحتفاظ بالبيانات مُهيَّأة"
+
+#. translators: %1$d: number of days, %2$s: retention mode.
+#: src/Privacy/ComplianceAuditor.php:127
+#, php-format
+msgid "Data retained for %1$d days (%2$s mode)."
+msgstr "يتم الاحتفاظ بالبيانات لمدة %1$d يومًا (وضع %2$s)."
+
+#: src/Privacy/ComplianceAuditor.php:128
+msgid "Data retained forever. Consider setting a retention period for compliance."
+msgstr "يتم الاحتفاظ بالبيانات إلى الأبد. ننصح بضبط مدة احتفاظ لتحقيق الامتثال."
+
+#: src/Privacy/ComplianceAuditor.php:142
+msgid "Privacy policy page published"
+msgstr "صفحة سياسة الخصوصية منشورة"
+
+#: src/Privacy/ComplianceAuditor.php:145
+msgid "Privacy policy page is published. Statnive content auto-generated."
+msgstr "صفحة سياسة الخصوصية منشورة. تم إنشاء محتوى Statnive تلقائيًا."
+
+#: src/Privacy/ComplianceAuditor.php:146
+msgid "No published privacy policy page found. Create one in Settings → Privacy."
+msgstr "لم يتم العثور على صفحة سياسة خصوصية منشورة. أنشئ واحدة من الإعدادات ← الخصوصية."
+
+#: src/Privacy/ComplianceAuditor.php:159
+msgid "No raw IP addresses stored"
+msgstr "لا يتم تخزين أي عناوين IP خام"
+
+#: src/Privacy/ComplianceAuditor.php:161
+msgid "IP addresses are discarded immediately after hashing and GeoIP lookup."
+msgstr "يتم التخلص من عناوين IP فور التجزئة والبحث في GeoIP."
+
+#: src/Privacy/ComplianceAuditor.php:181
+msgid "Daily salt rotation active"
+msgstr "تدوير الـ Salt اليومي نشط"
+
+#. translators: %s: datetime of last salt rotation.
+#: src/Privacy/ComplianceAuditor.php:185
+#, php-format
+msgid "Last rotation: %s"
+msgstr "آخر تدوير: %s"
+
+#: src/Privacy/ComplianceAuditor.php:186
+msgid "Salt rotation may not be running. Check WP-Cron."
+msgstr "قد لا يكون تدوير الـ Salt يعمل. تحقق من WP-Cron."
+
+#: src/Privacy/ComplianceAuditor.php:198
+msgid "Cookie-free tracking"
+msgstr "قياس بدون كوكيز"
+
+#: src/Privacy/ComplianceAuditor.php:200
+msgid "Statnive uses no cookies, localStorage, or sessionStorage by design."
+msgstr "Statnive لا تستخدم أي ملفات تعريف ارتباط (كوكيز) أو localStorage أو sessionStorage بحكم التصميم."
+
+#: src/Privacy/ComplianceAuditor.php:213
+#: src/Privacy/ComplianceAuditor.php:222
+msgid "Data purge operational"
+msgstr "تنقية البيانات تعمل"
+
+#: src/Privacy/ComplianceAuditor.php:215
+msgid "Retention mode is \"forever\" — no purge needed."
+msgstr "وضع الاحتفاظ هو «إلى الأبد» — لا حاجة إلى تنقية."
+
+#: src/Privacy/ComplianceAuditor.php:225
+msgid "Data purge cron is scheduled."
+msgstr "مهمة Cron لتنقية البيانات مجدولة."
+
+#: src/Privacy/ComplianceAuditor.php:226
+msgid "Data purge cron not scheduled. Deactivate and reactivate the plugin."
+msgstr "مهمة Cron لتنقية البيانات غير مجدولة. عطّل الإضافة ثم أعد تفعيلها."
+
+#: src/Privacy/ComplianceAuditor.php:239
+msgid "HTTPS enabled"
+msgstr "HTTPS مفعّل"
+
+#: src/Privacy/ComplianceAuditor.php:242
+msgid "Site is served over HTTPS."
+msgstr "يتم تقديم الموقع عبر HTTPS."
+
+#: src/Privacy/ComplianceAuditor.php:243
+msgid "Site not using HTTPS. Analytics data transmitted in plaintext."
+msgstr "الموقع لا يستخدم HTTPS. بيانات التحليلات تُنقَل بنص ظاهر."
+
+#. translators: %d: number of sessions anonymized
+#: src/Privacy/PrivacyEraser.php:124
+#, php-format
+msgid "Anonymized %d analytics session(s). Aggregate statistics preserved."
+msgstr "تم إخفاء هوية %d جلسة تحليلات. تم الإبقاء على الإحصاءات الإجمالية."
+
+#: src/Privacy/PrivacyExporter.php:102
+msgid "Session Start"
+msgstr "بداية الجلسة"
+
+#: src/Privacy/PrivacyExporter.php:106
+msgid "Session End"
+msgstr "نهاية الجلسة"
+
+#: src/Privacy/PrivacyExporter.php:107
+msgid "Active"
+msgstr "نشطة"
+
+#: src/Privacy/PrivacyExporter.php:110
+msgid "Pages Viewed"
+msgstr "الصفحات المشاهَدة"
+
+#: src/Privacy/PrivacyExporter.php:114
+msgid "Duration (seconds)"
+msgstr "المدة (بالثواني)"
+
+#: src/Privacy/PrivacyExporter.php:139
+msgid "Pages Visited"
+msgstr "الصفحات المُزارة"
+
+#: src/Privacy/PrivacyExporter.php:146
+msgid "Statnive Analytics Sessions"
+msgstr "جلسات تحليلات Statnive"
+
+#: src/Privacy/PrivacyExporter.php:147
+msgid "Analytics sessions recorded by Statnive. No IP addresses or cookies are stored."
+msgstr "جلسات تحليلات سجّلتها Statnive. لا يتم تخزين أي عناوين IP أو ملفات تعريف ارتباط."
+
+#: src/Privacy/PrivacyPolicyGenerator.php:55
+msgid "Analytics (Statnive)"
+msgstr "التحليلات (Statnive)"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:56
+msgid "This website uses Statnive, a privacy-first analytics plugin that runs entirely on our server. No data is shared with third-party services."
+msgstr "يستخدم هذا الموقع إضافة Statnive، وهي إضافة تحليلات تحترم الخصوصية وتعمل بالكامل على خادمنا. لا تُشارَك أي بيانات مع خدمات الأطراف الثالثة."
+
+#: src/Privacy/PrivacyPolicyGenerator.php:59
+msgid "Cookies & Tracking"
+msgstr "ملفات تعريف الارتباط والتتبع"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:60
+msgid "Statnive does not use cookies, localStorage, sessionStorage, or any form of browser fingerprinting. Visitor identification uses a daily-rotating cryptographic hash that cannot be reversed or used to track individuals across days."
+msgstr "لا تستخدم Statnive أي ملفات تعريف ارتباط أو localStorage أو sessionStorage أو أي شكل من أشكال بصمة المتصفح. يعتمد تعريف الزائر على تجزئة تشفيرية تتغير يوميًا، ولا يمكن عكسها أو استخدامها لتتبع الأفراد عبر الأيام."
+
+#: src/Privacy/PrivacyPolicyGenerator.php:63
+msgid "Data Collected"
+msgstr "البيانات التي يتم جمعها"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:64
+msgid "We collect the following anonymized data for each page visit:"
+msgstr "نقوم بجمع البيانات التالية بشكل مجهول الهوية لكل زيارة صفحة:"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:66
+msgid "Page URL visited (without query parameters)"
+msgstr "رابط الصفحة المُزارة (بدون معاملات الاستعلام)"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:67
+msgid "Referrer URL (domain only, query parameters stripped)"
+msgstr "رابط مصدر الإحالة (النطاق فقط، مع إزالة معاملات الاستعلام)"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:68
+msgid "Country and city (derived from IP, which is immediately discarded)"
+msgstr "الدولة والمدينة (مستخلصة من عنوان IP الذي يتم التخلص منه فورًا)"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:69
+msgid "Device type, browser, and operating system"
+msgstr "نوع الجهاز والمتصفح ونظام التشغيل"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:70
+msgid "Screen resolution, language, and timezone"
+msgstr "دقة الشاشة واللغة والمنطقة الزمنية"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:74
+msgid "IP Address Handling"
+msgstr "التعامل مع عنوان IP"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:75
+msgid "Your IP address is never stored. It is used only momentarily to determine your approximate geographic location and to generate a one-way cryptographic hash for visit counting. The IP is discarded immediately after processing and cannot be recovered from the stored hash."
+msgstr "لا يتم تخزين عنوان IP الخاص بك إطلاقًا. يُستخدَم لحظيًا فقط لتحديد موقعك الجغرافي التقريبي ولتوليد تجزئة تشفيرية أحادية الاتجاه لأغراض إحصاء الزيارات. يتم التخلص من IP فور المعالجة، ولا يمكن استرجاعه من التجزئة المخزَّنة."
+
+#: src/Privacy/PrivacyPolicyGenerator.php:76
+msgid "When no IP-derived geolocation source is configured, an approximate country may be inferred from your browser’s timezone setting. The timezone string is processed on this site’s server only and is not transmitted to any third party."
+msgstr "عندما لا يكون هناك مصدر تحديد موقع جغرافي مستند إلى IP مُهيَّأ، قد يتم استنتاج دولة تقريبية من إعداد المنطقة الزمنية في متصفحك. تتم معالجة قيمة المنطقة الزمنية على خادم هذا الموقع فقط، ولا يتم إرسالها إلى أي طرف ثالث."
+
+#: src/Privacy/PrivacyPolicyGenerator.php:79
+msgid "Consent"
+msgstr "الموافقة"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:81
+msgid "Because Statnive uses no cookies and stores no personal data, analytics run in cookieless mode without requiring consent under most privacy regulations."
+msgstr "نظرًا لأن Statnive لا تستخدم أي ملفات تعريف ارتباط ولا تخزّن أي بيانات شخصية، تعمل التحليلات في وضع بدون كوكيز دون الحاجة إلى الحصول على موافقة بموجب معظم لوائح الخصوصية."
+
+#: src/Privacy/PrivacyPolicyGenerator.php:83
+msgid "Analytics are disabled until you provide explicit consent through our cookie/consent banner. No data is collected before consent is granted."
+msgstr "تبقى التحليلات معطّلة حتى تقدّم موافقتك الصريحة من خلال شريط الكوكيز/الموافقة لدينا. لا يتم جمع أي بيانات قبل منح الموافقة."
+
+#: src/Privacy/PrivacyPolicyGenerator.php:85
+msgid "Analytics are active for all visitors. You may opt out using your browser's Do Not Track or Global Privacy Control settings."
+msgstr "التحليلات نشطة لجميع الزوار. يمكنك إلغاء الاشتراك باستخدام إعدادات Do Not Track أو Global Privacy Control في متصفحك."
+
+#: src/Privacy/PrivacyPolicyGenerator.php:90
+msgid "Do Not Track & Global Privacy Control"
+msgstr "Do Not Track و Global Privacy Control"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:93
+msgid "Do Not Track (DNT)"
+msgstr "Do Not Track (DNT)"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:96
+msgid "Global Privacy Control (GPC)"
+msgstr "Global Privacy Control (GPC)"
+
+#. translators: %s: comma-separated list of privacy signals
+#: src/Privacy/PrivacyPolicyGenerator.php:100
+#, php-format
+msgid "We honor the following browser privacy signals: %s. When enabled, no analytics data is collected."
+msgstr "نحترم إشارات الخصوصية التالية من المتصفح: %s. عند تفعيلها، لا يتم جمع أي بيانات تحليلات."
+
+#: src/Privacy/PrivacyPolicyGenerator.php:106
+msgid "Data Retention"
+msgstr "الاحتفاظ بالبيانات"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:108
+msgid "Aggregated analytics data is retained indefinitely. No personal data is stored."
+msgstr "يتم الاحتفاظ ببيانات التحليلات المُجمَّعة إلى أجل غير مسمى. لا يتم تخزين أي بيانات شخصية."
+
+#. translators: %d: number of days
+#: src/Privacy/PrivacyPolicyGenerator.php:112
+#, php-format
+msgid "Raw analytics data is automatically deleted after %d days. Only aggregated statistics are retained for historical reporting."
+msgstr "يتم حذف بيانات التحليلات الخام تلقائيًا بعد %d يومًا. لا يتم الاحتفاظ إلا بالإحصاءات المُجمَّعة لأغراض التقارير التاريخية."
+
+#: src/Privacy/PrivacyPolicyGenerator.php:118
+msgid "Your Rights"
+msgstr "حقوقك"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:119
+msgid "You may request export or deletion of any analytics data associated with your user account through the WordPress personal data tools. Anonymous visitor data cannot be attributed to individuals due to the cookieless, hash-based architecture."
+msgstr "يحق لك طلب تصدير أو حذف أي بيانات تحليلات مرتبطة بحسابك من خلال أدوات البيانات الشخصية في WordPress. لا يمكن نسب بيانات الزوار المجهولة الهوية إلى أفراد بعينهم بفضل البنية القائمة على التجزئة وبدون كوكيز."
+
+#: src/Privacy/SiteHealthIntegration.php:33
+msgid "Statnive Privacy Compliance"
+msgstr "امتثال الخصوصية لـ Statnive"
+
+#: src/Privacy/SiteHealthIntegration.php:38
+msgid "Statnive Data Retention"
+msgstr "احتفاظ Statnive بالبيانات"
+
+#: src/Privacy/SiteHealthIntegration.php:55
+msgid "Statnive privacy compliance is strong."
+msgstr "امتثال الخصوصية لـ Statnive قوي."
+
+#: src/Privacy/SiteHealthIntegration.php:58
+msgid "Statnive privacy settings could be improved. Review the Privacy Audit in your dashboard."
+msgstr "يمكن تحسين إعدادات الخصوصية في Statnive. راجع تدقيق الخصوصية في لوحة التحكم."
+
+#: src/Privacy/SiteHealthIntegration.php:61
+msgid "Statnive privacy compliance needs attention. Open Settings to configure privacy options."
+msgstr "امتثال الخصوصية لـ Statnive يحتاج إلى انتباه. افتح الإعدادات لتهيئة خيارات الخصوصية."
+
+#. translators: %d: compliance score
+#: src/Privacy/SiteHealthIntegration.php:67
+#, php-format
+msgid "Statnive Privacy Score: %d/100"
+msgstr "درجة الخصوصية في Statnive: %d/100"
+
+#: src/Privacy/SiteHealthIntegration.php:79
+msgid "Review Privacy Settings"
+msgstr "راجع إعدادات الخصوصية"
+
+#: src/Privacy/SiteHealthIntegration.php:96
+msgid "Statnive: Data retained indefinitely"
+msgstr "Statnive: الاحتفاظ بالبيانات إلى أجل غير مسمى"
+
+#: src/Privacy/SiteHealthIntegration.php:102
+msgid "Analytics data is retained forever. Consider setting a retention period for data minimization best practices."
+msgstr "يتم الاحتفاظ ببيانات التحليلات إلى الأبد. ننصح بضبط مدة احتفاظ لاتباع أفضل ممارسات تقليل البيانات."
+
+#: src/Privacy/SiteHealthIntegration.php:106
+msgid "Configure Retention"
+msgstr "تهيئة الاحتفاظ بالبيانات"
+
+#. translators: %1$d: days, %2$s: mode
+#: src/Privacy/SiteHealthIntegration.php:115
+#, php-format
+msgid "Statnive: %1$d-day retention (%2$s)"
+msgstr "Statnive: احتفاظ لمدة %1$d يومًا (%2$s)"
+
+#: src/Privacy/SiteHealthIntegration.php:124
+msgid "Data retention is configured with automatic cleanup."
+msgstr "تم تهيئة الاحتفاظ بالبيانات مع تنظيف تلقائي."
+
+#: statnive.php:111
+msgid "Statnive: Composer autoloader not found. Please run \"composer install\" in the plugin directory."
+msgstr "Statnive: لم يتم العثور على محمّل Composer التلقائي. الرجاء تشغيل «composer install» داخل مجلد الإضافة."
+
+# React/TypeScript-source strings (merged by bin/extract-react-pot.mjs).
+
+#: resources/react/components/charts/pie-chart-card.tsx:88
+msgid "Total"
+msgstr "الإجمالي"
+
+#: resources/react/components/charts/pie-chart-card.tsx:101
+#: resources/react/pages/devices.tsx:57
+#: resources/react/pages/devices.tsx:64
+msgid "Name"
+msgstr "الاسم"
+
+#: resources/react/components/charts/pie-chart-card.tsx:102
+#: resources/react/components/charts/time-series-chart.tsx:44
+#: resources/react/components/shared/dual-bar-cell.tsx:22
+#: resources/react/pages/overview.tsx:115
+msgid "Visitors"
+msgstr "الزوار"
+
+#: resources/react/components/charts/pie-chart-card.tsx:103
+msgid "Percentage"
+msgstr "النسبة المئوية"
+
+#: resources/react/components/charts/time-series-chart.tsx:45
+#: resources/react/components/shared/dual-bar-cell.tsx:31
+#: resources/react/pages/overview.tsx:121
+msgid "Sessions"
+msgstr "الجلسات"
+
+#: resources/react/components/charts/time-series-chart.tsx:89
+msgid "Visitors and sessions over time"
+msgstr "الزوار والجلسات عبر الزمن"
+
+#: resources/react/components/charts/time-series-chart.tsx:92
+msgid "Date"
+msgstr "التاريخ"
+
+#: resources/react/components/layouts/dashboard-layout.tsx:81
+msgid "Skip to content"
+msgstr "تخطي إلى المحتوى"
+
+#: resources/react/components/layouts/dashboard-layout.tsx:107
+msgid "Dashboard navigation"
+msgstr "تنقل لوحة التحكم"
+
+#: resources/react/components/shared/data-table.tsx:40
+msgid "No data available"
+msgstr "لا تتوفر بيانات"
+
+#: resources/react/components/shared/date-range-picker.tsx:20
+msgid "Date range"
+msgstr "النطاق الزمني"
+
+#: resources/react/components/shared/kpi-card.tsx:39
+msgid "Change %1$s %2$s versus previous period"
+msgstr "تغير %1$s %2$s مقارنة بالفترة السابقة"
+
+#: resources/react/components/shared/kpi-card.tsx:40
+msgid "up"
+msgstr "ارتفاع"
+
+#: resources/react/components/shared/kpi-card.tsx:40
+msgid "down"
+msgstr "انخفاض"
+
+#: resources/react/components/shared/realtime-counter.tsx:14
+msgid "%d active visitors"
+msgstr "%d زائر نشط"
+
+#: resources/react/components/shared/realtime-counter.tsx:25
+msgid "online"
+msgstr "متصل الآن"
+
+#: resources/react/lib/wp-commands.ts:26
+msgid "Statnive: Go to Overview"
+msgstr "Statnive: انتقل إلى نظرة عامة"
+
+#: resources/react/lib/wp-commands.ts:27
+msgid "Statnive: Go to Pages"
+msgstr "Statnive: انتقل إلى الصفحات"
+
+#: resources/react/lib/wp-commands.ts:28
+msgid "Statnive: Go to Referrers"
+msgstr "Statnive: انتقل إلى مصادر الإحالة"
+
+#: resources/react/lib/wp-commands.ts:29
+msgid "Statnive: Go to Geography"
+msgstr "Statnive: انتقل إلى الجغرافيا"
+
+#: resources/react/lib/wp-commands.ts:30
+msgid "Statnive: Go to Devices"
+msgstr "Statnive: انتقل إلى الأجهزة"
+
+#: resources/react/lib/wp-commands.ts:31
+msgid "Statnive: Go to Real-time"
+msgstr "Statnive: انتقل إلى اللحظي"
+
+#: resources/react/lib/wp-commands.ts:32
+msgid "Statnive: Go to Settings"
+msgstr "Statnive: انتقل إلى الإعدادات"
+
+#: resources/react/pages/devices.tsx:32
+msgid "Unknown"
+msgstr "غير معروف"
+
+#: resources/react/pages/devices.tsx:40
+msgid "Human"
+msgstr "بشر"
+
+#: resources/react/pages/devices.tsx:41
+msgid "Bot"
+msgstr "روبوت"
+
+#: resources/react/pages/devices.tsx:58
+#: resources/react/pages/devices.tsx:65
+#: resources/react/pages/geography.tsx:39
+#: resources/react/pages/geography.tsx:48
+#: resources/react/pages/languages.tsx:22
+#: resources/react/pages/overview.tsx:58
+#: resources/react/pages/referrers.tsx:40
+msgid "Visitors / Sessions"
+msgstr "الزوار / الجلسات"
+
+#: resources/react/pages/devices.tsx:70
+msgid "No device data for this period. If your site has traffic, data should appear within minutes. If nothing shows after 10 minutes, check Settings → Diagnostics."
+msgstr "لا تتوفر بيانات أجهزة لهذه الفترة. إذا كان موقعك يستقبل زيارات، يُفترض أن تظهر البيانات خلال دقائق. إذا لم يظهر شيء بعد 10 دقائق، راجع الإعدادات ← التشخيص."
+
+#: resources/react/pages/devices.tsx:74
+msgid "Devices"
+msgstr "الأجهزة"
+
+#: resources/react/pages/devices.tsx:79
+msgid "Device Distribution"
+msgstr "توزيع الأجهزة"
+
+#: resources/react/pages/devices.tsx:84
+msgid "Bot vs Human"
+msgstr "الروبوتات مقابل البشر"
+
+#: resources/react/pages/devices.tsx:93
+msgid "Browsers"
+msgstr "المتصفحات"
+
+#: resources/react/pages/devices.tsx:96
+msgid "Operating Systems"
+msgstr "أنظمة التشغيل"
+
+#: resources/react/pages/geography.tsx:38
+#: resources/react/pages/geography.tsx:47
+msgid "Country"
+msgstr "الدولة"
+
+#: resources/react/pages/geography.tsx:46
+msgid "City"
+msgstr "المدينة"
+
+#: resources/react/pages/geography.tsx:54
+msgid "No geography data for this period. If your site has traffic, data should appear within minutes. If nothing shows after 10 minutes, check Settings → Diagnostics."
+msgstr "لا تتوفر بيانات جغرافية لهذه الفترة. إذا كان موقعك يستقبل زيارات، يُفترض أن تظهر البيانات خلال دقائق. إذا لم يظهر شيء بعد 10 دقائق، راجع الإعدادات ← التشخيص."
+
+#: resources/react/pages/geography.tsx:55
+msgid "No geography data for this period. The free DB-IP city database is active; data will appear as traffic arrives."
+msgstr "لا تتوفر بيانات جغرافية لهذه الفترة. قاعدة بيانات المدن المجانية DB-IP نشطة؛ ستظهر البيانات مع وصول الزيارات."
+
+#: resources/react/pages/geography.tsx:56
+msgid "No visitors with a resolvable country in this period. Country detection via your CDN is active; data will appear as traffic arrives."
+msgstr "لا يوجد زوار بدولة قابلة للتحديد في هذه الفترة. اكتشاف الدولة عبر CDN لديك نشط؛ ستظهر البيانات مع وصول الزيارات."
+
+#: resources/react/pages/geography.tsx:57
+msgid "No visitors with a resolvable country in this period. Approximate country is being derived from each visitor’s browser timezone; for precise city-level data, enable DB-IP below or configure MaxMind GeoIP in Settings → GeoIP."
+msgstr "لا يوجد زوار بدولة قابلة للتحديد في هذه الفترة. يتم استنتاج دولة تقريبية من المنطقة الزمنية لمتصفح كل زائر؛ للحصول على بيانات دقيقة على مستوى المدينة، فعّل DB-IP أدناه أو هيّئ MaxMind GeoIP من الإعدادات ← GeoIP."
+
+#: resources/react/pages/geography.tsx:58
+msgid "Geography resolution is currently disabled. Re-enable the timezone fallback, configure MaxMind GeoIP, or place your site behind a CDN that sets a country header."
+msgstr "تحديد الموقع الجغرافي معطّل حاليًا. أعد تفعيل بديل المنطقة الزمنية، أو هيّئ MaxMind GeoIP، أو ضع موقعك خلف CDN يضيف ترويسة الدولة."
+
+#: resources/react/pages/geography.tsx:67
+msgid "Geography"
+msgstr "الجغرافيا"
+
+#: resources/react/pages/geography.tsx:73
+msgid "Want city-level data?"
+msgstr "هل تريد بيانات على مستوى المدينة؟"
+
+#: resources/react/pages/geography.tsx:75
+msgid "Enable the free DB-IP city database. No account, no key — one click. ~80 MB downloads to your uploads directory. CC-BY-4.0."
+msgstr "فعّل قاعدة بيانات المدن المجانية DB-IP. بدون حساب وبدون مفتاح — بنقرة واحدة. يتم تنزيل نحو 80 MB إلى مجلد uploads لديك. الترخيص CC-BY-4.0."
+
+#: resources/react/pages/geography.tsx:85
+msgid "Enabling…"
+msgstr "جارٍ التفعيل…"
+
+#: resources/react/pages/geography.tsx:86
+msgid "Enable city-level geography"
+msgstr "فعّل الجغرافيا على مستوى المدينة"
+
+#: resources/react/pages/geography.tsx:91
+msgid "Could not enable DB-IP. Try again, or configure MaxMind in Settings → GeoIP."
+msgstr "تعذّر تفعيل DB-IP. حاول مرة أخرى، أو هيّئ MaxMind من الإعدادات ← GeoIP."
+
+#: resources/react/pages/geography.tsx:99
+msgid "Countries"
+msgstr "الدول"
+
+#: resources/react/pages/geography.tsx:102
+msgid "Cities"
+msgstr "المدن"
+
+#: resources/react/pages/geography.tsx:108
+msgid "GeoIP data © DB-IP under CC-BY 4.0"
+msgstr "بيانات GeoIP © DB-IP بموجب ترخيص CC-BY 4.0"
+
+#: resources/react/pages/languages.tsx:21
+msgid "Language"
+msgstr "اللغة"
+
+#: resources/react/pages/languages.tsx:29
+msgid "Languages"
+msgstr "اللغات"
+
+#: resources/react/pages/languages.tsx:32
+msgid "Visitor Languages"
+msgstr "لغات الزوار"
+
+#: resources/react/pages/languages.tsx:38
+msgid "No language data for this period. If your site has traffic, data should appear within minutes. If nothing shows after 10 minutes, check Settings → Diagnostics."
+msgstr "لا تتوفر بيانات لغات لهذه الفترة. إذا كان موقعك يستقبل زيارات، يُفترض أن تظهر البيانات خلال دقائق. إذا لم يظهر شيء بعد 10 دقائق، راجع الإعدادات ← التشخيص."
+
+#: resources/react/pages/overview.tsx:46
+#: resources/react/pages/referrers.tsx:38
+msgid "Source"
+msgstr "المصدر"
+
+#: resources/react/pages/overview.tsx:49
+#: resources/react/pages/overview.tsx:51
+#: resources/react/pages/referrers.tsx:104
+msgid "Direct"
+msgstr "مباشر"
+
+#: resources/react/pages/overview.tsx:81
+#: resources/react/pages/pages.tsx:57
+#: resources/react/pages/pages.tsx:72
+msgid "Page"
+msgstr "الصفحة"
+
+#: resources/react/pages/overview.tsx:90
+#: resources/react/pages/pages.tsx:65
+msgid "Visitors / Views"
+msgstr "الزوار / المشاهدات"
+
+#: resources/react/pages/overview.tsx:101
+msgid "Today"
+msgstr "اليوم"
+
+#: resources/react/pages/overview.tsx:104
+msgid "Last %s"
+msgstr "آخر %s"
+
+#: resources/react/pages/overview.tsx:110
+msgid "Overview"
+msgstr "نظرة عامة"
+
+#: resources/react/pages/overview.tsx:127
+msgid "Pageviews"
+msgstr "مشاهدات الصفحة"
+
+#: resources/react/pages/overview.tsx:133
+#: resources/react/pages/pages.tsx:66
+msgid "Avg Duration"
+msgstr "متوسط المدة"
+
+#: resources/react/pages/overview.tsx:145
+msgid "Visitors & Sessions — %s"
+msgstr "الزوار والجلسات — %s"
+
+#: resources/react/pages/overview.tsx:156
+msgid "Top Sources"
+msgstr "أبرز المصادر"
+
+#: resources/react/pages/overview.tsx:162
+msgid "No traffic sources recorded yet. New visits will appear within a few minutes — if nothing shows after 10 minutes, run the self-test under Settings → Diagnostics or check Settings → Tracking is enabled."
+msgstr "لم يتم تسجيل أي مصادر زيارات حتى الآن. ستظهر الزيارات الجديدة خلال بضع دقائق — إذا لم يظهر شيء بعد 10 دقائق، شغّل الاختبار الذاتي من الإعدادات ← التشخيص أو تأكد من أن الإعدادات ← القياس مفعّل."
+
+#: resources/react/pages/overview.tsx:167
+msgid "Top Pages"
+msgstr "أبرز الصفحات"
+
+#: resources/react/pages/overview.tsx:173
+msgid "No page data recorded yet. Tracking is active — pageviews will appear after the next visit. If nothing shows after 10 minutes, run the self-test under Settings → Diagnostics."
+msgstr "لم يتم تسجيل أي بيانات صفحات حتى الآن. القياس نشط — ستظهر مشاهدات الصفحة بعد الزيارة التالية. إذا لم يظهر شيء بعد 10 دقائق، شغّل الاختبار الذاتي من الإعدادات ← التشخيص."
+
+#: resources/react/pages/pages.tsx:76
+msgid "Entries / Visitors"
+msgstr "الدخول / الزوار"
+
+#: resources/react/pages/pages.tsx:77
+msgid "Exits / Visitors"
+msgstr "الخروج / الزوار"
+
+#: resources/react/pages/pages.tsx:79
+msgid "No page data for this period. If your site has traffic, data should appear within minutes. If nothing shows after 10 minutes, check Settings → Diagnostics."
+msgstr "لا تتوفر بيانات صفحات لهذه الفترة. إذا كان موقعك يستقبل زيارات، يُفترض أن تظهر البيانات خلال دقائق. إذا لم يظهر شيء بعد 10 دقائق، راجع الإعدادات ← التشخيص."
+
+#: resources/react/pages/pages.tsx:83
+msgid "Pages"
+msgstr "الصفحات"
+
+#: resources/react/pages/pages.tsx:90
+msgid "Search pages"
+msgstr "بحث في الصفحات"
+
+#: resources/react/pages/pages.tsx:91
+msgid "Search pages..."
+msgstr "بحث في الصفحات…"
+
+#: resources/react/pages/pages.tsx:101
+msgid "Top Content"
+msgstr "أبرز المحتوى"
+
+#: resources/react/pages/pages.tsx:115
+msgid "Entry Pages"
+msgstr "صفحات الدخول"
+
+#: resources/react/pages/pages.tsx:126
+msgid "Exit Pages"
+msgstr "صفحات الخروج"
+
+#: resources/react/pages/realtime.tsx:12
+msgid "Real-time"
+msgstr "لحظي"
+
+#: resources/react/pages/realtime.tsx:22
+msgid "Active Visitors"
+msgstr "الزوار النشطون"
+
+#: resources/react/pages/realtime.tsx:30
+msgid "%s active visitors"
+msgstr "%s زائر نشط"
+
+#: resources/react/pages/realtime.tsx:41
+msgid "Active Pages"
+msgstr "الصفحات النشطة"
+
+#: resources/react/pages/realtime.tsx:60
+msgid "No active pages"
+msgstr "لا توجد صفحات نشطة"
+
+#: resources/react/pages/realtime.tsx:68
+msgid "Recent Pageviews"
+msgstr "أحدث مشاهدات الصفحة"
+
+#: resources/react/pages/realtime.tsx:89
+msgid "No recent activity"
+msgstr "لا يوجد نشاط حديث"
+
+#: resources/react/pages/referrers.tsx:37
+msgid "Campaign"
+msgstr "الحملة"
+
+#: resources/react/pages/referrers.tsx:39
+msgid "Medium"
+msgstr "الوسيط"
+
+#: resources/react/pages/referrers.tsx:45
+msgid "No referrer data for this period. If your site has traffic, data should appear within minutes. If nothing shows after 10 minutes, check Settings → Diagnostics."
+msgstr "لا تتوفر بيانات مصادر إحالة لهذه الفترة. إذا كان موقعك يستقبل زيارات، يُفترض أن تظهر البيانات خلال دقائق. إذا لم يظهر شيء بعد 10 دقائق، راجع الإعدادات ← التشخيص."
+
+#: resources/react/pages/referrers.tsx:49
+msgid "Referrers"
+msgstr "مصادر الإحالة"
+
+#: resources/react/pages/referrers.tsx:60
+msgid "%s sessions"
+msgstr "%s جلسة"
+
+#: resources/react/pages/referrers.tsx:70
+msgid "All Sources"
+msgstr "كل المصادر"
+
+#: resources/react/pages/referrers.tsx:72
+msgid "Loading sources"
+msgstr "جارٍ تحميل المصادر"
+
+#: resources/react/pages/referrers.tsx:94
+msgid "%1$s visitors · %2$s sessions"
+msgstr "%1$s زائر · %2$s جلسة"
+
+#: resources/react/pages/referrers.tsx:119
+msgid "UTM Campaigns"
+msgstr "حملات UTM"
+
+#: resources/react/pages/referrers.tsx:119
+msgid "No UTM parameters tracked yet. UTM-tagged links will appear here once visitors arrive through them."
+msgstr "لم يتم تسجيل أي معاملات UTM حتى الآن. ستظهر الروابط الموسومة بـ UTM هنا فور وصول زوار عبرها."
+
+#: resources/react/pages/settings.tsx:12
+msgid "30 days"
+msgstr "30 يومًا"
+
+#: resources/react/pages/settings.tsx:13
+msgid "90 days"
+msgstr "90 يومًا"
+
+#: resources/react/pages/settings.tsx:14
+msgid "180 days"
+msgstr "180 يومًا"
+
+#: resources/react/pages/settings.tsx:15
+msgid "1 year"
+msgstr "سنة واحدة"
+
+#: resources/react/pages/settings.tsx:16
+msgid "Forever"
+msgstr "إلى الأبد"
+
+#: resources/react/pages/settings.tsx:115
+#: resources/react/pages/settings.tsx:70
+msgid "Settings"
+msgstr "الإعدادات"
+
+#: resources/react/pages/settings.tsx:95
+msgid "Save failed."
+msgstr "فشل الحفظ."
+
+#: resources/react/pages/settings.tsx:123
+msgid "Saved ✓"
+msgstr "تم الحفظ ✓"
+
+#: resources/react/pages/settings.tsx:138
+msgid "Saving…"
+msgstr "جارٍ الحفظ…"
+
+#: resources/react/pages/settings.tsx:138
+msgid "Save"
+msgstr "حفظ"
+
+#: resources/react/pages/settings.tsx:145
+msgid "Privacy"
+msgstr "الخصوصية"
+
+#: resources/react/pages/settings.tsx:158
+msgid "Cookieless"
+msgstr "بدون كوكيز"
+
+#: resources/react/pages/settings.tsx:160
+msgid "Recommended"
+msgstr "موصى به"
+
+#: resources/react/pages/settings.tsx:164
+msgid "No cookies, privacy-first. Designed to support GDPR/CCPA/APPI compliance."
+msgstr "بدون كوكيز، تحترم الخصوصية. مصمَّمة لدعم الامتثال لـ GDPR/CCPA/APPI."
+
+#: resources/react/pages/settings.tsx:176
+msgid "Disabled Until Consent"
+msgstr "معطّل حتى الحصول على الموافقة"
+
+#: resources/react/pages/settings.tsx:178
+msgid "Tracking stays off until a consent-banner plugin signals approval. Also honors plugins that implement the WordPress Consent API."
+msgstr "يبقى القياس معطّلًا حتى تُصدر إضافة شريط الموافقة إشارة الموافقة. كما يحترم الإضافات التي تستخدم WordPress Consent API."
+
+#: resources/react/pages/settings.tsx:187
+msgid "Works with Real Cookie Banner, Complianz, CookieYes, or any WordPress Consent API plugin."
+msgstr "يعمل مع Real Cookie Banner و Complianz و CookieYes أو أي إضافة تستخدم WordPress Consent API."
+
+#: resources/react/pages/settings.tsx:204
+msgid "Respect Do Not Track"
+msgstr "احترم إشارة Do Not Track"
+
+#: resources/react/pages/settings.tsx:206
+msgid "Skip visitors whose browser sends the DNT signal."
+msgstr "تجاهَل الزوار الذين تُرسل متصفحاتهم إشارة DNT."
+
+#: resources/react/pages/settings.tsx:217
+msgid "Respect Global Privacy Control"
+msgstr "احترم إشارة Global Privacy Control"
+
+#: resources/react/pages/settings.tsx:219
+msgid "Skip visitors whose browser sends the GPC signal. Legally recognized in California and other regions."
+msgstr "تجاهَل الزوار الذين تُرسل متصفحاتهم إشارة GPC. معترف بها قانونيًا في كاليفورنيا ومناطق أخرى."
+
+#: resources/react/pages/settings.tsx:244
+msgid "How long stats are kept before deletion. Shorter = more privacy-friendly and a smaller database. Longer = year-over-year comparisons."
+msgstr "المدة التي تُحفظ خلالها الإحصاءات قبل الحذف. مدة أقصر = خصوصية أفضل وقاعدة بيانات أصغر. مدة أطول = إمكانية مقارنة سنة بسنة."
+
+#: resources/react/pages/settings.tsx:253
+msgid "Exclusions"
+msgstr "الاستثناءات"
+
+#: resources/react/pages/settings.tsx:255
+msgid "Excluded IP Addresses"
+msgstr "عناوين IP المستثناة"
+
+#: resources/react/pages/settings.tsx:266
+msgid "Tracking requests from these IPs or ranges are ignored — handy for hiding your own team. One per line. Supports CIDR (e.g., 10.0.0.0/8) and IPv6."
+msgstr "يتم تجاهل طلبات القياس القادمة من عناوين IP أو النطاقات المذكورة — مفيد لإخفاء فريقك. عنوان واحد لكل سطر. يدعم CIDR (مثل 10.0.0.0/8) و IPv6."
+
+#: resources/react/pages/settings.tsx:273
+msgid "Your IP right now:"
+msgstr "عنوان IP الخاص بك الآن:"
+
+#: resources/react/pages/settings.tsx:283
+msgid "Add to exclusions"
+msgstr "أضِف إلى الاستثناءات"
+
+#: resources/react/pages/settings.tsx:291
+msgid "GeoIP"
+msgstr "GeoIP"
+
+#: resources/react/pages/settings.tsx:296
+msgid "MaxMind License Key"
+msgstr "مفتاح ترخيص MaxMind"
+
+#: resources/react/pages/settings.tsx:307
+msgid "Paste your free MaxMind license key"
+msgstr "ألصق مفتاح ترخيص MaxMind المجاني"
+
+#: resources/react/pages/settings.tsx:311
+msgid "Get a free key:"
+msgstr "احصل على مفتاح مجاني:"
+
+#: resources/react/pages/settings.tsx:320
+msgid "then paste it here."
+msgstr "ثم ألصقه هنا."
+
+#: resources/react/pages/settings.tsx:323
+msgid "A key is currently saved. Clear this field to remove it, or paste a new one to replace it."
+msgstr "يوجد مفتاح محفوظ حاليًا. امسح هذا الحقل لإزالته، أو ألصق مفتاحًا جديدًا لاستبداله."
+
+#: resources/react/pages/settings.tsx:338
+msgid "Enable MaxMind GeoIP"
+msgstr "تفعيل MaxMind GeoIP"
+
+#: resources/react/pages/settings.tsx:340
+msgid "Activates the weekly MaxMind GeoLite2-City download (~70 MB to your uploads directory). Requires a license key above. The first lookup happens after the next WP-Cron tick."
+msgstr "يُفعّل تنزيل MaxMind GeoLite2-City الأسبوعي (نحو 70 MB إلى مجلد uploads لديك). يستلزم مفتاح ترخيص أعلاه. يتم أول بحث بعد دورة WP-Cron التالية."
+
+#: resources/react/pages/settings.tsx:349
+msgid "Prefer no account? Use the one-click DB-IP IP-to-City Lite download on the Geography page instead — it is free and account-less."
+msgstr "هل تفضّل عدم إنشاء حساب؟ استخدم تنزيل DB-IP IP-to-City Lite بنقرة واحدة من صفحة الجغرافيا بدلًا من ذلك — مجاني وبلا حساب."

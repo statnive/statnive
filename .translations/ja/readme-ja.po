@@ -1,0 +1,360 @@
+# Translation of Plugins - Statnive - Stable Readme (latest release) in Japanese
+# This file is distributed under the same license as the Plugins - Statnive - Stable Readme (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2026-05-16 10:00+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Statnive translation seed v0.4.13\n"
+"Language: ja\n"
+"Project-Id-Version: Plugins - Statnive - Stable Readme (latest release)\n"
+
+#. Short description.
+msgid "Privacy-first WordPress analytics — cookieless, self-hosted, real-time. A simple Google Analytics alternative with GeoIP and AI-source tracking."
+msgstr "プライバシー重視の WordPress アクセス解析 — Cookie 不要、セルフホスト、リアルタイム。GeoIP と AI 流入元計測を備えたシンプルな Google Analytics 代替。"
+
+#. Section heading.
+msgid "Description"
+msgstr "概要"
+
+#. Description lead.
+msgid "**The privacy-first analytics plugin for WordPress.**"
+msgstr "**WordPress 向けプライバシー重視のアクセス解析プラグイン。**"
+
+#. Description paragraph.
+msgid "See exactly who visits your site, where they come from, and what they do — without cookies, third-party trackers, or sending visitor data to anyone. All analytics live in your own WordPress database."
+msgstr "誰がサイトを訪問し、どこから来て、何をしているのかを正確に把握できます — Cookie や第三者の追跡スクリプト、訪問者データの外部送信は一切ありません。すべてのアクセス解析データは、お使いの WordPress データベース内に保持されます。"
+
+#. Description paragraph.
+msgid "Open source under GPLv2. Self-hosted in your own database — nothing ever leaves your server."
+msgstr "GPLv2 ライセンスのオープンソースです。お使いのデータベース上でセルフホスト — データがサーバー外へ出ることはありません。"
+
+#. Description paragraph.
+msgid "Install, activate, open Statnive — your dashboard fills up within minutes. No tracking code to paste, no account to create."
+msgstr "インストール、有効化、Statnive を開く — 数分以内にダッシュボードがデータで埋まります。計測コードの貼り付けもアカウント作成も不要です。"
+
+#. Subsection heading.
+msgid "Why Statnive?"
+msgstr "Statnive を選ぶ理由"
+
+#. Bullet.
+msgid "**No cookies. No fingerprinting. No third-party transfers.** Designed to support GDPR, CCPA, and APPI compliance."
+msgstr "**Cookie なし。フィンガープリンティングなし。第三者への送信なし。** GDPR・CCPA・APPI 対応を支援する設計です。"
+
+#. Bullet.
+msgid "**Honors GPC and DNT** server-side, integrates with the WordPress Consent API."
+msgstr "**GPC と DNT を尊重** — サーバーサイドで対応し、WordPress Consent API と連携します。"
+
+#. Bullet.
+msgid "**Daily-rotating salted hashes** — cross-day and cross-site tracking are mathematically impossible."
+msgstr "**毎日ローテーションされるソルト付きハッシュ** — 日をまたぐ計測やサイト横断の計測は数学的に不可能です。"
+
+#. Bullet.
+msgid "**Eight focused dashboard pages.** No clutter, no upsells."
+msgstr "**用途を絞った 8 つのダッシュボードページ。** 雑然さも追加課金の誘導もありません。"
+
+#. Subsection heading.
+msgid "Key Features"
+msgstr "主な機能"
+
+#. Bullet.
+msgid "**Real-time** — Active visitor count, active pages, live pageview feed."
+msgstr "**リアルタイム** — アクティブな訪問者数、アクティブなページ、ライブのページビューフィード。"
+
+#. Bullet.
+msgid "**Smart channel grouping** — Direct, Organic Search, Social Media, Email, Referral, Paid Search, Paid Social, and a dedicated **AI Assistants** channel for ChatGPT, Claude, Gemini, Perplexity, Copilot, NotebookLM, Meta AI, Le Chat, Deepseek, You, iAsk, Jasper, and Writesonic."
+msgstr "**スマートなチャネルグルーピング** — ダイレクト、オーガニック検索、ソーシャルメディア、メール、リファラル、有料検索、有料ソーシャル、そして ChatGPT・Claude・Gemini・Perplexity・Copilot・NotebookLM・Meta AI・Le Chat・Deepseek・You・iAsk・Jasper・Writesonic のための専用 **AI アシスタント** チャネル。"
+
+#. Bullet.
+msgid "**Custom events + engagement** — Link clicks (and tagged button clicks via `statnive-event-*` classes), form submissions, downloads, outbound links, time on page, scroll depth."
+msgstr "**カスタムイベントとエンゲージメント** — リンククリック（および `statnive-event-*` クラスでタグ付けされたボタンクリック）、フォーム送信、ダウンロード、外部リンク、ページ滞在時間、スクロール深度。"
+
+#. Bullet.
+msgid "**Bot vs human separation** — Real visitors and automated traffic in distinct buckets."
+msgstr "**ボットと人間の分離** — 実訪問者と自動化トラフィックを別々のバケットで分類します。"
+
+#. Bullet.
+msgid "**Geography in tiers** — Zero-config timezone country mapping; optional CDN headers; optional one-click DB-IP city download (free); optional MaxMind GeoLite2."
+msgstr "**段階的な地域判定** — 設定不要のタイムゾーンによる国マッピング、任意の CDN ヘッダー、任意のワンクリック DB-IP 都市データダウンロード（無料）、任意の MaxMind GeoLite2。"
+
+#. Bullet.
+msgid "**Configurable retention** — 30 / 90 / 180 / 365 days, or Forever. Daily WP-Cron purge."
+msgstr "**設定可能な保持期間** — 30 / 90 / 180 / 365 日、または無期限。毎日の WP-Cron パージ。"
+
+#. Bullet.
+msgid "**WordPress Privacy API** — Personal-data export and erase registered automatically."
+msgstr "**WordPress Privacy API** — 個人データのエクスポートと削除を自動登録します。"
+
+#. Bullet.
+msgid "**WP-CLI** — `wp statnive cron run` for sites with `DISABLE_WP_CRON`."
+msgstr "**WP-CLI** — `DISABLE_WP_CRON` が設定されたサイト向けの `wp statnive cron run` コマンド。"
+
+#. Description paragraph.
+msgid "Source code at [github.com/statnive/statnive](https://github.com/statnive/statnive). Learn more at [statnive.com](https://statnive.com)."
+msgstr "ソースコードは [github.com/statnive/statnive](https://github.com/statnive/statnive) にあります。詳細は [statnive.com](https://statnive.com) をご覧ください。"
+
+#. Section heading.
+msgid "Installation"
+msgstr "インストール"
+
+#. Numbered step.
+msgid "Upload the `statnive` folder to `/wp-content/plugins/`."
+msgstr "`statnive` フォルダを `/wp-content/plugins/` にアップロードします。"
+
+#. Numbered step.
+msgid "Activate the plugin through the **Plugins** menu in WordPress."
+msgstr "WordPress の **プラグイン** メニューからプラグインを有効化します。"
+
+#. Numbered step.
+msgid "Open **Statnive** in the admin sidebar."
+msgstr "管理画面のサイドバーから **Statnive** を開きます。"
+
+#. Installation paragraph.
+msgid "That's it. Tracking begins immediately — no configuration, no account, no tracking code to paste."
+msgstr "以上です。計測はすぐに開始されます — 設定もアカウントも計測コードの貼り付けも不要です。"
+
+#. Section heading.
+msgid "Frequently Asked Questions"
+msgstr "よくある質問"
+
+#. FAQ question.
+msgid "Does Statnive use cookies?"
+msgstr "Statnive は Cookie を使用しますか?"
+
+#. FAQ answer.
+msgid "No. Statnive is 100% cookie-free. Visitor identification is a daily-rotating salted hash that cannot be used to track individuals across days or sites."
+msgstr "いいえ。Statnive は 100% Cookie 不要です。訪問者の識別には毎日ローテーションされるソルト付きハッシュを使用しており、日をまたいで、またはサイト横断で個人を計測することはできません。"
+
+#. FAQ question.
+msgid "Is Statnive GDPR compliant?"
+msgstr "Statnive は GDPR に準拠していますか?"
+
+#. FAQ answer.
+msgid "Statnive is **designed to support** GDPR, CCPA, APPI, and PIPL compliance: no cookies, no PII storage, daily rotating hashes, configurable retention, WordPress Privacy API export/erase, and server-side respect for GPC and DNT signals. Final compliance always depends on your configuration and your privacy policy."
+msgstr "Statnive は GDPR・CCPA・APPI・PIPL 対応を **支援する設計** になっています。Cookie なし、個人情報の保存なし、毎日ローテーションされるハッシュ、設定可能な保持期間、WordPress Privacy API によるエクスポート・削除、サーバーサイドでの GPC・DNT シグナルの尊重を備えています。最終的なコンプライアンスは、設定内容とプライバシーポリシーによって決まります。"
+
+#. FAQ question.
+msgid "How does visitor counting work without cookies?"
+msgstr "Cookie を使わずに訪問者数をどのようにカウントしていますか?"
+
+#. FAQ answer.
+msgid "A salted SHA-256 hash of the visitor's anonymized IP plus User-Agent. The salt rotates daily, so the same visitor gets a different hash tomorrow — cross-day stitching is impossible while daily uniques stay accurate."
+msgstr "訪問者の匿名化された IP と User-Agent からソルト付き SHA-256 ハッシュを生成します。ソルトは毎日ローテーションされるため、同じ訪問者でも翌日には異なるハッシュになります — 日をまたぐ計測の結合は不可能ですが、日次のユニーク数は正確に保たれます。"
+
+#. FAQ question.
+msgid "Where is my data stored?"
+msgstr "データはどこに保存されますか?"
+
+#. FAQ answer.
+msgid "In your WordPress database, in tables prefixed `statnive_`. Nothing leaves your server unless you explicitly enable the optional MaxMind or DB-IP GeoIP downloads (one-time database files, never visitor data). When you uninstall the plugin, all tables and uploaded GeoIP files are removed."
+msgstr "お使いの WordPress データベース内の、`statnive_` プレフィックスが付いたテーブルに保存されます。任意の MaxMind または DB-IP GeoIP ダウンロード（一度きりのデータベースファイルであり、訪問者データではありません）を明示的に有効化しない限り、データがサーバー外へ出ることはありません。プラグインをアンインストールすると、すべてのテーブルとアップロードされた GeoIP ファイルは削除されます。"
+
+#. FAQ question.
+msgid "Does it work with WooCommerce?"
+msgstr "WooCommerce で動作しますか?"
+
+#. FAQ answer.
+msgid "Statnive tracks pageviews, events, sessions, and referrers on WooCommerce stores like any other WordPress site. Dedicated WooCommerce revenue tracking with Revenue per Visitor (RPV) is on the roadmap."
+msgstr "Statnive は、WooCommerce ストア上でも他の WordPress サイトと同様にページビュー、イベント、セッション、リファラーを計測します。訪問者あたり売上 (RPV) を含む WooCommerce 専用の売上計測はロードマップに掲載されています。"
+
+#. FAQ question.
+msgid "How much does it slow down my site?"
+msgstr "サイトの表示速度にどの程度影響しますか?"
+
+#. FAQ answer.
+msgid "The tracker script is small (~2 KB gzipped) and loads asynchronously, so it does not block your page render. The hit endpoint writes a single row per pageview. Dashboard queries run against pre-aggregated daily summaries rather than raw events."
+msgstr "計測スクリプトは小さく（gzip 圧縮後で約 2 KB）、非同期で読み込まれるため、ページのレンダリングをブロックしません。ヒットエンドポイントはページビューごとに 1 行のみを書き込みます。ダッシュボードのクエリは、生のイベントではなく事前集計済みの日次サマリーに対して実行されます。"
+
+#. FAQ question.
+msgid "Can I run Statnive alongside Google Analytics or Matomo?"
+msgstr "Statnive を Google Analytics や Matomo と併用できますか?"
+
+#. FAQ answer.
+msgid "Yes. Statnive is fully independent. Many users run Statnive as their primary privacy-friendly analytics and keep GA4 for advertising attribution."
+msgstr "はい。Statnive は完全に独立して動作します。多くのユーザーは、プライバシーに配慮したメインのアクセス解析として Statnive を使用し、広告アトリビューション用に GA4 を併用しています。"
+
+#. FAQ question.
+msgid "What can cause \"no data\"?"
+msgstr "「データなし」となる原因は何ですか?"
+
+#. FAQ answer.
+msgid "Common causes: ad blockers, aggressive page caching, CSP rules blocking `fetch`/`sendBeacon` (allow `connect-src 'self'`), GPC or DNT enabled, or `DISABLE_WP_CRON` without a system cron. Exclude `/wp-json/statnive/v1/hit` and `admin-ajax.php?action=statnive_hit` from page caches."
+msgstr "よくある原因: 広告ブロッカー、強いページキャッシュ、`fetch` や `sendBeacon` をブロックする CSP ルール（`connect-src 'self'` を許可してください）、GPC または DNT の有効化、システム Cron なしの `DISABLE_WP_CRON` 設定など。ページキャッシュから `/wp-json/statnive/v1/hit` と `admin-ajax.php?action=statnive_hit` を除外してください。"
+
+#. FAQ question.
+msgid "How does Geography work?"
+msgstr "地域判定はどのように動作しますか?"
+
+#. FAQ answer.
+msgid "Four tiers, falling through automatically: (1) browser timezone → country, ~80% accurate, no external call; (2) CDN country headers (Cloudflare, CloudFront, Vercel) when present; (3) optional one-click DB-IP IP-to-City Lite (free, CC-BY 4.0); (4) optional MaxMind GeoLite2 (free with an account). Tiers 3 and 4 are opt-in via a discrete user click."
+msgstr "4 段階で自動的にフォールバックします: (1) ブラウザのタイムゾーン → 国 — 精度約 80%、外部通信なし、(2) CDN の国ヘッダー（Cloudflare、CloudFront、Vercel）があれば使用、(3) 任意のワンクリック DB-IP IP-to-City Lite（無料、CC-BY 4.0）、(4) 任意の MaxMind GeoLite2（アカウント取得で無料）。階層 3 と 4 は、ユーザーが明示的にクリックしたときのみ有効化されるオプトイン方式です。"
+
+#. FAQ question.
+msgid "Does Statnive count bots as real visitors?"
+msgstr "Statnive はボットを実訪問者としてカウントしますか?"
+
+#. FAQ answer.
+msgid "No. ~200 server-side bot UA patterns and tracker-side fingerprints (webdriver, automation flags) bucket bots separately, so \"Visitors\" and \"Pageviews\" reflect humans only."
+msgstr "いいえ。サーバーサイドの約 200 件のボット UA パターンと、計測スクリプト側のフィンガープリント（webdriver、自動化フラグ）によりボットを別バケットに分類します。そのため「訪問者」と「ページビュー」は人間のみを反映します。"
+
+#. Section heading.
+msgid "Screenshots"
+msgstr "スクリーンショット"
+
+#. Screenshot caption.
+msgid "Know your traffic at a glance — visitors, sessions, pageviews and trends that matter"
+msgstr "トラフィックを一目で把握 — 訪問者、セッション、ページビュー、重要なトレンド"
+
+#. Screenshot caption.
+msgid "Find what's actually driving results — top sources and top pages side by side"
+msgstr "成果を生み出している要因を発見 — トップ流入元とトップページを横並びで表示"
+
+#. Screenshot caption.
+msgid "Every page, ranked by what matters — search, sort, find your best content"
+msgstr "重要な指標ですべてのページをランキング — 検索、ソート、ベストコンテンツの発見"
+
+#. Screenshot caption.
+msgid "See where visitors arrive and leave — entry and exit pages side by side"
+msgstr "訪問者の入口と出口を確認 — ランディングページと離脱ページを横並びで表示"
+
+#. Screenshot caption.
+msgid "Understand where your traffic comes from — referral, direct, organic, social, AI"
+msgstr "トラフィックの流入元を把握 — リファラル、ダイレクト、オーガニック、ソーシャル、AI"
+
+#. Screenshot caption.
+msgid "Desktop, mobile, bots — device, browser and OS breakdowns in one view"
+msgstr "デスクトップ、モバイル、ボット — デバイス、ブラウザ、OS の内訳を 1 つのビューで表示"
+
+#. Screenshot caption.
+msgid "Reach across languages and regions — see which languages your visitors speak"
+msgstr "言語と地域をまたいだリーチ — 訪問者が話す言語を可視化"
+
+#. Screenshot caption.
+msgid "Watch your site breathe in real time — active visitors and live pageviews"
+msgstr "リアルタイムでサイトの動きを観察 — アクティブな訪問者とライブのページビュー"
+
+#. Section heading.
+msgid "External Services"
+msgstr "外部サービス"
+
+#. External Services lead.
+msgid "This plugin connects to two third-party services, both **opt-in via explicit user action**. No visitor data is ever sent to either service."
+msgstr "このプラグインは 2 つの第三者サービスに接続しますが、いずれも **ユーザーが明示的にアクションを実行したときのみ有効化されるオプトイン方式** です。どちらのサービスにも訪問者データが送信されることはありません。"
+
+#. Subsection heading.
+msgid "MaxMind GeoLite2 (optional)"
+msgstr "MaxMind GeoLite2（任意）"
+
+#. External Services paragraph.
+msgid "Used to download the MaxMind GeoLite2-City database for high-accuracy visitor geolocation. Requires a free MaxMind account and a license key the user pastes into Settings → GeoIP. Accuracy: approximate city/region only — not for identifying individuals or households."
+msgstr "訪問者の高精度な地理位置情報のために MaxMind GeoLite2-City データベースをダウンロードします。無料の MaxMind アカウントと、設定 → GeoIP に貼り付けるライセンスキーが必要です。精度: おおよその都市・地域レベルのみで、個人や世帯の特定には使用できません。"
+
+#. Bullet.
+msgid "Source: MaxMind (https://www.maxmind.com), downloaded from https://download.maxmind.com/app/geoip_download"
+msgstr "提供元: MaxMind (https://www.maxmind.com)、ダウンロード元: https://download.maxmind.com/app/geoip_download"
+
+#. Bullet.
+msgid "When: Weekly via WP-Cron, only after the user enables GeoIP and configures a license key"
+msgstr "実行タイミング: ユーザーが GeoIP を有効化しライセンスキーを設定した後、WP-Cron 経由で毎週実行"
+
+#. Bullet.
+msgid "Data sent: License key + standard HTTP request headers. No visitor data is transmitted."
+msgstr "送信データ: ライセンスキー + 標準的な HTTP リクエストヘッダー。訪問者データは送信されません。"
+
+#. Bullet.
+msgid "Data received: GeoLite2-City.mmdb file, stored in your `wp-content/uploads/statnive/` directory"
+msgstr "受信データ: GeoLite2-City.mmdb ファイル — `wp-content/uploads/statnive/` ディレクトリに保存"
+
+#. Bullet.
+msgid "Purpose: Approximate visitor geolocation (country / region / coarse city)"
+msgstr "目的: 訪問者のおおよその地理位置情報（国 / 地域 / 大まかな都市）"
+
+#. Bullet.
+msgid "Sign up for a MaxMind account: https://www.maxmind.com/en/geolite2/signup"
+msgstr "MaxMind アカウント登録: https://www.maxmind.com/en/geolite2/signup"
+
+#. Bullet.
+msgid "Get your license key: https://www.maxmind.com/en/accounts/current/license-key"
+msgstr "ライセンスキーの取得: https://www.maxmind.com/en/accounts/current/license-key"
+
+#. Bullet.
+msgid "MaxMind Privacy Policy: https://www.maxmind.com/en/privacy-policy"
+msgstr "MaxMind プライバシーポリシー: https://www.maxmind.com/en/privacy-policy"
+
+#. Bullet.
+msgid "MaxMind Terms of Use: https://www.maxmind.com/en/terms-of-use"
+msgstr "MaxMind 利用規約: https://www.maxmind.com/en/terms-of-use"
+
+#. Bullet.
+msgid "MaxMind GeoLite2 EULA: https://www.maxmind.com/en/geolite2/eula"
+msgstr "MaxMind GeoLite2 EULA: https://www.maxmind.com/en/geolite2/eula"
+
+#. External Services paragraph.
+msgid "This product includes GeoLite Data created by MaxMind, available from https://www.maxmind.com."
+msgstr "本製品には MaxMind が作成した GeoLite データが含まれています（https://www.maxmind.com から入手可能）。"
+
+#. Subsection heading.
+msgid "DB-IP IP-to-City Lite (optional)"
+msgstr "DB-IP IP-to-City Lite（任意）"
+
+#. External Services paragraph.
+msgid "Used to download the free DB-IP IP-to-City Lite database. No account, no license key, no EULA. Accuracy: approximate city/region only — not for identifying individuals or households."
+msgstr "無料の DB-IP IP-to-City Lite データベースをダウンロードするために使用します。アカウントもライセンスキーも EULA も不要です。精度: おおよその都市・地域レベルのみで、個人や世帯の特定には使用できません。"
+
+#. Bullet.
+msgid "Source: DB-IP (https://db-ip.com), downloaded from https://download.db-ip.com/free/"
+msgstr "提供元: DB-IP (https://db-ip.com)、ダウンロード元: https://download.db-ip.com/free/"
+
+#. Bullet.
+msgid "When: One-shot user click \"Enable city-level geography\" on the Geography page, then monthly via WP-Cron for refresh"
+msgstr "実行タイミング: 地域ページの「都市レベルの地域判定を有効化」をユーザーがワンクリックした後、その後は WP-Cron 経由で毎月更新"
+
+#. Bullet.
+msgid "Data sent: Standard HTTP request headers only (no visitor data, no account, no key)"
+msgstr "送信データ: 標準的な HTTP リクエストヘッダーのみ（訪問者データ・アカウント・キーは送信されません）"
+
+#. Bullet.
+msgid "Data received: dbip-city-lite-YYYY-MM.mmdb.gz file, decompressed to your `wp-content/uploads/statnive/` directory"
+msgstr "受信データ: dbip-city-lite-YYYY-MM.mmdb.gz ファイル — `wp-content/uploads/statnive/` ディレクトリに展開"
+
+#. Bullet.
+msgid "Purpose: Approximate visitor geolocation (city / region / country)"
+msgstr "目的: 訪問者のおおよその地理位置情報（都市 / 地域 / 国）"
+
+#. Bullet.
+msgid "DB-IP Terms: https://db-ip.com/tos.php"
+msgstr "DB-IP 利用規約: https://db-ip.com/tos.php"
+
+#. Bullet.
+msgid "DB-IP Privacy Policy: https://db-ip.com/privacy.php"
+msgstr "DB-IP プライバシーポリシー: https://db-ip.com/privacy.php"
+
+#. Bullet.
+msgid "License: CC-BY 4.0"
+msgstr "ライセンス: CC-BY 4.0"
+
+#. External Services paragraph.
+msgid "GeoIP data © DB-IP under CC-BY 4.0."
+msgstr "GeoIP データ © DB-IP (CC-BY 4.0)。"
+
+#. External Services paragraph.
+msgid "No visitor data is ever sent to any external service. All analytics data remains in your WordPress database."
+msgstr "訪問者データが外部サービスへ送信されることは一切ありません。すべてのアクセス解析データはお使いの WordPress データベース内に保持されます。"
+
+#. Section heading.
+msgid "Privacy Policy"
+msgstr "プライバシーポリシー"
+
+#. Privacy Policy paragraph.
+msgid "All analytics data stays in your WordPress database. Raw IPs are used only for the optional GeoIP lookup and are never persisted. Statnive registers with the WordPress Privacy API for personal-data export and erasure."
+msgstr "すべてのアクセス解析データはお使いの WordPress データベース内に保持されます。生の IP アドレスは任意の GeoIP ルックアップにのみ使用され、保存されることはありません。Statnive は個人データのエクスポートと削除のため、WordPress Privacy API に登録されます。"
+
+#. Section heading.
+msgid "Changelog"
+msgstr "更新履歴"
+
+#. Section heading.
+msgid "Upgrade Notice"
+msgstr "アップグレード通知"

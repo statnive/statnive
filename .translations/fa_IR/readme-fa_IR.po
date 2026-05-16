@@ -1,0 +1,348 @@
+# Translation of Plugins - Statnive - Stable (latest release) in Persian
+# This file is distributed under the same license as the Plugins - Statnive - Stable (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2026-05-16 10:00+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Statnive translation seed v0.4.13\n"
+"Language: fa_IR\n"
+"Project-Id-Version: Plugins - Statnive - Stable (latest release)\n"
+
+#. Short description.
+msgid "Privacy-first WordPress analytics — cookieless, self-hosted, real-time. A simple Google Analytics alternative with GeoIP and AI-source tracking."
+msgstr "آنالیتیکس WordPress حریم‌خصوصی‌محور — بدون کوکی، خودمیزبان، بی‌درنگ. جایگزینی ساده برای Google Analytics با GeoIP و اندازه‌گیری منابع AI."
+
+#. Description section, paragraph 1 (heading).
+msgid "**The privacy-first analytics plugin for WordPress.**"
+msgstr "**افزونه آنالیتیکس حریم‌خصوصی‌محور برای WordPress.**"
+
+#. Description section, paragraph 2.
+msgid "See exactly who visits your site, where they come from, and what they do — without cookies, third-party trackers, or sending visitor data to anyone. All analytics live in your own WordPress database."
+msgstr "ببینید دقیقاً چه کسانی از وب‌سایت شما بازدید می‌کنند، از کجا می‌آیند و چه می‌کنند — بدون کوکی، بدون ردیاب‌های شخص ثالث، و بدون ارسال داده بازدیدکنندگان به هیچ‌کس. همه آنالیتیکس در پایگاه داده WordPress خودتان قرار دارد."
+
+#. Description section, paragraph 3.
+msgid "Open source under GPLv2. Self-hosted in your own database — nothing ever leaves your server."
+msgstr "متن‌باز تحت GPLv2. خودمیزبان در پایگاه داده خودتان — هیچ چیز هرگز سرور شما را ترک نمی‌کند."
+
+#. Description section, paragraph 4.
+msgid "Install, activate, open Statnive — your dashboard fills up within minutes. No tracking code to paste, no account to create."
+msgstr "نصب کنید، فعال کنید، Statnive را باز کنید — داشبورد شما ظرف چند دقیقه پر می‌شود. هیچ کد اندازه‌گیری برای وارد کردن، هیچ حسابی برای ساختن وجود ندارد."
+
+#. Why Statnive heading.
+msgid "Why Statnive?"
+msgstr "چرا Statnive؟"
+
+#. Why bullet 1.
+msgid "**No cookies. No fingerprinting. No third-party transfers.** Designed to support GDPR, CCPA, and APPI compliance."
+msgstr "**بدون کوکی. بدون اثرانگشت‌گیری. بدون انتقال به اشخاص ثالث.** طراحی‌شده برای پشتیبانی از انطباق با GDPR، CCPA و APPI."
+
+#. Why bullet 2.
+msgid "**Honors GPC and DNT** server-side, integrates with the WordPress Consent API."
+msgstr "**GPC و DNT را رعایت می‌کند** در سمت سرور، با WordPress Consent API یکپارچه می‌شود."
+
+#. Why bullet 3.
+msgid "**Daily-rotating salted hashes** — cross-day and cross-site tracking are mathematically impossible."
+msgstr "**hashهای salt‌دار با چرخش روزانه** — اندازه‌گیری بین‌روز و بین‌سایت از نظر ریاضی غیرممکن است."
+
+#. Why bullet 4.
+msgid "**Eight focused dashboard pages.** No clutter, no upsells."
+msgstr "**هشت صفحه داشبورد متمرکز.** بدون شلوغی، بدون پیشنهادهای فروش اضافی."
+
+#. Key features heading.
+msgid "Key Features"
+msgstr "ویژگی‌های کلیدی"
+
+#. Feature bullet 1.
+msgid "**Real-time** — Active visitor count, active pages, live pageview feed."
+msgstr "**بی‌درنگ** — شمار بازدیدکنندگان فعال، صفحات فعال، فید زنده بازدید صفحه."
+
+#. Feature bullet 2.
+msgid "**Smart channel grouping** — Direct, Organic Search, Social Media, Email, Referral, Paid Search, Paid Social, and a dedicated **AI Assistants** channel for ChatGPT, Claude, Gemini, Perplexity, Copilot, NotebookLM, Meta AI, Le Chat, Deepseek, You, iAsk, Jasper, and Writesonic."
+msgstr "**گروه‌بندی هوشمند کانال‌ها** — مستقیم، جست‌وجوی ارگانیک، شبکه‌های اجتماعی، ایمیل، ارجاع، جست‌وجوی پولی، شبکه اجتماعی پولی، و یک کانال اختصاصی **دستیارهای AI** برای ChatGPT، Claude، Gemini، Perplexity، Copilot، NotebookLM، Meta AI، Le Chat، Deepseek، You، iAsk، Jasper و Writesonic."
+
+#. Feature bullet 3.
+msgid "**Custom events + engagement** — Link clicks (and tagged button clicks via `statnive-event-*` classes), form submissions, downloads, outbound links, time on page, scroll depth."
+msgstr "**رویدادهای سفارشی + تعامل** — کلیک بر روی پیوندها (و کلیک‌های دکمه‌های برچسب‌گذاری‌شده از طریق کلاس‌های `statnive-event-*`)، ارسال فرم‌ها، دانلودها، پیوندهای خروجی، زمان روی صفحه، عمق پیمایش."
+
+#. Feature bullet 4.
+msgid "**Bot vs human separation** — Real visitors and automated traffic in distinct buckets."
+msgstr "**جداسازی ربات از انسان** — بازدیدکنندگان واقعی و ترافیک خودکار در سطل‌های مجزا."
+
+#. Feature bullet 5.
+msgid "**Geography in tiers** — Zero-config timezone country mapping; optional CDN headers; optional one-click DB-IP city download (free); optional MaxMind GeoLite2."
+msgstr "**جغرافیا در لایه‌ها** — نگاشت کشور بدون پیکربندی از روی منطقه زمانی؛ هدرهای CDN اختیاری؛ دانلود تک‌کلیکی DB-IP در سطح شهر (رایگان) به‌صورت اختیاری؛ MaxMind GeoLite2 اختیاری."
+
+#. Feature bullet 6.
+msgid "**Configurable retention** — 30 / 90 / 180 / 365 days, or Forever. Daily WP-Cron purge."
+msgstr "**نگهداری قابل پیکربندی** — 30 / 90 / 180 / 365 روز، یا همیشه. پاک‌سازی روزانه از طریق WP-Cron."
+
+#. Feature bullet 7.
+msgid "**WordPress Privacy API** — Personal-data export and erase registered automatically."
+msgstr "**WordPress Privacy API** — خروجی و حذف داده‌های شخصی به‌صورت خودکار ثبت می‌شود."
+
+#. Feature bullet 8.
+msgid "**WP-CLI** — `wp statnive cron run` for sites with `DISABLE_WP_CRON`."
+msgstr "**WP-CLI** — دستور `wp statnive cron run` برای وب‌سایت‌هایی که `DISABLE_WP_CRON` را تنظیم کرده‌اند."
+
+#. Description final paragraph.
+msgid "Source code at [github.com/statnive/statnive](https://github.com/statnive/statnive). Learn more at [statnive.com](https://statnive.com)."
+msgstr "کد منبع در [github.com/statnive/statnive](https://github.com/statnive/statnive). برای اطلاعات بیشتر [statnive.com](https://statnive.com) را ببینید."
+
+#. Installation heading.
+msgid "Installation"
+msgstr "نصب"
+
+#. Installation step 1.
+msgid "Upload the `statnive` folder to `/wp-content/plugins/`."
+msgstr "پوشه `statnive` را در مسیر `/wp-content/plugins/` بارگذاری کنید."
+
+#. Installation step 2.
+msgid "Activate the plugin through the **Plugins** menu in WordPress."
+msgstr "افزونه را از طریق منوی **افزونه‌ها** در WordPress فعال کنید."
+
+#. Installation step 3.
+msgid "Open **Statnive** in the admin sidebar."
+msgstr "**Statnive** را در نوار کناری مدیریت باز کنید."
+
+#. Installation final paragraph.
+msgid "That's it. Tracking begins immediately — no configuration, no account, no tracking code to paste."
+msgstr "همین. اندازه‌گیری بلافاصله آغاز می‌شود — بدون پیکربندی، بدون حساب کاربری، بدون کد اندازه‌گیری برای وارد کردن."
+
+#. FAQ heading.
+msgid "Frequently Asked Questions"
+msgstr "پرسش‌های متداول"
+
+#. FAQ Q1.
+msgid "Does Statnive use cookies?"
+msgstr "آیا Statnive از کوکی استفاده می‌کند؟"
+
+#. FAQ A1.
+msgid "No. Statnive is 100% cookie-free. Visitor identification is a daily-rotating salted hash that cannot be used to track individuals across days or sites."
+msgstr "خیر. Statnive 100٪ بدون کوکی است. شناسایی بازدیدکنندگان با یک hash salt‌دار دارای چرخش روزانه انجام می‌شود که نمی‌توان از آن برای پیگیری افراد در طول روزها یا وب‌سایت‌ها استفاده کرد."
+
+#. FAQ Q2.
+msgid "Is Statnive GDPR compliant?"
+msgstr "آیا Statnive با GDPR منطبق است؟"
+
+#. FAQ A2.
+msgid "Statnive is **designed to support** GDPR, CCPA, APPI, and PIPL compliance: no cookies, no PII storage, daily rotating hashes, configurable retention, WordPress Privacy API export/erase, and server-side respect for GPC and DNT signals. Final compliance always depends on your configuration and your privacy policy."
+msgstr "Statnive **طراحی‌شده است تا از** انطباق با GDPR، CCPA، APPI و PIPL پشتیبانی کند: بدون کوکی، بدون ذخیره PII، hashهای با چرخش روزانه، نگهداری قابل پیکربندی، خروجی/حذف از طریق WordPress Privacy API، و رعایت سیگنال‌های GPC و DNT در سمت سرور. انطباق نهایی همیشه به پیکربندی شما و سیاست حریم خصوصی‌تان بستگی دارد."
+
+#. FAQ Q3.
+msgid "How does visitor counting work without cookies?"
+msgstr "شمارش بازدیدکنندگان بدون کوکی چگونه کار می‌کند؟"
+
+#. FAQ A3.
+msgid "A salted SHA-256 hash of the visitor's anonymized IP plus User-Agent. The salt rotates daily, so the same visitor gets a different hash tomorrow — cross-day stitching is impossible while daily uniques stay accurate."
+msgstr "یک hash از نوع SHA-256 با salt از IP ناشناس‌سازی‌شده بازدیدکننده به‌علاوه User-Agent. این salt هر روز چرخش می‌کند، بنابراین همان بازدیدکننده فردا hash متفاوتی دریافت می‌کند — اتصال داده‌ها بین روزها غیرممکن است در حالی که شمار منحصربه‌فرد روزانه دقیق باقی می‌ماند."
+
+#. FAQ Q4.
+msgid "Where is my data stored?"
+msgstr "داده‌های من کجا ذخیره می‌شوند؟"
+
+#. FAQ A4.
+msgid "In your WordPress database, in tables prefixed `statnive_`. Nothing leaves your server unless you explicitly enable the optional MaxMind or DB-IP GeoIP downloads (one-time database files, never visitor data). When you uninstall the plugin, all tables and uploaded GeoIP files are removed."
+msgstr "در پایگاه داده WordPress شما، در جدول‌هایی با پیشوند `statnive_`. هیچ چیز از سرور شما خارج نمی‌شود مگر اینکه به‌صورت صریح دانلودهای اختیاری MaxMind یا DB-IP GeoIP را فعال کنید (پرونده‌های پایگاه داده تک‌بار، هرگز داده بازدیدکنندگان نیست). هنگامی که افزونه را حذف نصب می‌کنید، همه جدول‌ها و پرونده‌های GeoIP بارگذاری‌شده حذف می‌شوند."
+
+#. FAQ Q5.
+msgid "Does it work with WooCommerce?"
+msgstr "آیا با WooCommerce کار می‌کند؟"
+
+#. FAQ A5.
+msgid "Statnive tracks pageviews, events, sessions, and referrers on WooCommerce stores like any other WordPress site. Dedicated WooCommerce revenue tracking with Revenue per Visitor (RPV) is on the roadmap."
+msgstr "Statnive بازدیدهای صفحه، رویدادها، جلسات و ارجاع‌دهندگان را در فروشگاه‌های WooCommerce مانند هر وب‌سایت WordPress دیگر اندازه‌گیری می‌کند. اندازه‌گیری اختصاصی درآمد WooCommerce با Revenue per Visitor (RPV) در نقشه راه قرار دارد."
+
+#. FAQ Q6.
+msgid "How much does it slow down my site?"
+msgstr "وب‌سایت من را چقدر کند می‌کند؟"
+
+#. FAQ A6.
+msgid "The tracker script is small (~2 KB gzipped) and loads asynchronously, so it does not block your page render. The hit endpoint writes a single row per pageview. Dashboard queries run against pre-aggregated daily summaries rather than raw events."
+msgstr "اسکریپت اندازه‌گیری کوچک است (حدود 2 KB در حالت gzip) و به‌صورت ناهمگام بارگذاری می‌شود، بنابراین مانع از رندر شدن صفحه شما نمی‌شود. نقطه پایانی hit برای هر بازدید صفحه یک ردیف می‌نویسد. پرس‌وجوهای داشبورد در برابر خلاصه‌های روزانه از پیش تجمیع‌شده اجرا می‌شوند، نه رویدادهای خام."
+
+#. FAQ Q7.
+msgid "Can I run Statnive alongside Google Analytics or Matomo?"
+msgstr "آیا می‌توانم Statnive را در کنار Google Analytics یا Matomo اجرا کنم؟"
+
+#. FAQ A7.
+msgid "Yes. Statnive is fully independent. Many users run Statnive as their primary privacy-friendly analytics and keep GA4 for advertising attribution."
+msgstr "بله. Statnive کاملاً مستقل است. بسیاری از کاربران Statnive را به‌عنوان آنالیتیکس اصلی حریم‌خصوصی‌محور خود اجرا می‌کنند و GA4 را برای انتساب تبلیغات نگه می‌دارند."
+
+#. FAQ Q8.
+msgid "What can cause \"no data\"?"
+msgstr "چه چیزی می‌تواند باعث «بدون داده» شود؟"
+
+#. FAQ A8.
+msgid "Common causes: ad blockers, aggressive page caching, CSP rules blocking `fetch`/`sendBeacon` (allow `connect-src 'self'`), GPC or DNT enabled, or `DISABLE_WP_CRON` without a system cron. Exclude `/wp-json/statnive/v1/hit` and `admin-ajax.php?action=statnive_hit` from page caches."
+msgstr "دلایل رایج: مسدودکننده‌های تبلیغات، کش تهاجمی صفحه، قوانین CSP که `fetch`/`sendBeacon` را مسدود می‌کنند (اجازه دهید `connect-src 'self'`)، فعال بودن GPC یا DNT، یا `DISABLE_WP_CRON` بدون یک cron سیستمی. مسیرهای `/wp-json/statnive/v1/hit` و `admin-ajax.php?action=statnive_hit` را از کش‌های صفحه مستثنی کنید."
+
+#. FAQ Q9.
+msgid "How does Geography work?"
+msgstr "جغرافیا چگونه کار می‌کند؟"
+
+#. FAQ A9.
+msgid "Four tiers, falling through automatically: (1) browser timezone → country, ~80% accurate, no external call; (2) CDN country headers (Cloudflare, CloudFront, Vercel) when present; (3) optional one-click DB-IP IP-to-City Lite (free, CC-BY 4.0); (4) optional MaxMind GeoLite2 (free with an account). Tiers 3 and 4 are opt-in via a discrete user click."
+msgstr "چهار لایه که به‌صورت خودکار از بالا به پایین فرود می‌آیند: (1) منطقه زمانی مرورگر ← کشور، با دقت حدود 80٪، بدون فراخوانی خارجی؛ (2) هدرهای کشور CDN (Cloudflare، CloudFront، Vercel) در صورت وجود؛ (3) DB-IP IP-to-City Lite تک‌کلیکی اختیاری (رایگان، CC-BY 4.0)؛ (4) MaxMind GeoLite2 اختیاری (رایگان با یک حساب کاربری). لایه‌های 3 و 4 از طریق یک کلیک صریح کاربر فعال می‌شوند."
+
+#. FAQ Q10.
+msgid "Does Statnive count bots as real visitors?"
+msgstr "آیا Statnive ربات‌ها را به‌عنوان بازدیدکننده واقعی می‌شمارد؟"
+
+#. FAQ A10.
+msgid "No. ~200 server-side bot UA patterns and tracker-side fingerprints (webdriver, automation flags) bucket bots separately, so \"Visitors\" and \"Pageviews\" reflect humans only."
+msgstr "خیر. حدود 200 الگوی UA رباتی در سمت سرور و اثرانگشت‌های سمت اندازه‌گیر (webdriver، پرچم‌های اتوماسیون) ربات‌ها را به‌صورت جداگانه دسته‌بندی می‌کنند، بنابراین «بازدیدکنندگان» و «بازدیدهای صفحه» تنها انسان‌ها را منعکس می‌کنند."
+
+#. Screenshots heading.
+msgid "Screenshots"
+msgstr "تصاویر"
+
+#. Screenshot 1 caption.
+msgid "Know your traffic at a glance — visitors, sessions, pageviews and trends that matter"
+msgstr "ترافیک خود را در یک نگاه بشناسید — بازدیدکنندگان، جلسات، بازدیدهای صفحه و روندهای مهم"
+
+#. Screenshot 2 caption.
+msgid "Find what's actually driving results — top sources and top pages side by side"
+msgstr "بیابید چه چیزی واقعاً نتایج را پیش می‌برد — منابع برتر و صفحات برتر در کنار هم"
+
+#. Screenshot 3 caption.
+msgid "Every page, ranked by what matters — search, sort, find your best content"
+msgstr "هر صفحه، رتبه‌بندی‌شده بر اساس اهمیت — جست‌وجو کنید، مرتب کنید، بهترین محتوای خود را بیابید"
+
+#. Screenshot 4 caption.
+msgid "See where visitors arrive and leave — entry and exit pages side by side"
+msgstr "ببینید بازدیدکنندگان از کجا وارد می‌شوند و از کجا خارج می‌شوند — صفحات ورودی و خروجی در کنار هم"
+
+#. Screenshot 5 caption.
+msgid "Understand where your traffic comes from — referral, direct, organic, social, AI"
+msgstr "بفهمید ترافیک شما از کجا می‌آید — ارجاع، مستقیم، ارگانیک، شبکه‌های اجتماعی، AI"
+
+#. Screenshot 6 caption.
+msgid "Desktop, mobile, bots — device, browser and OS breakdowns in one view"
+msgstr "دسکتاپ، موبایل، ربات‌ها — تفکیک دستگاه، مرورگر و سیستم‌عامل در یک نما"
+
+#. Screenshot 7 caption.
+msgid "Reach across languages and regions — see which languages your visitors speak"
+msgstr "دسترسی به زبان‌ها و مناطق مختلف — ببینید بازدیدکنندگان شما به چه زبان‌هایی صحبت می‌کنند"
+
+#. Screenshot 8 caption.
+msgid "Watch your site breathe in real time — active visitors and live pageviews"
+msgstr "نفس کشیدن وب‌سایت خود را به‌صورت بی‌درنگ ببینید — بازدیدکنندگان فعال و بازدیدهای زنده صفحه"
+
+#. External Services heading.
+msgid "External Services"
+msgstr "خدمات خارجی"
+
+#. External Services intro.
+msgid "This plugin connects to two third-party services, both **opt-in via explicit user action**. No visitor data is ever sent to either service."
+msgstr "این افزونه به دو خدمت شخص ثالث متصل می‌شود که هر دو **با اقدام صریح کاربر فعال می‌شوند**. هیچ داده بازدیدکننده‌ای هرگز به هیچ‌یک از این خدمات ارسال نمی‌شود."
+
+#. MaxMind subheading.
+msgid "MaxMind GeoLite2 (optional)"
+msgstr "MaxMind GeoLite2 (اختیاری)"
+
+#. MaxMind description.
+msgid "Used to download the MaxMind GeoLite2-City database for high-accuracy visitor geolocation. Requires a free MaxMind account and a license key the user pastes into Settings → GeoIP. Accuracy: approximate city/region only — not for identifying individuals or households."
+msgstr "برای دانلود پایگاه داده MaxMind GeoLite2-City به‌منظور موقعیت‌یابی جغرافیایی با دقت بالا استفاده می‌شود. نیازمند یک حساب کاربری رایگان MaxMind و یک کلید مجوز است که کاربر آن را در تنظیمات ← GeoIP وارد می‌کند. دقت: تنها شهر/منطقه تقریبی — برای شناسایی افراد یا خانوارها مناسب نیست."
+
+#. MaxMind bullet 1.
+msgid "Source: MaxMind (https://www.maxmind.com), downloaded from https://download.maxmind.com/app/geoip_download"
+msgstr "منبع: MaxMind (https://www.maxmind.com)، دانلود از https://download.maxmind.com/app/geoip_download"
+
+#. MaxMind bullet 2.
+msgid "When: Weekly via WP-Cron, only after the user enables GeoIP and configures a license key"
+msgstr "زمان: هفتگی از طریق WP-Cron، تنها پس از اینکه کاربر GeoIP را فعال و یک کلید مجوز را پیکربندی کند"
+
+#. MaxMind bullet 3.
+msgid "Data sent: License key + standard HTTP request headers. No visitor data is transmitted."
+msgstr "داده‌های ارسالی: کلید مجوز + هدرهای استاندارد درخواست HTTP. هیچ داده بازدیدکننده‌ای منتقل نمی‌شود."
+
+#. MaxMind bullet 4.
+msgid "Data received: GeoLite2-City.mmdb file, stored in your `wp-content/uploads/statnive/` directory"
+msgstr "داده‌های دریافتی: پرونده GeoLite2-City.mmdb، ذخیره‌شده در پوشه `wp-content/uploads/statnive/` شما"
+
+#. MaxMind bullet 5.
+msgid "Purpose: Approximate visitor geolocation (country / region / coarse city)"
+msgstr "هدف: موقعیت‌یابی جغرافیایی تقریبی بازدیدکنندگان (کشور / منطقه / شهر تقریبی)"
+
+#. MaxMind bullet 6.
+msgid "Sign up for a MaxMind account: https://www.maxmind.com/en/geolite2/signup"
+msgstr "ثبت‌نام برای یک حساب MaxMind: https://www.maxmind.com/en/geolite2/signup"
+
+#. MaxMind bullet 7.
+msgid "Get your license key: https://www.maxmind.com/en/accounts/current/license-key"
+msgstr "دریافت کلید مجوز: https://www.maxmind.com/en/accounts/current/license-key"
+
+#. MaxMind bullet 8.
+msgid "MaxMind Privacy Policy: https://www.maxmind.com/en/privacy-policy"
+msgstr "سیاست حریم خصوصی MaxMind: https://www.maxmind.com/en/privacy-policy"
+
+#. MaxMind bullet 9.
+msgid "MaxMind Terms of Use: https://www.maxmind.com/en/terms-of-use"
+msgstr "شرایط استفاده MaxMind: https://www.maxmind.com/en/terms-of-use"
+
+#. MaxMind bullet 10.
+msgid "MaxMind GeoLite2 EULA: https://www.maxmind.com/en/geolite2/eula"
+msgstr "MaxMind GeoLite2 EULA: https://www.maxmind.com/en/geolite2/eula"
+
+#. MaxMind attribution.
+msgid "This product includes GeoLite Data created by MaxMind, available from https://www.maxmind.com."
+msgstr "این محصول شامل داده‌های GeoLite ساخته‌شده توسط MaxMind است که از https://www.maxmind.com در دسترس است."
+
+#. DB-IP subheading.
+msgid "DB-IP IP-to-City Lite (optional)"
+msgstr "DB-IP IP-to-City Lite (اختیاری)"
+
+#. DB-IP description.
+msgid "Used to download the free DB-IP IP-to-City Lite database. No account, no license key, no EULA. Accuracy: approximate city/region only — not for identifying individuals or households."
+msgstr "برای دانلود پایگاه داده رایگان DB-IP IP-to-City Lite استفاده می‌شود. بدون حساب کاربری، بدون کلید مجوز، بدون EULA. دقت: تنها شهر/منطقه تقریبی — برای شناسایی افراد یا خانوارها مناسب نیست."
+
+#. DB-IP bullet 1.
+msgid "Source: DB-IP (https://db-ip.com), downloaded from https://download.db-ip.com/free/"
+msgstr "منبع: DB-IP (https://db-ip.com)، دانلود از https://download.db-ip.com/free/"
+
+#. DB-IP bullet 2.
+msgid "When: One-shot user click \"Enable city-level geography\" on the Geography page, then monthly via WP-Cron for refresh"
+msgstr "زمان: کلیک تک‌بار کاربر بر روی «فعال‌سازی جغرافیا در سطح شهر» در صفحه جغرافیا، سپس به‌صورت ماهانه از طریق WP-Cron برای به‌روزرسانی"
+
+#. DB-IP bullet 3.
+msgid "Data sent: Standard HTTP request headers only (no visitor data, no account, no key)"
+msgstr "داده‌های ارسالی: تنها هدرهای استاندارد درخواست HTTP (بدون داده بازدیدکننده، بدون حساب، بدون کلید)"
+
+#. DB-IP bullet 4.
+msgid "Data received: dbip-city-lite-YYYY-MM.mmdb.gz file, decompressed to your `wp-content/uploads/statnive/` directory"
+msgstr "داده‌های دریافتی: پرونده dbip-city-lite-YYYY-MM.mmdb.gz، در پوشه `wp-content/uploads/statnive/` شما از حالت فشرده خارج می‌شود"
+
+#. DB-IP bullet 5.
+msgid "Purpose: Approximate visitor geolocation (city / region / country)"
+msgstr "هدف: موقعیت‌یابی جغرافیایی تقریبی بازدیدکنندگان (شهر / منطقه / کشور)"
+
+#. DB-IP bullet 6.
+msgid "DB-IP Terms: https://db-ip.com/tos.php"
+msgstr "شرایط DB-IP: https://db-ip.com/tos.php"
+
+#. DB-IP bullet 7.
+msgid "DB-IP Privacy Policy: https://db-ip.com/privacy.php"
+msgstr "سیاست حریم خصوصی DB-IP: https://db-ip.com/privacy.php"
+
+#. DB-IP bullet 8.
+msgid "License: CC-BY 4.0"
+msgstr "مجوز: CC-BY 4.0"
+
+#. DB-IP attribution.
+msgid "GeoIP data © DB-IP under CC-BY 4.0."
+msgstr "داده‌های GeoIP © DB-IP تحت CC-BY 4.0."
+
+#. External services closing.
+msgid "No visitor data is ever sent to any external service. All analytics data remains in your WordPress database."
+msgstr "هیچ داده بازدیدکننده‌ای هرگز به هیچ خدمت خارجی ارسال نمی‌شود. همه داده‌های آنالیتیکس در پایگاه داده WordPress شما باقی می‌ماند."
+
+#. Privacy Policy heading.
+msgid "Privacy Policy"
+msgstr "سیاست حریم خصوصی"
+
+#. Privacy Policy body.
+msgid "All analytics data stays in your WordPress database. Raw IPs are used only for the optional GeoIP lookup and are never persisted. Statnive registers with the WordPress Privacy API for personal-data export and erasure."
+msgstr "همه داده‌های آنالیتیکس در پایگاه داده WordPress شما باقی می‌مانند. IPهای خام تنها برای جست‌وجوی اختیاری GeoIP استفاده می‌شوند و هرگز ذخیره نمی‌شوند. Statnive برای خروجی و حذف داده‌های شخصی با WordPress Privacy API ثبت می‌شود."

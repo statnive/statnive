@@ -1,0 +1,1045 @@
+# Translation of Plugins - Statnive - Stable (latest release) in Chinese (China)
+# This file is distributed under the same license as the Plugins - Statnive - Stable (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2026-05-16 10:00+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Statnive translation seed v0.4.13\n"
+"Language: zh_CN\n"
+"Project-Id-Version: Plugins - Statnive - Stable (latest release)\n"
+
+#. Plugin Name of the plugin
+#: statnive.php
+msgid "Statnive – Simple, Real-time, Privacy-first Web Analytics"
+msgstr "Statnive — 简单、实时、注重隐私的网站分析"
+
+#. Plugin URI of the plugin
+#. Author URI of the plugin
+#: statnive.php
+msgid "https://statnive.com"
+msgstr ""
+
+#. Description of the plugin
+#: statnive.php
+msgid "Simple stats, clear decisions. Privacy-first analytics for WordPress."
+msgstr "简单统计，清晰决策。注重隐私的 WordPress 网站分析。"
+
+#. Author of the plugin
+#: statnive.php
+#: src/Admin/AdminMenuManager.php:39
+msgid "Statnive"
+msgstr "Statnive"
+
+#: src/Admin/AdminBarWidget.php:56
+msgid "Statnive — Today's visitors"
+msgstr "Statnive — 今天的访客"
+
+#: src/Admin/AdminMenuManager.php:38
+#: src/Privacy/PrivacyEraser.php:43
+#: src/Privacy/PrivacyExporter.php:43
+msgid "Statnive Analytics"
+msgstr "Statnive 网站分析"
+
+#: src/Admin/CronHealth.php:86
+msgid "Daily salt rotation"
+msgstr "每日盐值轮换"
+
+#: src/Admin/CronHealth.php:91
+msgid "Daily data aggregation"
+msgstr "每日数据聚合"
+
+#: src/Admin/CronHealth.php:96
+msgid "Retention cleanup"
+msgstr "保留期清理"
+
+#: src/Admin/CronHealth.php:101
+msgid "Weekly GeoIP database update"
+msgstr "每周 GeoIP 数据库更新"
+
+#: src/Admin/GeoIPNotice.php:96
+msgid "Statnive: GeoIP is enabled but no MaxMind license key is configured."
+msgstr "Statnive：已启用 GeoIP，但尚未配置 MaxMind 许可密钥。"
+
+#: src/Admin/GeoIPNotice.php:97
+msgid "Impact: visitor country/region data will not appear in your reports. Page tracking, sources, devices and all other metrics continue to work normally."
+msgstr "影响：访客的国家/地区数据将不会出现在报表中。页面统计、来源、设备及其他所有指标均可正常使用。"
+
+#: src/Admin/GeoIPNotice.php:98
+msgid "What Statnive will do: retry the GeoIP database download every week. No additional alerts will be raised until the key is added or GeoIP is disabled."
+msgstr "Statnive 的处理方式：每周重试 GeoIP 数据库下载。在添加密钥或停用 GeoIP 之前，不会再发出额外的提醒。"
+
+#. translators: 1: MaxMind signup URL, 2: MaxMind EULA URL
+#: src/Admin/GeoIPNotice.php:102
+#, php-format
+msgid "<strong>To fix:</strong> <a href=\"%1$s\" target=\"_blank\" rel=\"noopener\">get a free MaxMind license key</a> (requires accepting the <a href=\"%2$s\" target=\"_blank\" rel=\"noopener\">GeoLite2 EULA</a>) and paste it into Settings → GeoIP. Or disable GeoIP in Settings to dismiss this notice."
+msgstr "<strong>解决方法：</strong><a href=\"%1$s\" target=\"_blank\" rel=\"noopener\">获取免费的 MaxMind 许可密钥</a>（需要接受 <a href=\"%2$s\" target=\"_blank\" rel=\"noopener\">GeoLite2 EULA</a>），然后粘贴到“设置 → GeoIP”。也可以在设置中停用 GeoIP 以关闭此通知。"
+
+#: src/Admin/GeoIPNotice.php:139
+msgid "Statnive: WordPress cron jobs are not running on time."
+msgstr "Statnive：WordPress 定时任务未按时运行。"
+
+#: src/Admin/GeoIPNotice.php:143
+msgid "These Statnive background jobs have not completed within their normal window:"
+msgstr "以下 Statnive 后台任务未在正常时间窗内完成："
+
+#. translators: 1: example crontab line, 2: WP-CLI command
+#: src/Admin/GeoIPNotice.php:154
+#, php-format
+msgid "<strong>To fix:</strong> add a system cron that pings <code>wp-cron.php</code> every five minutes — for example <code>%1$s</code> — or run <code>%2$s</code> via WP-CLI."
+msgstr "<strong>解决方法：</strong>添加一个系统 cron，每 5 分钟请求一次 <code>wp-cron.php</code>，例如 <code>%1$s</code>，或者通过 WP-CLI 运行 <code>%2$s</code>。"
+
+#: src/Admin/GeoIPNotice.php:166
+msgid "What Statnive will do automatically: this notice self-dismisses as soon as every job runs again within its normal window. Clicking \"Run cleanup now\" below records a fresh heartbeat, which clears the warning until the next scheduled cycle."
+msgstr "Statnive 将自动处理：一旦每项任务再次在正常窗口内完成，此通知会自动消失。点击下方的“立即运行清理”会记录一次新的心跳，从而在下一个计划周期之前清除此警告。"
+
+#: src/Admin/GeoIPNotice.php:172
+msgid "Run cleanup now"
+msgstr "立即运行清理"
+
+#: src/Admin/GeoIPNotice.php:177
+msgid "Dismiss"
+msgstr "关闭"
+
+#: src/Admin/GeoIPNotice.php:179
+msgid "Dismiss this Statnive cron warning"
+msgstr "关闭此 Statnive 定时任务警告"
+
+#. translators: %s = job label, e.g. "Daily data aggregation"
+#: src/Admin/GeoIPNotice.php:273
+#, php-format
+msgid "%s — has not run yet."
+msgstr "%s — 尚未运行。"
+
+#. translators: 1: job label, 2: localised date/time of last successful run
+#: src/Admin/GeoIPNotice.php:287
+#, php-format
+msgid "%1$s — last ran %2$s."
+msgstr "%1$s — 上次运行：%2$s。"
+
+#: src/Admin/GeoIPNotice.php:307
+msgid "You do not have permission to run Statnive cron jobs."
+msgstr "您没有运行 Statnive 定时任务的权限。"
+
+#: src/Admin/GeoIPNotice.php:316
+msgid "Statnive cron jobs ran successfully. The warning will reappear if cron stops firing again."
+msgstr "Statnive 定时任务运行成功。如果 cron 再次停止触发，此警告将重新出现。"
+
+#. translators: %s = error message
+#: src/Admin/GeoIPNotice.php:321
+#, php-format
+msgid "Statnive cron run failed: %s"
+msgstr "Statnive 定时任务运行失败：%s"
+
+#: src/Admin/GeoIPNotice.php:353
+msgid "You do not have permission to dismiss this notice."
+msgstr "您没有关闭此通知的权限。"
+
+#: src/Cron/CronRegistrar.php:32
+msgid "Once Weekly"
+msgstr "每周一次"
+
+#: src/Database/Migrator.php:259
+msgid "Statnive: plugin version mismatch detected."
+msgstr "Statnive：检测到插件版本不一致。"
+
+#. translators: 1: stored schema version, 2: running plugin version
+#: src/Database/Migrator.php:263
+#, php-format
+msgid "Your database schema is at version %1$s but the running plugin is version %2$s. This may happen if you downgraded the plugin. Please re-install the latest version to avoid data inconsistencies."
+msgstr "您的数据库结构版本为 %1$s，而正在运行的插件版本为 %2$s。这可能是因为您将插件降级所致。请重新安装最新版本，以避免数据不一致。"
+
+#: src/Plugin.php:124
+msgid "You do not have permission to activate plugins."
+msgstr "您没有启用插件的权限。"
+
+#: src/Plugin.php:125
+#: src/Plugin.php:141
+#: src/Plugin.php:157
+msgid "Plugin Activation Error"
+msgstr "插件启用错误"
+
+#. translators: 1: Required PHP version, 2: Current PHP version
+#: src/Plugin.php:136
+#: statnive.php:68
+#, php-format
+msgid "Statnive requires PHP %1$s or higher. You are running PHP %2$s."
+msgstr "Statnive 需要 PHP %1$s 或更高版本。您当前运行的是 PHP %2$s。"
+
+#. translators: 1: Required WordPress version, 2: Current WordPress version
+#: src/Plugin.php:152
+#: statnive.php:93
+#, php-format
+msgid "Statnive requires WordPress %1$s or higher. You are running WordPress %2$s."
+msgstr "Statnive 需要 WordPress %1$s 或更高版本。您当前运行的是 WordPress %2$s。"
+
+#: src/Privacy/ComplianceAuditor.php:70
+msgid "Consent mode configured"
+msgstr "已配置同意模式"
+
+#. translators: %s: consent mode name.
+#: src/Privacy/ComplianceAuditor.php:74
+#, php-format
+msgid "Consent mode: %s"
+msgstr "同意模式：%s"
+
+#: src/Privacy/ComplianceAuditor.php:75
+msgid "No consent mode configured. Set one in Settings."
+msgstr "尚未配置同意模式。请在“设置”中进行配置。"
+
+#: src/Privacy/ComplianceAuditor.php:88
+msgid "Do Not Track honored"
+msgstr "已遵循 Do Not Track"
+
+#: src/Privacy/ComplianceAuditor.php:91
+msgid "DNT header is respected."
+msgstr "已遵循 DNT 标头。"
+
+#: src/Privacy/ComplianceAuditor.php:92
+msgid "DNT header is not honored. Consider enabling for privacy compliance."
+msgstr "未遵循 DNT 标头。建议启用以满足隐私合规要求。"
+
+#: src/Privacy/ComplianceAuditor.php:105
+msgid "Global Privacy Control honored"
+msgstr "已遵循 Global Privacy Control"
+
+#: src/Privacy/ComplianceAuditor.php:108
+msgid "GPC header is respected."
+msgstr "已遵循 GPC 标头。"
+
+#: src/Privacy/ComplianceAuditor.php:109
+msgid "GPC header is not honored. Required under some US state laws."
+msgstr "未遵循 GPC 标头。部分美国州法律要求遵循该信号。"
+
+#: src/Privacy/ComplianceAuditor.php:123
+msgid "Data retention configured"
+msgstr "已配置数据保留期"
+
+#. translators: %1$d: number of days, %2$s: retention mode.
+#: src/Privacy/ComplianceAuditor.php:127
+#, php-format
+msgid "Data retained for %1$d days (%2$s mode)."
+msgstr "数据保留 %1$d 天（%2$s 模式）。"
+
+#: src/Privacy/ComplianceAuditor.php:128
+msgid "Data retained forever. Consider setting a retention period for compliance."
+msgstr "数据将永久保留。建议为合规起见设置保留期限。"
+
+#: src/Privacy/ComplianceAuditor.php:142
+msgid "Privacy policy page published"
+msgstr "隐私政策页面已发布"
+
+#: src/Privacy/ComplianceAuditor.php:145
+msgid "Privacy policy page is published. Statnive content auto-generated."
+msgstr "隐私政策页面已发布。Statnive 相关内容已自动生成。"
+
+#: src/Privacy/ComplianceAuditor.php:146
+msgid "No published privacy policy page found. Create one in Settings → Privacy."
+msgstr "未找到已发布的隐私政策页面。请在“设置 → 隐私”中创建一个。"
+
+#: src/Privacy/ComplianceAuditor.php:159
+msgid "No raw IP addresses stored"
+msgstr "不存储任何原始 IP 地址"
+
+#: src/Privacy/ComplianceAuditor.php:161
+msgid "IP addresses are discarded immediately after hashing and GeoIP lookup."
+msgstr "IP 地址在完成哈希计算与 GeoIP 查询后立即丢弃。"
+
+#: src/Privacy/ComplianceAuditor.php:181
+msgid "Daily salt rotation active"
+msgstr "每日盐值轮换已启用"
+
+#. translators: %s: datetime of last salt rotation.
+#: src/Privacy/ComplianceAuditor.php:185
+#, php-format
+msgid "Last rotation: %s"
+msgstr "上次轮换：%s"
+
+#: src/Privacy/ComplianceAuditor.php:186
+msgid "Salt rotation may not be running. Check WP-Cron."
+msgstr "盐值轮换可能未在运行。请检查 WP-Cron。"
+
+#: src/Privacy/ComplianceAuditor.php:198
+msgid "Cookie-free tracking"
+msgstr "无 Cookie 统计"
+
+#: src/Privacy/ComplianceAuditor.php:200
+msgid "Statnive uses no cookies, localStorage, or sessionStorage by design."
+msgstr "Statnive 在设计上不使用 Cookie、localStorage 或 sessionStorage。"
+
+#: src/Privacy/ComplianceAuditor.php:213
+#: src/Privacy/ComplianceAuditor.php:222
+msgid "Data purge operational"
+msgstr "数据清除功能正常"
+
+#: src/Privacy/ComplianceAuditor.php:215
+msgid "Retention mode is \"forever\" — no purge needed."
+msgstr "保留模式为“永久”— 无需清除。"
+
+#: src/Privacy/ComplianceAuditor.php:225
+msgid "Data purge cron is scheduled."
+msgstr "数据清除定时任务已计划。"
+
+#: src/Privacy/ComplianceAuditor.php:226
+msgid "Data purge cron not scheduled. Deactivate and reactivate the plugin."
+msgstr "数据清除定时任务未计划。请停用并重新启用插件。"
+
+#: src/Privacy/ComplianceAuditor.php:239
+msgid "HTTPS enabled"
+msgstr "已启用 HTTPS"
+
+#: src/Privacy/ComplianceAuditor.php:242
+msgid "Site is served over HTTPS."
+msgstr "网站通过 HTTPS 提供服务。"
+
+#: src/Privacy/ComplianceAuditor.php:243
+msgid "Site not using HTTPS. Analytics data transmitted in plaintext."
+msgstr "网站未使用 HTTPS。网站分析数据以明文形式传输。"
+
+#. translators: %d: number of sessions anonymized
+#: src/Privacy/PrivacyEraser.php:124
+#, php-format
+msgid "Anonymized %d analytics session(s). Aggregate statistics preserved."
+msgstr "已匿名化 %d 个网站分析会话。聚合统计数据已保留。"
+
+#: src/Privacy/PrivacyExporter.php:102
+msgid "Session Start"
+msgstr "会话开始"
+
+#: src/Privacy/PrivacyExporter.php:106
+msgid "Session End"
+msgstr "会话结束"
+
+#: src/Privacy/PrivacyExporter.php:107
+msgid "Active"
+msgstr "进行中"
+
+#: src/Privacy/PrivacyExporter.php:110
+msgid "Pages Viewed"
+msgstr "已浏览页面数"
+
+#: src/Privacy/PrivacyExporter.php:114
+msgid "Duration (seconds)"
+msgstr "时长（秒）"
+
+#: src/Privacy/PrivacyExporter.php:139
+msgid "Pages Visited"
+msgstr "访问过的页面"
+
+#: src/Privacy/PrivacyExporter.php:146
+msgid "Statnive Analytics Sessions"
+msgstr "Statnive 网站分析会话"
+
+#: src/Privacy/PrivacyExporter.php:147
+msgid "Analytics sessions recorded by Statnive. No IP addresses or cookies are stored."
+msgstr "由 Statnive 记录的网站分析会话。不存储任何 IP 地址或 Cookie。"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:55
+msgid "Analytics (Statnive)"
+msgstr "网站分析（Statnive）"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:56
+msgid "This website uses Statnive, a privacy-first analytics plugin that runs entirely on our server. No data is shared with third-party services."
+msgstr "本网站使用 Statnive，这是一款注重隐私的网站分析插件，完全运行在本站服务器上。不会向任何第三方服务共享数据。"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:59
+msgid "Cookies & Tracking"
+msgstr "Cookie 与统计"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:60
+msgid "Statnive does not use cookies, localStorage, sessionStorage, or any form of browser fingerprinting. Visitor identification uses a daily-rotating cryptographic hash that cannot be reversed or used to track individuals across days."
+msgstr "Statnive 不使用 Cookie、localStorage、sessionStorage，也不进行任何形式的浏览器指纹识别。访客识别采用每日轮换的加密哈希，无法被逆向，也无法用于跨日识别同一访客。"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:63
+msgid "Data Collected"
+msgstr "收集的数据"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:64
+msgid "We collect the following anonymized data for each page visit:"
+msgstr "我们在每次页面访问时收集以下经过匿名化处理的数据："
+
+#: src/Privacy/PrivacyPolicyGenerator.php:66
+msgid "Page URL visited (without query parameters)"
+msgstr "访问的页面 URL（不含查询参数）"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:67
+msgid "Referrer URL (domain only, query parameters stripped)"
+msgstr "引荐来源 URL（仅域名，已去除查询参数）"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:68
+msgid "Country and city (derived from IP, which is immediately discarded)"
+msgstr "国家/地区与城市（由 IP 推导得出，IP 随后立即丢弃）"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:69
+msgid "Device type, browser, and operating system"
+msgstr "设备类型、浏览器与操作系统"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:70
+msgid "Screen resolution, language, and timezone"
+msgstr "屏幕分辨率、语言与时区"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:74
+msgid "IP Address Handling"
+msgstr "IP 地址处理方式"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:75
+msgid "Your IP address is never stored. It is used only momentarily to determine your approximate geographic location and to generate a one-way cryptographic hash for visit counting. The IP is discarded immediately after processing and cannot be recovered from the stored hash."
+msgstr "您的 IP 地址绝不会被存储。它仅在短暂使用期间用于推断您的大致地理位置，并生成用于访问计数的单向加密哈希。处理完毕后 IP 会立即丢弃，且无法从存储的哈希值中恢复。"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:76
+msgid "When no IP-derived geolocation source is configured, an approximate country may be inferred from your browser’s timezone setting. The timezone string is processed on this site’s server only and is not transmitted to any third party."
+msgstr "当未配置基于 IP 的地理定位源时，可能会根据您浏览器的时区设置推断大致国家/地区。该时区字符串仅在本站服务器上处理，不会传输给任何第三方。"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:79
+msgid "Consent"
+msgstr "同意"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:81
+msgid "Because Statnive uses no cookies and stores no personal data, analytics run in cookieless mode without requiring consent under most privacy regulations."
+msgstr "由于 Statnive 不使用 Cookie 且不存储任何个人数据，网站分析以无 Cookie 模式运行，在大多数隐私法规下无需征得同意。"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:83
+msgid "Analytics are disabled until you provide explicit consent through our cookie/consent banner. No data is collected before consent is granted."
+msgstr "在您通过 Cookie/同意横幅明确表示同意之前，网站分析将保持停用状态。在获得同意之前不会收集任何数据。"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:85
+msgid "Analytics are active for all visitors. You may opt out using your browser's Do Not Track or Global Privacy Control settings."
+msgstr "网站分析对所有访客均处于启用状态。您可以通过浏览器的 Do Not Track 或 Global Privacy Control 设置选择退出。"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:90
+msgid "Do Not Track & Global Privacy Control"
+msgstr "Do Not Track 与 Global Privacy Control"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:93
+msgid "Do Not Track (DNT)"
+msgstr "Do Not Track（DNT）"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:96
+msgid "Global Privacy Control (GPC)"
+msgstr "Global Privacy Control（GPC）"
+
+#. translators: %s: comma-separated list of privacy signals
+#: src/Privacy/PrivacyPolicyGenerator.php:100
+#, php-format
+msgid "We honor the following browser privacy signals: %s. When enabled, no analytics data is collected."
+msgstr "我们遵循以下浏览器隐私信号：%s。当这些信号启用时，不会收集任何网站分析数据。"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:106
+msgid "Data Retention"
+msgstr "数据保留期"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:108
+msgid "Aggregated analytics data is retained indefinitely. No personal data is stored."
+msgstr "聚合后的网站分析数据将无限期保留。不会存储任何个人数据。"
+
+#. translators: %d: number of days
+#: src/Privacy/PrivacyPolicyGenerator.php:112
+#, php-format
+msgid "Raw analytics data is automatically deleted after %d days. Only aggregated statistics are retained for historical reporting."
+msgstr "原始网站分析数据将在 %d 天后自动删除。仅保留聚合统计数据用于历史报表。"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:118
+msgid "Your Rights"
+msgstr "您的权利"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:119
+msgid "You may request export or deletion of any analytics data associated with your user account through the WordPress personal data tools. Anonymous visitor data cannot be attributed to individuals due to the cookieless, hash-based architecture."
+msgstr "您可以通过 WordPress 个人数据工具，申请导出或删除与您账号相关的任何网站分析数据。由于采用无 Cookie、基于哈希的架构，匿名访客数据无法归属到任何具体个人。"
+
+#: src/Privacy/SiteHealthIntegration.php:33
+msgid "Statnive Privacy Compliance"
+msgstr "Statnive 隐私合规"
+
+#: src/Privacy/SiteHealthIntegration.php:38
+msgid "Statnive Data Retention"
+msgstr "Statnive 数据保留期"
+
+#: src/Privacy/SiteHealthIntegration.php:55
+msgid "Statnive privacy compliance is strong."
+msgstr "Statnive 隐私合规状态良好。"
+
+#: src/Privacy/SiteHealthIntegration.php:58
+msgid "Statnive privacy settings could be improved. Review the Privacy Audit in your dashboard."
+msgstr "Statnive 隐私设置仍有改进空间。请在仪表盘中查看“隐私审计”。"
+
+#: src/Privacy/SiteHealthIntegration.php:61
+msgid "Statnive privacy compliance needs attention. Open Settings to configure privacy options."
+msgstr "Statnive 隐私合规需要关注。请打开“设置”以配置隐私选项。"
+
+#. translators: %d: compliance score
+#: src/Privacy/SiteHealthIntegration.php:67
+#, php-format
+msgid "Statnive Privacy Score: %d/100"
+msgstr "Statnive 隐私评分：%d/100"
+
+#: src/Privacy/SiteHealthIntegration.php:79
+msgid "Review Privacy Settings"
+msgstr "查看隐私设置"
+
+#: src/Privacy/SiteHealthIntegration.php:96
+msgid "Statnive: Data retained indefinitely"
+msgstr "Statnive：数据无限期保留"
+
+#: src/Privacy/SiteHealthIntegration.php:102
+msgid "Analytics data is retained forever. Consider setting a retention period for data minimization best practices."
+msgstr "网站分析数据将永久保留。建议设置保留期限，以遵循数据最小化的最佳实践。"
+
+#: src/Privacy/SiteHealthIntegration.php:106
+msgid "Configure Retention"
+msgstr "配置保留期"
+
+#. translators: %1$d: days, %2$s: mode
+#: src/Privacy/SiteHealthIntegration.php:115
+#, php-format
+msgid "Statnive: %1$d-day retention (%2$s)"
+msgstr "Statnive：保留 %1$d 天（%2$s）"
+
+#: src/Privacy/SiteHealthIntegration.php:124
+msgid "Data retention is configured with automatic cleanup."
+msgstr "数据保留期已配置，并启用了自动清理。"
+
+#: statnive.php:111
+msgid "Statnive: Composer autoloader not found. Please run \"composer install\" in the plugin directory."
+msgstr "Statnive：未找到 Composer 自动加载器。请在插件目录下运行 \"composer install\"。"
+
+# React/TypeScript-source strings (merged by bin/extract-react-pot.mjs).
+
+#: resources/react/components/charts/pie-chart-card.tsx:88
+msgid "Total"
+msgstr "总计"
+
+#: resources/react/components/charts/pie-chart-card.tsx:101
+#: resources/react/pages/devices.tsx:57
+#: resources/react/pages/devices.tsx:64
+msgid "Name"
+msgstr "名称"
+
+#: resources/react/components/charts/pie-chart-card.tsx:102
+#: resources/react/components/charts/time-series-chart.tsx:44
+#: resources/react/components/shared/dual-bar-cell.tsx:22
+#: resources/react/pages/overview.tsx:115
+msgid "Visitors"
+msgstr "访客"
+
+#: resources/react/components/charts/pie-chart-card.tsx:103
+msgid "Percentage"
+msgstr "百分比"
+
+#: resources/react/components/charts/time-series-chart.tsx:45
+#: resources/react/components/shared/dual-bar-cell.tsx:31
+#: resources/react/pages/overview.tsx:121
+msgid "Sessions"
+msgstr "会话"
+
+#: resources/react/components/charts/time-series-chart.tsx:89
+msgid "Visitors and sessions over time"
+msgstr "访客与会话随时间变化"
+
+#: resources/react/components/charts/time-series-chart.tsx:92
+msgid "Date"
+msgstr "日期"
+
+#: resources/react/components/layouts/dashboard-layout.tsx:81
+msgid "Skip to content"
+msgstr "跳转到主要内容"
+
+#: resources/react/components/layouts/dashboard-layout.tsx:107
+msgid "Dashboard navigation"
+msgstr "仪表盘导航"
+
+#: resources/react/components/shared/data-table.tsx:40
+msgid "No data available"
+msgstr "暂无数据"
+
+#: resources/react/components/shared/date-range-picker.tsx:20
+msgid "Date range"
+msgstr "日期范围"
+
+#: resources/react/components/shared/kpi-card.tsx:39
+msgid "Change %1$s %2$s versus previous period"
+msgstr "与上一周期相比变化 %1$s %2$s"
+
+#: resources/react/components/shared/kpi-card.tsx:40
+msgid "up"
+msgstr "上升"
+
+#: resources/react/components/shared/kpi-card.tsx:40
+msgid "down"
+msgstr "下降"
+
+#: resources/react/components/shared/realtime-counter.tsx:14
+msgid "%d active visitors"
+msgstr "%d 位在线访客"
+
+#: resources/react/components/shared/realtime-counter.tsx:25
+msgid "online"
+msgstr "在线"
+
+#: resources/react/lib/wp-commands.ts:26
+msgid "Statnive: Go to Overview"
+msgstr "Statnive：前往“概览”"
+
+#: resources/react/lib/wp-commands.ts:27
+msgid "Statnive: Go to Pages"
+msgstr "Statnive：前往“页面”"
+
+#: resources/react/lib/wp-commands.ts:28
+msgid "Statnive: Go to Referrers"
+msgstr "Statnive：前往“引荐来源”"
+
+#: resources/react/lib/wp-commands.ts:29
+msgid "Statnive: Go to Geography"
+msgstr "Statnive：前往“地理位置”"
+
+#: resources/react/lib/wp-commands.ts:30
+msgid "Statnive: Go to Devices"
+msgstr "Statnive：前往“设备”"
+
+#: resources/react/lib/wp-commands.ts:31
+msgid "Statnive: Go to Real-time"
+msgstr "Statnive：前往“实时”"
+
+#: resources/react/lib/wp-commands.ts:32
+msgid "Statnive: Go to Settings"
+msgstr "Statnive：前往“设置”"
+
+#: resources/react/pages/devices.tsx:32
+msgid "Unknown"
+msgstr "未知"
+
+#: resources/react/pages/devices.tsx:40
+msgid "Human"
+msgstr "真人"
+
+#: resources/react/pages/devices.tsx:41
+msgid "Bot"
+msgstr "机器人"
+
+#: resources/react/pages/devices.tsx:58
+#: resources/react/pages/devices.tsx:65
+#: resources/react/pages/geography.tsx:39
+#: resources/react/pages/geography.tsx:48
+#: resources/react/pages/languages.tsx:22
+#: resources/react/pages/overview.tsx:58
+#: resources/react/pages/referrers.tsx:40
+msgid "Visitors / Sessions"
+msgstr "访客 / 会话"
+
+#: resources/react/pages/devices.tsx:70
+msgid "No device data for this period. If your site has traffic, data should appear within minutes. If nothing shows after 10 minutes, check Settings → Diagnostics."
+msgstr "此时间段内暂无设备数据。如果网站有访问，数据通常会在几分钟内出现。如果 10 分钟后仍无数据，请检查“设置 → 诊断”。"
+
+#: resources/react/pages/devices.tsx:74
+msgid "Devices"
+msgstr "设备"
+
+#: resources/react/pages/devices.tsx:79
+msgid "Device Distribution"
+msgstr "设备分布"
+
+#: resources/react/pages/devices.tsx:84
+msgid "Bot vs Human"
+msgstr "机器人与真人对比"
+
+#: resources/react/pages/devices.tsx:93
+msgid "Browsers"
+msgstr "浏览器"
+
+#: resources/react/pages/devices.tsx:96
+msgid "Operating Systems"
+msgstr "操作系统"
+
+#: resources/react/pages/geography.tsx:38
+#: resources/react/pages/geography.tsx:47
+msgid "Country"
+msgstr "国家/地区"
+
+#: resources/react/pages/geography.tsx:46
+msgid "City"
+msgstr "城市"
+
+#: resources/react/pages/geography.tsx:54
+msgid "No geography data for this period. If your site has traffic, data should appear within minutes. If nothing shows after 10 minutes, check Settings → Diagnostics."
+msgstr "此时间段内暂无地理位置数据。如果网站有访问，数据通常会在几分钟内出现。如果 10 分钟后仍无数据，请检查“设置 → 诊断”。"
+
+#: resources/react/pages/geography.tsx:55
+msgid "No geography data for this period. The free DB-IP city database is active; data will appear as traffic arrives."
+msgstr "此时间段内暂无地理位置数据。免费的 DB-IP 城市级数据库已启用；数据将随访问到达而出现。"
+
+#: resources/react/pages/geography.tsx:56
+msgid "No visitors with a resolvable country in this period. Country detection via your CDN is active; data will appear as traffic arrives."
+msgstr "此时间段内没有可解析国家/地区的访客。通过 CDN 进行的国家/地区检测已启用；数据将随访问到达而出现。"
+
+#: resources/react/pages/geography.tsx:57
+msgid "No visitors with a resolvable country in this period. Approximate country is being derived from each visitor’s browser timezone; for precise city-level data, enable DB-IP below or configure MaxMind GeoIP in Settings → GeoIP."
+msgstr "此时间段内没有可解析国家/地区的访客。当前正基于每位访客的浏览器时区推断大致国家/地区；如需精确的城市级数据，请在下方启用 DB-IP，或在“设置 → GeoIP”中配置 MaxMind GeoIP。"
+
+#: resources/react/pages/geography.tsx:58
+msgid "Geography resolution is currently disabled. Re-enable the timezone fallback, configure MaxMind GeoIP, or place your site behind a CDN that sets a country header."
+msgstr "地理位置解析当前已停用。请重新启用时区回退、配置 MaxMind GeoIP，或将网站放置在会设置国家/地区标头的 CDN 之后。"
+
+#: resources/react/pages/geography.tsx:67
+msgid "Geography"
+msgstr "地理位置"
+
+#: resources/react/pages/geography.tsx:73
+msgid "Want city-level data?"
+msgstr "想要城市级数据？"
+
+#: resources/react/pages/geography.tsx:75
+msgid "Enable the free DB-IP city database. No account, no key — one click. ~80 MB downloads to your uploads directory. CC-BY-4.0."
+msgstr "启用免费的 DB-IP 城市级数据库。无需账号、无需密钥 — 一键启用。约 80 MB 文件将下载到您的 uploads 目录。许可证：CC-BY-4.0。"
+
+#: resources/react/pages/geography.tsx:85
+msgid "Enabling…"
+msgstr "正在启用…"
+
+#: resources/react/pages/geography.tsx:86
+msgid "Enable city-level geography"
+msgstr "启用城市级地理位置"
+
+#: resources/react/pages/geography.tsx:91
+msgid "Could not enable DB-IP. Try again, or configure MaxMind in Settings → GeoIP."
+msgstr "无法启用 DB-IP。请重试，或在“设置 → GeoIP”中配置 MaxMind。"
+
+#: resources/react/pages/geography.tsx:99
+msgid "Countries"
+msgstr "国家/地区"
+
+#: resources/react/pages/geography.tsx:102
+msgid "Cities"
+msgstr "城市"
+
+#: resources/react/pages/geography.tsx:108
+msgid "GeoIP data © DB-IP under CC-BY 4.0"
+msgstr "GeoIP 数据 © DB-IP，依据 CC-BY 4.0 许可协议"
+
+#: resources/react/pages/languages.tsx:21
+msgid "Language"
+msgstr "语言"
+
+#: resources/react/pages/languages.tsx:29
+msgid "Languages"
+msgstr "语言"
+
+#: resources/react/pages/languages.tsx:32
+msgid "Visitor Languages"
+msgstr "访客语言"
+
+#: resources/react/pages/languages.tsx:38
+msgid "No language data for this period. If your site has traffic, data should appear within minutes. If nothing shows after 10 minutes, check Settings → Diagnostics."
+msgstr "此时间段内暂无语言数据。如果网站有访问，数据通常会在几分钟内出现。如果 10 分钟后仍无数据，请检查“设置 → 诊断”。"
+
+#: resources/react/pages/overview.tsx:46
+#: resources/react/pages/referrers.tsx:38
+msgid "Source"
+msgstr "来源"
+
+#: resources/react/pages/overview.tsx:49
+#: resources/react/pages/overview.tsx:51
+#: resources/react/pages/referrers.tsx:104
+msgid "Direct"
+msgstr "直接访问"
+
+#: resources/react/pages/overview.tsx:81
+#: resources/react/pages/pages.tsx:57
+#: resources/react/pages/pages.tsx:72
+msgid "Page"
+msgstr "页面"
+
+#: resources/react/pages/overview.tsx:90
+#: resources/react/pages/pages.tsx:65
+msgid "Visitors / Views"
+msgstr "访客 / 浏览量"
+
+#: resources/react/pages/overview.tsx:101
+msgid "Today"
+msgstr "今天"
+
+#: resources/react/pages/overview.tsx:104
+msgid "Last %s"
+msgstr "过去 %s"
+
+#: resources/react/pages/overview.tsx:110
+msgid "Overview"
+msgstr "概览"
+
+#: resources/react/pages/overview.tsx:127
+msgid "Pageviews"
+msgstr "浏览量"
+
+#: resources/react/pages/overview.tsx:133
+#: resources/react/pages/pages.tsx:66
+msgid "Avg Duration"
+msgstr "平均时长"
+
+#: resources/react/pages/overview.tsx:145
+msgid "Visitors & Sessions — %s"
+msgstr "访客与会话 — %s"
+
+#: resources/react/pages/overview.tsx:156
+msgid "Top Sources"
+msgstr "热门来源"
+
+#: resources/react/pages/overview.tsx:162
+msgid "No traffic sources recorded yet. New visits will appear within a few minutes — if nothing shows after 10 minutes, run the self-test under Settings → Diagnostics or check Settings → Tracking is enabled."
+msgstr "暂未记录到任何流量来源。新访问通常会在几分钟内出现 — 如果 10 分钟后仍无数据，请在“设置 → 诊断”中运行自检，或检查“设置 → 统计”是否已启用。"
+
+#: resources/react/pages/overview.tsx:167
+msgid "Top Pages"
+msgstr "热门页面"
+
+#: resources/react/pages/overview.tsx:173
+msgid "No page data recorded yet. Tracking is active — pageviews will appear after the next visit. If nothing shows after 10 minutes, run the self-test under Settings → Diagnostics."
+msgstr "暂未记录到任何页面数据。统计已启用 — 浏览量将在下一次访问后出现。如果 10 分钟后仍无数据，请在“设置 → 诊断”中运行自检。"
+
+#: resources/react/pages/pages.tsx:76
+msgid "Entries / Visitors"
+msgstr "入站 / 访客"
+
+#: resources/react/pages/pages.tsx:77
+msgid "Exits / Visitors"
+msgstr "离开 / 访客"
+
+#: resources/react/pages/pages.tsx:79
+msgid "No page data for this period. If your site has traffic, data should appear within minutes. If nothing shows after 10 minutes, check Settings → Diagnostics."
+msgstr "此时间段内暂无页面数据。如果网站有访问，数据通常会在几分钟内出现。如果 10 分钟后仍无数据，请检查“设置 → 诊断”。"
+
+#: resources/react/pages/pages.tsx:83
+msgid "Pages"
+msgstr "页面"
+
+#: resources/react/pages/pages.tsx:90
+msgid "Search pages"
+msgstr "搜索页面"
+
+#: resources/react/pages/pages.tsx:91
+msgid "Search pages..."
+msgstr "搜索页面…"
+
+#: resources/react/pages/pages.tsx:101
+msgid "Top Content"
+msgstr "热门内容"
+
+#: resources/react/pages/pages.tsx:115
+msgid "Entry Pages"
+msgstr "入站页面"
+
+#: resources/react/pages/pages.tsx:126
+msgid "Exit Pages"
+msgstr "离开页面"
+
+#: resources/react/pages/realtime.tsx:12
+msgid "Real-time"
+msgstr "实时"
+
+#: resources/react/pages/realtime.tsx:22
+msgid "Active Visitors"
+msgstr "在线访客"
+
+#: resources/react/pages/realtime.tsx:30
+msgid "%s active visitors"
+msgstr "%s 位在线访客"
+
+#: resources/react/pages/realtime.tsx:41
+msgid "Active Pages"
+msgstr "活跃页面"
+
+#: resources/react/pages/realtime.tsx:60
+msgid "No active pages"
+msgstr "暂无活跃页面"
+
+#: resources/react/pages/realtime.tsx:68
+msgid "Recent Pageviews"
+msgstr "最近浏览"
+
+#: resources/react/pages/realtime.tsx:89
+msgid "No recent activity"
+msgstr "暂无最近活动"
+
+#: resources/react/pages/referrers.tsx:37
+msgid "Campaign"
+msgstr "营销活动"
+
+#: resources/react/pages/referrers.tsx:39
+msgid "Medium"
+msgstr "媒介"
+
+#: resources/react/pages/referrers.tsx:45
+msgid "No referrer data for this period. If your site has traffic, data should appear within minutes. If nothing shows after 10 minutes, check Settings → Diagnostics."
+msgstr "此时间段内暂无引荐来源数据。如果网站有访问，数据通常会在几分钟内出现。如果 10 分钟后仍无数据，请检查“设置 → 诊断”。"
+
+#: resources/react/pages/referrers.tsx:49
+msgid "Referrers"
+msgstr "引荐来源"
+
+#: resources/react/pages/referrers.tsx:60
+msgid "%s sessions"
+msgstr "%s 次会话"
+
+#: resources/react/pages/referrers.tsx:70
+msgid "All Sources"
+msgstr "全部来源"
+
+#: resources/react/pages/referrers.tsx:72
+msgid "Loading sources"
+msgstr "正在加载来源"
+
+#: resources/react/pages/referrers.tsx:94
+msgid "%1$s visitors · %2$s sessions"
+msgstr "%1$s 位访客 · %2$s 次会话"
+
+#: resources/react/pages/referrers.tsx:119
+msgid "UTM Campaigns"
+msgstr "UTM 营销活动"
+
+#: resources/react/pages/referrers.tsx:119
+msgid "No UTM parameters tracked yet. UTM-tagged links will appear here once visitors arrive through them."
+msgstr "尚未记录到任何 UTM 参数。当有访客通过带 UTM 标签的链接到达时，相关数据将显示在这里。"
+
+#: resources/react/pages/settings.tsx:12
+msgid "30 days"
+msgstr "30 天"
+
+#: resources/react/pages/settings.tsx:13
+msgid "90 days"
+msgstr "90 天"
+
+#: resources/react/pages/settings.tsx:14
+msgid "180 days"
+msgstr "180 天"
+
+#: resources/react/pages/settings.tsx:15
+msgid "1 year"
+msgstr "1 年"
+
+#: resources/react/pages/settings.tsx:16
+msgid "Forever"
+msgstr "永久"
+
+#: resources/react/pages/settings.tsx:115
+#: resources/react/pages/settings.tsx:70
+msgid "Settings"
+msgstr "设置"
+
+#: resources/react/pages/settings.tsx:95
+msgid "Save failed."
+msgstr "保存失败。"
+
+#: resources/react/pages/settings.tsx:123
+msgid "Saved ✓"
+msgstr "已保存 ✓"
+
+#: resources/react/pages/settings.tsx:138
+msgid "Saving…"
+msgstr "正在保存…"
+
+#: resources/react/pages/settings.tsx:138
+msgid "Save"
+msgstr "保存"
+
+#: resources/react/pages/settings.tsx:145
+msgid "Privacy"
+msgstr "隐私"
+
+#: resources/react/pages/settings.tsx:158
+msgid "Cookieless"
+msgstr "无 Cookie"
+
+#: resources/react/pages/settings.tsx:160
+msgid "Recommended"
+msgstr "推荐"
+
+#: resources/react/pages/settings.tsx:164
+msgid "No cookies, privacy-first. Designed to support GDPR/CCPA/APPI compliance."
+msgstr "无 Cookie，注重隐私。旨在支持 GDPR/CCPA/APPI 合规要求。"
+
+#: resources/react/pages/settings.tsx:176
+msgid "Disabled Until Consent"
+msgstr "在同意之前保持停用"
+
+#: resources/react/pages/settings.tsx:178
+msgid "Tracking stays off until a consent-banner plugin signals approval. Also honors plugins that implement the WordPress Consent API."
+msgstr "在同意横幅插件发出同意信号之前，统计始终保持关闭。同时遵循实现了 WordPress Consent API 的插件。"
+
+#: resources/react/pages/settings.tsx:187
+msgid "Works with Real Cookie Banner, Complianz, CookieYes, or any WordPress Consent API plugin."
+msgstr "兼容 Real Cookie Banner、Complianz、CookieYes 以及任何实现 WordPress Consent API 的插件。"
+
+#: resources/react/pages/settings.tsx:204
+msgid "Respect Do Not Track"
+msgstr "尊重 Do Not Track"
+
+#: resources/react/pages/settings.tsx:206
+msgid "Skip visitors whose browser sends the DNT signal."
+msgstr "对发送 DNT 信号的访客跳过统计。"
+
+#: resources/react/pages/settings.tsx:217
+msgid "Respect Global Privacy Control"
+msgstr "尊重 Global Privacy Control"
+
+#: resources/react/pages/settings.tsx:219
+msgid "Skip visitors whose browser sends the GPC signal. Legally recognized in California and other regions."
+msgstr "对发送 GPC 信号的访客跳过统计。该信号在加利福尼亚州及其他地区具有法律效力。"
+
+#: resources/react/pages/settings.tsx:244
+msgid "How long stats are kept before deletion. Shorter = more privacy-friendly and a smaller database. Longer = year-over-year comparisons."
+msgstr "统计数据在删除前保留的时长。更短 = 更隐私友好、数据库更小。更长 = 便于进行同比对比。"
+
+#: resources/react/pages/settings.tsx:253
+msgid "Exclusions"
+msgstr "排除项"
+
+#: resources/react/pages/settings.tsx:255
+msgid "Excluded IP Addresses"
+msgstr "排除的 IP 地址"
+
+#: resources/react/pages/settings.tsx:266
+msgid "Tracking requests from these IPs or ranges are ignored — handy for hiding your own team. One per line. Supports CIDR (e.g., 10.0.0.0/8) and IPv6."
+msgstr "来自这些 IP 或网段的统计请求将被忽略 — 适合隐藏您自己团队的访问。每行一条。支持 CIDR（例如 10.0.0.0/8）和 IPv6。"
+
+#: resources/react/pages/settings.tsx:273
+msgid "Your IP right now:"
+msgstr "您当前的 IP："
+
+#: resources/react/pages/settings.tsx:283
+msgid "Add to exclusions"
+msgstr "添加到排除项"
+
+#: resources/react/pages/settings.tsx:291
+msgid "GeoIP"
+msgstr "GeoIP"
+
+#: resources/react/pages/settings.tsx:296
+msgid "MaxMind License Key"
+msgstr "MaxMind 许可密钥"
+
+#: resources/react/pages/settings.tsx:307
+msgid "Paste your free MaxMind license key"
+msgstr "粘贴您的免费 MaxMind 许可密钥"
+
+#: resources/react/pages/settings.tsx:311
+msgid "Get a free key:"
+msgstr "获取免费密钥："
+
+#: resources/react/pages/settings.tsx:320
+msgid "then paste it here."
+msgstr "然后粘贴到此处。"
+
+#: resources/react/pages/settings.tsx:323
+msgid "A key is currently saved. Clear this field to remove it, or paste a new one to replace it."
+msgstr "当前已保存一个密钥。清空此字段可删除该密钥，或粘贴新密钥以替换。"
+
+#: resources/react/pages/settings.tsx:338
+msgid "Enable MaxMind GeoIP"
+msgstr "启用 MaxMind GeoIP"
+
+#: resources/react/pages/settings.tsx:340
+msgid "Activates the weekly MaxMind GeoLite2-City download (~70 MB to your uploads directory). Requires a license key above. The first lookup happens after the next WP-Cron tick."
+msgstr "启用每周一次的 MaxMind GeoLite2-City 数据库下载（约 70 MB 至您的 uploads 目录）。需要上方已配置的许可密钥。首次查询将在下一次 WP-Cron 触发后进行。"
+
+#: resources/react/pages/settings.tsx:349
+msgid "Prefer no account? Use the one-click DB-IP IP-to-City Lite download on the Geography page instead — it is free and account-less."
+msgstr "不想注册账号？请在“地理位置”页面使用一键 DB-IP IP-to-City Lite 下载 — 完全免费、无需账号。"
