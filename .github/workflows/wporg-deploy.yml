@@ -4,12 +4,15 @@ name: Deploy to WordPress.org
 #
 # 1. release: published — fires automatically when a GitHub release is published.
 #    GHA reads the workflow file from the tag's commit, so the tag MUST contain
-#    this workflow file. Use this for v0.4.14 onwards.
+#    this workflow file. Use this for v0.4.14 onwards. Source deployed = tag's
+#    commit.
 #
-# 2. workflow_dispatch — manual trigger with `version` input. GHA reads the
-#    workflow from the default branch, then this job checks out the v<version>
-#    tag for the build/deploy. Used to ship v0.4.13 (whose tag predates this
-#    workflow) and as a safety net for retries.
+# 2. workflow_dispatch — manual trigger with `version` input. Used to ship
+#    v0.4.13 (whose tag predates this workflow) and as a safety net for retries.
+#    Source deployed = the branch the workflow was dispatched from (default
+#    branch unless `gh workflow run ... --ref <branch>` is passed). The
+#    `version` input only sets the SVN tag name and is verified against
+#    readme.txt Stable tag.
 #
 # WP.org Rule 14 ("avoid frequent commits") respected — trunk only updates on
 # intentional triggers, never on push or readme tweaks. Concurrency group is a
@@ -47,10 +50,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
-          # release: defaults to the tag's ref (refs/tags/vX.Y.Z).
-          # workflow_dispatch: explicitly fetch the v<input> tag so the SVN push
-          # ships the source pinned to that tag, not the default branch HEAD.
-          ref: ${{ github.event_name == 'workflow_dispatch' && format('v{0}', inputs.version) || github.ref }}
+          # Default behaviour:
+          # - release event → GITHUB_REF = refs/tags/vX.Y.Z → tag checked out.
+          # - workflow_dispatch → GITHUB_REF = the dispatched branch
+          #   (default branch unless --ref overrides).
           fetch-depth: 1
 
       - name: Compute SVN version
