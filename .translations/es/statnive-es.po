@@ -1,0 +1,1045 @@
+# Translation of Plugins - Statnive - Stable (latest release) in Spanish (Spain)
+# This file is distributed under the same license as the Plugins - Statnive - Stable (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2026-05-16 10:00+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Statnive translation seed v0.4.13\n"
+"Language: es_ES\n"
+"Project-Id-Version: Plugins - Statnive - Stable (latest release)\n"
+
+#. Plugin Name of the plugin
+#: statnive.php
+msgid "Statnive – Simple, Real-time, Privacy-first Web Analytics"
+msgstr "Statnive – Analítica web simple, en tiempo real y respetuosa con la privacidad"
+
+#. Plugin URI of the plugin
+#. Author URI of the plugin
+#: statnive.php
+msgid "https://statnive.com"
+msgstr ""
+
+#. Description of the plugin
+#: statnive.php
+msgid "Simple stats, clear decisions. Privacy-first analytics for WordPress."
+msgstr "Estadísticas simples, decisiones claras. Analítica web para WordPress respetuosa con la privacidad."
+
+#. Author of the plugin
+#: statnive.php
+#: src/Admin/AdminMenuManager.php:39
+msgid "Statnive"
+msgstr "Statnive"
+
+#: src/Admin/AdminBarWidget.php:56
+msgid "Statnive — Today's visitors"
+msgstr "Statnive — Visitantes de hoy"
+
+#: src/Admin/AdminMenuManager.php:38
+#: src/Privacy/PrivacyEraser.php:43
+#: src/Privacy/PrivacyExporter.php:43
+msgid "Statnive Analytics"
+msgstr "Statnive Analytics"
+
+#: src/Admin/CronHealth.php:86
+msgid "Daily salt rotation"
+msgstr "Rotación diaria de la sal"
+
+#: src/Admin/CronHealth.php:91
+msgid "Daily data aggregation"
+msgstr "Agregación diaria de datos"
+
+#: src/Admin/CronHealth.php:96
+msgid "Retention cleanup"
+msgstr "Limpieza por conservación"
+
+#: src/Admin/CronHealth.php:101
+msgid "Weekly GeoIP database update"
+msgstr "Actualización semanal de la base de datos de GeoIP"
+
+#: src/Admin/GeoIPNotice.php:96
+msgid "Statnive: GeoIP is enabled but no MaxMind license key is configured."
+msgstr "Statnive: GeoIP está activado, pero no hay ninguna clave de licencia de MaxMind configurada."
+
+#: src/Admin/GeoIPNotice.php:97
+msgid "Impact: visitor country/region data will not appear in your reports. Page tracking, sources, devices and all other metrics continue to work normally."
+msgstr "Impacto: los datos de país y región de los visitantes no aparecerán en tus informes. El seguimiento de páginas, fuentes, dispositivos y todas las demás métricas siguen funcionando con normalidad."
+
+#: src/Admin/GeoIPNotice.php:98
+msgid "What Statnive will do: retry the GeoIP database download every week. No additional alerts will be raised until the key is added or GeoIP is disabled."
+msgstr "Lo que hará Statnive: reintentará la descarga de la base de datos de GeoIP cada semana. No se generarán más alertas hasta que añadas la clave o desactives GeoIP."
+
+#. translators: 1: MaxMind signup URL, 2: MaxMind EULA URL
+#: src/Admin/GeoIPNotice.php:102
+#, php-format
+msgid "<strong>To fix:</strong> <a href=\"%1$s\" target=\"_blank\" rel=\"noopener\">get a free MaxMind license key</a> (requires accepting the <a href=\"%2$s\" target=\"_blank\" rel=\"noopener\">GeoLite2 EULA</a>) and paste it into Settings → GeoIP. Or disable GeoIP in Settings to dismiss this notice."
+msgstr "<strong>Para solucionarlo:</strong> <a href=\"%1$s\" target=\"_blank\" rel=\"noopener\">obtén una clave de licencia gratuita de MaxMind</a> (es necesario aceptar la <a href=\"%2$s\" target=\"_blank\" rel=\"noopener\">EULA de GeoLite2</a>) y pégala en Ajustes → GeoIP. O desactiva GeoIP en Ajustes para descartar este aviso."
+
+#: src/Admin/GeoIPNotice.php:139
+msgid "Statnive: WordPress cron jobs are not running on time."
+msgstr "Statnive: las tareas de cron de WordPress no se están ejecutando a tiempo."
+
+#: src/Admin/GeoIPNotice.php:143
+msgid "These Statnive background jobs have not completed within their normal window:"
+msgstr "Las siguientes tareas en segundo plano de Statnive no se han completado dentro de su ventana habitual:"
+
+#. translators: 1: example crontab line, 2: WP-CLI command
+#: src/Admin/GeoIPNotice.php:154
+#, php-format
+msgid "<strong>To fix:</strong> add a system cron that pings <code>wp-cron.php</code> every five minutes — for example <code>%1$s</code> — or run <code>%2$s</code> via WP-CLI."
+msgstr "<strong>Para solucionarlo:</strong> añade una tarea cron del sistema que llame a <code>wp-cron.php</code> cada cinco minutos (por ejemplo, <code>%1$s</code>) o ejecuta <code>%2$s</code> mediante WP-CLI."
+
+#: src/Admin/GeoIPNotice.php:166
+msgid "What Statnive will do automatically: this notice self-dismisses as soon as every job runs again within its normal window. Clicking \"Run cleanup now\" below records a fresh heartbeat, which clears the warning until the next scheduled cycle."
+msgstr "Lo que hará Statnive automáticamente: este aviso desaparece solo en cuanto todas las tareas vuelven a ejecutarse dentro de su ventana habitual. Al pulsar «Ejecutar limpieza ahora» se registra una nueva señal de vida que retira la advertencia hasta el siguiente ciclo programado."
+
+#: src/Admin/GeoIPNotice.php:172
+msgid "Run cleanup now"
+msgstr "Ejecutar limpieza ahora"
+
+#: src/Admin/GeoIPNotice.php:177
+msgid "Dismiss"
+msgstr "Descartar"
+
+#: src/Admin/GeoIPNotice.php:179
+msgid "Dismiss this Statnive cron warning"
+msgstr "Descartar esta advertencia de cron de Statnive"
+
+#. translators: %s = job label, e.g. "Daily data aggregation"
+#: src/Admin/GeoIPNotice.php:273
+#, php-format
+msgid "%s — has not run yet."
+msgstr "%s: aún no se ha ejecutado."
+
+#. translators: 1: job label, 2: localised date/time of last successful run
+#: src/Admin/GeoIPNotice.php:287
+#, php-format
+msgid "%1$s — last ran %2$s."
+msgstr "%1$s: última ejecución %2$s."
+
+#: src/Admin/GeoIPNotice.php:307
+msgid "You do not have permission to run Statnive cron jobs."
+msgstr "No tienes permiso para ejecutar las tareas de cron de Statnive."
+
+#: src/Admin/GeoIPNotice.php:316
+msgid "Statnive cron jobs ran successfully. The warning will reappear if cron stops firing again."
+msgstr "Las tareas de cron de Statnive se han ejecutado correctamente. La advertencia volverá a aparecer si el cron deja de dispararse otra vez."
+
+#. translators: %s = error message
+#: src/Admin/GeoIPNotice.php:321
+#, php-format
+msgid "Statnive cron run failed: %s"
+msgstr "La ejecución del cron de Statnive ha fallado: %s"
+
+#: src/Admin/GeoIPNotice.php:353
+msgid "You do not have permission to dismiss this notice."
+msgstr "No tienes permiso para descartar este aviso."
+
+#: src/Cron/CronRegistrar.php:32
+msgid "Once Weekly"
+msgstr "Una vez por semana"
+
+#: src/Database/Migrator.php:259
+msgid "Statnive: plugin version mismatch detected."
+msgstr "Statnive: se ha detectado una discrepancia de versión de la extensión."
+
+#. translators: 1: stored schema version, 2: running plugin version
+#: src/Database/Migrator.php:263
+#, php-format
+msgid "Your database schema is at version %1$s but the running plugin is version %2$s. This may happen if you downgraded the plugin. Please re-install the latest version to avoid data inconsistencies."
+msgstr "El esquema de tu base de datos está en la versión %1$s, pero la extensión en ejecución es la versión %2$s. Esto puede ocurrir si has revertido la extensión a una versión anterior. Vuelve a instalar la última versión para evitar inconsistencias en los datos."
+
+#: src/Plugin.php:124
+msgid "You do not have permission to activate plugins."
+msgstr "No tienes permiso para activar extensiones."
+
+#: src/Plugin.php:125
+#: src/Plugin.php:141
+#: src/Plugin.php:157
+msgid "Plugin Activation Error"
+msgstr "Error al activar la extensión"
+
+#. translators: 1: Required PHP version, 2: Current PHP version
+#: src/Plugin.php:136
+#: statnive.php:68
+#, php-format
+msgid "Statnive requires PHP %1$s or higher. You are running PHP %2$s."
+msgstr "Statnive requiere PHP %1$s o superior. Tu servidor ejecuta PHP %2$s."
+
+#. translators: 1: Required WordPress version, 2: Current WordPress version
+#: src/Plugin.php:152
+#: statnive.php:93
+#, php-format
+msgid "Statnive requires WordPress %1$s or higher. You are running WordPress %2$s."
+msgstr "Statnive requiere WordPress %1$s o superior. Tu sitio ejecuta WordPress %2$s."
+
+#: src/Privacy/ComplianceAuditor.php:70
+msgid "Consent mode configured"
+msgstr "Modo de consentimiento configurado"
+
+#. translators: %s: consent mode name.
+#: src/Privacy/ComplianceAuditor.php:74
+#, php-format
+msgid "Consent mode: %s"
+msgstr "Modo de consentimiento: %s"
+
+#: src/Privacy/ComplianceAuditor.php:75
+msgid "No consent mode configured. Set one in Settings."
+msgstr "No hay ningún modo de consentimiento configurado. Configura uno en Ajustes."
+
+#: src/Privacy/ComplianceAuditor.php:88
+msgid "Do Not Track honored"
+msgstr "Do Not Track respetado"
+
+#: src/Privacy/ComplianceAuditor.php:91
+msgid "DNT header is respected."
+msgstr "La cabecera DNT se respeta."
+
+#: src/Privacy/ComplianceAuditor.php:92
+msgid "DNT header is not honored. Consider enabling for privacy compliance."
+msgstr "La cabecera DNT no se respeta. Considera activarla para mejorar el cumplimiento en materia de privacidad."
+
+#: src/Privacy/ComplianceAuditor.php:105
+msgid "Global Privacy Control honored"
+msgstr "Global Privacy Control respetado"
+
+#: src/Privacy/ComplianceAuditor.php:108
+msgid "GPC header is respected."
+msgstr "La cabecera GPC se respeta."
+
+#: src/Privacy/ComplianceAuditor.php:109
+msgid "GPC header is not honored. Required under some US state laws."
+msgstr "La cabecera GPC no se respeta. Es obligatoria según la legislación de algunos estados de EE. UU."
+
+#: src/Privacy/ComplianceAuditor.php:123
+msgid "Data retention configured"
+msgstr "Conservación de datos configurada"
+
+#. translators: %1$d: number of days, %2$s: retention mode.
+#: src/Privacy/ComplianceAuditor.php:127
+#, php-format
+msgid "Data retained for %1$d days (%2$s mode)."
+msgstr "Datos conservados durante %1$d días (modo %2$s)."
+
+#: src/Privacy/ComplianceAuditor.php:128
+msgid "Data retained forever. Consider setting a retention period for compliance."
+msgstr "Los datos se conservan para siempre. Considera fijar un periodo de conservación para mejorar el cumplimiento."
+
+#: src/Privacy/ComplianceAuditor.php:142
+msgid "Privacy policy page published"
+msgstr "Página de política de privacidad publicada"
+
+#: src/Privacy/ComplianceAuditor.php:145
+msgid "Privacy policy page is published. Statnive content auto-generated."
+msgstr "La página de política de privacidad está publicada. El contenido de Statnive se ha generado automáticamente."
+
+#: src/Privacy/ComplianceAuditor.php:146
+msgid "No published privacy policy page found. Create one in Settings → Privacy."
+msgstr "No se ha encontrado ninguna página de política de privacidad publicada. Crea una en Ajustes → Privacidad."
+
+#: src/Privacy/ComplianceAuditor.php:159
+msgid "No raw IP addresses stored"
+msgstr "No se almacenan direcciones IP en bruto"
+
+#: src/Privacy/ComplianceAuditor.php:161
+msgid "IP addresses are discarded immediately after hashing and GeoIP lookup."
+msgstr "Las direcciones IP se descartan de inmediato tras el hash y la consulta de GeoIP."
+
+#: src/Privacy/ComplianceAuditor.php:181
+msgid "Daily salt rotation active"
+msgstr "Rotación diaria de la sal activa"
+
+#. translators: %s: datetime of last salt rotation.
+#: src/Privacy/ComplianceAuditor.php:185
+#, php-format
+msgid "Last rotation: %s"
+msgstr "Última rotación: %s"
+
+#: src/Privacy/ComplianceAuditor.php:186
+msgid "Salt rotation may not be running. Check WP-Cron."
+msgstr "Puede que la rotación de la sal no se esté ejecutando. Revisa WP-Cron."
+
+#: src/Privacy/ComplianceAuditor.php:198
+msgid "Cookie-free tracking"
+msgstr "Seguimiento sin cookies"
+
+#: src/Privacy/ComplianceAuditor.php:200
+msgid "Statnive uses no cookies, localStorage, or sessionStorage by design."
+msgstr "Por diseño, Statnive no utiliza cookies, localStorage ni sessionStorage."
+
+#: src/Privacy/ComplianceAuditor.php:213
+#: src/Privacy/ComplianceAuditor.php:222
+msgid "Data purge operational"
+msgstr "Purga de datos operativa"
+
+#: src/Privacy/ComplianceAuditor.php:215
+msgid "Retention mode is \"forever\" — no purge needed."
+msgstr "El modo de conservación es «para siempre»: no se necesita purga."
+
+#: src/Privacy/ComplianceAuditor.php:225
+msgid "Data purge cron is scheduled."
+msgstr "La tarea de cron de purga de datos está programada."
+
+#: src/Privacy/ComplianceAuditor.php:226
+msgid "Data purge cron not scheduled. Deactivate and reactivate the plugin."
+msgstr "La tarea de cron de purga de datos no está programada. Desactiva y vuelve a activar la extensión."
+
+#: src/Privacy/ComplianceAuditor.php:239
+msgid "HTTPS enabled"
+msgstr "HTTPS activado"
+
+#: src/Privacy/ComplianceAuditor.php:242
+msgid "Site is served over HTTPS."
+msgstr "El sitio se sirve mediante HTTPS."
+
+#: src/Privacy/ComplianceAuditor.php:243
+msgid "Site not using HTTPS. Analytics data transmitted in plaintext."
+msgstr "El sitio no utiliza HTTPS. Los datos de analítica se transmiten en texto plano."
+
+#. translators: %d: number of sessions anonymized
+#: src/Privacy/PrivacyEraser.php:124
+#, php-format
+msgid "Anonymized %d analytics session(s). Aggregate statistics preserved."
+msgstr "Se ha(n) anonimizado %d sesión(es) de analítica. Se conservan las estadísticas agregadas."
+
+#: src/Privacy/PrivacyExporter.php:102
+msgid "Session Start"
+msgstr "Comienzo de la sesión"
+
+#: src/Privacy/PrivacyExporter.php:106
+msgid "Session End"
+msgstr "Fin de la sesión"
+
+#: src/Privacy/PrivacyExporter.php:107
+msgid "Active"
+msgstr "Activa"
+
+#: src/Privacy/PrivacyExporter.php:110
+msgid "Pages Viewed"
+msgstr "Páginas vistas"
+
+#: src/Privacy/PrivacyExporter.php:114
+msgid "Duration (seconds)"
+msgstr "Duración (segundos)"
+
+#: src/Privacy/PrivacyExporter.php:139
+msgid "Pages Visited"
+msgstr "Páginas visitadas"
+
+#: src/Privacy/PrivacyExporter.php:146
+msgid "Statnive Analytics Sessions"
+msgstr "Sesiones de Statnive Analytics"
+
+#: src/Privacy/PrivacyExporter.php:147
+msgid "Analytics sessions recorded by Statnive. No IP addresses or cookies are stored."
+msgstr "Sesiones de analítica registradas por Statnive. No se almacenan direcciones IP ni cookies."
+
+#: src/Privacy/PrivacyPolicyGenerator.php:55
+msgid "Analytics (Statnive)"
+msgstr "Analítica (Statnive)"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:56
+msgid "This website uses Statnive, a privacy-first analytics plugin that runs entirely on our server. No data is shared with third-party services."
+msgstr "Este sitio web utiliza Statnive, una extensión de analítica respetuosa con la privacidad que se ejecuta íntegramente en nuestro servidor. No se comparten datos con servicios de terceros."
+
+#: src/Privacy/PrivacyPolicyGenerator.php:59
+msgid "Cookies & Tracking"
+msgstr "Cookies y seguimiento"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:60
+msgid "Statnive does not use cookies, localStorage, sessionStorage, or any form of browser fingerprinting. Visitor identification uses a daily-rotating cryptographic hash that cannot be reversed or used to track individuals across days."
+msgstr "Statnive no utiliza cookies, localStorage, sessionStorage ni ninguna forma de fingerprinting del navegador. La identificación de visitantes se basa en un hash criptográfico con rotación diaria que no se puede revertir ni utilizar para seguir a una persona entre días."
+
+#: src/Privacy/PrivacyPolicyGenerator.php:63
+msgid "Data Collected"
+msgstr "Datos recopilados"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:64
+msgid "We collect the following anonymized data for each page visit:"
+msgstr "Recopilamos los siguientes datos anonimizados de cada visita a una página:"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:66
+msgid "Page URL visited (without query parameters)"
+msgstr "URL de la página visitada (sin parámetros de consulta)"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:67
+msgid "Referrer URL (domain only, query parameters stripped)"
+msgstr "URL del referente (solo el dominio, sin parámetros de consulta)"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:68
+msgid "Country and city (derived from IP, which is immediately discarded)"
+msgstr "País y ciudad (derivados de la IP, que se descarta de inmediato)"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:69
+msgid "Device type, browser, and operating system"
+msgstr "Tipo de dispositivo, navegador y sistema operativo"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:70
+msgid "Screen resolution, language, and timezone"
+msgstr "Resolución de pantalla, idioma y zona horaria"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:74
+msgid "IP Address Handling"
+msgstr "Tratamiento de la dirección IP"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:75
+msgid "Your IP address is never stored. It is used only momentarily to determine your approximate geographic location and to generate a one-way cryptographic hash for visit counting. The IP is discarded immediately after processing and cannot be recovered from the stored hash."
+msgstr "Tu dirección IP no se almacena en ningún momento. Se utiliza solo de forma puntual para determinar tu ubicación geográfica aproximada y para generar un hash criptográfico unidireccional con el que contar visitas. La IP se descarta inmediatamente después de procesarla y no se puede recuperar a partir del hash almacenado."
+
+#: src/Privacy/PrivacyPolicyGenerator.php:76
+msgid "When no IP-derived geolocation source is configured, an approximate country may be inferred from your browser’s timezone setting. The timezone string is processed on this site’s server only and is not transmitted to any third party."
+msgstr "Cuando no hay configurada ninguna fuente de geolocalización derivada de la IP, se puede inferir un país aproximado a partir de la zona horaria de tu navegador. La cadena de zona horaria se procesa únicamente en el servidor de este sitio y no se transmite a ningún tercero."
+
+#: src/Privacy/PrivacyPolicyGenerator.php:79
+msgid "Consent"
+msgstr "Consentimiento"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:81
+msgid "Because Statnive uses no cookies and stores no personal data, analytics run in cookieless mode without requiring consent under most privacy regulations."
+msgstr "Como Statnive no utiliza cookies ni almacena datos personales, la analítica funciona en modo sin cookies sin necesidad de consentimiento según la mayoría de las normativas de privacidad."
+
+#: src/Privacy/PrivacyPolicyGenerator.php:83
+msgid "Analytics are disabled until you provide explicit consent through our cookie/consent banner. No data is collected before consent is granted."
+msgstr "La analítica permanece desactivada hasta que prestas tu consentimiento explícito a través de nuestro banner de cookies o consentimiento. No se recopila ningún dato antes de que se otorgue el consentimiento."
+
+#: src/Privacy/PrivacyPolicyGenerator.php:85
+msgid "Analytics are active for all visitors. You may opt out using your browser's Do Not Track or Global Privacy Control settings."
+msgstr "La analítica está activa para todos los visitantes. Puedes oponerte mediante los ajustes de Do Not Track o Global Privacy Control de tu navegador."
+
+#: src/Privacy/PrivacyPolicyGenerator.php:90
+msgid "Do Not Track & Global Privacy Control"
+msgstr "Do Not Track y Global Privacy Control"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:93
+msgid "Do Not Track (DNT)"
+msgstr "Do Not Track (DNT)"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:96
+msgid "Global Privacy Control (GPC)"
+msgstr "Global Privacy Control (GPC)"
+
+#. translators: %s: comma-separated list of privacy signals
+#: src/Privacy/PrivacyPolicyGenerator.php:100
+#, php-format
+msgid "We honor the following browser privacy signals: %s. When enabled, no analytics data is collected."
+msgstr "Respetamos las siguientes señales de privacidad del navegador: %s. Cuando están activadas, no se recopila ningún dato de analítica."
+
+#: src/Privacy/PrivacyPolicyGenerator.php:106
+msgid "Data Retention"
+msgstr "Conservación de datos"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:108
+msgid "Aggregated analytics data is retained indefinitely. No personal data is stored."
+msgstr "Los datos de analítica agregados se conservan de forma indefinida. No se almacena ningún dato personal."
+
+#. translators: %d: number of days
+#: src/Privacy/PrivacyPolicyGenerator.php:112
+#, php-format
+msgid "Raw analytics data is automatically deleted after %d days. Only aggregated statistics are retained for historical reporting."
+msgstr "Los datos de analítica en bruto se eliminan automáticamente después de %d días. Solo se conservan las estadísticas agregadas para los informes históricos."
+
+#: src/Privacy/PrivacyPolicyGenerator.php:118
+msgid "Your Rights"
+msgstr "Tus derechos"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:119
+msgid "You may request export or deletion of any analytics data associated with your user account through the WordPress personal data tools. Anonymous visitor data cannot be attributed to individuals due to the cookieless, hash-based architecture."
+msgstr "Puedes solicitar la exportación o el borrado de cualquier dato de analítica asociado a tu cuenta de usuario a través de las herramientas de datos personales de WordPress. Los datos anónimos de visitantes no se pueden atribuir a personas concretas debido a la arquitectura sin cookies y basada en hashes."
+
+#: src/Privacy/SiteHealthIntegration.php:33
+msgid "Statnive Privacy Compliance"
+msgstr "Cumplimiento de privacidad de Statnive"
+
+#: src/Privacy/SiteHealthIntegration.php:38
+msgid "Statnive Data Retention"
+msgstr "Conservación de datos de Statnive"
+
+#: src/Privacy/SiteHealthIntegration.php:55
+msgid "Statnive privacy compliance is strong."
+msgstr "El cumplimiento de privacidad de Statnive es sólido."
+
+#: src/Privacy/SiteHealthIntegration.php:58
+msgid "Statnive privacy settings could be improved. Review the Privacy Audit in your dashboard."
+msgstr "Los ajustes de privacidad de Statnive se pueden mejorar. Revisa la auditoría de privacidad en tu panel."
+
+#: src/Privacy/SiteHealthIntegration.php:61
+msgid "Statnive privacy compliance needs attention. Open Settings to configure privacy options."
+msgstr "El cumplimiento de privacidad de Statnive requiere atención. Abre Ajustes para configurar las opciones de privacidad."
+
+#. translators: %d: compliance score
+#: src/Privacy/SiteHealthIntegration.php:67
+#, php-format
+msgid "Statnive Privacy Score: %d/100"
+msgstr "Puntuación de privacidad de Statnive: %d/100"
+
+#: src/Privacy/SiteHealthIntegration.php:79
+msgid "Review Privacy Settings"
+msgstr "Revisar los ajustes de privacidad"
+
+#: src/Privacy/SiteHealthIntegration.php:96
+msgid "Statnive: Data retained indefinitely"
+msgstr "Statnive: datos conservados de forma indefinida"
+
+#: src/Privacy/SiteHealthIntegration.php:102
+msgid "Analytics data is retained forever. Consider setting a retention period for data minimization best practices."
+msgstr "Los datos de analítica se conservan para siempre. Considera fijar un periodo de conservación para aplicar buenas prácticas de minimización de datos."
+
+#: src/Privacy/SiteHealthIntegration.php:106
+msgid "Configure Retention"
+msgstr "Configurar la conservación"
+
+#. translators: %1$d: days, %2$s: mode
+#: src/Privacy/SiteHealthIntegration.php:115
+#, php-format
+msgid "Statnive: %1$d-day retention (%2$s)"
+msgstr "Statnive: conservación de %1$d días (%2$s)"
+
+#: src/Privacy/SiteHealthIntegration.php:124
+msgid "Data retention is configured with automatic cleanup."
+msgstr "La conservación de datos está configurada con limpieza automática."
+
+#: statnive.php:111
+msgid "Statnive: Composer autoloader not found. Please run \"composer install\" in the plugin directory."
+msgstr "Statnive: no se ha encontrado el cargador automático de Composer. Ejecuta «composer install» en el directorio de la extensión."
+
+# React/TypeScript-source strings (merged by bin/extract-react-pot.mjs).
+
+#: resources/react/components/charts/pie-chart-card.tsx:88
+msgid "Total"
+msgstr "Total"
+
+#: resources/react/components/charts/pie-chart-card.tsx:101
+#: resources/react/pages/devices.tsx:57
+#: resources/react/pages/devices.tsx:64
+msgid "Name"
+msgstr "Nombre"
+
+#: resources/react/components/charts/pie-chart-card.tsx:102
+#: resources/react/components/charts/time-series-chart.tsx:44
+#: resources/react/components/shared/dual-bar-cell.tsx:22
+#: resources/react/pages/overview.tsx:115
+msgid "Visitors"
+msgstr "Visitantes"
+
+#: resources/react/components/charts/pie-chart-card.tsx:103
+msgid "Percentage"
+msgstr "Porcentaje"
+
+#: resources/react/components/charts/time-series-chart.tsx:45
+#: resources/react/components/shared/dual-bar-cell.tsx:31
+#: resources/react/pages/overview.tsx:121
+msgid "Sessions"
+msgstr "Sesiones"
+
+#: resources/react/components/charts/time-series-chart.tsx:89
+msgid "Visitors and sessions over time"
+msgstr "Visitantes y sesiones a lo largo del tiempo"
+
+#: resources/react/components/charts/time-series-chart.tsx:92
+msgid "Date"
+msgstr "Fecha"
+
+#: resources/react/components/layouts/dashboard-layout.tsx:81
+msgid "Skip to content"
+msgstr "Saltar al contenido"
+
+#: resources/react/components/layouts/dashboard-layout.tsx:107
+msgid "Dashboard navigation"
+msgstr "Navegación del panel"
+
+#: resources/react/components/shared/data-table.tsx:40
+msgid "No data available"
+msgstr "No hay datos disponibles"
+
+#: resources/react/components/shared/date-range-picker.tsx:20
+msgid "Date range"
+msgstr "Intervalo de fechas"
+
+#: resources/react/components/shared/kpi-card.tsx:39
+msgid "Change %1$s %2$s versus previous period"
+msgstr "Variación %1$s %2$s frente al periodo anterior"
+
+#: resources/react/components/shared/kpi-card.tsx:40
+msgid "up"
+msgstr "al alza"
+
+#: resources/react/components/shared/kpi-card.tsx:40
+msgid "down"
+msgstr "a la baja"
+
+#: resources/react/components/shared/realtime-counter.tsx:14
+msgid "%d active visitors"
+msgstr "%d visitantes activos"
+
+#: resources/react/components/shared/realtime-counter.tsx:25
+msgid "online"
+msgstr "en línea"
+
+#: resources/react/lib/wp-commands.ts:26
+msgid "Statnive: Go to Overview"
+msgstr "Statnive: ir a Resumen"
+
+#: resources/react/lib/wp-commands.ts:27
+msgid "Statnive: Go to Pages"
+msgstr "Statnive: ir a Páginas"
+
+#: resources/react/lib/wp-commands.ts:28
+msgid "Statnive: Go to Referrers"
+msgstr "Statnive: ir a Referentes"
+
+#: resources/react/lib/wp-commands.ts:29
+msgid "Statnive: Go to Geography"
+msgstr "Statnive: ir a Geografía"
+
+#: resources/react/lib/wp-commands.ts:30
+msgid "Statnive: Go to Devices"
+msgstr "Statnive: ir a Dispositivos"
+
+#: resources/react/lib/wp-commands.ts:31
+msgid "Statnive: Go to Real-time"
+msgstr "Statnive: ir a Tiempo real"
+
+#: resources/react/lib/wp-commands.ts:32
+msgid "Statnive: Go to Settings"
+msgstr "Statnive: ir a Ajustes"
+
+#: resources/react/pages/devices.tsx:32
+msgid "Unknown"
+msgstr "Desconocido"
+
+#: resources/react/pages/devices.tsx:40
+msgid "Human"
+msgstr "Humano"
+
+#: resources/react/pages/devices.tsx:41
+msgid "Bot"
+msgstr "Bot"
+
+#: resources/react/pages/devices.tsx:58
+#: resources/react/pages/devices.tsx:65
+#: resources/react/pages/geography.tsx:39
+#: resources/react/pages/geography.tsx:48
+#: resources/react/pages/languages.tsx:22
+#: resources/react/pages/overview.tsx:58
+#: resources/react/pages/referrers.tsx:40
+msgid "Visitors / Sessions"
+msgstr "Visitantes / Sesiones"
+
+#: resources/react/pages/devices.tsx:70
+msgid "No device data for this period. If your site has traffic, data should appear within minutes. If nothing shows after 10 minutes, check Settings → Diagnostics."
+msgstr "No hay datos de dispositivos para este periodo. Si tu sitio tiene tráfico, los datos deberían aparecer en cuestión de minutos. Si pasados 10 minutos no aparece nada, revisa Ajustes → Diagnóstico."
+
+#: resources/react/pages/devices.tsx:74
+msgid "Devices"
+msgstr "Dispositivos"
+
+#: resources/react/pages/devices.tsx:79
+msgid "Device Distribution"
+msgstr "Distribución de dispositivos"
+
+#: resources/react/pages/devices.tsx:84
+msgid "Bot vs Human"
+msgstr "Bot frente a humano"
+
+#: resources/react/pages/devices.tsx:93
+msgid "Browsers"
+msgstr "Navegadores"
+
+#: resources/react/pages/devices.tsx:96
+msgid "Operating Systems"
+msgstr "Sistemas operativos"
+
+#: resources/react/pages/geography.tsx:38
+#: resources/react/pages/geography.tsx:47
+msgid "Country"
+msgstr "País"
+
+#: resources/react/pages/geography.tsx:46
+msgid "City"
+msgstr "Ciudad"
+
+#: resources/react/pages/geography.tsx:54
+msgid "No geography data for this period. If your site has traffic, data should appear within minutes. If nothing shows after 10 minutes, check Settings → Diagnostics."
+msgstr "No hay datos de geografía para este periodo. Si tu sitio tiene tráfico, los datos deberían aparecer en cuestión de minutos. Si pasados 10 minutos no aparece nada, revisa Ajustes → Diagnóstico."
+
+#: resources/react/pages/geography.tsx:55
+msgid "No geography data for this period. The free DB-IP city database is active; data will appear as traffic arrives."
+msgstr "No hay datos de geografía para este periodo. La base de datos gratuita de ciudades de DB-IP está activa; los datos aparecerán a medida que llegue tráfico."
+
+#: resources/react/pages/geography.tsx:56
+msgid "No visitors with a resolvable country in this period. Country detection via your CDN is active; data will appear as traffic arrives."
+msgstr "No hay visitantes con un país identificable en este periodo. La detección de país a través de tu CDN está activa; los datos aparecerán a medida que llegue tráfico."
+
+#: resources/react/pages/geography.tsx:57
+msgid "No visitors with a resolvable country in this period. Approximate country is being derived from each visitor’s browser timezone; for precise city-level data, enable DB-IP below or configure MaxMind GeoIP in Settings → GeoIP."
+msgstr "No hay visitantes con un país identificable en este periodo. El país aproximado se está deduciendo a partir de la zona horaria del navegador de cada visitante; para obtener datos precisos a nivel de ciudad, activa DB-IP más abajo o configura MaxMind GeoIP en Ajustes → GeoIP."
+
+#: resources/react/pages/geography.tsx:58
+msgid "Geography resolution is currently disabled. Re-enable the timezone fallback, configure MaxMind GeoIP, or place your site behind a CDN that sets a country header."
+msgstr "La resolución geográfica está desactivada en este momento. Vuelve a activar el respaldo por zona horaria, configura MaxMind GeoIP o coloca tu sitio detrás de un CDN que establezca una cabecera de país."
+
+#: resources/react/pages/geography.tsx:67
+msgid "Geography"
+msgstr "Geografía"
+
+#: resources/react/pages/geography.tsx:73
+msgid "Want city-level data?"
+msgstr "¿Quieres datos a nivel de ciudad?"
+
+#: resources/react/pages/geography.tsx:75
+msgid "Enable the free DB-IP city database. No account, no key — one click. ~80 MB downloads to your uploads directory. CC-BY-4.0."
+msgstr "Activa la base de datos gratuita de ciudades de DB-IP. Sin cuenta, sin clave: un solo clic. Se descargan unos 80 MB en tu directorio de subidas. CC-BY-4.0."
+
+#: resources/react/pages/geography.tsx:85
+msgid "Enabling…"
+msgstr "Activando…"
+
+#: resources/react/pages/geography.tsx:86
+msgid "Enable city-level geography"
+msgstr "Activar geografía a nivel de ciudad"
+
+#: resources/react/pages/geography.tsx:91
+msgid "Could not enable DB-IP. Try again, or configure MaxMind in Settings → GeoIP."
+msgstr "No se ha podido activar DB-IP. Inténtalo de nuevo o configura MaxMind en Ajustes → GeoIP."
+
+#: resources/react/pages/geography.tsx:99
+msgid "Countries"
+msgstr "Países"
+
+#: resources/react/pages/geography.tsx:102
+msgid "Cities"
+msgstr "Ciudades"
+
+#: resources/react/pages/geography.tsx:108
+msgid "GeoIP data © DB-IP under CC-BY 4.0"
+msgstr "Datos de GeoIP © DB-IP bajo CC-BY 4.0"
+
+#: resources/react/pages/languages.tsx:21
+msgid "Language"
+msgstr "Idioma"
+
+#: resources/react/pages/languages.tsx:29
+msgid "Languages"
+msgstr "Idiomas"
+
+#: resources/react/pages/languages.tsx:32
+msgid "Visitor Languages"
+msgstr "Idiomas de los visitantes"
+
+#: resources/react/pages/languages.tsx:38
+msgid "No language data for this period. If your site has traffic, data should appear within minutes. If nothing shows after 10 minutes, check Settings → Diagnostics."
+msgstr "No hay datos de idiomas para este periodo. Si tu sitio tiene tráfico, los datos deberían aparecer en cuestión de minutos. Si pasados 10 minutos no aparece nada, revisa Ajustes → Diagnóstico."
+
+#: resources/react/pages/overview.tsx:46
+#: resources/react/pages/referrers.tsx:38
+msgid "Source"
+msgstr "Fuente"
+
+#: resources/react/pages/overview.tsx:49
+#: resources/react/pages/overview.tsx:51
+#: resources/react/pages/referrers.tsx:104
+msgid "Direct"
+msgstr "Directo"
+
+#: resources/react/pages/overview.tsx:81
+#: resources/react/pages/pages.tsx:57
+#: resources/react/pages/pages.tsx:72
+msgid "Page"
+msgstr "Página"
+
+#: resources/react/pages/overview.tsx:90
+#: resources/react/pages/pages.tsx:65
+msgid "Visitors / Views"
+msgstr "Visitantes / Vistas"
+
+#: resources/react/pages/overview.tsx:101
+msgid "Today"
+msgstr "Hoy"
+
+#: resources/react/pages/overview.tsx:104
+msgid "Last %s"
+msgstr "Últimos %s"
+
+#: resources/react/pages/overview.tsx:110
+msgid "Overview"
+msgstr "Resumen"
+
+#: resources/react/pages/overview.tsx:127
+msgid "Pageviews"
+msgstr "Páginas vistas"
+
+#: resources/react/pages/overview.tsx:133
+#: resources/react/pages/pages.tsx:66
+msgid "Avg Duration"
+msgstr "Duración media"
+
+#: resources/react/pages/overview.tsx:145
+msgid "Visitors & Sessions — %s"
+msgstr "Visitantes y sesiones — %s"
+
+#: resources/react/pages/overview.tsx:156
+msgid "Top Sources"
+msgstr "Fuentes principales"
+
+#: resources/react/pages/overview.tsx:162
+msgid "No traffic sources recorded yet. New visits will appear within a few minutes — if nothing shows after 10 minutes, run the self-test under Settings → Diagnostics or check Settings → Tracking is enabled."
+msgstr "Aún no se han registrado fuentes de tráfico. Las nuevas visitas aparecerán en unos minutos. Si pasados 10 minutos no aparece nada, ejecuta la autoprueba en Ajustes → Diagnóstico o comprueba que el seguimiento esté activado en Ajustes."
+
+#: resources/react/pages/overview.tsx:167
+msgid "Top Pages"
+msgstr "Páginas principales"
+
+#: resources/react/pages/overview.tsx:173
+msgid "No page data recorded yet. Tracking is active — pageviews will appear after the next visit. If nothing shows after 10 minutes, run the self-test under Settings → Diagnostics."
+msgstr "Aún no se han registrado datos de páginas. El seguimiento está activo: las páginas vistas aparecerán tras la próxima visita. Si pasados 10 minutos no aparece nada, ejecuta la autoprueba en Ajustes → Diagnóstico."
+
+#: resources/react/pages/pages.tsx:76
+msgid "Entries / Visitors"
+msgstr "Entradas / Visitantes"
+
+#: resources/react/pages/pages.tsx:77
+msgid "Exits / Visitors"
+msgstr "Salidas / Visitantes"
+
+#: resources/react/pages/pages.tsx:79
+msgid "No page data for this period. If your site has traffic, data should appear within minutes. If nothing shows after 10 minutes, check Settings → Diagnostics."
+msgstr "No hay datos de páginas para este periodo. Si tu sitio tiene tráfico, los datos deberían aparecer en cuestión de minutos. Si pasados 10 minutos no aparece nada, revisa Ajustes → Diagnóstico."
+
+#: resources/react/pages/pages.tsx:83
+msgid "Pages"
+msgstr "Páginas"
+
+#: resources/react/pages/pages.tsx:90
+msgid "Search pages"
+msgstr "Buscar páginas"
+
+#: resources/react/pages/pages.tsx:91
+msgid "Search pages..."
+msgstr "Buscar páginas…"
+
+#: resources/react/pages/pages.tsx:101
+msgid "Top Content"
+msgstr "Contenido principal"
+
+#: resources/react/pages/pages.tsx:115
+msgid "Entry Pages"
+msgstr "Páginas de entrada"
+
+#: resources/react/pages/pages.tsx:126
+msgid "Exit Pages"
+msgstr "Páginas de salida"
+
+#: resources/react/pages/realtime.tsx:12
+msgid "Real-time"
+msgstr "Tiempo real"
+
+#: resources/react/pages/realtime.tsx:22
+msgid "Active Visitors"
+msgstr "Visitantes activos"
+
+#: resources/react/pages/realtime.tsx:30
+msgid "%s active visitors"
+msgstr "%s visitantes activos"
+
+#: resources/react/pages/realtime.tsx:41
+msgid "Active Pages"
+msgstr "Páginas activas"
+
+#: resources/react/pages/realtime.tsx:60
+msgid "No active pages"
+msgstr "Sin páginas activas"
+
+#: resources/react/pages/realtime.tsx:68
+msgid "Recent Pageviews"
+msgstr "Páginas vistas recientes"
+
+#: resources/react/pages/realtime.tsx:89
+msgid "No recent activity"
+msgstr "Sin actividad reciente"
+
+#: resources/react/pages/referrers.tsx:37
+msgid "Campaign"
+msgstr "Campaña"
+
+#: resources/react/pages/referrers.tsx:39
+msgid "Medium"
+msgstr "Medio"
+
+#: resources/react/pages/referrers.tsx:45
+msgid "No referrer data for this period. If your site has traffic, data should appear within minutes. If nothing shows after 10 minutes, check Settings → Diagnostics."
+msgstr "No hay datos de referentes para este periodo. Si tu sitio tiene tráfico, los datos deberían aparecer en cuestión de minutos. Si pasados 10 minutos no aparece nada, revisa Ajustes → Diagnóstico."
+
+#: resources/react/pages/referrers.tsx:49
+msgid "Referrers"
+msgstr "Referentes"
+
+#: resources/react/pages/referrers.tsx:60
+msgid "%s sessions"
+msgstr "%s sesiones"
+
+#: resources/react/pages/referrers.tsx:70
+msgid "All Sources"
+msgstr "Todas las fuentes"
+
+#: resources/react/pages/referrers.tsx:72
+msgid "Loading sources"
+msgstr "Cargando fuentes"
+
+#: resources/react/pages/referrers.tsx:94
+msgid "%1$s visitors · %2$s sessions"
+msgstr "%1$s visitantes · %2$s sesiones"
+
+#: resources/react/pages/referrers.tsx:119
+msgid "UTM Campaigns"
+msgstr "Campañas UTM"
+
+#: resources/react/pages/referrers.tsx:119
+msgid "No UTM parameters tracked yet. UTM-tagged links will appear here once visitors arrive through them."
+msgstr "Aún no se han registrado parámetros UTM. Los enlaces etiquetados con UTM aparecerán aquí cuando lleguen visitantes a través de ellos."
+
+#: resources/react/pages/settings.tsx:12
+msgid "30 days"
+msgstr "30 días"
+
+#: resources/react/pages/settings.tsx:13
+msgid "90 days"
+msgstr "90 días"
+
+#: resources/react/pages/settings.tsx:14
+msgid "180 days"
+msgstr "180 días"
+
+#: resources/react/pages/settings.tsx:15
+msgid "1 year"
+msgstr "1 año"
+
+#: resources/react/pages/settings.tsx:16
+msgid "Forever"
+msgstr "Para siempre"
+
+#: resources/react/pages/settings.tsx:115
+#: resources/react/pages/settings.tsx:70
+msgid "Settings"
+msgstr "Ajustes"
+
+#: resources/react/pages/settings.tsx:95
+msgid "Save failed."
+msgstr "No se ha podido guardar."
+
+#: resources/react/pages/settings.tsx:123
+msgid "Saved ✓"
+msgstr "Guardado ✓"
+
+#: resources/react/pages/settings.tsx:138
+msgid "Saving…"
+msgstr "Guardando…"
+
+#: resources/react/pages/settings.tsx:138
+msgid "Save"
+msgstr "Guardar"
+
+#: resources/react/pages/settings.tsx:145
+msgid "Privacy"
+msgstr "Privacidad"
+
+#: resources/react/pages/settings.tsx:158
+msgid "Cookieless"
+msgstr "Sin cookies"
+
+#: resources/react/pages/settings.tsx:160
+msgid "Recommended"
+msgstr "Recomendado"
+
+#: resources/react/pages/settings.tsx:164
+msgid "No cookies, privacy-first. Designed to support GDPR/CCPA/APPI compliance."
+msgstr "Sin cookies, respetuoso con la privacidad. Diseñado para facilitar el cumplimiento del RGPD, la CCPA y la APPI."
+
+#: resources/react/pages/settings.tsx:176
+msgid "Disabled Until Consent"
+msgstr "Desactivado hasta dar consentimiento"
+
+#: resources/react/pages/settings.tsx:178
+msgid "Tracking stays off until a consent-banner plugin signals approval. Also honors plugins that implement the WordPress Consent API."
+msgstr "El seguimiento permanece desactivado hasta que una extensión de banner de consentimiento indique aprobación. También respeta las extensiones que implementan la API de consentimiento de WordPress."
+
+#: resources/react/pages/settings.tsx:187
+msgid "Works with Real Cookie Banner, Complianz, CookieYes, or any WordPress Consent API plugin."
+msgstr "Funciona con Real Cookie Banner, Complianz, CookieYes o cualquier extensión que implemente la API de consentimiento de WordPress."
+
+#: resources/react/pages/settings.tsx:204
+msgid "Respect Do Not Track"
+msgstr "Respetar Do Not Track"
+
+#: resources/react/pages/settings.tsx:206
+msgid "Skip visitors whose browser sends the DNT signal."
+msgstr "Omite a los visitantes cuyo navegador envía la señal DNT."
+
+#: resources/react/pages/settings.tsx:217
+msgid "Respect Global Privacy Control"
+msgstr "Respetar Global Privacy Control"
+
+#: resources/react/pages/settings.tsx:219
+msgid "Skip visitors whose browser sends the GPC signal. Legally recognized in California and other regions."
+msgstr "Omite a los visitantes cuyo navegador envía la señal GPC. Cuenta con reconocimiento legal en California y en otras regiones."
+
+#: resources/react/pages/settings.tsx:244
+msgid "How long stats are kept before deletion. Shorter = more privacy-friendly and a smaller database. Longer = year-over-year comparisons."
+msgstr "Tiempo durante el que se conservan las estadísticas antes de borrarlas. Más corto = más respetuoso con la privacidad y una base de datos más pequeña. Más largo = comparaciones interanuales."
+
+#: resources/react/pages/settings.tsx:253
+msgid "Exclusions"
+msgstr "Exclusiones"
+
+#: resources/react/pages/settings.tsx:255
+msgid "Excluded IP Addresses"
+msgstr "Direcciones IP excluidas"
+
+#: resources/react/pages/settings.tsx:266
+msgid "Tracking requests from these IPs or ranges are ignored — handy for hiding your own team. One per line. Supports CIDR (e.g., 10.0.0.0/8) and IPv6."
+msgstr "Las peticiones de seguimiento desde estas IP o rangos se ignoran, lo que resulta útil para ocultar a tu propio equipo. Una por línea. Admite CIDR (por ejemplo, 10.0.0.0/8) e IPv6."
+
+#: resources/react/pages/settings.tsx:273
+msgid "Your IP right now:"
+msgstr "Tu IP ahora mismo:"
+
+#: resources/react/pages/settings.tsx:283
+msgid "Add to exclusions"
+msgstr "Añadir a las exclusiones"
+
+#: resources/react/pages/settings.tsx:291
+msgid "GeoIP"
+msgstr "GeoIP"
+
+#: resources/react/pages/settings.tsx:296
+msgid "MaxMind License Key"
+msgstr "Clave de licencia de MaxMind"
+
+#: resources/react/pages/settings.tsx:307
+msgid "Paste your free MaxMind license key"
+msgstr "Pega tu clave de licencia gratuita de MaxMind"
+
+#: resources/react/pages/settings.tsx:311
+msgid "Get a free key:"
+msgstr "Obtén una clave gratuita:"
+
+#: resources/react/pages/settings.tsx:320
+msgid "then paste it here."
+msgstr "después pégala aquí."
+
+#: resources/react/pages/settings.tsx:323
+msgid "A key is currently saved. Clear this field to remove it, or paste a new one to replace it."
+msgstr "Hay una clave guardada en este momento. Vacía este campo para eliminarla o pega una nueva para sustituirla."
+
+#: resources/react/pages/settings.tsx:338
+msgid "Enable MaxMind GeoIP"
+msgstr "Activar MaxMind GeoIP"
+
+#: resources/react/pages/settings.tsx:340
+msgid "Activates the weekly MaxMind GeoLite2-City download (~70 MB to your uploads directory). Requires a license key above. The first lookup happens after the next WP-Cron tick."
+msgstr "Activa la descarga semanal de MaxMind GeoLite2-City (unos 70 MB en tu directorio de subidas). Requiere una clave de licencia indicada arriba. La primera consulta se produce tras el siguiente disparo de WP-Cron."
+
+#: resources/react/pages/settings.tsx:349
+msgid "Prefer no account? Use the one-click DB-IP IP-to-City Lite download on the Geography page instead — it is free and account-less."
+msgstr "¿Prefieres no crear cuenta? Utiliza en su lugar la descarga en un clic de DB-IP IP-to-City Lite en la página de geografía: es gratuita y no requiere cuenta."

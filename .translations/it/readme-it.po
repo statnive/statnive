@@ -1,0 +1,456 @@
+# Translation of Plugins - Statnive - Stable Readme (latest release) in Italian
+# This file is distributed under the same license as the Plugins - Statnive - Stable Readme (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2026-05-16 10:00+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Statnive translation seed v0.4.13\n"
+"Language: it_IT\n"
+"Project-Id-Version: Plugins - Statnive - Stable Readme (latest release)\n"
+
+#. Plugin title (from === Statnive ... === line).
+msgid "Statnive – Simple, Real-time, Privacy-first Web Analytics"
+msgstr "Statnive – Analisi web semplice, in tempo reale e rispettosa della privacy"
+
+#. Short description
+#: readme.txt:short-description
+msgid "Privacy-first WordPress analytics — cookieless, self-hosted, real-time. A simple Google Analytics alternative with GeoIP and AI-source tracking."
+msgstr "Analisi web per WordPress rispettosa della privacy — senza cookie, auto-ospitata, in tempo reale. Una semplice alternativa a Google Analytics, con GeoIP e tracciamento delle sorgenti IA."
+
+#. Section heading
+#: readme.txt:section-description
+msgid "Description"
+msgstr "Descrizione"
+
+#. Description tagline
+#: readme.txt:description-tagline
+msgid "**The privacy-first analytics plugin for WordPress.**"
+msgstr "**Il plugin di analisi web per WordPress rispettoso della privacy.**"
+
+#. Description paragraph
+#: readme.txt:description-p1
+msgid "See exactly who visits your site, where they come from, and what they do — without cookies, third-party trackers, or sending visitor data to anyone. All analytics live in your own WordPress database."
+msgstr "Veda con precisione chi visita il Suo sito, da dove arriva e che cosa fa — senza cookie, senza tracker di terze parti e senza inviare i dati dei visitatori a nessuno. Tutti i dati di analisi restano nel Suo database WordPress."
+
+#. Description paragraph
+#: readme.txt:description-p2
+msgid "Open source under GPLv2. Self-hosted in your own database — nothing ever leaves your server."
+msgstr "Open source con licenza GPLv2. Auto-ospitato nel Suo database — nulla esce mai dal Suo server."
+
+#. Description paragraph
+#: readme.txt:description-p3
+msgid "Install, activate, open Statnive — your dashboard fills up within minutes. No tracking code to paste, no account to create."
+msgstr "Installi, attivi, apra Statnive — il dashboard si popola in pochi minuti. Nessun codice di tracciamento da incollare, nessun account da creare."
+
+#. Sub-heading: Why Statnive?
+#: readme.txt:why-statnive-heading
+msgid "Why Statnive?"
+msgstr "Perché Statnive?"
+
+#. Why bullet
+#: readme.txt:why-bullet-1
+msgid "**No cookies. No fingerprinting. No third-party transfers.** Designed to support GDPR, CCPA, and APPI compliance."
+msgstr "**Senza cookie. Senza fingerprinting. Senza trasferimenti a terze parti.** Progettato per supportare la conformità a GDPR, CCPA e APPI."
+
+#. Why bullet
+#: readme.txt:why-bullet-2
+msgid "**Honors GPC and DNT** server-side, integrates with the WordPress Consent API."
+msgstr "**Rispetta GPC e DNT** lato server, e si integra con la Consent API di WordPress."
+
+#. Why bullet
+#: readme.txt:why-bullet-3
+msgid "**Daily-rotating salted hashes** — cross-day and cross-site tracking are mathematically impossible."
+msgstr "**Hash con salt a rotazione giornaliera** — il tracciamento tra giorni diversi e tra siti diversi è matematicamente impossibile."
+
+#. Why bullet
+#: readme.txt:why-bullet-4
+msgid "**Eight focused dashboard pages.** No clutter, no upsells."
+msgstr "**Otto pagine del dashboard focalizzate.** Nessun ingombro, nessuna proposta di upselling."
+
+#. Sub-heading: Key Features
+#: readme.txt:key-features-heading
+msgid "Key Features"
+msgstr "Funzionalità principali"
+
+#. Feature bullet
+#: readme.txt:feature-bullet-1
+msgid "**Real-time** — Active visitor count, active pages, live pageview feed."
+msgstr "**Tempo reale** — Conteggio dei visitatori attivi, pagine attive, flusso in diretta delle visualizzazioni di pagina."
+
+#. Feature bullet
+#: readme.txt:feature-bullet-2
+msgid "**Smart channel grouping** — Direct, Organic Search, Social Media, Email, Referral, Paid Search, Paid Social, and a dedicated **AI Assistants** channel for ChatGPT, Claude, Gemini, Perplexity, Copilot, NotebookLM, Meta AI, Le Chat, Deepseek, You, iAsk, Jasper, and Writesonic."
+msgstr "**Raggruppamento intelligente dei canali** — Diretto, ricerca organica, social media, email, referral, ricerca a pagamento, social a pagamento e un canale **Assistenti IA** dedicato per ChatGPT, Claude, Gemini, Perplexity, Copilot, NotebookLM, Meta AI, Le Chat, Deepseek, You, iAsk, Jasper e Writesonic."
+
+#. Feature bullet
+#: readme.txt:feature-bullet-3
+msgid "**Custom events + engagement** — Link clicks (and tagged button clicks via `statnive-event-*` classes), form submissions, downloads, outbound links, time on page, scroll depth."
+msgstr "**Eventi personalizzati e coinvolgimento** — Clic sui link (e clic su pulsanti taggati tramite le classi `statnive-event-*`), invii di moduli, download, link in uscita, tempo trascorso sulla pagina, profondità di scorrimento."
+
+#. Feature bullet
+#: readme.txt:feature-bullet-4
+msgid "**Bot vs human separation** — Real visitors and automated traffic in distinct buckets."
+msgstr "**Separazione bot e umani** — Visitatori reali e traffico automatizzato in compartimenti distinti."
+
+#. Feature bullet
+#: readme.txt:feature-bullet-5
+msgid "**Geography in tiers** — Zero-config timezone country mapping; optional CDN headers; optional one-click DB-IP city download (free); optional MaxMind GeoLite2."
+msgstr "**Geografia a livelli** — Mappatura del paese tramite fuso orario senza configurazione; intestazioni CDN opzionali; download DB-IP a livello di città con un clic, opzionale (gratuito); MaxMind GeoLite2 opzionale."
+
+#. Feature bullet
+#: readme.txt:feature-bullet-6
+msgid "**Configurable retention** — 30 / 90 / 180 / 365 days, or Forever. Daily WP-Cron purge."
+msgstr "**Conservazione configurabile** — 30 / 90 / 180 / 365 giorni oppure per sempre. Pulizia quotidiana tramite WP-Cron."
+
+#. Feature bullet
+#: readme.txt:feature-bullet-7
+msgid "**WordPress Privacy API** — Personal-data export and erase registered automatically."
+msgstr "**WordPress Privacy API** — Esportazione e cancellazione dei dati personali registrate automaticamente."
+
+#. Feature bullet
+#: readme.txt:feature-bullet-8
+msgid "**WP-CLI** — `wp statnive cron run` for sites with `DISABLE_WP_CRON`."
+msgstr "**WP-CLI** — `wp statnive cron run` per i siti con `DISABLE_WP_CRON`."
+
+#. Description paragraph
+#: readme.txt:description-p4
+msgid "Source code at [github.com/statnive/statnive](https://github.com/statnive/statnive). Learn more at [statnive.com](https://statnive.com)."
+msgstr "Codice sorgente su [github.com/statnive/statnive](https://github.com/statnive/statnive). Scopra di più su [statnive.com](https://statnive.com)."
+
+#. Section heading
+#: readme.txt:section-installation
+msgid "Installation"
+msgstr "Installazione"
+
+#. Install step
+#: readme.txt:install-step-1
+msgid "Upload the `statnive` folder to `/wp-content/plugins/`."
+msgstr "Carichi la cartella `statnive` in `/wp-content/plugins/`."
+
+#. Install step
+#: readme.txt:install-step-2
+msgid "Activate the plugin through the **Plugins** menu in WordPress."
+msgstr "Attivi il plugin dal menu **Plugin** di WordPress."
+
+#. Install step
+#: readme.txt:install-step-3
+msgid "Open **Statnive** in the admin sidebar."
+msgstr "Apra **Statnive** nella barra laterale di amministrazione."
+
+#. Install closing paragraph
+#: readme.txt:install-closing
+msgid "That's it. Tracking begins immediately — no configuration, no account, no tracking code to paste."
+msgstr "Tutto qui. Il tracciamento parte subito — nessuna configurazione, nessun account, nessun codice di tracciamento da incollare."
+
+#. Section heading
+#: readme.txt:section-faq
+msgid "Frequently Asked Questions"
+msgstr "Domande frequenti"
+
+#. FAQ Q
+#: readme.txt:faq-q1
+msgid "Does Statnive use cookies?"
+msgstr "Statnive usa i cookie?"
+
+#. FAQ A
+#: readme.txt:faq-a1
+msgid "No. Statnive is 100% cookie-free. Visitor identification is a daily-rotating salted hash that cannot be used to track individuals across days or sites."
+msgstr "No. Statnive è al 100 % senza cookie. L’identificazione dei visitatori è un hash con salt a rotazione giornaliera, che non può essere usato per tracciare le persone tra giorni diversi o tra siti diversi."
+
+#. FAQ Q
+#: readme.txt:faq-q2
+msgid "Is Statnive GDPR compliant?"
+msgstr "Statnive è conforme al GDPR?"
+
+#. FAQ A
+#: readme.txt:faq-a2
+msgid "Statnive is **designed to support** GDPR, CCPA, APPI, and PIPL compliance: no cookies, no PII storage, daily rotating hashes, configurable retention, WordPress Privacy API export/erase, and server-side respect for GPC and DNT signals. Final compliance always depends on your configuration and your privacy policy."
+msgstr "Statnive è **progettato per supportare** la conformità a GDPR, CCPA, APPI e PIPL: senza cookie, senza archiviazione di dati personali identificativi, hash a rotazione giornaliera, conservazione configurabile, esportazione e cancellazione tramite WordPress Privacy API e rispetto lato server dei segnali GPC e DNT. La conformità finale dipende sempre dalla Sua configurazione e dalla Sua informativa sulla privacy."
+
+#. FAQ Q
+#: readme.txt:faq-q3
+msgid "How does visitor counting work without cookies?"
+msgstr "Come funziona il conteggio dei visitatori senza cookie?"
+
+#. FAQ A
+#: readme.txt:faq-a3
+msgid "A salted SHA-256 hash of the visitor's anonymized IP plus User-Agent. The salt rotates daily, so the same visitor gets a different hash tomorrow — cross-day stitching is impossible while daily uniques stay accurate."
+msgstr "Un hash SHA-256 con salt, calcolato sull’IP anonimizzato del visitatore combinato con lo User-Agent. Il salt ruota ogni giorno, quindi lo stesso visitatore ottiene un hash diverso il giorno successivo — il collegamento tra giorni diversi è impossibile, mentre i visitatori unici giornalieri restano accurati."
+
+#. FAQ Q
+#: readme.txt:faq-q4
+msgid "Where is my data stored?"
+msgstr "Dove sono archiviati i miei dati?"
+
+#. FAQ A
+#: readme.txt:faq-a4
+msgid "In your WordPress database, in tables prefixed `statnive_`. Nothing leaves your server unless you explicitly enable the optional MaxMind or DB-IP GeoIP downloads (one-time database files, never visitor data). When you uninstall the plugin, all tables and uploaded GeoIP files are removed."
+msgstr "Nel Suo database WordPress, in tabelle con prefisso `statnive_`. Nulla esce dal Suo server, a meno che Lei non attivi esplicitamente i download GeoIP opzionali di MaxMind o DB-IP (file di database scaricati una sola volta, mai dati dei visitatori). Quando disinstalla il plugin, tutte le tabelle e i file GeoIP caricati vengono rimossi."
+
+#. FAQ Q
+#: readme.txt:faq-q5
+msgid "Does it work with WooCommerce?"
+msgstr "Funziona con WooCommerce?"
+
+#. FAQ A
+#: readme.txt:faq-a5
+msgid "Statnive tracks pageviews, events, sessions, and referrers on WooCommerce stores like any other WordPress site. Dedicated WooCommerce revenue tracking with Revenue per Visitor (RPV) is on the roadmap."
+msgstr "Statnive traccia visualizzazioni di pagina, eventi, sessioni e referrer sui negozi WooCommerce come su qualsiasi altro sito WordPress. Il tracciamento dedicato del fatturato WooCommerce con il fatturato per visitatore (RPV) è in roadmap."
+
+#. FAQ Q
+#: readme.txt:faq-q6
+msgid "How much does it slow down my site?"
+msgstr "Quanto rallenta il mio sito?"
+
+#. FAQ A
+#: readme.txt:faq-a6
+msgid "The tracker script is small (~2 KB gzipped) and loads asynchronously, so it does not block your page render. The hit endpoint writes a single row per pageview. Dashboard queries run against pre-aggregated daily summaries rather than raw events."
+msgstr "Lo script del tracker è leggero (~2 KB compresso con gzip) e si carica in modo asincrono, quindi non blocca il rendering delle pagine. L’endpoint di hit scrive una sola riga per ogni visualizzazione di pagina. Le query del dashboard vengono eseguite su riepiloghi giornalieri pre-aggregati, non sugli eventi grezzi."
+
+#. FAQ Q
+#: readme.txt:faq-q7
+msgid "Can I run Statnive alongside Google Analytics or Matomo?"
+msgstr "Posso usare Statnive insieme a Google Analytics o Matomo?"
+
+#. FAQ A
+#: readme.txt:faq-a7
+msgid "Yes. Statnive is fully independent. Many users run Statnive as their primary privacy-friendly analytics and keep GA4 for advertising attribution."
+msgstr "Sì. Statnive è completamente indipendente. Molti utenti usano Statnive come strumento principale di analisi web rispettosa della privacy e mantengono GA4 per l’attribuzione pubblicitaria."
+
+#. FAQ Q
+#: readme.txt:faq-q8
+msgid "What can cause \"no data\"?"
+msgstr "Che cosa può causare l’assenza di dati?"
+
+#. FAQ A
+#: readme.txt:faq-a8
+msgid "Common causes: ad blockers, aggressive page caching, CSP rules blocking `fetch`/`sendBeacon` (allow `connect-src 'self'`), GPC or DNT enabled, or `DISABLE_WP_CRON` without a system cron. Exclude `/wp-json/statnive/v1/hit` and `admin-ajax.php?action=statnive_hit` from page caches."
+msgstr "Cause comuni: blocco delle pubblicità, caching aggressivo delle pagine, regole CSP che bloccano `fetch`/`sendBeacon` (consenta `connect-src 'self'`), GPC o DNT attivati, oppure `DISABLE_WP_CRON` senza un cron di sistema. Escluda `/wp-json/statnive/v1/hit` e `admin-ajax.php?action=statnive_hit` dalle cache delle pagine."
+
+#. FAQ Q
+#: readme.txt:faq-q9
+msgid "How does Geography work?"
+msgstr "Come funziona la geografia?"
+
+#. FAQ A
+#: readme.txt:faq-a9
+msgid "Four tiers, falling through automatically: (1) browser timezone → country, ~80% accurate, no external call; (2) CDN country headers (Cloudflare, CloudFront, Vercel) when present; (3) optional one-click DB-IP IP-to-City Lite (free, CC-BY 4.0); (4) optional MaxMind GeoLite2 (free with an account). Tiers 3 and 4 are opt-in via a discrete user click."
+msgstr "Quattro livelli, che si succedono automaticamente: (1) fuso orario del browser → paese, precisione di circa l’80 %, senza chiamate esterne; (2) intestazioni di paese del CDN (Cloudflare, CloudFront, Vercel) quando sono presenti; (3) DB-IP IP-to-City Lite con un clic, opzionale (gratuito, CC-BY 4.0); (4) MaxMind GeoLite2 opzionale (gratuito con un account). I livelli 3 e 4 si attivano (opt-in) tramite un clic esplicito dell’utente."
+
+#. FAQ Q
+#: readme.txt:faq-q10
+msgid "Does Statnive count bots as real visitors?"
+msgstr "Statnive conta i bot come visitatori reali?"
+
+#. FAQ A
+#: readme.txt:faq-a10
+msgid "No. ~200 server-side bot UA patterns and tracker-side fingerprints (webdriver, automation flags) bucket bots separately, so \"Visitors\" and \"Pageviews\" reflect humans only."
+msgstr "No. Circa 200 pattern di User-Agent di bot lato server e impronte lato tracker (webdriver, indicatori di automazione) classificano i bot a parte: «Visitatori» e «Visualizzazioni di pagina» riflettono quindi solo le persone."
+
+#. Section heading
+#: readme.txt:section-screenshots
+msgid "Screenshots"
+msgstr "Screenshot"
+
+#. Screenshot caption 1
+#: readme.txt:screenshot-1
+msgid "Know your traffic at a glance — visitors, sessions, pageviews and trends that matter"
+msgstr "Conoscere il Suo traffico a colpo d’occhio — visitatori, sessioni, visualizzazioni di pagina e tendenze che contano"
+
+#. Screenshot caption 2
+#: readme.txt:screenshot-2
+msgid "Find what's actually driving results — top sources and top pages side by side"
+msgstr "Individuare ciò che genera davvero risultati — sorgenti principali e pagine principali fianco a fianco"
+
+#. Screenshot caption 3
+#: readme.txt:screenshot-3
+msgid "Every page, ranked by what matters — search, sort, find your best content"
+msgstr "Ogni pagina, ordinata in base a ciò che conta — cercare, ordinare, trovare i Suoi migliori contenuti"
+
+#. Screenshot caption 4
+#: readme.txt:screenshot-4
+msgid "See where visitors arrive and leave — entry and exit pages side by side"
+msgstr "Vedere dove arrivano e dove escono i visitatori — pagine di ingresso e di uscita fianco a fianco"
+
+#. Screenshot caption 5
+#: readme.txt:screenshot-5
+msgid "Understand where your traffic comes from — referral, direct, organic, social, AI"
+msgstr "Capire da dove arriva il Suo traffico — referral, diretto, organico, social, IA"
+
+#. Screenshot caption 6
+#: readme.txt:screenshot-6
+msgid "Desktop, mobile, bots — device, browser and OS breakdowns in one view"
+msgstr "Desktop, mobile, bot — ripartizioni per dispositivo, browser e sistema operativo in un’unica vista"
+
+#. Screenshot caption 7
+#: readme.txt:screenshot-7
+msgid "Reach across languages and regions — see which languages your visitors speak"
+msgstr "Raggiungere tutte le lingue e tutte le regioni — veda quali lingue parlano i Suoi visitatori"
+
+#. Screenshot caption 8
+#: readme.txt:screenshot-8
+msgid "Watch your site breathe in real time — active visitors and live pageviews"
+msgstr "Veda il Suo sito respirare in tempo reale — visitatori attivi e visualizzazioni di pagina in diretta"
+
+#. Section heading
+#: readme.txt:section-external-services
+msgid "External Services"
+msgstr "Servizi esterni"
+
+#. External Services intro
+#: readme.txt:external-services-intro
+msgid "This plugin connects to two third-party services, both **opt-in via explicit user action**. No visitor data is ever sent to either service."
+msgstr "Questo plugin si connette a due servizi di terze parti, entrambi **attivati solo tramite un’azione esplicita dell’utente (opt-in)**. Nessun dato dei visitatori viene mai inviato a questi servizi."
+
+#. External Services subsection heading
+#: readme.txt:maxmind-heading
+msgid "MaxMind GeoLite2 (optional)"
+msgstr "MaxMind GeoLite2 (opzionale)"
+
+#. MaxMind description
+#: readme.txt:maxmind-description
+msgid "Used to download the MaxMind GeoLite2-City database for high-accuracy visitor geolocation. Requires a free MaxMind account and a license key the user pastes into Settings → GeoIP. Accuracy: approximate city/region only — not for identifying individuals or households."
+msgstr "Usato per scaricare il database MaxMind GeoLite2-City, per una geolocalizzazione dei visitatori di alta precisione. Richiede un account MaxMind gratuito e una chiave di licenza che l’utente incolla in Impostazioni → GeoIP. Precisione: solo città/regione approssimative — non adatto a identificare singole persone o famiglie."
+
+#. MaxMind bullet
+#: readme.txt:maxmind-bullet-source
+msgid "Source: MaxMind (https://www.maxmind.com), downloaded from https://download.maxmind.com/app/geoip_download"
+msgstr "Sorgente: MaxMind (https://www.maxmind.com), scaricato da https://download.maxmind.com/app/geoip_download"
+
+#. MaxMind bullet
+#: readme.txt:maxmind-bullet-when
+msgid "When: Weekly via WP-Cron, only after the user enables GeoIP and configures a license key"
+msgstr "Quando: ogni settimana tramite WP-Cron, soltanto dopo che l’utente ha attivato GeoIP e configurato una chiave di licenza"
+
+#. MaxMind bullet
+#: readme.txt:maxmind-bullet-data-sent
+msgid "Data sent: License key + standard HTTP request headers. No visitor data is transmitted."
+msgstr "Dati inviati: chiave di licenza e intestazioni HTTP di richiesta standard. Nessun dato dei visitatori viene trasmesso."
+
+#. MaxMind bullet
+#: readme.txt:maxmind-bullet-data-received
+msgid "Data received: GeoLite2-City.mmdb file, stored in your `wp-content/uploads/statnive/` directory"
+msgstr "Dati ricevuti: file GeoLite2-City.mmdb, archiviato nella Sua cartella `wp-content/uploads/statnive/`"
+
+#. MaxMind bullet
+#: readme.txt:maxmind-bullet-purpose
+msgid "Purpose: Approximate visitor geolocation (country / region / coarse city)"
+msgstr "Finalità: geolocalizzazione approssimativa dei visitatori (paese / regione / città approssimativa)"
+
+#. MaxMind bullet
+#: readme.txt:maxmind-bullet-signup
+msgid "Sign up for a MaxMind account: https://www.maxmind.com/en/geolite2/signup"
+msgstr "Creare un account MaxMind: https://www.maxmind.com/en/geolite2/signup"
+
+#. MaxMind bullet
+#: readme.txt:maxmind-bullet-license
+msgid "Get your license key: https://www.maxmind.com/en/accounts/current/license-key"
+msgstr "Ottenere la chiave di licenza: https://www.maxmind.com/en/accounts/current/license-key"
+
+#. MaxMind bullet
+#: readme.txt:maxmind-bullet-privacy
+msgid "MaxMind Privacy Policy: https://www.maxmind.com/en/privacy-policy"
+msgstr "Informativa sulla privacy di MaxMind: https://www.maxmind.com/en/privacy-policy"
+
+#. MaxMind bullet
+#: readme.txt:maxmind-bullet-terms
+msgid "MaxMind Terms of Use: https://www.maxmind.com/en/terms-of-use"
+msgstr "Termini di servizio di MaxMind: https://www.maxmind.com/en/terms-of-use"
+
+#. MaxMind bullet
+#: readme.txt:maxmind-bullet-eula
+msgid "MaxMind GeoLite2 EULA: https://www.maxmind.com/en/geolite2/eula"
+msgstr "Contratto di licenza GeoLite2 di MaxMind: https://www.maxmind.com/en/geolite2/eula"
+
+#. MaxMind attribution
+#: readme.txt:maxmind-attribution
+msgid "This product includes GeoLite Data created by MaxMind, available from https://www.maxmind.com."
+msgstr "Questo prodotto include dati GeoLite creati da MaxMind, disponibili su https://www.maxmind.com."
+
+#. External Services subsection heading
+#: readme.txt:dbip-heading
+msgid "DB-IP IP-to-City Lite (optional)"
+msgstr "DB-IP IP-to-City Lite (opzionale)"
+
+#. DB-IP description
+#: readme.txt:dbip-description
+msgid "Used to download the free DB-IP IP-to-City Lite database. No account, no license key, no EULA. Accuracy: approximate city/region only — not for identifying individuals or households."
+msgstr "Usato per scaricare il database gratuito DB-IP IP-to-City Lite. Nessun account, nessuna chiave di licenza, nessun contratto di licenza. Precisione: solo città/regione approssimative — non adatto a identificare singole persone o famiglie."
+
+#. DB-IP bullet
+#: readme.txt:dbip-bullet-source
+msgid "Source: DB-IP (https://db-ip.com), downloaded from https://download.db-ip.com/free/"
+msgstr "Sorgente: DB-IP (https://db-ip.com), scaricato da https://download.db-ip.com/free/"
+
+#. DB-IP bullet
+#: readme.txt:dbip-bullet-when
+msgid "When: One-shot user click \"Enable city-level geography\" on the Geography page, then monthly via WP-Cron for refresh"
+msgstr "Quando: un clic una tantum dell’utente su «Abilita la geografia a livello di città» nella pagina Geografia, poi aggiornamento mensile tramite WP-Cron"
+
+#. DB-IP bullet
+#: readme.txt:dbip-bullet-data-sent
+msgid "Data sent: Standard HTTP request headers only (no visitor data, no account, no key)"
+msgstr "Dati inviati: solo intestazioni HTTP di richiesta standard (nessun dato dei visitatori, nessun account, nessuna chiave)"
+
+#. DB-IP bullet
+#: readme.txt:dbip-bullet-data-received
+msgid "Data received: dbip-city-lite-YYYY-MM.mmdb.gz file, decompressed to your `wp-content/uploads/statnive/` directory"
+msgstr "Dati ricevuti: file dbip-city-lite-YYYY-MM.mmdb.gz, decompresso nella Sua cartella `wp-content/uploads/statnive/`"
+
+#. DB-IP bullet
+#: readme.txt:dbip-bullet-purpose
+msgid "Purpose: Approximate visitor geolocation (city / region / country)"
+msgstr "Finalità: geolocalizzazione approssimativa dei visitatori (città / regione / paese)"
+
+#. DB-IP bullet
+#: readme.txt:dbip-bullet-terms
+msgid "DB-IP Terms: https://db-ip.com/tos.php"
+msgstr "Termini di DB-IP: https://db-ip.com/tos.php"
+
+#. DB-IP bullet
+#: readme.txt:dbip-bullet-privacy
+msgid "DB-IP Privacy Policy: https://db-ip.com/privacy.php"
+msgstr "Informativa sulla privacy di DB-IP: https://db-ip.com/privacy.php"
+
+#. DB-IP bullet
+#: readme.txt:dbip-bullet-license
+msgid "License: CC-BY 4.0"
+msgstr "Licenza: CC-BY 4.0"
+
+#. DB-IP attribution
+#: readme.txt:dbip-attribution
+msgid "GeoIP data © DB-IP under CC-BY 4.0."
+msgstr "Dati GeoIP © DB-IP con licenza CC-BY 4.0."
+
+#. External services closing
+#: readme.txt:external-services-closing
+msgid "No visitor data is ever sent to any external service. All analytics data remains in your WordPress database."
+msgstr "Nessun dato dei visitatori viene mai inviato a un servizio esterno. Tutti i dati di analisi restano nel Suo database WordPress."
+
+#. Section heading
+#: readme.txt:section-privacy-policy
+msgid "Privacy Policy"
+msgstr "Informativa sulla privacy"
+
+#. Privacy policy body
+#: readme.txt:privacy-policy-body
+msgid "All analytics data stays in your WordPress database. Raw IPs are used only for the optional GeoIP lookup and are never persisted. Statnive registers with the WordPress Privacy API for personal-data export and erasure."
+msgstr "Tutti i dati di analisi restano nel Suo database WordPress. Gli IP grezzi vengono usati solo per la consultazione GeoIP opzionale e non vengono mai conservati. Statnive si registra presso WordPress Privacy API per l’esportazione e la cancellazione dei dati personali."
+
+#. Section heading
+#: readme.txt:section-changelog
+msgid "Changelog"
+msgstr "Registro delle modifiche"
+
+#. Section heading
+#: readme.txt:section-upgrade-notice
+msgid "Upgrade Notice"
+msgstr "Avviso di aggiornamento"
+
+#. Upgrade Notice body for the latest version.
+#: readme.txt:upgrade-notice-body
+msgid "First public release on WordPress.org."
+msgstr "Prima versione pubblica su WordPress.org."

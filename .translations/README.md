@@ -27,14 +27,19 @@ Each locale has **two** files going to **two** different translate.wordpress.org
 
 URL pattern: `https://translate.wordpress.org/projects/wp-plugins/statnive/stable/{locale}/default/`
 
-| Locale | Direct link |
-|---|---|
-| de_DE | https://translate.wordpress.org/projects/wp-plugins/statnive/stable/de/default/ |
-| fr_FR | https://translate.wordpress.org/projects/wp-plugins/statnive/stable/fr/default/ |
-| ja | https://translate.wordpress.org/projects/wp-plugins/statnive/stable/ja/default/ |
-| zh_CN | https://translate.wordpress.org/projects/wp-plugins/statnive/stable/zh-cn/default/ |
-| fa_IR | https://translate.wordpress.org/projects/wp-plugins/statnive/stable/fa/default/ |
-| ar | https://translate.wordpress.org/projects/wp-plugins/statnive/stable/ar/default/ |
+| Locale (dir) | WP locale (PO `Language:`) | Direct link |
+|---|---|---|
+| de_DE | `de_DE` | https://translate.wordpress.org/projects/wp-plugins/statnive/stable/de/default/ |
+| fr_FR | `fr_FR` | https://translate.wordpress.org/projects/wp-plugins/statnive/stable/fr/default/ |
+| ja | `ja` | https://translate.wordpress.org/projects/wp-plugins/statnive/stable/ja/default/ |
+| zh_CN | `zh_CN` | https://translate.wordpress.org/projects/wp-plugins/statnive/stable/zh-cn/default/ |
+| fa_IR | `fa_IR` | https://translate.wordpress.org/projects/wp-plugins/statnive/stable/fa/default/ |
+| ar | `ar` | https://translate.wordpress.org/projects/wp-plugins/statnive/stable/ar/default/ |
+| es | `es_ES` | https://translate.wordpress.org/projects/wp-plugins/statnive/stable/es/default/ |
+| nl | `nl_NL` | https://translate.wordpress.org/projects/wp-plugins/statnive/stable/nl/default/ |
+| it | `it_IT` | https://translate.wordpress.org/projects/wp-plugins/statnive/stable/it/default/ |
+| sv | `sv_SE` | https://translate.wordpress.org/projects/wp-plugins/statnive/stable/sv/default/ |
+| ru | `ru_RU` | https://translate.wordpress.org/projects/wp-plugins/statnive/stable/ru/default/ |
 
 For each row:
 
@@ -98,8 +103,13 @@ Per-locale `Plural-Forms`:
 | zh_CN | `nplurals=1; plural=0;` |
 | fa_IR | `nplurals=2; plural=(n > 1);` |
 | ar | `nplurals=6; plural=(n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 ? 4 : 5);` |
+| es | `nplurals=2; plural=(n != 1);` |
+| nl | `nplurals=2; plural=(n != 1);` |
+| it | `nplurals=2; plural=(n != 1);` |
+| sv | `nplurals=2; plural=(n != 1);` |
+| ru | `nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);` |
 
-The current POT contains **zero** `_n()` plural strings, so the Plural-Forms expression is moot in practice. It becomes load-bearing the first time a `_n()` call enters the codebase — at that point regenerate the POT and re-translate the new plural entries (Arabic alone needs 6 forms).
+The current POT contains **zero** `_n()` plural strings, so the Plural-Forms expression is moot in practice. It becomes load-bearing the first time a `_n()` call enters the codebase — at that point regenerate the POT and re-translate the new plural entries (Arabic needs 6 forms; Russian needs 3 one/few/many).
 
 ## Known divergences from strict `→` preservation
 
@@ -120,18 +130,23 @@ Brand names stay Latin across all six locales (verified):
 
 ## Validation report (at-time-of-generation)
 
-All 12 files passed `msgfmt -c --statistics` (the two warnings about missing `Last-Translator` and `Language-Team` header fields are cosmetic and resolved automatically when a PTE/GTE imports through the GlotPress UI).
+All 22 files passed `msgfmt -c --statistics` (the two warnings about missing `Last-Translator` and `Language-Team` header fields are cosmetic and resolved automatically when a PTE/GTE imports through the GlotPress UI).
 
 | Locale | Plugin msgids | Readme chunks | msgfmt status |
 |---|---|---|---|
-| de_DE | 241 | 69 | ✅ clean (after 7 typographic-quote escape fixes) |
-| fr_FR | 241 | 87 | ✅ clean |
-| ja | 240 | 87 | ✅ clean |
-| zh_CN | 241 | 88 | ✅ clean |
-| fa_IR | 241 | 84 | ✅ clean |
-| ar | 240 | 87 | ✅ clean |
+| de_DE | 241 | 89 | ✅ clean |
+| fr_FR | 241 | 89 | ✅ clean |
+| ja | 241 | 89 | ✅ clean |
+| zh_CN | 241 | 89 | ✅ clean |
+| fa_IR | 241 | 89 | ✅ clean |
+| ar | 241 | 89 | ✅ clean |
+| es | 241 | 89 | ✅ clean |
+| nl | 241 | 89 | ✅ clean |
+| it | 241 | 89 | ✅ clean |
+| sv | 241 | 89 | ✅ clean |
+| ru | 241 | 89 | ✅ clean |
 
-(The "missing 1 msgid" in ja and ar plugin totals refers to the plugin URI msgid `https://statnive.com` which is intentionally left as empty `msgstr ""` — URIs don't translate.)
+(Plugin totals show "240 translated, 1 untranslated" via msgfmt; the 1 untranslated is the plugin URI msgid `https://statnive.com` which is intentionally left as empty `msgstr ""` — URIs don't translate. All other 240 msgids are translated per locale, giving 240 × 11 = 2,640 plugin-string translations plus 89 × 11 = 979 readme-chunk translations across all locales.)
 
 ## Cross-references
 
@@ -142,3 +157,8 @@ All 12 files passed `msgfmt -c --statistics` (the two warnings about missing `La
 - `jaan-to/docs/research/50-statnive-localization-japanese.md` — ja style guide
 - `jaan-to/docs/research/51-statnive-localization-chinese.md` — zh_CN style guide
 - `jaan-to/docs/research/52-statnive-localization-french.md` — fr_FR style guide
+- `jaan-to/docs/research/63-statnive-localization-spanish.md` — es style guide
+- `jaan-to/docs/research/64-statnive-localization-dutch.md` — nl style guide
+- `jaan-to/docs/research/65-statnive-localization-italian.md` — it style guide
+- `jaan-to/docs/research/66-statnive-localization-swedish.md` — sv style guide
+- `jaan-to/docs/research/67-statnive-localization-russian.md` — ru style guide
