@@ -153,7 +153,7 @@ final class ReportQueryService {
 					COUNT(*) AS orders,
 					COALESCE(SUM(o.net_total - o.refund_total),0) AS revenue
 				 FROM {$orders} o
-				 LEFT JOIN {$attr} a ON a.order_id = o.ID
+				 LEFT JOIN {$attr} a ON a.order_id = o.wc_order_id
 				 WHERE o.deleted_at IS NULL
 				   AND o.status IN " . self::COUNTED_STATUSES . '
 				   AND DATE(o.date_created_gmt) BETWEEN %s AND %s
@@ -200,7 +200,7 @@ final class ReportQueryService {
 					COUNT(*) AS orders,
 					COALESCE(SUM(o.net_total - o.refund_total),0) AS revenue
 				 FROM {$orders} o
-				 LEFT JOIN {$attr} a ON a.order_id = o.ID
+				 LEFT JOIN {$attr} a ON a.order_id = o.wc_order_id
 				 WHERE o.deleted_at IS NULL
 				   AND o.status IN " . self::COUNTED_STATUSES . '
 				   AND DATE(o.date_created_gmt) BETWEEN %s AND %s
@@ -216,7 +216,16 @@ final class ReportQueryService {
 		);
 		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
 
-		return is_array( $rows ) ? $rows : [];
+		return array_map(
+			static fn( array $r ): array => [
+				'source'   => (string) $r['source'],
+				'medium'   => (string) $r['medium'],
+				'campaign' => (string) $r['campaign'],
+				'orders'   => (int) $r['orders'],
+				'revenue'  => max( 0.0, (float) $r['revenue'] ),
+			],
+			is_array( $rows ) ? $rows : []
+		);
 	}
 
 	/**
@@ -240,7 +249,7 @@ final class ReportQueryService {
 					COUNT(*) AS orders,
 					COALESCE(SUM(o.net_total - o.refund_total),0) AS revenue
 				 FROM {$orders} o
-				 LEFT JOIN {$attr} a ON a.order_id = o.ID
+				 LEFT JOIN {$attr} a ON a.order_id = o.wc_order_id
 				 WHERE o.deleted_at IS NULL
 				   AND o.status IN " . self::COUNTED_STATUSES . '
 				   AND DATE(o.date_created_gmt) BETWEEN %s AND %s
@@ -256,7 +265,14 @@ final class ReportQueryService {
 		);
 		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
 
-		return is_array( $rows ) ? $rows : [];
+		return array_map(
+			static fn( array $r ): array => [
+				'landing_page' => (string) $r['landing_page'],
+				'orders'       => (int) $r['orders'],
+				'revenue'      => max( 0.0, (float) $r['revenue'] ),
+			],
+			is_array( $rows ) ? $rows : []
+		);
 	}
 
 	/**
@@ -281,7 +297,7 @@ final class ReportQueryService {
 					SUM(i.quantity) - SUM(i.refund_quantity) AS units,
 					SUM(i.total) - SUM(i.refund_amount) AS revenue
 				 FROM {$items} i
-				 JOIN {$orders} o ON o.ID = i.order_id
+				 JOIN {$orders} o ON o.wc_order_id = i.order_id
 				 WHERE o.deleted_at IS NULL
 				   AND o.status IN " . self::COUNTED_STATUSES . '
 				   AND DATE(o.date_created_gmt) BETWEEN %s AND %s
@@ -398,7 +414,7 @@ final class ReportQueryService {
 					SUM(o.gross_total)     AS revenue_with_coupon,
 					SUM(o.net_total - o.refund_total) AS net_after_discount
 				 FROM {$coupons} c
-				 JOIN {$orders} o ON o.ID = c.order_id
+				 JOIN {$orders} o ON o.wc_order_id = c.order_id
 				 WHERE o.deleted_at IS NULL
 				   AND o.status IN " . self::COUNTED_STATUSES . '
 				   AND DATE(o.date_created_gmt) BETWEEN %s AND %s
@@ -467,7 +483,7 @@ final class ReportQueryService {
 					SUM(i.refund_quantity) AS units,
 					SUM(i.refund_amount)   AS amount
 				 FROM {$items} i
-				 JOIN {$orders} o ON o.ID = i.order_id
+				 JOIN {$orders} o ON o.wc_order_id = i.order_id
 				 WHERE o.deleted_at IS NULL
 				   AND DATE(o.date_created_gmt) BETWEEN %s AND %s
 				   AND i.refund_amount > 0

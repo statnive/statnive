@@ -78,6 +78,7 @@ final class Plugin {
 		// WP-CLI commands (loaded only when WP-CLI is the SAPI).
 		if ( defined( 'WP_CLI' ) && WP_CLI ) {
 			\WP_CLI::add_command( 'statnive cron', \Statnive\Cli\CronCommand::class );
+			\WP_CLI::add_command( 'statnive wc-backfill', \Statnive\Cli\WooCommerceBackfillCommand::class );
 		}
 
 		self::register_hooks();
