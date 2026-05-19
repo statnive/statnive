@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Statnive\Container;
 
+use Statnive\Integration\WooCommerce\FunnelEvents;
 use Statnive\Integration\WooCommerce\Recorder;
 use Statnive\Integration\WooCommerce\SafeHook;
 
@@ -71,5 +72,17 @@ final class WooCommerceServiceProvider implements ServiceProvider {
 		// status; route through the same paid_or_paying upsert so totals
 		// stay in sync.
 		add_action( 'woocommerce_order_status_refunded', SafeHook::wrap( [ Recorder::class, 'on_paid_or_paying' ] ) );
+
+		// Funnel events (PR 6) — write into statnive_events. wc_purchase
+		// is derived from statnive_orders at query time and so has no
+		// dedicated hook here.
+		add_action( 'template_redirect', SafeHook::wrap( [ FunnelEvents::class, 'on_product_view' ] ) );
+		add_action( 'woocommerce_add_to_cart', SafeHook::wrap( [ FunnelEvents::class, 'on_add_to_cart' ] ), 10, 4 );
+
+		// Classic shortcode checkout.
+		add_action( 'woocommerce_checkout_order_processed', SafeHook::wrap( [ FunnelEvents::class, 'on_classic_checkout_start' ] ) );
+
+		// Block checkout — Store API equivalent.
+		add_action( 'woocommerce_store_api_checkout_order_processed', SafeHook::wrap( [ FunnelEvents::class, 'on_blocks_checkout_start' ] ) );
 	}
 }
