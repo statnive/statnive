@@ -6,6 +6,14 @@ declare global {
 			siteTitle: string;
 			version: string;
 			currentIp: string;
+			/** Initial SPA route, derived server-side from the `?page=` slug. */
+			initialRoute?: string;
+			/** Store currency code (e.g. 'USD'); falls back to 'USD' when WooCommerce is absent. */
+			currency?: string;
+			/** Currency minor-unit decimals (2 for USD/EUR, 0 for JPY, 3 for BHD). */
+			currencyMinorUnit?: number;
+			/** Currency symbol — defensive; React uses Intl.NumberFormat directly. */
+			currencySymbol?: string;
 		};
 	}
 }

@@ -4,17 +4,26 @@ declare(strict_types=1);
 
 namespace Statnive\Admin;
 
+use Statnive\Capability;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
 /**
- * WordPress admin menu registration.
- *
- * Registers the top-level "Statnive" admin menu item and renders
- * the container div for the React SPA.
+ * WordPress admin menu registration for the React SPA shell.
  */
 final class AdminMenuManager {
+
+	/** First submenu reuses parent slug to suppress WP's duplicated parent label. */
+	public const MENU_SLUG_OVERVIEW = 'statnive';
+	public const MENU_SLUG_REVENUE  = 'statnive-revenue';
+	public const MENU_SLUG_SETTINGS = 'statnive-settings';
+
+	/** SPA hash-routes — match TanStack Router paths in resources/react/app.tsx. */
+	private const ROUTE_OVERVIEW = '/';
+	private const ROUTE_REVENUE  = '/revenue';
+	private const ROUTE_SETTINGS = '/settings';
 
 	private const MENU_ICON_SVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">'
 		. '<path d="M 10 82 L 50 24" stroke="currentColor" stroke-width="4" stroke-linecap="round" fill="none"/>'
@@ -30,18 +39,43 @@ final class AdminMenuManager {
 		add_action( 'admin_enqueue_scripts', [ self::class, 'enqueue_menu_icon_style' ] );
 	}
 
-	/**
-	 * Register the Statnive admin menu page.
-	 */
+	/** Register the Statnive admin menu pages. */
 	public static function register_menu(): void {
 		add_menu_page(
 			__( 'Statnive Analytics', 'statnive' ),
 			__( 'Statnive', 'statnive' ),
-			'manage_options',
-			'statnive',
+			Capability::VIEW_REPORTS,
+			self::MENU_SLUG_OVERVIEW,
 			[ self::class, 'render_page' ],
 			self::menu_icon_data_uri(),
 			26
+		);
+
+		add_submenu_page(
+			self::MENU_SLUG_OVERVIEW,
+			__( 'Overview', 'statnive' ),
+			__( 'Overview', 'statnive' ),
+			Capability::VIEW_REPORTS,
+			self::MENU_SLUG_OVERVIEW,
+			[ self::class, 'render_page' ]
+		);
+
+		add_submenu_page(
+			self::MENU_SLUG_OVERVIEW,
+			__( 'Revenue Report', 'statnive' ),
+			__( 'Revenue Report', 'statnive' ),
+			Capability::VIEW_REPORTS,
+			self::MENU_SLUG_REVENUE,
+			[ self::class, 'render_page' ]
+		);
+
+		add_submenu_page(
+			self::MENU_SLUG_OVERVIEW,
+			__( 'Settings', 'statnive' ),
+			__( 'Settings', 'statnive' ),
+			Capability::VIEW_REPORTS,
+			self::MENU_SLUG_SETTINGS,
+			[ self::class, 'render_page' ]
 		);
 	}
 
@@ -56,7 +90,7 @@ final class AdminMenuManager {
 	 * rule.
 	 */
 	public static function enqueue_menu_icon_style(): void {
-		if ( ! current_user_can( 'manage_options' ) ) {
+		if ( ! Capability::can_view_reports() ) {
 			return;
 		}
 
@@ -121,13 +155,39 @@ final class AdminMenuManager {
 	}
 
 	/**
-	 * Check if the current admin page is the Statnive page.
+	 * Check if the current admin page is any of the Statnive admin pages.
 	 *
-	 * @return bool True if on the Statnive admin page.
+	 * @return bool True if on the Statnive admin page (overview, revenue, or settings).
 	 */
 	public static function is_statnive_page(): bool {
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		$page = sanitize_text_field( wp_unslash( $_GET['page'] ?? '' ) );
-		return 'statnive' === $page;
+		return in_array(
+			$page,
+			[ self::MENU_SLUG_OVERVIEW, self::MENU_SLUG_REVENUE, self::MENU_SLUG_SETTINGS ],
+			true
+		);
+	}
+
+	/**
+	 * Map the active `?page=` slug to an initial SPA hash-route.
+	 *
+	 * Injected as `window.StatniveDashboard.initialRoute` so the SPA
+	 * boots into the submenu the user clicked instead of always "/".
+	 *
+	 * @return string Initial route — defaults to "/" off-Statnive pages.
+	 */
+	public static function current_initial_route(): string {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$page = sanitize_text_field( wp_unslash( $_GET['page'] ?? '' ) );
+		switch ( $page ) {
+			case self::MENU_SLUG_REVENUE:
+				return self::ROUTE_REVENUE;
+			case self::MENU_SLUG_SETTINGS:
+				return self::ROUTE_SETTINGS;
+			case self::MENU_SLUG_OVERVIEW:
+			default:
+				return self::ROUTE_OVERVIEW;
+		}
 	}
 }

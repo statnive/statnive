@@ -64,7 +64,7 @@ final class GeoIPNotice {
 	 */
 	public static function maybe_show_notices(): void {
 		$screen = get_current_screen();
-		if ( null === $screen || ReactHandler::HOOK_SUFFIX !== $screen->id ) {
+		if ( null === $screen || ! in_array( $screen->id, ReactHandler::HOOK_SUFFIXES, true ) ) {
 			return;
 		}
 

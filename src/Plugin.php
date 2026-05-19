@@ -64,6 +64,11 @@ final class Plugin {
 		// Database schema migrations (runs on plugins_loaded, bails fast when nothing pending).
 		Migrator::init();
 
+		// Synthetic capability used by every admin page + REST endpoint.
+		// Resolves to view_woocommerce_reports OR manage_options so admins
+		// on non-WooCommerce sites still see the Statnive menu.
+		Capability::init();
+
 		// WP-CLI commands (loaded only when WP-CLI is the SAPI).
 		if ( defined( 'WP_CLI' ) && WP_CLI ) {
 			\WP_CLI::add_command( 'statnive cron', \Statnive\Cli\CronCommand::class );
