@@ -14,6 +14,7 @@ use Statnive\Container\CoreServiceProvider;
 use Statnive\Container\PrivacyServiceProvider;
 use Statnive\Container\ServiceContainer;
 use Statnive\Container\ServiceProvider;
+use Statnive\Container\WooCommerceServiceProvider;
 use Statnive\Cron\CronRegistrar;
 use Statnive\Database\DatabaseFactory;
 use Statnive\Database\Migrator;
@@ -43,6 +44,7 @@ final class Plugin {
 		AnalyticsServiceProvider::class,
 		PrivacyServiceProvider::class,
 		AdminServiceProvider::class,
+		WooCommerceServiceProvider::class,
 	];
 
 	/**
