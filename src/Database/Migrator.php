@@ -91,6 +91,12 @@ final class Migrator {
 			if ( version_compare( $current, $version, '>=' ) ) {
 				continue;
 			}
+			// Skip migrations newer than the running plugin — guards against
+			// future migrations being run prematurely (e.g. test harnesses
+			// holding STATNIVE_VERSION below the migration map).
+			if ( version_compare( (string) $version, $target, '>' ) ) {
+				continue;
+			}
 			$migration();
 			update_option( self::OPTION, $version );
 			$current = $version;
@@ -114,13 +120,56 @@ final class Migrator {
 	 */
 	private static function registered_migrations(): array {
 		return [
-			// Keyed at the running plugin version so any older install runs
-			// each pending migration step exactly once on its next page load.
-			STATNIVE_VERSION => static function (): void {
+			// Email-reports cleanup + referrer reclassify — historically
+			// landed in the 0.4.x line. Pinned at '0.4.13' so the v1.0.0
+			// bump doesn't re-run them for sites already past that point.
+			'0.4.13' => static function (): void {
 				self::migrate_0_4_2_drop_email_and_full_mode();
 				self::migrate_reclassify_referrers();
 			},
+			// WooCommerce Revenue Report — 5 new tables + per-site email
+			// pepper for first-purchase detection.
+			'1.0.0'  => static function (): void {
+				self::migrate_1_0_0_create_wc_tables();
+				self::migrate_1_0_0_seed_email_pepper();
+			},
 		];
+	}
+
+	/**
+	 * Create the 5 v1.0.0 WooCommerce Revenue Report tables.
+	 *
+	 * Calls SchemaDefinition::get_sql() which is dbDelta-safe — running
+	 * it on already-up-to-date schemas is a no-op. The WC tables coexist
+	 * with the existing 21 tables and DO NOT touch any WooCommerce
+	 * tables or post types.
+	 *
+	 * Bails when invoked outside a real WordPress request (e.g. unit
+	 * tests without WP_CONTENT_DIR + $wpdb); integration tests + live
+	 * activations run dbDelta normally.
+	 */
+	private static function migrate_1_0_0_create_wc_tables(): void {
+		global $wpdb;
+		if ( ! defined( 'WP_CONTENT_DIR' ) || null === $wpdb ) {
+			return;
+		}
+		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+		dbDelta( SchemaDefinition::get_sql() );
+	}
+
+	/**
+	 * Seed the per-site email pepper used to hash customer emails on
+	 * order capture. SHA-256(email + pepper); the pepper is never rotated
+	 * so first-purchase detection works across days.
+	 *
+	 * Stored as `statnive_email_pepper` with `autoload=no`. Never
+	 * exposed via REST. Never leaves the database.
+	 */
+	private static function migrate_1_0_0_seed_email_pepper(): void {
+		if ( '' !== (string) get_option( 'statnive_email_pepper', '' ) ) {
+			return;
+		}
+		add_option( 'statnive_email_pepper', wp_generate_password( 64, true, true ), '', false );
 	}
 
 	/**
