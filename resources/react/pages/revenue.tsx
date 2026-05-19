@@ -291,7 +291,7 @@ function FunnelCard({ data, isLoading }: FunnelCardProps) {
 					<ul className="space-y-2.5">
 						{steps.map((s: RevenueFunnelStep, i: number) => {
 							const width = (s.sessions / max) * 100;
-							const prev = i === 0 ? null : steps[i - 1].sessions;
+							const prev = i === 0 ? null : ( steps[i - 1]?.sessions ?? null );
 							const drop = prev && prev > 0 ? ((prev - s.sessions) / prev) * 100 : null;
 							const isLast = i === steps.length - 1;
 							return (

@@ -13,9 +13,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 // All SQL in this file interpolates Statnive table names (constants from
 // $wpdb->prefix + a hardcoded suffix) into prepared statements, never
 // user input. The InterpolatedNotPrepared sniff doesn't have visibility
-// into that, so silence it file-wide.
+// into that, so silence it file-wide. The PluginCheck variant is the
+// same finding under a different sniff name (Plugin Check action).
 // phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 // phpcs:disable WordPress.DB.PreparedSQL.NotPrepared
+// phpcs:disable PluginCheck.Security.DirectDB.UnescapedDBParameter
 
 /**
  * Read-only SQL queries that power the Revenue Report.
