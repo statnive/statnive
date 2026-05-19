@@ -17,6 +17,7 @@ use Statnive\Container\ServiceProvider;
 use Statnive\Cron\CronRegistrar;
 use Statnive\Database\DatabaseFactory;
 use Statnive\Database\Migrator;
+use Statnive\Integration\WooCommerce\Detector as WooCommerceDetector;
 
 /**
  * Plugin bootstrap class.
@@ -68,6 +69,9 @@ final class Plugin {
 		// Resolves to view_woocommerce_reports OR manage_options so admins
 		// on non-WooCommerce sites still see the Statnive menu.
 		Capability::init();
+
+		// Declare HPOS + Block Checkout compatibility before WC boots.
+		WooCommerceDetector::init();
 
 		// WP-CLI commands (loaded only when WP-CLI is the SAPI).
 		if ( defined( 'WP_CLI' ) && WP_CLI ) {

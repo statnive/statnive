@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Statnive\Admin;
 
+use Statnive\Integration\WooCommerce\Currency;
 use Statnive\Service\IpExtractor;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -18,6 +19,13 @@ if ( ! defined( 'ABSPATH' ) ) {
  * (Overview / Revenue Report / Settings).
  */
 final class ReactHandler {
+
+	/**
+	 * Back-compat alias of the Overview hook (kept to avoid breaking
+	 * external code that may reference this constant). New code should
+	 * use {@see HOOK_SUFFIXES}.
+	 */
+	public const HOOK_SUFFIX = 'toplevel_page_statnive';
 
 	/**
 	 * Hook suffixes for Statnive admin pages — single source of truth for the
@@ -103,9 +111,9 @@ final class ReactHandler {
 				'version'           => STATNIVE_VERSION,
 				'currentIp'         => IpExtractor::extract(),
 				'initialRoute'      => AdminMenuManager::current_initial_route(),
-				'currency'          => self::store_currency_code(),
-				'currencyMinorUnit' => self::store_currency_minor_unit(),
-				'currencySymbol'    => self::store_currency_symbol(),
+				'currency'          => Currency::code(),
+				'currencyMinorUnit' => Currency::decimals(),
+				'currencySymbol'    => Currency::symbol(),
 			]
 		);
 
@@ -164,49 +172,6 @@ final class ReactHandler {
 		}
 
 		return $map;
-	}
-
-	/**
-	 * Currency-string snapshot for the SPA — WooCommerce when active,
-	 * fallback otherwise. PR 2 promotes this to
-	 * `src/Integration/WooCommerce/Currency.php` once the Recorder + REST
-	 * controllers also need it.
-	 *
-	 * @param string $wc_fn    WooCommerce function name to call when WC is active.
-	 * @param string $fallback Default value to return when WC is absent or returns empty.
-	 */
-	private static function store_currency_string( string $wc_fn, string $fallback ): string {
-		if ( function_exists( $wc_fn ) ) {
-			$value = (string) call_user_func( $wc_fn );
-			if ( '' !== $value ) {
-				return $value;
-			}
-		}
-		return $fallback;
-	}
-
-	/**
-	 * ISO 4217 currency code from WooCommerce, defaulting to 'USD'.
-	 */
-	private static function store_currency_code(): string {
-		return self::store_currency_string( 'get_woocommerce_currency', 'USD' );
-	}
-
-	/**
-	 * Display symbol for the store currency, defaulting to '$'.
-	 */
-	private static function store_currency_symbol(): string {
-		return self::store_currency_string( 'get_woocommerce_currency_symbol', '$' );
-	}
-
-	/**
-	 * Currency minor-unit decimals (2 for USD/EUR, 0 for JPY, 3 for BHD).
-	 */
-	private static function store_currency_minor_unit(): int {
-		if ( function_exists( 'wc_get_price_decimals' ) ) {
-			return (int) wc_get_price_decimals();
-		}
-		return 2;
 	}
 
 	/**

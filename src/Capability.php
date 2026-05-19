@@ -31,8 +31,13 @@ final class Capability {
 	}
 
 	/**
-	 * Grant `statnive_view_reports` to anyone who has
-	 * `view_woocommerce_reports` (WC) OR `manage_options` (WP core).
+	 * Grant `statnive_view_reports` based on the configured capability chain.
+	 *
+	 * Default chain: `view_woocommerce_reports` (WC Shop Manager) OR
+	 * `manage_options` (WP Administrator). Site owners who want admin-only
+	 * access — for example, sites that don't trust their Shop Managers with
+	 * analytics — can filter to e.g. `[ 'manage_options' ]` via the
+	 * `statnive_view_reports_caps` filter. The chain is OR-combined.
 	 *
 	 * @param array<string, bool> $allcaps All capabilities of the user.
 	 * @param array<int, string>  $caps    Capabilities required by the current check.
@@ -47,9 +52,28 @@ final class Capability {
 			return $allcaps;
 		}
 
-		$allcaps[ self::VIEW_REPORTS ] =
-			! empty( $allcaps['view_woocommerce_reports'] ) ||
-			! empty( $allcaps['manage_options'] );
+		/**
+		 * Filter the capability chain that grants Statnive report access.
+		 *
+		 * Return an array of WordPress capability strings; the user is
+		 * granted `statnive_view_reports` if they have ANY of them.
+		 *
+		 * @param array<int, string> $chain Default: ['view_woocommerce_reports', 'manage_options'].
+		 */
+		$chain = (array) apply_filters(
+			'statnive_view_reports_caps',
+			[ 'view_woocommerce_reports', 'manage_options' ]
+		);
+
+		$granted = false;
+		foreach ( $chain as $cap ) {
+			if ( is_string( $cap ) && ! empty( $allcaps[ $cap ] ) ) {
+				$granted = true;
+				break;
+			}
+		}
+
+		$allcaps[ self::VIEW_REPORTS ] = $granted;
 
 		return $allcaps;
 	}

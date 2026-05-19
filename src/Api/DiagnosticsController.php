@@ -16,6 +16,7 @@ use Statnive\Database\Migrator;
 use Statnive\Database\TableRegistry;
 use Statnive\Service\GeoIPDownloader;
 use Statnive\Service\GeoIPService;
+use Statnive\Capability;
 use WP_REST_Controller;
 use WP_REST_Request;
 use WP_REST_Response;
@@ -106,7 +107,7 @@ final class DiagnosticsController extends WP_REST_Controller {
 	 */
 	public function permissions_check( $request ): bool {
 		unset( $request );
-		return current_user_can( 'manage_options' );
+		return Capability::can_view_reports();
 	}
 
 	/**
