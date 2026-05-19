@@ -51,15 +51,25 @@ final class WooCommerceServiceProvider implements ServiceProvider {
 	public function boot( ServiceContainer $container ): void {
 		unset( $container );
 
-		add_action( 'woocommerce_new_order', SafeHook::wrap( [ Recorder::class, 'onNewOrder' ] ) );
+		add_action( 'woocommerce_new_order', SafeHook::wrap( [ Recorder::class, 'on_new_order' ] ) );
 
-		add_action( 'woocommerce_order_status_processing', SafeHook::wrap( [ Recorder::class, 'onPaidOrPaying' ] ) );
-		add_action( 'woocommerce_order_status_completed', SafeHook::wrap( [ Recorder::class, 'onPaidOrPaying' ] ) );
-		add_action( 'woocommerce_order_status_on-hold', SafeHook::wrap( [ Recorder::class, 'onPaidOrPaying' ] ) );
+		add_action( 'woocommerce_order_status_processing', SafeHook::wrap( [ Recorder::class, 'on_paid_or_paying' ] ) );
+		add_action( 'woocommerce_order_status_completed', SafeHook::wrap( [ Recorder::class, 'on_paid_or_paying' ] ) );
+		add_action( 'woocommerce_order_status_on-hold', SafeHook::wrap( [ Recorder::class, 'on_paid_or_paying' ] ) );
 
-		add_action( 'woocommerce_order_status_cancelled', SafeHook::wrap( [ Recorder::class, 'onCancelledOrFailed' ] ) );
-		add_action( 'woocommerce_order_status_failed', SafeHook::wrap( [ Recorder::class, 'onCancelledOrFailed' ] ) );
+		add_action( 'woocommerce_order_status_cancelled', SafeHook::wrap( [ Recorder::class, 'on_cancelled_or_failed' ] ) );
+		add_action( 'woocommerce_order_status_failed', SafeHook::wrap( [ Recorder::class, 'on_cancelled_or_failed' ] ) );
 
-		add_action( 'woocommerce_delete_order', SafeHook::wrap( [ Recorder::class, 'onDelete' ] ) );
+		add_action( 'woocommerce_delete_order', SafeHook::wrap( [ Recorder::class, 'on_delete' ] ) );
+
+		// Refund hooks (PR 5). woocommerce_order_refunded is canonical;
+		// woocommerce_update_order is known not to fire on partial
+		// refunds (WC issue #22072) so we don't rely on it.
+		add_action( 'woocommerce_order_refunded', SafeHook::wrap( [ Recorder::class, 'on_refund' ] ), 10, 2 );
+
+		// woocommerce_order_status_refunded also marks the parent order
+		// status; route through the same paid_or_paying upsert so totals
+		// stay in sync.
+		add_action( 'woocommerce_order_status_refunded', SafeHook::wrap( [ Recorder::class, 'on_paid_or_paying' ] ) );
 	}
 }
