@@ -21,8 +21,8 @@ export function SettingsActions() {
 				rel="noopener noreferrer"
 				className={baseClasses}
 			>
-				<Star className="h-4 w-4" aria-hidden="true" />
-				{__('Give 5 Stars :D', 'statnive')}
+				<Star className="h-4 w-4" aria-hidden="true" color="#FBBF24" fill="#FBBF24" />
+				{__( 'Give 5 Stars 😅', 'statnive' )}
 			</a>
 			<a
 				href={ISSUES_URL}

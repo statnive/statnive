@@ -182,7 +182,7 @@ describe('DashboardLayout — per-page nav scoping', () => {
 
 	it('renders the two Settings CTAs with secure external-link attributes', async () => {
 		await renderApp('/settings');
-		const reviewLink = screen.getByText('Give 5 Stars :D').closest('a');
+		const reviewLink = screen.getByText('Give 5 Stars 😅').closest('a');
 		const issuesLink = screen.getByText('Report Issues').closest('a');
 
 		expect(reviewLink).toBeTruthy();
