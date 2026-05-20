@@ -52,9 +52,15 @@ export function QuestionCard({ question, pinned, startExpanded = false }: Questi
 	};
 
 	return (
-		<div className="border-t border-border first:border-t-0">
+		<div
+			className={cn(
+				'group border-t border-border transition-colors duration-150 first:border-t-0',
+				!isComingSoon && 'hover:bg-muted/30',
+				expanded && 'bg-muted/20',
+			)}
+		>
 			{/* Header row */}
-			<div className="flex items-center gap-2 px-5 py-3.5">
+			<div className="flex items-center gap-3 px-6 py-4">
 				<button
 					type="button"
 					onClick={togglePin}
@@ -74,7 +80,9 @@ export function QuestionCard({ question, pinned, startExpanded = false }: Questi
 					<Pin
 						className={cn(
 							'h-4 w-4 transition-colors',
-							pinned ? 'fill-primary text-primary' : 'text-muted-foreground',
+							pinned
+								? 'fill-[color:var(--color-accent)] text-[color:var(--color-accent)]'
+								: 'text-muted-foreground/60 group-hover:text-muted-foreground',
 						)}
 					/>
 				</button>

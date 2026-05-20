@@ -135,13 +135,18 @@ export function QuestionTabs({ categories, active, onChange, children }: Questio
 						tabIndex={active === PINNED_TAB_ID ? 0 : -1}
 						onClick={() => onChange(PINNED_TAB_ID)}
 						className={cn(
-							'flex items-center gap-1.5 whitespace-nowrap border-b-2 px-3 py-2.5 text-sm font-medium transition-colors duration-150',
+							'flex items-center gap-1.5 whitespace-nowrap border-b-[3px] px-3 py-2.5 text-sm font-medium transition-colors duration-150',
 							active === PINNED_TAB_ID
-								? 'border-primary text-primary'
+								? 'border-[color:var(--color-accent)] bg-[color:var(--color-accent)]/5 text-primary'
 								: 'border-transparent text-muted-foreground hover:border-border hover:text-foreground',
 						)}
 					>
-						<Pin className="h-4 w-4" />
+						<Pin
+							className={cn(
+								'h-4 w-4',
+								active === PINNED_TAB_ID && 'text-[color:var(--color-accent)]',
+							)}
+						/>
 						{__('Ask me!', 'statnive')}
 					</button>
 
@@ -160,13 +165,19 @@ export function QuestionTabs({ categories, active, onChange, children }: Questio
 								tabIndex={isActive ? 0 : -1}
 								onClick={() => onChange(category.id)}
 								className={cn(
-									'flex items-center gap-1.5 whitespace-nowrap border-b-2 px-3 py-2.5 text-sm font-medium transition-colors duration-150',
+									'flex items-center gap-1.5 whitespace-nowrap border-b-[3px] px-3 py-2.5 text-sm font-medium transition-colors duration-150',
 									isActive
-										? 'border-primary text-primary'
+										? 'border-[color:var(--color-accent)] bg-[color:var(--color-accent)]/5 text-primary'
 										: 'border-transparent text-muted-foreground hover:border-border hover:text-foreground',
 								)}
 							>
-								<Icon className="h-4 w-4" aria-hidden="true" />
+								<Icon
+									className={cn(
+										'h-4 w-4',
+										isActive && 'text-[color:var(--color-accent)]',
+									)}
+									aria-hidden="true"
+								/>
 								{shortLabelFor(category)}
 							</button>
 						);
