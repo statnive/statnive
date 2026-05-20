@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: Statnive – Simple, Real-time, Privacy-first Web Analytics
+ * Plugin Name: Statnive – Privacy-first Analytics + Revenue Reports for WooCommerce
  * Plugin URI:  https://github.com/statnive/statnive
  * Description: Simple stats, clear decisions. Privacy-first analytics for WordPress.
  * Version:     1.0.0
