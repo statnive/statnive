@@ -437,7 +437,10 @@ final class BackfillService {
 			return 0;
 		}
 		$table = $wpdb->prefix . 'statnive_orders';
-		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		// The interpolated $table is a constant ($wpdb->prefix + 'statnive_orders'),
+		// never user input — same justification as ReportQueryService. The PluginCheck
+		// variant of the sniff has its own code, so silence both.
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared,PluginCheck.Security.DirectDB.UnescapedDBParameter
 		$count = $wpdb->get_var(
 			"SELECT COUNT(*) FROM {$table} WHERE deleted_at IS NULL"
 		);
