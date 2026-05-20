@@ -150,16 +150,46 @@ final class QuestionResolver {
 	 */
 	private function dispatch( string $id, string $from, string $to, array $q ): array {
 		switch ( $id ) {
+			// Traffic Overview (cat 1) — all served by /summary aggregations.
+			case 'q1':
+				return $this->answer_visitors_today( $q );
 			case 'q2':
 				return $this->answer_q2( $from, $to, $q );
+			case 'q3':
+				return $this->answer_pageviews_range( $from, $to, $q );
+			case 'q4':
+				return $this->answer_sessions_range( $from, $to, $q );
+			case 'q5':
+				return $this->answer_today_vs_yesterday( $q );
+			case 'q6':
+				return $this->answer_period_delta( $from, $to, $q );
+			case 'q7':
+				return $this->answer_best_day( $from, $to, $q );
+			case 'q8':
+				return $this->answer_worst_day( $from, $to, $q );
+			case 'q9':
+				return $this->answer_trend( $from, $to, $q );
+			case 'q10':
+				return $this->answer_drop_anomaly( $from, $to, $q );
+			case 'q11':
+				return $this->answer_spike_anomaly( $from, $to, $q );
+
+			// Pages & Content (cat 3) — top-pages family.
 			case 'q23':
 				return $this->answer_q23( $from, $to, $q );
+
+			// Referrers & Channels (cat 4) — channel mix.
 			case 'q41':
 				return $this->answer_q41( $from, $to, $q );
+
+			// Geography & Language (cat 6) — country mix.
 			case 'q72':
 				return $this->answer_q72( $from, $to, $q );
+
+			// Devices & Browsers (cat 7) — device split.
 			case 'q81':
 				return $this->answer_q81( $from, $to, $q );
+
 			default:
 				// No native handler yet — treat as coming-soon for v1.
 				return $this->coming_soon( $q );
@@ -503,5 +533,438 @@ final class QuestionResolver {
 		);
 
 		return $this->ok( $q, [ 'rows' => $normalized ], 'bar' );
+	}
+
+	// =================================================================
+	// Traffic Overview handlers (cat 1) — Q1 + Q3..Q11
+	//
+	// All read from the pre-aggregated `summary_totals` table; today gets
+	// a real-time fallback to raw `sessions` so the answer matches what
+	// SummaryController shows for the same date range.
+	// =================================================================
+
+	/**
+	 * Q1 — "How many people visited my site today?"
+	 *
+	 * @param array<string, mixed> $q Inventory row.
+	 * @return array<string, mixed>
+	 */
+	private function answer_visitors_today( array $q ): array {
+		global $wpdb;
+		$today          = gmdate( 'Y-m-d' );
+		$sessions_table = TableRegistry::get( 'sessions' );
+
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		$visitors = (int) $wpdb->get_var(
+			$wpdb->prepare(
+				'SELECT COUNT(DISTINCT visitor_id) FROM %i WHERE DATE(started_at) = %s',
+				$sessions_table,
+				$today
+			)
+		);
+		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+
+		return $this->ok(
+			$q,
+			[
+				'visitors' => $visitors,
+				'from'     => $today,
+				'to'       => $today,
+			],
+			'kpi_tile'
+		);
+	}
+
+	/**
+	 * Q3 — "How many pageviews did I get?"
+	 *
+	 * @param string               $from Date range start (`Y-m-d`).
+	 * @param string               $to   Date range end (`Y-m-d`).
+	 * @param array<string, mixed> $q    Inventory row.
+	 * @return array<string, mixed>
+	 */
+	private function answer_pageviews_range( string $from, string $to, array $q ): array {
+		$totals = $this->load_period_totals( $from, $to );
+		return $this->ok(
+			$q,
+			[
+				'pageviews' => $totals['views'],
+				'from'      => $from,
+				'to'        => $to,
+			],
+			'kpi_tile'
+		);
+	}
+
+	/**
+	 * Q4 — "How many sessions did I get?"
+	 *
+	 * @param string               $from Date range start (`Y-m-d`).
+	 * @param string               $to   Date range end (`Y-m-d`).
+	 * @param array<string, mixed> $q    Inventory row.
+	 * @return array<string, mixed>
+	 */
+	private function answer_sessions_range( string $from, string $to, array $q ): array {
+		$totals = $this->load_period_totals( $from, $to );
+		return $this->ok(
+			$q,
+			[
+				'sessions' => $totals['sessions'],
+				'from'     => $from,
+				'to'       => $to,
+			],
+			'kpi_tile'
+		);
+	}
+
+	/**
+	 * Q5 — "Is my traffic up or down compared with yesterday?"
+	 *
+	 * @param array<string, mixed> $q Inventory row.
+	 * @return array<string, mixed>
+	 */
+	private function answer_today_vs_yesterday( array $q ): array {
+		$today_str     = gmdate( 'Y-m-d' );
+		$yesterday_str = gmdate( 'Y-m-d', strtotime( '-1 day' ) );
+
+		$today     = $this->load_day_visitors( $today_str );
+		$yesterday = $this->load_day_visitors( $yesterday_str );
+
+		$delta_pct = ( $yesterday > 0 ) ? ( ( $today - $yesterday ) / $yesterday ) * 100 : 0.0;
+
+		return $this->ok(
+			$q,
+			[
+				'current'     => $today,
+				'previous'    => $yesterday,
+				'delta_pct'   => round( $delta_pct, 1 ),
+				'current_at'  => $today_str,
+				'previous_at' => $yesterday_str,
+			],
+			'delta'
+		);
+	}
+
+	/**
+	 * Q6 — "Is my traffic up or down compared with last week?"
+	 *
+	 * @param string               $from Date range start (`Y-m-d`).
+	 * @param string               $to   Date range end (`Y-m-d`).
+	 * @param array<string, mixed> $q    Inventory row.
+	 * @return array<string, mixed>
+	 */
+	private function answer_period_delta( string $from, string $to, array $q ): array {
+		$current   = $this->load_period_totals( $from, $to );
+		$length    = max( 1, ( strtotime( $to ) - strtotime( $from ) ) / DAY_IN_SECONDS + 1 );
+		$prev_to   = gmdate( 'Y-m-d', strtotime( $from . ' -1 day' ) );
+		$prev_from = gmdate( 'Y-m-d', strtotime( $prev_to . ' -' . ( $length - 1 ) . ' day' ) );
+		$previous  = $this->load_period_totals( $prev_from, $prev_to );
+
+		$delta_pct = ( $previous['visitors'] > 0 )
+			? ( ( $current['visitors'] - $previous['visitors'] ) / $previous['visitors'] ) * 100
+			: 0.0;
+
+		return $this->ok(
+			$q,
+			[
+				'current'   => $current['visitors'],
+				'previous'  => $previous['visitors'],
+				'delta_pct' => round( $delta_pct, 1 ),
+				'from'      => $from,
+				'to'        => $to,
+				'prev_from' => $prev_from,
+				'prev_to'   => $prev_to,
+			],
+			'delta'
+		);
+	}
+
+	/**
+	 * Q7 — "Which day had the most traffic?"
+	 *
+	 * @param string               $from Date range start (`Y-m-d`).
+	 * @param string               $to   Date range end (`Y-m-d`).
+	 * @param array<string, mixed> $q    Inventory row.
+	 * @return array<string, mixed>
+	 */
+	private function answer_best_day( string $from, string $to, array $q ): array {
+		return $this->ok(
+			$q,
+			[ 'rows' => $this->load_daily_visitors( $from, $to, 'DESC' ) ],
+			'table'
+		);
+	}
+
+	/**
+	 * Q8 — "Which date had the lowest traffic?"
+	 *
+	 * @param string               $from Date range start (`Y-m-d`).
+	 * @param string               $to   Date range end (`Y-m-d`).
+	 * @param array<string, mixed> $q    Inventory row.
+	 * @return array<string, mixed>
+	 */
+	private function answer_worst_day( string $from, string $to, array $q ): array {
+		return $this->ok(
+			$q,
+			[ 'rows' => $this->load_daily_visitors( $from, $to, 'ASC' ) ],
+			'table'
+		);
+	}
+
+	/**
+	 * Q9 — "What is my traffic trend over time?"
+	 *
+	 * @param string               $from Date range start (`Y-m-d`).
+	 * @param string               $to   Date range end (`Y-m-d`).
+	 * @param array<string, mixed> $q    Inventory row.
+	 * @return array<string, mixed>
+	 */
+	private function answer_trend( string $from, string $to, array $q ): array {
+		return $this->ok(
+			$q,
+			[ 'rows' => $this->load_daily_series( $from, $to ) ],
+			'table'
+		);
+	}
+
+	/**
+	 * Q10 — "Did traffic suddenly drop?" (z-score proxy)
+	 *
+	 * @param string               $from Date range start (`Y-m-d`).
+	 * @param string               $to   Date range end (`Y-m-d`).
+	 * @param array<string, mixed> $q    Inventory row.
+	 * @return array<string, mixed>
+	 */
+	private function answer_drop_anomaly( string $from, string $to, array $q ): array {
+		return $this->ok( $q, $this->anomaly_summary( $from, $to, 'drop' ), 'delta' );
+	}
+
+	/**
+	 * Q11 — "Did traffic suddenly spike?"
+	 *
+	 * @param string               $from Date range start (`Y-m-d`).
+	 * @param string               $to   Date range end (`Y-m-d`).
+	 * @param array<string, mixed> $q    Inventory row.
+	 * @return array<string, mixed>
+	 */
+	private function answer_spike_anomaly( string $from, string $to, array $q ): array {
+		return $this->ok( $q, $this->anomaly_summary( $from, $to, 'spike' ), 'delta' );
+	}
+
+	// =================================================================
+	// Traffic Overview helpers
+	// =================================================================
+
+	/**
+	 * Sum visitors/sessions/views across `summary_totals` in [from, to],
+	 * with a real-time top-up for today read straight from `sessions`/`views`.
+	 *
+	 * @param string $from Date range start (`Y-m-d`).
+	 * @param string $to   Date range end (`Y-m-d`).
+	 * @return array{visitors:int,sessions:int,views:int}
+	 */
+	private function load_period_totals( string $from, string $to ): array {
+		global $wpdb;
+		$totals_table   = TableRegistry::get( 'summary_totals' );
+		$sessions_table = TableRegistry::get( 'sessions' );
+		$views_table    = TableRegistry::get( 'views' );
+		$today          = gmdate( 'Y-m-d' );
+
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		$row = $wpdb->get_row(
+			$wpdb->prepare(
+				'SELECT COALESCE(SUM(visitors), 0) AS visitors,
+					COALESCE(SUM(sessions), 0) AS sessions,
+					COALESCE(SUM(views), 0) AS views
+				FROM %i WHERE date BETWEEN %s AND %s',
+				$totals_table,
+				$from,
+				$to
+			),
+			ARRAY_A
+		);
+
+		$out = [
+			'visitors' => (int) ( $row['visitors'] ?? 0 ),
+			'sessions' => (int) ( $row['sessions'] ?? 0 ),
+			'views'    => (int) ( $row['views'] ?? 0 ),
+		];
+
+		if ( $from <= $today && $to >= $today ) {
+			$today_row = $wpdb->get_row(
+				$wpdb->prepare(
+					'SELECT COUNT(DISTINCT s.visitor_id) AS visitors,
+						COUNT(DISTINCT s.ID) AS sessions,
+						COUNT(v.ID) AS views
+					FROM %i s
+					LEFT JOIN %i v ON v.session_id = s.ID AND DATE(v.viewed_at) = %s
+					WHERE DATE(s.started_at) = %s',
+					$sessions_table,
+					$views_table,
+					$today,
+					$today
+				),
+				ARRAY_A
+			);
+			if ( is_array( $today_row ) ) {
+				$out['visitors'] += (int) $today_row['visitors'];
+				$out['sessions'] += (int) $today_row['sessions'];
+				$out['views']    += (int) $today_row['views'];
+			}
+		}
+		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+
+		return $out;
+	}
+
+	/**
+	 * Load visitor count for a single calendar day. Reads `summary_totals`
+	 * for past days; live-counts from `sessions` for today.
+	 *
+	 * @param string $day Date (`Y-m-d`).
+	 */
+	private function load_day_visitors( string $day ): int {
+		global $wpdb;
+		$today = gmdate( 'Y-m-d' );
+
+		if ( $day === $today ) {
+			$sessions_table = TableRegistry::get( 'sessions' );
+			// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+			return (int) $wpdb->get_var(
+				$wpdb->prepare(
+					'SELECT COUNT(DISTINCT visitor_id) FROM %i WHERE DATE(started_at) = %s',
+					$sessions_table,
+					$day
+				)
+			);
+			// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		}
+
+		$totals_table = TableRegistry::get( 'summary_totals' );
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		return (int) $wpdb->get_var(
+			$wpdb->prepare(
+				'SELECT COALESCE(visitors, 0) FROM %i WHERE date = %s',
+				$totals_table,
+				$day
+			)
+		);
+		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+	}
+
+	/**
+	 * Top/bottom days by visitor count over [from, to], limit 5.
+	 *
+	 * @param string $from      Date range start (`Y-m-d`).
+	 * @param string $to        Date range end (`Y-m-d`).
+	 * @param string $order_dir `ASC` for worst-first, `DESC` for best-first.
+	 * @return array<int, array{date:string,visitors:int}>
+	 */
+	private function load_daily_visitors( string $from, string $to, string $order_dir ): array {
+		global $wpdb;
+		$totals_table = TableRegistry::get( 'summary_totals' );
+		$dir          = ( 'ASC' === strtoupper( $order_dir ) ) ? 'ASC' : 'DESC';
+
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		$rows = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT date, COALESCE(visitors, 0) AS visitors
+				FROM %i WHERE date BETWEEN %s AND %s
+				ORDER BY visitors {$dir} LIMIT 5",
+				$totals_table,
+				$from,
+				$to
+			),
+			ARRAY_A
+		);
+		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+
+		return array_map(
+			static fn( $r ) => [
+				'date'     => (string) $r['date'],
+				'visitors' => (int) $r['visitors'],
+			],
+			is_array( $rows ) ? $rows : []
+		);
+	}
+
+	/**
+	 * Daily series (date, visitors, sessions, views) for the trend chart.
+	 *
+	 * @param string $from Date range start (`Y-m-d`).
+	 * @param string $to   Date range end (`Y-m-d`).
+	 * @return array<int, array{date:string,visitors:int,sessions:int,views:int}>
+	 */
+	private function load_daily_series( string $from, string $to ): array {
+		global $wpdb;
+		$totals_table = TableRegistry::get( 'summary_totals' );
+
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		$rows = $wpdb->get_results(
+			$wpdb->prepare(
+				'SELECT date,
+					COALESCE(visitors, 0) AS visitors,
+					COALESCE(sessions, 0) AS sessions,
+					COALESCE(views, 0) AS views
+				FROM %i WHERE date BETWEEN %s AND %s
+				ORDER BY date ASC',
+				$totals_table,
+				$from,
+				$to
+			),
+			ARRAY_A
+		);
+		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+
+		return array_map(
+			static fn( $r ) => [
+				'date'     => (string) $r['date'],
+				'visitors' => (int) $r['visitors'],
+				'sessions' => (int) $r['sessions'],
+				'views'    => (int) $r['views'],
+			],
+			is_array( $rows ) ? $rows : []
+		);
+	}
+
+	/**
+	 * Anomaly summary for Q10/Q11: compares the last day of the range to
+	 * the prior-7-day mean. Returns the worst single drop or biggest spike
+	 * along with a simple normalized score.
+	 *
+	 * @param string $from      Date range start (`Y-m-d`).
+	 * @param string $to        Date range end (`Y-m-d`).
+	 * @param string $direction Either `drop` or `spike`.
+	 * @return array<string, mixed>
+	 */
+	private function anomaly_summary( string $from, string $to, string $direction ): array {
+		$series = $this->load_daily_series( $from, $to );
+		if ( count( $series ) < 2 ) {
+			return [
+				'has_anomaly' => false,
+				'rows'        => [],
+			];
+		}
+
+		$last  = $series[ array_key_last( $series ) ];
+		$prior = array_slice( $series, max( 0, count( $series ) - 8 ), 7 );
+		$mean  = 0;
+		if ( ! empty( $prior ) ) {
+			$mean = array_sum( array_column( $prior, 'visitors' ) ) / count( $prior );
+		}
+
+		$delta_pct = ( $mean > 0 ) ? ( ( $last['visitors'] - $mean ) / $mean ) * 100 : 0.0;
+
+		$is_drop  = $delta_pct <= -15;
+		$is_spike = $delta_pct >= 25;
+		$has      = ( 'drop' === $direction ) ? $is_drop : $is_spike;
+
+		return [
+			'has_anomaly' => $has,
+			'current'     => (int) $last['visitors'],
+			'baseline'    => (int) round( $mean ),
+			'delta_pct'   => round( $delta_pct, 1 ),
+			'on_date'     => $last['date'],
+		];
 	}
 }

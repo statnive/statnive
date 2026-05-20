@@ -2,6 +2,7 @@ import { __ } from '@wordpress/i18n';
 import { useAdvisorAnswers } from '@/hooks/use-advisor-answers';
 import type { AdvisorQuestion } from '@/types/api';
 import { QuestionCard } from './QuestionCard';
+import { SearchBox } from './SearchBox';
 
 /**
  * The home tab — "Ask me!" — shows the user's pinned questions expanded
@@ -27,23 +28,32 @@ export function PinnedTab({ pinnedIds, maxPins, questions }: PinnedTabProps) {
 	// without firing its own request.
 	useAdvisorAnswers(pinnedIds, pinnedIds.length > 0);
 
-	if (pinnedQuestions.length === 0) {
-		return <EmptyPinned />;
-	}
-
 	return (
 		<div className="mx-auto max-w-7xl">
-			<p className="px-5 pb-5 text-sm text-muted-foreground">
-				{__('Your pinned questions. Pin more from any category.', 'statnive')}
-			</p>
-			<div className="rounded-lg border border-border bg-card">
-				{pinnedQuestions.map((q) => (
-					<QuestionCard key={q.id} question={q} pinned={true} startExpanded={true} />
-				))}
-			</div>
-			<p className="mt-3 px-5 text-xs text-muted-foreground/70">
-				{pinnedIds.length}/{maxPins} {__('pinned', 'statnive')}
-			</p>
+			<SearchBox questions={questions} pinnedIds={pinnedIds} />
+
+			{pinnedQuestions.length === 0 ? (
+				<EmptyPinned />
+			) : (
+				<>
+					<p className="px-5 pb-5 text-sm text-muted-foreground">
+						{__('Your pinned questions. Pin more from any category.', 'statnive')}
+					</p>
+					<div className="rounded-lg border border-border bg-card">
+						{pinnedQuestions.map((q) => (
+							<QuestionCard
+								key={q.id}
+								question={q}
+								pinned={true}
+								startExpanded={true}
+							/>
+						))}
+					</div>
+					<p className="mt-3 px-5 text-xs text-muted-foreground/70">
+						{pinnedIds.length}/{maxPins} {__('pinned', 'statnive')}
+					</p>
+				</>
+			)}
 		</div>
 	);
 }

@@ -36,6 +36,11 @@ const OVERVIEW_NAV = [
 	{ to: '/realtime', label: 'Real-time', icon: Activity },
 ] as const;
 
+// Ask me! owns its full chrome — the QuestionTabs strip replaces the
+// dashboard top-nav so the only tab strip the user sees is the 11
+// category tabs. The page renders an empty nav slot here.
+const ASK_NAV: ReadonlyArray<NavItem> = [];
+
 const REVENUE_NAV = [
 	{ to: '/revenue', label: 'Revenue Overview', icon: DollarSign },
 ] as const;
@@ -59,12 +64,14 @@ function deriveScopedNav(path: string): ScopedNav {
 	if (path.startsWith('/revenue')) {
 		return { navItems: REVENUE_NAV, showDatePicker: true, headerSlot: null };
 	}
+	if (path.startsWith('/ask')) {
+		// Ask me! page renders its own 11-tab strip via QuestionTabs in the
+		// same visual style as the global top-nav. The global nav is
+		// suppressed here so the user sees one tab strip, not two.
+		return { navItems: ASK_NAV, showDatePicker: true, headerSlot: null };
+	}
 	return {
 		navItems: OVERVIEW_NAV,
-		// Date picker is hidden on Real-time (live counter has its own time
-		// horizon) and on the Ask me! pinned tab (where the picker still
-		// applies but rendering inside the Ask me! page would be confusing —
-		// keep it in the global header).
 		showDatePicker: !path.startsWith('/realtime'),
 		headerSlot: null,
 	};
@@ -152,7 +159,9 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
 				</div>
 			</header>
 
-			{/* Navigation */}
+			{/* Navigation — skipped when the page renders its own tab strip
+			    (e.g., the Ask me! page mounts QuestionTabs in this slot). */}
+			{navItems.length > 0 && (
 			<nav className="border-b border-border bg-card" aria-label={__('Dashboard navigation', 'statnive')}>
 				<div className="mx-auto max-w-7xl overflow-x-auto px-4">
 					<div className="flex gap-1">
@@ -184,11 +193,18 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
 					</div>
 				</div>
 			</nav>
+			)}
 
-			{/* Content */}
-			<main id="statnive-content" className="mx-auto max-w-7xl px-4 py-6">
-				{children}
-			</main>
+			{/* Content — when the page owns its own tab strip (e.g., Ask me!),
+			    render edge-to-edge so the page can mount its tabs full-width
+			    in the same chrome position the global nav would have used. */}
+			{navItems.length > 0 ? (
+				<main id="statnive-content" className="mx-auto max-w-7xl px-4 py-6">
+					{children}
+				</main>
+			) : (
+				<main id="statnive-content">{children}</main>
+			)}
 		</div>
 	);
 }

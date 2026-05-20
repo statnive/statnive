@@ -144,14 +144,17 @@ function isQuestionComingSoon(q: AdvisorQuestion): boolean {
 function ChipCluster({ question }: { question: AdvisorQuestion }) {
 	const isComingSoon = isQuestionComingSoon(question);
 	if (isComingSoon) {
+		// Impeccable quieter pass: drop the yellow background + emoji that
+		// shouted "warning"; reduce to italic muted text so the chip reads
+		// as a quiet status note next to the question, not a callout.
 		return (
-			<span className="inline-flex items-center gap-1 rounded-full bg-yellow-100 px-2 py-0.5 text-[11px] font-medium text-yellow-900 dark:bg-yellow-900/30 dark:text-yellow-300">
-				<span aria-hidden="true">🟡</span>
+			<span className="inline-flex items-center text-[11px] italic text-muted-foreground/70">
 				{__('Coming soon', 'statnive')}
 			</span>
 		);
 	}
-	const planLabel = question.plan === 'free' ? __('Free', 'statnive') : __('Paid', 'statnive');
+	// Free questions: confidence indicator only (no redundant "Free" label —
+	// the absence of "Coming soon" already signals availability).
 	const confidenceGlyph =
 		question.confidence === 'direct'
 			? '🟢'
@@ -159,10 +162,11 @@ function ChipCluster({ question }: { question: AdvisorQuestion }) {
 				? '🟡'
 				: '🔴';
 	return (
-		<span className="inline-flex items-center gap-1.5 text-[11px] text-muted-foreground">
-			<span>{planLabel}</span>
-			<span aria-hidden="true">·</span>
-			<span aria-hidden="true">{confidenceGlyph}</span>
+		<span
+			className="inline-flex items-center text-[11px] text-muted-foreground"
+			aria-hidden="true"
+		>
+			{confidenceGlyph}
 		</span>
 	);
 }

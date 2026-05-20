@@ -79,8 +79,10 @@ describe('QuestionCard', () => {
 	it('renders collapsed by default for a Free question', () => {
 		render(withQueryClient(<QuestionCard question={freeQuestion()} pinned={false} />));
 		expect(screen.getByText('How many people visited this week?')).toBeInTheDocument();
-		// Free + 🟢 Direct chip.
-		expect(screen.getByText('Free')).toBeInTheDocument();
+		// Quieter chip cluster — Free questions show only the confidence
+		// glyph (🟢 for `direct`), no redundant "Free" label.
+		expect(screen.getByText('🟢')).toBeInTheDocument();
+		expect(screen.queryByText('Free')).not.toBeInTheDocument();
 	});
 
 	it('expands when the header button is clicked', async () => {

@@ -84,8 +84,8 @@ export function QuestionTabs({ categories, active, onChange, children }: Questio
 	const activePanelId = `statnive-advisor-panel-${active}`;
 
 	return (
-		<div>
-			<div
+		<>
+			<nav
 				className="border-b border-border bg-card"
 				aria-label={__('Ask me! categories', 'statnive')}
 			>
@@ -94,7 +94,7 @@ export function QuestionTabs({ categories, active, onChange, children }: Questio
 					role="tablist"
 					aria-orientation="horizontal"
 					onKeyDown={onKeyDown}
-					className="mx-auto flex max-w-7xl overflow-x-auto rtl:flex-row-reverse"
+					className="mx-auto flex max-w-7xl gap-1 overflow-x-auto px-4 rtl:flex-row-reverse"
 				>
 					<button
 						type="button"
@@ -114,9 +114,6 @@ export function QuestionTabs({ categories, active, onChange, children }: Questio
 						<Pin className="h-4 w-4" />
 						{__('Ask me!', 'statnive')}
 					</button>
-
-					{/* Vertical divider between pinned tab and the 10 category tabs */}
-					<span className="my-2 border-l border-border" aria-hidden="true" />
 
 					{categories.map((category) => {
 						const isActive = active === category.id;
@@ -143,18 +140,18 @@ export function QuestionTabs({ categories, active, onChange, children }: Questio
 						);
 					})}
 				</div>
-			</div>
+			</nav>
 
 			<div
 				role="tabpanel"
 				id={activePanelId}
 				aria-labelledby={`statnive-advisor-tab-${active}`}
 				tabIndex={0}
-				className="py-6"
+				className="mx-auto max-w-7xl px-4 py-6"
 			>
 				{children}
 			</div>
-		</div>
+		</>
 	);
 }
 

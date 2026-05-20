@@ -18,17 +18,49 @@ export function AnswerViz({ question, answer }: AnswerVizProps) {
 	const value = answer.value as Record<string, unknown> | undefined;
 
 	if (viz === 'kpi_tile') {
-		// Q2 visitors-this-week pattern: `{ visitors, from, to }`.
-		const number = typeof value?.visitors === 'number' ? value.visitors : undefined;
+		// KPI tile shape: any of `{ visitors }` / `{ sessions }` / `{ pageviews }`
+		// from the cat-1 handlers; fall back to the first numeric field found.
+		const lang = document.documentElement.lang || 'en';
+		const metric = pickKpi(value);
 		return (
 			<div>
 				<div className="text-4xl font-semibold tabular-nums">
-					{number !== undefined
-						? new Intl.NumberFormat(document.documentElement.lang || 'en').format(number)
-						: '—'}
+					{metric.value !== undefined ? new Intl.NumberFormat(lang).format(metric.value) : '—'}
 				</div>
-				<div className="mt-1 text-sm text-muted-foreground">
-					{__('Visitors in selected range', 'statnive')}
+				<div className="mt-1 text-sm text-muted-foreground">{metric.label}</div>
+			</div>
+		);
+	}
+
+	if (viz === 'delta') {
+		// Period-comparison shape from Q5/Q6/Q10/Q11. Carries
+		// `{ current, previous, delta_pct, … }` OR anomaly-summary
+		// `{ has_anomaly, current, baseline, delta_pct, on_date }`.
+		const lang = document.documentElement.lang || 'en';
+		const current = typeof value?.current === 'number' ? value.current : undefined;
+		const previous =
+			typeof value?.previous === 'number'
+				? value.previous
+				: typeof value?.baseline === 'number'
+					? value.baseline
+					: undefined;
+		const deltaPct = typeof value?.delta_pct === 'number' ? value.delta_pct : 0;
+		const arrow = deltaPct > 0 ? '▲' : deltaPct < 0 ? '▼' : '•';
+		const tone =
+			deltaPct > 0 ? 'text-emerald-600' : deltaPct < 0 ? 'text-rose-600' : 'text-muted-foreground';
+		return (
+			<div>
+				<div className="text-4xl font-semibold tabular-nums">
+					{current !== undefined ? new Intl.NumberFormat(lang).format(current) : '—'}
+				</div>
+				<div className={`mt-1 text-sm ${tone}`}>
+					<span aria-hidden="true">{arrow}</span> {Math.abs(deltaPct).toFixed(1)}%
+					{previous !== undefined && (
+						<span className="ml-2 text-muted-foreground">
+							{__('vs', 'statnive')}{' '}
+							{new Intl.NumberFormat(lang).format(previous)}
+						</span>
+					)}
 				</div>
 			</div>
 		);
@@ -108,4 +140,21 @@ export function AnswerViz({ question, answer }: AnswerVizProps) {
 			{JSON.stringify(answer.value, null, 2)}
 		</pre>
 	);
+}
+
+/** Pick the canonical KPI from the answer value, with a localized label. */
+function pickKpi(value: Record<string, unknown> | undefined): {
+	value: number | undefined;
+	label: string;
+} {
+	if (typeof value?.visitors === 'number') {
+		return { value: value.visitors, label: __('Visitors in selected range', 'statnive') };
+	}
+	if (typeof value?.sessions === 'number') {
+		return { value: value.sessions, label: __('Sessions in selected range', 'statnive') };
+	}
+	if (typeof value?.pageviews === 'number') {
+		return { value: value.pageviews, label: __('Pageviews in selected range', 'statnive') };
+	}
+	return { value: undefined, label: __('No data', 'statnive') };
 }
