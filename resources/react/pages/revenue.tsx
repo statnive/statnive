@@ -1,16 +1,18 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { __, sprintf } from '@wordpress/i18n';
+import { useQueryClient } from '@tanstack/react-query';
 import { ShoppingCart, ExternalLink } from 'lucide-react';
 import { KpiCard } from '@/components/shared/kpi-card';
 import { DataTable, type Column } from '@/components/shared/data-table';
 import { useDateRange } from '@/hooks/use-date-range';
 import {
-	useWcStatus,
 	useRevenueSummary,
 	useRevenueByChannel,
 	useTopProducts,
 	useFunnel,
 } from '@/hooks/use-revenue';
+import { useBackfillStatus, useBackfillTrigger } from '@/hooks/use-backfill';
+import { BackfillProgress } from '@/components/revenue/backfill-progress';
 import { HEADING_H2, HEADING_H3 } from '@/lib/typography';
 import { formatNumber } from '@/lib/utils';
 import { formatMoney, formatMoneyPrecise, formatPercent } from '@/lib/revenue-format';
@@ -28,19 +30,40 @@ import type { RevenueChannelRow, RevenueProductRow, RevenueFunnelStep } from '@/
 export function RevenuePage() {
 	const { params } = useDateRange();
 	const { from, to } = params;
+	const queryClient = useQueryClient();
 
-	const wc = useWcStatus();
+	const { wcStatus, state: backfillState } = useBackfillStatus();
+	const backfillTrigger = useBackfillTrigger();
 	const summary = useRevenueSummary(from, to);
 	const channels = useRevenueByChannel(from, to);
 	const products = useTopProducts(from, to, 10);
 	const funnel = useFunnel(from, to);
 
+	const inFlight = backfillState?.status === 'pending' || backfillState?.status === 'running';
+
+	// While a backfill is running, refetch the revenue queries every 10s
+	// so the user sees partial data filling in. No work at all when idle.
+	useEffect(() => {
+		if (!inFlight) return undefined;
+		const id = window.setInterval(() => {
+			void queryClient.invalidateQueries({ queryKey: ['revenue', 'summary'] });
+			void queryClient.invalidateQueries({ queryKey: ['revenue', 'by-channel'] });
+			void queryClient.invalidateQueries({ queryKey: ['revenue', 'products'] });
+			void queryClient.invalidateQueries({ queryKey: ['revenue', 'funnel'] });
+		}, 10000);
+		return () => window.clearInterval(id);
+	}, [inFlight, queryClient]);
+
 	// WooCommerce not installed — full-page empty state.
-	if (wc.isSuccess && !wc.data?.data?.woocommerce_active) {
+	if (wcStatus && !wcStatus.woocommerce_active) {
 		return <NoWooCommerceState />;
 	}
 
-	const noOrders = summary.isSuccess && summary.data?.data?.orders === 0;
+	// During backfill, suppress the bare "no orders" state — data is
+	// actively being imported. Show the progress strip instead so the
+	// user understands why KPIs are thin.
+	const hasGap = wcStatus?.backfill?.has_gap ?? false;
+	const noOrders = summary.isSuccess && summary.data?.data?.orders === 0 && !inFlight && !hasGap;
 
 	return (
 		<div className="space-y-5">
@@ -53,6 +76,12 @@ export function RevenuePage() {
 					)}
 				</p>
 			</header>
+
+			<BackfillProgress
+				state={backfillState}
+				onRetry={() => backfillTrigger.mutate()}
+				retryDisabled={backfillTrigger.isPending}
+			/>
 
 			<KpiStrip summary={summary.data?.data} isLoading={summary.isLoading} />
 
