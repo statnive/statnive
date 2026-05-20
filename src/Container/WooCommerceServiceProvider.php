@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Statnive\Container;
 
 use Statnive\Api\RevenueController;
+use Statnive\Integration\WooCommerce\BackfillService;
 use Statnive\Integration\WooCommerce\FunnelEvents;
 use Statnive\Integration\WooCommerce\Recorder;
 use Statnive\Integration\WooCommerce\SafeHook;
@@ -86,12 +87,18 @@ final class WooCommerceServiceProvider implements ServiceProvider {
 		// Block checkout — Store API equivalent.
 		add_action( 'woocommerce_store_api_checkout_order_processed', SafeHook::wrap( [ FunnelEvents::class, 'on_blocks_checkout_start' ] ) );
 
-		// Register the 10 Revenue Report REST routes (PR 7).
+		// Register the Revenue Report REST routes (PR 7) and the new
+		// backfill trigger endpoint (PR 2.1).
 		add_action(
 			'rest_api_init',
 			static function (): void {
 				( new RevenueController() )->register_routes();
 			}
 		);
+
+		// Backfill service — registers the Action Scheduler chunk callback
+		// and the admin_init auto-start hook. Must run on every request
+		// (admin + REST + AS) so the chunk callback resolves.
+		BackfillService::init();
 	}
 }

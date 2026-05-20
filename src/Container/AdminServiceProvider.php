@@ -12,6 +12,7 @@ use Statnive\Admin\AdminBarWidget;
 use Statnive\Admin\AdminMenuManager;
 use Statnive\Admin\GeoIPNotice;
 use Statnive\Admin\ReactHandler;
+use Statnive\Admin\WooCommerceBackfillNotice;
 
 /**
  * Admin Service Provider.
@@ -46,5 +47,6 @@ final class AdminServiceProvider implements ServiceProvider {
 		ReactHandler::init();
 		AdminBarWidget::init();
 		GeoIPNotice::init();
+		WooCommerceBackfillNotice::init();
 	}
 }

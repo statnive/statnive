@@ -201,6 +201,12 @@ final class Plugin {
 		// Remove all scheduled cron events.
 		CronRegistrar::deregister_all();
 
+		// Cancel any in-flight Action Scheduler chunks for the WC backfill.
+		// AS may not be loaded when WC has been deactivated first, so guard.
+		if ( function_exists( 'as_unschedule_all_actions' ) ) {
+			as_unschedule_all_actions( \Statnive\Integration\WooCommerce\BackfillService::HOOK, null, \Statnive\Integration\WooCommerce\BackfillService::GROUP );
+		}
+
 		flush_rewrite_rules();
 	}
 }
