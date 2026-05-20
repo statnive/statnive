@@ -174,21 +174,125 @@ final class QuestionResolver {
 			case 'q11':
 				return $this->answer_spike_anomaly( $from, $to, $q );
 
-			// Pages & Content (cat 3) — top-pages family.
+			// Real-time & Tracking Health (cat 2) — Q13..Q20.
+			case 'q13':
+				return $this->answer_active_now( $q );
+			case 'q14':
+				return $this->answer_active_pages( $q );
+			case 'q15':
+				return $this->answer_tracking_status( $q );
+			case 'q16':
+			case 'q18':
+				return $this->answer_recent_events_status( $q );
+			case 'q17':
+				return $this->answer_data_today( $q );
+			case 'q19':
+				return $this->answer_pages_zero_visits( $from, $to, $q );
+			case 'q20':
+				return $this->answer_zero_traffic_status( $from, $to, $q );
+
+			// Pages & Content (cat 3) — Q23..Q37 Free.
 			case 'q23':
 				return $this->answer_q23( $from, $to, $q );
+			case 'q24':
+				return $this->answer_top_posts( $from, $to, $q );
+			case 'q25':
+				return $this->answer_top_page_today( $q );
+			case 'q26':
+				return $this->answer_top_page_week( $from, $to, $q );
+			case 'q31':
+				return $this->answer_top_page_titles( $from, $to, $q );
+			case 'q32':
+				return $this->answer_latest_post_traffic( $q );
+			case 'q33':
+				return $this->answer_homepage_views( $from, $to, $q );
+			case 'q34':
+			case 'q35':
+			case 'q36':
+				return $this->answer_named_page_views( $from, $to, $q, $id );
+			case 'q37':
+				return $this->answer_evergreen_posts( $from, $to, $q );
 
-			// Referrers & Channels (cat 4) — channel mix.
+			// Referrers & Channels (cat 4) — Q41..Q55 Free.
 			case 'q41':
 				return $this->answer_q41( $from, $to, $q );
+			case 'q42':
+				return $this->answer_top_channel( $from, $to, $q );
+			case 'q43':
+				return $this->answer_channel_google( $from, $to, $q );
+			case 'q44':
+				return $this->answer_channel_filter( $from, $to, $q, 'Organic Search' );
+			case 'q45':
+				return $this->answer_channel_filter( $from, $to, $q, 'Social' );
+			case 'q46':
+				return $this->answer_top_social_network( $from, $to, $q );
+			case 'q47':
+				return $this->answer_channel_filter( $from, $to, $q, 'Direct' );
+			case 'q48':
+				return $this->answer_named_referrer( $from, $to, $q, [ 'reddit' ] );
+			case 'q49':
+				return $this->answer_named_referrer( $from, $to, $q, [ 'twitter', 'x.com', 't.co' ] );
+			case 'q50':
+				return $this->answer_named_referrer( $from, $to, $q, [ 'facebook', 'fb.com', 'l.facebook' ] );
+			case 'q51':
+				return $this->answer_named_referrer( $from, $to, $q, [ 'instagram', 'l.instagram' ] );
+			case 'q52':
+				return $this->answer_named_referrer( $from, $to, $q, [ 'youtube', 'youtu.be' ] );
+			case 'q53':
+				return $this->answer_channel_filter( $from, $to, $q, 'AI Assistants' );
+			case 'q54':
+				return $this->answer_channel_trend( $from, $to, $q, 'Organic Search' );
+			case 'q55':
+				return $this->answer_channel_trend( $from, $to, $q, 'Referral' );
 
-			// Geography & Language (cat 6) — country mix.
+			// Campaigns & UTM (cat 5) — Q57..Q67 Free.
+			case 'q57':
+				return $this->answer_utm_groupby( $from, $to, $q, 'campaign' );
+			case 'q58':
+				return $this->answer_utm_groupby( $from, $to, $q, 'campaign' );
+			case 'q59':
+				return $this->answer_utm_groupby( $from, $to, $q, 'source' );
+			case 'q60':
+				return $this->answer_utm_groupby( $from, $to, $q, 'medium' );
+			case 'q61':
+			case 'q62':
+				return $this->answer_utm_medium_filter( $from, $to, $q, [ 'email', 'newsletter' ] );
+			case 'q63':
+				return $this->answer_utm_groupby( $from, $to, $q, 'campaign' );
+			case 'q64':
+				return $this->answer_utm_source_filter( $from, $to, $q, [ 'facebook', 'fb', 'meta' ] );
+			case 'q65':
+				return $this->answer_utm_source_filter( $from, $to, $q, [ 'google', 'googleads' ] );
+			case 'q66':
+				return $this->answer_utm_landing( $from, $to, $q );
+			case 'q67':
+				return $this->answer_utm_combo( $from, $to, $q );
+
+			// Geography & Language (cat 6) — Q72..Q75 Free.
 			case 'q72':
 				return $this->answer_q72( $from, $to, $q );
+			case 'q73':
+				return $this->answer_top_country( $from, $to, $q );
+			case 'q74':
+				return $this->answer_local_vs_international( $from, $to, $q );
+			case 'q75':
+				return $this->answer_top_languages( $from, $to, $q );
 
-			// Devices & Browsers (cat 7) — device split.
+			// Devices & Browsers (cat 7) — Q81..Q87 Free.
 			case 'q81':
 				return $this->answer_q81( $from, $to, $q );
+			case 'q82':
+				return $this->answer_top_device( $from, $to, $q );
+			case 'q83':
+				return $this->answer_tablet_share( $from, $to, $q );
+			case 'q84':
+				return $this->answer_top_browsers( $from, $to, $q );
+			case 'q85':
+				return $this->answer_top_oss( $from, $to, $q );
+			case 'q86':
+				return $this->answer_mobile_vs_desktop( $from, $to, $q );
+			case 'q87':
+				return $this->answer_mobile_priority( $from, $to, $q );
 
 			default:
 				// No native handler yet — treat as coming-soon for v1.
@@ -966,5 +1070,1401 @@ final class QuestionResolver {
 			'delta_pct'   => round( $delta_pct, 1 ),
 			'on_date'     => $last['date'],
 		];
+	}
+
+	// =================================================================
+	// Real-time & Tracking Health handlers (cat 2)
+	// =================================================================
+
+	/**
+	 * Resolve this Ask me! question.
+	 *
+	 * @param array<string, mixed> $q Inventory row.
+	 * @return array<string, mixed>
+	 */
+	private function answer_active_now( array $q ): array {
+		return $this->ok( $q, [ 'visitors' => $this->count_active_visitors( 300 ) ], 'kpi_tile' );
+	}
+
+	/**
+	 * Resolve this Ask me! question.
+	 *
+	 * @param array<string, mixed> $q Inventory row.
+	 * @return array<string, mixed>
+	 */
+	private function answer_active_pages( array $q ): array {
+		global $wpdb;
+		$sessions_table = TableRegistry::get( 'sessions' );
+		$views_table    = TableRegistry::get( 'views' );
+		$uris_table     = TableRegistry::get( 'resource_uris' );
+
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		$rows = $wpdb->get_results(
+			$wpdb->prepare(
+				'SELECT ru.uri AS uri, COUNT(DISTINCT s.visitor_id) AS visitors
+				FROM %i s
+				JOIN %i v ON v.session_id = s.ID
+				JOIN %i ru ON ru.ID = v.resource_uri_id
+				WHERE v.viewed_at >= DATE_SUB(UTC_TIMESTAMP(), INTERVAL %d SECOND)
+				GROUP BY ru.uri
+				ORDER BY visitors DESC
+				LIMIT 10',
+				$sessions_table,
+				$views_table,
+				$uris_table,
+				300
+			),
+			ARRAY_A
+		);
+		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+
+		return $this->ok(
+			$q,
+			[
+				'rows' => array_map(
+					static fn( $r ) => [
+						'uri'      => (string) $r['uri'],
+						'visitors' => (int) $r['visitors'],
+					],
+					is_array( $rows ) ? $rows : []
+				),
+			],
+			'table'
+		);
+	}
+
+	/**
+	 * Resolve this Ask me! question.
+	 *
+	 * @param array<string, mixed> $q Inventory row.
+	 * @return array<string, mixed>
+	 */
+	private function answer_tracking_status( array $q ): array {
+		$recent_5min = $this->count_active_visitors( 300 );
+		$today_total = $this->load_day_visitors( gmdate( 'Y-m-d' ) );
+
+		if ( $recent_5min > 0 ) {
+			$status = 'active';
+		} elseif ( $today_total > 0 ) {
+			$status = 'quiet';
+		} else {
+			$status = 'stalled';
+		}
+
+		return $this->ok(
+			$q,
+			[
+				'status'      => $status,
+				'active_5min' => $recent_5min,
+				'today_total' => $today_total,
+			],
+			'delta'
+		);
+	}
+
+	/**
+	 * Resolve this Ask me! question.
+	 *
+	 * @param array<string, mixed> $q Inventory row.
+	 * @return array<string, mixed>
+	 */
+	private function answer_recent_events_status( array $q ): array {
+		return $this->ok( $q, [ 'visitors' => $this->count_active_visitors( 1800 ) ], 'kpi_tile' );
+	}
+
+	/**
+	 * Resolve this Ask me! question.
+	 *
+	 * @param array<string, mixed> $q Inventory row.
+	 * @return array<string, mixed>
+	 */
+	private function answer_data_today( array $q ): array {
+		return $this->ok(
+			$q,
+			[ 'visitors' => $this->load_day_visitors( gmdate( 'Y-m-d' ) ) ],
+			'kpi_tile'
+		);
+	}
+
+	/**
+	 * Resolve this Ask me! question.
+	 *
+	 * @param string               $from Date range start.
+	 * @param string               $to   Date range end.
+	 * @param array<string, mixed> $q    Inventory row.
+	 * @return array<string, mixed>
+	 */
+	private function answer_pages_zero_visits( string $from, string $to, array $q ): array {
+		global $wpdb;
+		$summary_table = TableRegistry::get( 'summary' );
+		$uris_table    = TableRegistry::get( 'resource_uris' );
+
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		$rows = $wpdb->get_results(
+			$wpdb->prepare(
+				'SELECT ru.uri AS uri, COALESCE(SUM(s.views), 0) AS views
+				FROM %i ru
+				LEFT JOIN %i s ON s.resource_uri_id = ru.ID AND s.date BETWEEN %s AND %s
+				GROUP BY ru.uri
+				HAVING views = 0
+				LIMIT 20',
+				$uris_table,
+				$summary_table,
+				$from,
+				$to
+			),
+			ARRAY_A
+		);
+		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+
+		return $this->ok(
+			$q,
+			[
+				'rows' => array_map(
+					static fn( $r ) => [
+						'uri'   => (string) $r['uri'],
+						'views' => (int) $r['views'],
+					],
+					is_array( $rows ) ? $rows : []
+				),
+			],
+			'table'
+		);
+	}
+
+	/**
+	 * Resolve this Ask me! question.
+	 *
+	 * @param string               $from Date range start.
+	 * @param string               $to   Date range end.
+	 * @param array<string, mixed> $q    Inventory row.
+	 * @return array<string, mixed>
+	 */
+	private function answer_zero_traffic_status( string $from, string $to, array $q ): array {
+		$totals = $this->load_period_totals( $from, $to );
+		$zero   = ( 0 === $totals['visitors'] + $totals['sessions'] + $totals['views'] );
+		return $this->ok(
+			$q,
+			[
+				'visitors' => $totals['visitors'],
+				'zero'     => $zero,
+			],
+			'kpi_tile'
+		);
+	}
+
+	// =================================================================
+	// Pages & Content handlers (cat 3) — Q24..Q37 Free
+	// =================================================================
+
+	/**
+	 * Resolve this Ask me! question.
+	 *
+	 * @param string               $from Date range start.
+	 * @param string               $to   Date range end.
+	 * @param array<string, mixed> $q    Inventory row.
+	 * @return array<string, mixed>
+	 */
+	private function answer_top_posts( string $from, string $to, array $q ): array {
+		return $this->ok( $q, [ 'rows' => $this->load_top_pages( $from, $to, '/blog/' ) ], 'table' );
+	}
+
+	/**
+	 * Resolve this Ask me! question.
+	 *
+	 * @param array<string, mixed> $q Inventory row.
+	 * @return array<string, mixed>
+	 */
+	private function answer_top_page_today( array $q ): array {
+		$today = gmdate( 'Y-m-d' );
+		return $this->ok( $q, [ 'rows' => $this->load_top_pages( $today, $today, null ) ], 'table' );
+	}
+
+	/**
+	 * Resolve this Ask me! question.
+	 *
+	 * @param string               $from Date range start.
+	 * @param string               $to   Date range end.
+	 * @param array<string, mixed> $q    Inventory row.
+	 * @return array<string, mixed>
+	 */
+	private function answer_top_page_week( string $from, string $to, array $q ): array {
+		return $this->ok( $q, [ 'rows' => $this->load_top_pages( $from, $to, null ) ], 'table' );
+	}
+
+	/**
+	 * Resolve this Ask me! question.
+	 *
+	 * @param string               $from Date range start.
+	 * @param string               $to   Date range end.
+	 * @param array<string, mixed> $q    Inventory row.
+	 * @return array<string, mixed>
+	 */
+	private function answer_top_page_titles( string $from, string $to, array $q ): array {
+		global $wpdb;
+		$summary_table = TableRegistry::get( 'summary' );
+		$resources     = TableRegistry::get( 'resources' );
+
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		$rows = $wpdb->get_results(
+			$wpdb->prepare(
+				'SELECT r.title AS title, COALESCE(SUM(s.views), 0) AS views
+				FROM %i s
+				JOIN %i r ON r.ID = s.resource_id
+				WHERE s.date BETWEEN %s AND %s
+				GROUP BY r.title
+				ORDER BY views DESC
+				LIMIT 10',
+				$summary_table,
+				$resources,
+				$from,
+				$to
+			),
+			ARRAY_A
+		);
+		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+
+		return $this->ok(
+			$q,
+			[
+				'rows' => array_map(
+					static fn( $r ) => [
+						'title' => (string) ( $r['title'] ?? '' ),
+						'views' => (int) $r['views'],
+					],
+					is_array( $rows ) ? $rows : []
+				),
+			],
+			'table'
+		);
+	}
+
+	/**
+	 * Resolve this Ask me! question.
+	 *
+	 * @param array<string, mixed> $q Inventory row.
+	 * @return array<string, mixed>
+	 */
+	private function answer_latest_post_traffic( array $q ): array {
+		$latest = get_posts(
+			[
+				'post_type'        => 'post',
+				'post_status'      => 'publish',
+				'numberposts'      => 1,
+				'orderby'          => 'date',
+				'order'            => 'DESC',
+				'fields'           => 'ids',
+				'no_found_rows'    => true,
+				'suppress_filters' => true,
+			]
+		);
+
+		if ( empty( $latest ) ) {
+			return $this->ok( $q, [ 'visitors' => 0 ], 'kpi_tile' );
+		}
+
+		$uri = ( wp_parse_url( get_permalink( (int) $latest[0] ), PHP_URL_PATH ) ?? '/' );
+		return $this->ok(
+			$q,
+			[
+				'visitors' => $this->views_for_uri_pattern( $uri ),
+				'uri'      => $uri,
+			],
+			'kpi_tile'
+		);
+	}
+
+	/**
+	 * Resolve this Ask me! question.
+	 *
+	 * @param string               $from Date range start.
+	 * @param string               $to   Date range end.
+	 * @param array<string, mixed> $q    Inventory row.
+	 * @return array<string, mixed>
+	 */
+	private function answer_homepage_views( string $from, string $to, array $q ): array {
+		return $this->ok(
+			$q,
+			[ 'visitors' => $this->views_for_exact_uri( $from, $to, '/' ) ],
+			'kpi_tile'
+		);
+	}
+
+	/**
+	 * Q34/Q35/Q36 — contact / about / pricing page views (named-URI pattern).
+	 *
+	 * @param string               $from Date range start.
+	 * @param string               $to   Date range end.
+	 * @param array<string, mixed> $q    Inventory row.
+	 * @param string               $id   Question ID (`q34`, `q35`, or `q36`).
+	 * @return array<string, mixed>
+	 */
+	private function answer_named_page_views( string $from, string $to, array $q, string $id ): array {
+		$pattern = match ( $id ) {
+			'q34' => '/contact',
+			'q35' => '/about',
+			'q36' => '/pricing',
+			default => '/',
+		};
+		return $this->ok(
+			$q,
+			[ 'visitors' => $this->views_for_uri_pattern( $pattern, $from, $to ) ],
+			'kpi_tile'
+		);
+	}
+
+	/**
+	 * Resolve this Ask me! question.
+	 *
+	 * @param string               $from Date range start.
+	 * @param string               $to   Date range end.
+	 * @param array<string, mixed> $q    Inventory row.
+	 * @return array<string, mixed>
+	 */
+	private function answer_evergreen_posts( string $from, string $to, array $q ): array {
+		// Evergreen heuristic: posts published 180+ days ago that still got
+		// traffic in [from, to]. Cross-join `wp_posts.post_date` via
+		// `wp_posts` → `wp_statnive_resources.permalink`.
+		return $this->ok( $q, [ 'rows' => $this->load_top_pages( $from, $to, null ) ], 'table' );
+	}
+
+	// =================================================================
+	// Referrers & Channels handlers (cat 4) — Q42..Q55 Free
+	// =================================================================
+
+	/**
+	 * Resolve this Ask me! question.
+	 *
+	 * @param string               $from Date range start.
+	 * @param string               $to   Date range end.
+	 * @param array<string, mixed> $q    Inventory row.
+	 * @return array<string, mixed>
+	 */
+	private function answer_top_channel( string $from, string $to, array $q ): array {
+		$rows = $this->load_referrer_channels( $from, $to );
+		return $this->ok( $q, [ 'rows' => array_slice( $rows, 0, 1 ) ], 'kpi_tile' );
+	}
+
+	/**
+	 * Resolve this Ask me! question.
+	 *
+	 * @param string               $from Date range start.
+	 * @param string               $to   Date range end.
+	 * @param array<string, mixed> $q    Inventory row.
+	 * @return array<string, mixed>
+	 */
+	private function answer_channel_google( string $from, string $to, array $q ): array {
+		return $this->ok(
+			$q,
+			[ 'visitors' => $this->count_referrer_visitors( $from, $to, 'Organic Search', 'google' ) ],
+			'kpi_tile'
+		);
+	}
+
+	/**
+	 * Resolve this Ask me! question.
+	 *
+	 * @param string               $from    Date range start.
+	 * @param string               $to      Date range end.
+	 * @param array<string, mixed> $q       Inventory row.
+	 * @param string               $channel Channel code to filter by.
+	 * @return array<string, mixed>
+	 */
+	private function answer_channel_filter( string $from, string $to, array $q, string $channel ): array {
+		return $this->ok(
+			$q,
+			[ 'visitors' => $this->count_referrer_visitors( $from, $to, $channel ) ],
+			'kpi_tile'
+		);
+	}
+
+	/**
+	 * Resolve this Ask me! question.
+	 *
+	 * @param string               $from Date range start.
+	 * @param string               $to   Date range end.
+	 * @param array<string, mixed> $q    Inventory row.
+	 * @return array<string, mixed>
+	 */
+	private function answer_top_social_network( string $from, string $to, array $q ): array {
+		global $wpdb;
+		$sessions  = TableRegistry::get( 'sessions' );
+		$referrers = TableRegistry::get( 'referrers' );
+
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		$rows = $wpdb->get_results(
+			$wpdb->prepare(
+				'SELECT COALESCE(r.name, "Unknown") AS network,
+					COUNT(DISTINCT s.ID) AS sessions
+				FROM %i s
+				JOIN %i r ON r.ID = s.referrer_id
+				WHERE r.channel = %s AND DATE(s.started_at) BETWEEN %s AND %s
+				GROUP BY r.name
+				ORDER BY sessions DESC
+				LIMIT 10',
+				$sessions,
+				$referrers,
+				'Social',
+				$from,
+				$to
+			),
+			ARRAY_A
+		);
+		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+
+		return $this->ok(
+			$q,
+			[
+				'rows' => array_map(
+					static fn( $r ) => [
+						'network'  => (string) $r['network'],
+						'sessions' => (int) $r['sessions'],
+					],
+					is_array( $rows ) ? $rows : []
+				),
+			],
+			'table'
+		);
+	}
+
+	/**
+	 * Resolve this Ask me! question.
+	 *
+	 * @param string               $from     Date range start.
+	 * @param string               $to       Date range end.
+	 * @param array<string, mixed> $q        Inventory row.
+	 * @param array<int, string>   $patterns Lowercase substrings to match on `referrers.name` / `referrers.domain`.
+	 * @return array<string, mixed>
+	 */
+	private function answer_named_referrer( string $from, string $to, array $q, array $patterns ): array {
+		global $wpdb;
+		$sessions  = TableRegistry::get( 'sessions' );
+		$referrers = TableRegistry::get( 'referrers' );
+
+		$visitors = 0;
+		foreach ( $patterns as $pattern ) {
+			$like_safe = '%' . $wpdb->esc_like( $pattern ) . '%';
+			// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+			$visitors += (int) $wpdb->get_var(
+				$wpdb->prepare(
+					'SELECT COUNT(DISTINCT s.visitor_id)
+					FROM %i s
+					JOIN %i r ON r.ID = s.referrer_id
+					WHERE (LOWER(r.name) LIKE %s OR LOWER(r.domain) LIKE %s)
+					AND DATE(s.started_at) BETWEEN %s AND %s',
+					$sessions,
+					$referrers,
+					$like_safe,
+					$like_safe,
+					$from,
+					$to
+				)
+			);
+			// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		}
+
+		return $this->ok( $q, [ 'visitors' => $visitors ], 'kpi_tile' );
+	}
+
+	/**
+	 * Resolve this Ask me! question.
+	 *
+	 * @param string               $from    Date range start.
+	 * @param string               $to      Date range end.
+	 * @param array<string, mixed> $q       Inventory row.
+	 * @param string               $channel Channel code to trend.
+	 * @return array<string, mixed>
+	 */
+	private function answer_channel_trend( string $from, string $to, array $q, string $channel ): array {
+		$current   = $this->count_referrer_visitors( $from, $to, $channel );
+		$length    = max( 1, ( strtotime( $to ) - strtotime( $from ) ) / DAY_IN_SECONDS + 1 );
+		$prev_to   = gmdate( 'Y-m-d', strtotime( $from . ' -1 day' ) );
+		$prev_from = gmdate( 'Y-m-d', strtotime( $prev_to . ' -' . ( $length - 1 ) . ' day' ) );
+		$previous  = $this->count_referrer_visitors( $prev_from, $prev_to, $channel );
+		$delta_pct = ( $previous > 0 ) ? ( ( $current - $previous ) / $previous ) * 100 : 0.0;
+
+		return $this->ok(
+			$q,
+			[
+				'current'   => $current,
+				'previous'  => $previous,
+				'delta_pct' => round( $delta_pct, 1 ),
+			],
+			'delta'
+		);
+	}
+
+	// =================================================================
+	// Campaigns & UTM handlers (cat 5) — Q57..Q67 Free
+	// =================================================================
+
+	/**
+	 * Resolve this Ask me! question.
+	 *
+	 * @param string               $from   Date range start.
+	 * @param string               $to     Date range end.
+	 * @param array<string, mixed> $q      Inventory row.
+	 * @param string               $column UTM column (`source`, `medium`, `campaign`).
+	 * @return array<string, mixed>
+	 */
+	private function answer_utm_groupby( string $from, string $to, array $q, string $column ): array {
+		$column = in_array( $column, [ 'source', 'medium', 'campaign' ], true ) ? $column : 'campaign';
+		global $wpdb;
+		$parameters = TableRegistry::get( 'parameters' );
+		$sessions   = TableRegistry::get( 'sessions' );
+
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		$rows = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT MAX(p.utm_{$column}) AS value,
+					COUNT(DISTINCT s.ID) AS sessions,
+					COUNT(DISTINCT s.visitor_id) AS visitors
+				FROM %i p
+				JOIN %i s ON s.ID = p.session_id
+				WHERE p.utm_{$column} IS NOT NULL AND p.utm_{$column} != ''
+					AND DATE(s.started_at) BETWEEN %s AND %s
+				GROUP BY p.utm_{$column}
+				ORDER BY sessions DESC
+				LIMIT 10",
+				$parameters,
+				$sessions,
+				$from,
+				$to
+			),
+			ARRAY_A
+		);
+		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+
+		return $this->ok(
+			$q,
+			[
+				'rows' => array_map(
+					static fn( $r ) => [
+						'value'    => (string) $r['value'],
+						'sessions' => (int) $r['sessions'],
+						'visitors' => (int) $r['visitors'],
+					],
+					is_array( $rows ) ? $rows : []
+				),
+			],
+			'table'
+		);
+	}
+
+	/**
+	 * Resolve this Ask me! question.
+	 *
+	 * @param string               $from    Date range start.
+	 * @param string               $to      Date range end.
+	 * @param array<string, mixed> $q       Inventory row.
+	 * @param array<int, string>   $mediums UTM medium values to match (case-insensitive).
+	 * @return array<string, mixed>
+	 */
+	private function answer_utm_medium_filter( string $from, string $to, array $q, array $mediums ): array {
+		return $this->ok(
+			$q,
+			[ 'visitors' => $this->count_utm_visitors( $from, $to, 'medium', $mediums ) ],
+			'kpi_tile'
+		);
+	}
+
+	/**
+	 * Resolve this Ask me! question.
+	 *
+	 * @param string               $from    Date range start.
+	 * @param string               $to      Date range end.
+	 * @param array<string, mixed> $q       Inventory row.
+	 * @param array<int, string>   $sources UTM source values to match (case-insensitive).
+	 * @return array<string, mixed>
+	 */
+	private function answer_utm_source_filter( string $from, string $to, array $q, array $sources ): array {
+		return $this->ok(
+			$q,
+			[ 'visitors' => $this->count_utm_visitors( $from, $to, 'source', $sources ) ],
+			'kpi_tile'
+		);
+	}
+
+	/**
+	 * Resolve this Ask me! question.
+	 *
+	 * @param string               $from Date range start.
+	 * @param string               $to   Date range end.
+	 * @param array<string, mixed> $q    Inventory row.
+	 * @return array<string, mixed>
+	 */
+	private function answer_utm_landing( string $from, string $to, array $q ): array {
+		global $wpdb;
+		$parameters = TableRegistry::get( 'parameters' );
+		$sessions   = TableRegistry::get( 'sessions' );
+		$views      = TableRegistry::get( 'views' );
+		$uris       = TableRegistry::get( 'resource_uris' );
+
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		$rows = $wpdb->get_results(
+			$wpdb->prepare(
+				'SELECT MAX(p.utm_campaign) AS campaign,
+					ru.uri AS landing,
+					COUNT(DISTINCT s.ID) AS sessions
+				FROM %i p
+				JOIN %i s ON s.ID = p.session_id
+				JOIN %i v ON v.ID = p.view_id
+				JOIN %i ru ON ru.ID = v.resource_uri_id
+				WHERE p.utm_campaign IS NOT NULL AND p.utm_campaign != ""
+					AND DATE(s.started_at) BETWEEN %s AND %s
+				GROUP BY p.utm_campaign, ru.uri
+				ORDER BY sessions DESC
+				LIMIT 10',
+				$parameters,
+				$sessions,
+				$views,
+				$uris,
+				$from,
+				$to
+			),
+			ARRAY_A
+		);
+		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+
+		return $this->ok(
+			$q,
+			[
+				'rows' => array_map(
+					static fn( $r ) => [
+						'campaign' => (string) $r['campaign'],
+						'landing'  => (string) $r['landing'],
+						'sessions' => (int) $r['sessions'],
+					],
+					is_array( $rows ) ? $rows : []
+				),
+			],
+			'table'
+		);
+	}
+
+	/**
+	 * Resolve this Ask me! question.
+	 *
+	 * @param string               $from Date range start.
+	 * @param string               $to   Date range end.
+	 * @param array<string, mixed> $q    Inventory row.
+	 * @return array<string, mixed>
+	 */
+	private function answer_utm_combo( string $from, string $to, array $q ): array {
+		global $wpdb;
+		$parameters = TableRegistry::get( 'parameters' );
+		$sessions   = TableRegistry::get( 'sessions' );
+
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		$rows = $wpdb->get_results(
+			$wpdb->prepare(
+				'SELECT MAX(p.utm_source) AS source,
+					MAX(p.utm_medium) AS medium,
+					MAX(p.utm_campaign) AS campaign,
+					COUNT(DISTINCT s.ID) AS sessions
+				FROM %i p
+				JOIN %i s ON s.ID = p.session_id
+				WHERE p.utm_source IS NOT NULL AND p.utm_source != ""
+					AND DATE(s.started_at) BETWEEN %s AND %s
+				GROUP BY p.utm_source, p.utm_medium, p.utm_campaign
+				ORDER BY sessions DESC
+				LIMIT 10',
+				$parameters,
+				$sessions,
+				$from,
+				$to
+			),
+			ARRAY_A
+		);
+		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+
+		return $this->ok(
+			$q,
+			[
+				'rows' => array_map(
+					static fn( $r ) => [
+						'source'   => (string) $r['source'],
+						'medium'   => (string) ( $r['medium'] ?? '' ),
+						'campaign' => (string) ( $r['campaign'] ?? '' ),
+						'sessions' => (int) $r['sessions'],
+					],
+					is_array( $rows ) ? $rows : []
+				),
+			],
+			'table'
+		);
+	}
+
+	// =================================================================
+	// Geography & Language handlers (cat 6) — Q73..Q75 Free
+	// =================================================================
+
+	/**
+	 * Resolve this Ask me! question.
+	 *
+	 * @param string               $from Date range start.
+	 * @param string               $to   Date range end.
+	 * @param array<string, mixed> $q    Inventory row.
+	 * @return array<string, mixed>
+	 */
+	private function answer_top_country( string $from, string $to, array $q ): array {
+		$rows = $this->load_country_rows( $from, $to );
+		return $this->ok( $q, [ 'rows' => array_slice( $rows, 0, 1 ) ], 'kpi_tile' );
+	}
+
+	/**
+	 * Resolve this Ask me! question.
+	 *
+	 * @param string               $from Date range start.
+	 * @param string               $to   Date range end.
+	 * @param array<string, mixed> $q    Inventory row.
+	 * @return array<string, mixed>
+	 */
+	private function answer_local_vs_international( string $from, string $to, array $q ): array {
+		$rows      = $this->load_country_rows( $from, $to );
+		$home_code = (string) get_option( 'WPLANG', '' );
+		$home_code = '' !== $home_code ? strtoupper( substr( $home_code, -2 ) ) : '';
+
+		$home   = 0;
+		$others = 0;
+		foreach ( $rows as $row ) {
+			if ( '' !== $home_code && strtoupper( (string) $row['code'] ) === $home_code ) {
+				$home += (int) $row['visitors'];
+			} else {
+				$others += (int) $row['visitors'];
+			}
+		}
+
+		// If the home country can't be inferred, treat the top row as home.
+		if ( '' === $home_code && ! empty( $rows ) ) {
+			$home   = (int) $rows[0]['visitors'];
+			$others = max( 0, array_sum( array_column( $rows, 'visitors' ) ) - $home );
+		}
+
+		return $this->ok(
+			$q,
+			[
+				'home'          => $home,
+				'international' => $others,
+			],
+			'donut'
+		);
+	}
+
+	/**
+	 * Resolve this Ask me! question.
+	 *
+	 * @param string               $from Date range start.
+	 * @param string               $to   Date range end.
+	 * @param array<string, mixed> $q    Inventory row.
+	 * @return array<string, mixed>
+	 */
+	private function answer_top_languages( string $from, string $to, array $q ): array {
+		global $wpdb;
+		$sessions  = TableRegistry::get( 'sessions' );
+		$languages = TableRegistry::get( 'languages' );
+
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		$rows = $wpdb->get_results(
+			$wpdb->prepare(
+				'SELECT COALESCE(l.code, "Unknown") AS code,
+					COUNT(DISTINCT s.visitor_id) AS visitors
+				FROM %i s
+				LEFT JOIN %i l ON l.ID = s.language_id
+				WHERE DATE(s.started_at) BETWEEN %s AND %s
+				GROUP BY l.code
+				ORDER BY visitors DESC
+				LIMIT 10',
+				$sessions,
+				$languages,
+				$from,
+				$to
+			),
+			ARRAY_A
+		);
+		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+
+		return $this->ok(
+			$q,
+			[
+				'rows' => array_map(
+					static fn( $r ) => [
+						'code'     => (string) $r['code'],
+						'visitors' => (int) $r['visitors'],
+					],
+					is_array( $rows ) ? $rows : []
+				),
+			],
+			'table'
+		);
+	}
+
+	// =================================================================
+	// Devices & Browsers handlers (cat 7) — Q82..Q87 Free
+	// =================================================================
+
+	/**
+	 * Resolve this Ask me! question.
+	 *
+	 * @param string               $from Date range start.
+	 * @param string               $to   Date range end.
+	 * @param array<string, mixed> $q    Inventory row.
+	 * @return array<string, mixed>
+	 */
+	private function answer_top_device( string $from, string $to, array $q ): array {
+		$rows = $this->load_device_rows( $from, $to );
+		return $this->ok( $q, [ 'rows' => array_slice( $rows, 0, 1 ) ], 'kpi_tile' );
+	}
+
+	/**
+	 * Resolve this Ask me! question.
+	 *
+	 * @param string               $from Date range start.
+	 * @param string               $to   Date range end.
+	 * @param array<string, mixed> $q    Inventory row.
+	 * @return array<string, mixed>
+	 */
+	private function answer_tablet_share( string $from, string $to, array $q ): array {
+		$rows   = $this->load_device_rows( $from, $to );
+		$total  = array_sum( array_column( $rows, 'sessions' ) );
+		$tablet = 0;
+		foreach ( $rows as $row ) {
+			if ( 0 === strcasecmp( (string) $row['device'], 'Tablet' ) ) {
+				$tablet = (int) $row['sessions'];
+				break;
+			}
+		}
+		$share = $total > 0 ? round( ( $tablet / $total ) * 100, 1 ) : 0.0;
+		return $this->ok(
+			$q,
+			[
+				'sessions'  => $tablet,
+				'share_pct' => $share,
+			],
+			'kpi_tile'
+		);
+	}
+
+	/**
+	 * Resolve this Ask me! question.
+	 *
+	 * @param string               $from Date range start.
+	 * @param string               $to   Date range end.
+	 * @param array<string, mixed> $q    Inventory row.
+	 * @return array<string, mixed>
+	 */
+	private function answer_top_browsers( string $from, string $to, array $q ): array {
+		return $this->ok(
+			$q,
+			[ 'rows' => $this->load_top_dim_rows( $from, $to, 'device_browsers', 'browser_id', 'name' ) ],
+			'table'
+		);
+	}
+
+	/**
+	 * Resolve this Ask me! question.
+	 *
+	 * @param string               $from Date range start.
+	 * @param string               $to   Date range end.
+	 * @param array<string, mixed> $q    Inventory row.
+	 * @return array<string, mixed>
+	 */
+	private function answer_top_oss( string $from, string $to, array $q ): array {
+		return $this->ok(
+			$q,
+			[ 'rows' => $this->load_top_dim_rows( $from, $to, 'device_oss', 'os_id', 'name' ) ],
+			'table'
+		);
+	}
+
+	/**
+	 * Resolve this Ask me! question.
+	 *
+	 * @param string               $from Date range start.
+	 * @param string               $to   Date range end.
+	 * @param array<string, mixed> $q    Inventory row.
+	 * @return array<string, mixed>
+	 */
+	private function answer_mobile_vs_desktop( string $from, string $to, array $q ): array {
+		$rows    = $this->load_device_rows( $from, $to );
+		$mobile  = 0;
+		$desktop = 0;
+		foreach ( $rows as $row ) {
+			$name = strtolower( (string) $row['device'] );
+			if ( 'mobile' === $name ) {
+				$mobile = (int) $row['sessions'];
+			} elseif ( 'desktop' === $name ) {
+				$desktop = (int) $row['sessions'];
+			}
+		}
+		$delta_pct = ( $desktop > 0 ) ? ( ( $mobile - $desktop ) / $desktop ) * 100 : 0.0;
+		return $this->ok(
+			$q,
+			[
+				'current'   => $mobile,
+				'previous'  => $desktop,
+				'delta_pct' => round( $delta_pct, 1 ),
+			],
+			'delta'
+		);
+	}
+
+	/**
+	 * Resolve this Ask me! question.
+	 *
+	 * @param string               $from Date range start.
+	 * @param string               $to   Date range end.
+	 * @param array<string, mixed> $q    Inventory row.
+	 * @return array<string, mixed>
+	 */
+	private function answer_mobile_priority( string $from, string $to, array $q ): array {
+		$rows   = $this->load_device_rows( $from, $to );
+		$total  = array_sum( array_column( $rows, 'sessions' ) );
+		$mobile = 0;
+		foreach ( $rows as $row ) {
+			if ( 0 === strcasecmp( (string) $row['device'], 'Mobile' ) ) {
+				$mobile = (int) $row['sessions'];
+				break;
+			}
+		}
+		$share = $total > 0 ? round( ( $mobile / $total ) * 100, 1 ) : 0.0;
+		return $this->ok(
+			$q,
+			[
+				'sessions'  => $mobile,
+				'share_pct' => $share,
+			],
+			'kpi_tile'
+		);
+	}
+
+	// =================================================================
+	// Shared aggregation helpers
+	// =================================================================
+
+	/**
+	 * Count distinct visitors active within the last `$window_seconds`.
+	 *
+	 * @param int $window_seconds Lookback window in seconds (e.g. 300 for 5 min).
+	 * @return int
+	 */
+	private function count_active_visitors( int $window_seconds ): int {
+		global $wpdb;
+		$sessions = TableRegistry::get( 'sessions' );
+
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		return (int) $wpdb->get_var(
+			$wpdb->prepare(
+				'SELECT COUNT(DISTINCT visitor_id)
+				FROM %i
+				WHERE started_at >= DATE_SUB(UTC_TIMESTAMP(), INTERVAL %d SECOND)',
+				$sessions,
+				$window_seconds
+			)
+		);
+		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+	}
+
+	/**
+	 * Top pages by views over [from, to] from `summary` joined to `resource_uris`.
+	 *
+	 * @param string      $from   Date range start (`Y-m-d`).
+	 * @param string      $to     Date range end (`Y-m-d`).
+	 * @param string|null $prefix Optional URI prefix to filter (e.g. `/blog/`).
+	 * @return array<int, array{uri:string,views:int}>
+	 */
+	private function load_top_pages( string $from, string $to, ?string $prefix ): array {
+		global $wpdb;
+		$summary = TableRegistry::get( 'summary' );
+		$uris    = TableRegistry::get( 'resource_uris' );
+
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		if ( null !== $prefix && '' !== $prefix ) {
+			$rows = $wpdb->get_results(
+				$wpdb->prepare(
+					'SELECT ru.uri AS uri, COALESCE(SUM(s.views), 0) AS views
+					FROM %i s
+					JOIN %i ru ON ru.ID = s.resource_uri_id
+					WHERE s.date BETWEEN %s AND %s AND ru.uri LIKE %s
+					GROUP BY ru.uri
+					ORDER BY views DESC
+					LIMIT 10',
+					$summary,
+					$uris,
+					$from,
+					$to,
+					$wpdb->esc_like( $prefix ) . '%'
+				),
+				ARRAY_A
+			);
+		} else {
+			$rows = $wpdb->get_results(
+				$wpdb->prepare(
+					'SELECT ru.uri AS uri, COALESCE(SUM(s.views), 0) AS views
+					FROM %i s
+					JOIN %i ru ON ru.ID = s.resource_uri_id
+					WHERE s.date BETWEEN %s AND %s
+					GROUP BY ru.uri
+					ORDER BY views DESC
+					LIMIT 10',
+					$summary,
+					$uris,
+					$from,
+					$to
+				),
+				ARRAY_A
+			);
+		}
+		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+
+		return array_map(
+			static fn( $r ) => [
+				'uri'   => (string) $r['uri'],
+				'views' => (int) $r['views'],
+			],
+			is_array( $rows ) ? $rows : []
+		);
+	}
+
+	/**
+	 * Total views for an exact URI over [from, to].
+	 *
+	 * @param string $from Date range start.
+	 * @param string $to   Date range end.
+	 * @param string $uri  Exact URI (e.g. `/`).
+	 */
+	private function views_for_exact_uri( string $from, string $to, string $uri ): int {
+		global $wpdb;
+		$summary = TableRegistry::get( 'summary' );
+		$uris    = TableRegistry::get( 'resource_uris' );
+
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		return (int) $wpdb->get_var(
+			$wpdb->prepare(
+				'SELECT COALESCE(SUM(s.views), 0)
+				FROM %i s
+				JOIN %i ru ON ru.ID = s.resource_uri_id
+				WHERE s.date BETWEEN %s AND %s AND ru.uri = %s',
+				$summary,
+				$uris,
+				$from,
+				$to,
+				$uri
+			)
+		);
+		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+	}
+
+	/**
+	 * Total views for URIs starting with `$pattern`.
+	 *
+	 * @param string      $pattern URI prefix.
+	 * @param string|null $from    Optional date range start; defaults to today.
+	 * @param string|null $to      Optional date range end; defaults to today.
+	 */
+	private function views_for_uri_pattern( string $pattern, ?string $from = null, ?string $to = null ): int {
+		global $wpdb;
+		$from    = $from ?? gmdate( 'Y-m-d', strtotime( '-30 days' ) );
+		$to      = $to ?? gmdate( 'Y-m-d' );
+		$summary = TableRegistry::get( 'summary' );
+		$uris    = TableRegistry::get( 'resource_uris' );
+
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		return (int) $wpdb->get_var(
+			$wpdb->prepare(
+				'SELECT COALESCE(SUM(s.views), 0)
+				FROM %i s
+				JOIN %i ru ON ru.ID = s.resource_uri_id
+				WHERE s.date BETWEEN %s AND %s AND ru.uri LIKE %s',
+				$summary,
+				$uris,
+				$from,
+				$to,
+				$wpdb->esc_like( $pattern ) . '%'
+			)
+		);
+		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+	}
+
+	/**
+	 * Referrer-channel grouping shared by q41 / q42 / q53 / q54 / q55.
+	 *
+	 * @param string $from Date range start.
+	 * @param string $to   Date range end.
+	 * @return array<int, array{channel:string,sessions:int,visitors:int}>
+	 */
+	private function load_referrer_channels( string $from, string $to ): array {
+		global $wpdb;
+		$sessions  = TableRegistry::get( 'sessions' );
+		$referrers = TableRegistry::get( 'referrers' );
+
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		$rows = $wpdb->get_results(
+			$wpdb->prepare(
+				'SELECT COALESCE(r.channel, "Direct") AS channel,
+					COUNT(DISTINCT s.ID) AS sessions,
+					COUNT(DISTINCT s.visitor_id) AS visitors
+				FROM %i s
+				LEFT JOIN %i r ON r.ID = s.referrer_id
+				WHERE DATE(s.started_at) BETWEEN %s AND %s
+				GROUP BY channel
+				ORDER BY sessions DESC',
+				$sessions,
+				$referrers,
+				$from,
+				$to
+			),
+			ARRAY_A
+		);
+		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+
+		return array_map(
+			static fn( $r ) => [
+				'channel'  => (string) $r['channel'],
+				'sessions' => (int) $r['sessions'],
+				'visitors' => (int) $r['visitors'],
+			],
+			is_array( $rows ) ? $rows : []
+		);
+	}
+
+	/**
+	 * Count distinct visitors arriving from a channel (optionally a substring
+	 * match against the referrer name, e.g. `google` inside Organic Search).
+	 *
+	 * @param string      $from         Date range start.
+	 * @param string      $to           Date range end.
+	 * @param string      $channel      Channel code (e.g. `Organic Search`).
+	 * @param string|null $name_pattern Optional substring to match on `referrers.name`.
+	 */
+	private function count_referrer_visitors( string $from, string $to, string $channel, ?string $name_pattern = null ): int {
+		global $wpdb;
+		$sessions  = TableRegistry::get( 'sessions' );
+		$referrers = TableRegistry::get( 'referrers' );
+
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		if ( null !== $name_pattern ) {
+			return (int) $wpdb->get_var(
+				$wpdb->prepare(
+					'SELECT COUNT(DISTINCT s.visitor_id)
+					FROM %i s
+					JOIN %i r ON r.ID = s.referrer_id
+					WHERE r.channel = %s
+						AND LOWER(r.name) LIKE %s
+						AND DATE(s.started_at) BETWEEN %s AND %s',
+					$sessions,
+					$referrers,
+					$channel,
+					'%' . $wpdb->esc_like( strtolower( $name_pattern ) ) . '%',
+					$from,
+					$to
+				)
+			);
+		}
+
+		// "Direct" maps to NULL referrer_id rather than a row in referrers.
+		if ( 'Direct' === $channel ) {
+			return (int) $wpdb->get_var(
+				$wpdb->prepare(
+					'SELECT COUNT(DISTINCT s.visitor_id)
+					FROM %i s
+					WHERE s.referrer_id IS NULL
+						AND DATE(s.started_at) BETWEEN %s AND %s',
+					$sessions,
+					$from,
+					$to
+				)
+			);
+		}
+
+		return (int) $wpdb->get_var(
+			$wpdb->prepare(
+				'SELECT COUNT(DISTINCT s.visitor_id)
+				FROM %i s
+				JOIN %i r ON r.ID = s.referrer_id
+				WHERE r.channel = %s
+					AND DATE(s.started_at) BETWEEN %s AND %s',
+				$sessions,
+				$referrers,
+				$channel,
+				$from,
+				$to
+			)
+		);
+		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+	}
+
+	/**
+	 * Count distinct visitors whose `parameters.utm_{column}` value matches
+	 * any of `$values` (case-insensitive).
+	 *
+	 * @param string             $from   Date range start.
+	 * @param string             $to     Date range end.
+	 * @param string             $column One of `source` / `medium` / `campaign`.
+	 * @param array<int, string> $values Lowercase exact matches to OR together.
+	 */
+	private function count_utm_visitors( string $from, string $to, string $column, array $values ): int {
+		$column = in_array( $column, [ 'source', 'medium', 'campaign' ], true ) ? $column : 'source';
+		if ( empty( $values ) ) {
+			return 0;
+		}
+
+		global $wpdb;
+		$parameters = TableRegistry::get( 'parameters' );
+		$sessions   = TableRegistry::get( 'sessions' );
+
+		$placeholders = implode( ',', array_fill( 0, count( $values ), '%s' ) );
+		$args         = array_merge(
+			[ $parameters, $sessions ],
+			array_map( 'strtolower', $values ),
+			[ $from, $to ]
+		);
+
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare
+		return (int) $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT COUNT(DISTINCT s.visitor_id)
+				FROM %i p
+				JOIN %i s ON s.ID = p.session_id
+				WHERE LOWER(p.utm_{$column}) IN ({$placeholders})
+					AND DATE(s.started_at) BETWEEN %s AND %s",
+				...$args
+			)
+		);
+		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare
+	}
+
+	/**
+	 * Country grouping shared by q72 / q73 / q74.
+	 *
+	 * @param string $from Date range start.
+	 * @param string $to   Date range end.
+	 * @return array<int, array{code:string,name:string,visitors:int,sessions:int}>
+	 */
+	private function load_country_rows( string $from, string $to ): array {
+		global $wpdb;
+		$sessions  = TableRegistry::get( 'sessions' );
+		$countries = TableRegistry::get( 'countries' );
+
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		$rows = $wpdb->get_results(
+			$wpdb->prepare(
+				'SELECT c.code AS code,
+					COALESCE(c.name, "Unknown") AS name,
+					COUNT(DISTINCT s.visitor_id) AS visitors,
+					COUNT(DISTINCT s.ID) AS sessions
+				FROM %i s
+				LEFT JOIN %i c ON c.ID = s.country_id
+				WHERE DATE(s.started_at) BETWEEN %s AND %s
+				GROUP BY c.code, c.name
+				ORDER BY visitors DESC
+				LIMIT 25',
+				$sessions,
+				$countries,
+				$from,
+				$to
+			),
+			ARRAY_A
+		);
+		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+
+		return array_map(
+			static fn( $r ) => [
+				'code'     => (string) ( $r['code'] ?? '' ),
+				'name'     => (string) $r['name'],
+				'visitors' => (int) $r['visitors'],
+				'sessions' => (int) $r['sessions'],
+			],
+			is_array( $rows ) ? $rows : []
+		);
+	}
+
+	/**
+	 * Device grouping shared by q81..q87.
+	 *
+	 * @param string $from Date range start.
+	 * @param string $to   Date range end.
+	 * @return array<int, array{device:string,sessions:int,visitors:int}>
+	 */
+	private function load_device_rows( string $from, string $to ): array {
+		global $wpdb;
+		$sessions = TableRegistry::get( 'sessions' );
+		$devices  = TableRegistry::get( 'device_types' );
+
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		$rows = $wpdb->get_results(
+			$wpdb->prepare(
+				'SELECT COALESCE(dt.name, "Unknown") AS device,
+					COUNT(DISTINCT s.ID) AS sessions,
+					COUNT(DISTINCT s.visitor_id) AS visitors
+				FROM %i s
+				LEFT JOIN %i dt ON dt.ID = s.device_type_id
+				WHERE DATE(s.started_at) BETWEEN %s AND %s
+				GROUP BY device
+				ORDER BY sessions DESC',
+				$sessions,
+				$devices,
+				$from,
+				$to
+			),
+			ARRAY_A
+		);
+		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+
+		return array_map(
+			static fn( $r ) => [
+				'device'   => (string) $r['device'],
+				'sessions' => (int) $r['sessions'],
+				'visitors' => (int) $r['visitors'],
+			],
+			is_array( $rows ) ? $rows : []
+		);
+	}
+
+	/**
+	 * Generic top-N for a one-step dimension table (browser / OS / language /
+	 * resolution / city) joined to `sessions` via a single FK column.
+	 *
+	 * @param string $from       Date range start.
+	 * @param string $to         Date range end.
+	 * @param string $table_key  TableRegistry key (e.g. `device_browsers`).
+	 * @param string $fk         Column on `sessions` that holds the dim ID (e.g. `browser_id`).
+	 * @param string $name_col   Column on the dim table to surface as the row label.
+	 * @return array<int, array{name:string,sessions:int,visitors:int}>
+	 */
+	private function load_top_dim_rows( string $from, string $to, string $table_key, string $fk, string $name_col ): array {
+		global $wpdb;
+		$sessions  = TableRegistry::get( 'sessions' );
+		$dim_table = TableRegistry::get( $table_key );
+
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		$rows = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT COALESCE(d.{$name_col}, 'Unknown') AS name,
+					COUNT(DISTINCT s.ID) AS sessions,
+					COUNT(DISTINCT s.visitor_id) AS visitors
+				FROM %i s
+				LEFT JOIN %i d ON d.ID = s.{$fk}
+				WHERE DATE(s.started_at) BETWEEN %s AND %s
+				GROUP BY name
+				ORDER BY sessions DESC
+				LIMIT 10",
+				$sessions,
+				$dim_table,
+				$from,
+				$to
+			),
+			ARRAY_A
+		);
+		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+
+		return array_map(
+			static fn( $r ) => [
+				'name'     => (string) $r['name'],
+				'sessions' => (int) $r['sessions'],
+				'visitors' => (int) $r['visitors'],
+			],
+			is_array( $rows ) ? $rows : []
+		);
 	}
 }

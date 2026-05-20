@@ -1,6 +1,19 @@
 import { useRef, useCallback, useEffect, type ReactNode } from 'react';
 import { __ } from '@wordpress/i18n';
-import { Pin } from 'lucide-react';
+import {
+	Pin,
+	BarChart3,
+	Activity,
+	FileText,
+	Share2,
+	Send,
+	Globe,
+	Monitor,
+	Gauge,
+	DollarSign,
+	Zap,
+	type LucideIcon,
+} from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { AdvisorCategory } from '@/types/api';
 
@@ -33,8 +46,25 @@ const SHORT_LABEL: Record<string, string> = {
 	events_and_privacy: 'Events',
 };
 
+const CATEGORY_ICON: Record<string, LucideIcon> = {
+	traffic_overview: BarChart3,
+	real_time_tracking_health: Activity,
+	pages_and_content: FileText,
+	referrers_and_channels: Share2,
+	campaigns_and_utm: Send,
+	geography_and_language: Globe,
+	devices_and_browsers: Monitor,
+	engagement_and_quality: Gauge,
+	revenue: DollarSign,
+	events_and_privacy: Zap,
+};
+
 function shortLabelFor(category: AdvisorCategory): string {
 	return SHORT_LABEL[category.id] ?? category.label;
+}
+
+function iconFor(category: AdvisorCategory): LucideIcon {
+	return CATEGORY_ICON[category.id] ?? BarChart3;
 }
 
 interface QuestionTabsProps {
@@ -117,6 +147,7 @@ export function QuestionTabs({ categories, active, onChange, children }: Questio
 
 					{categories.map((category) => {
 						const isActive = active === category.id;
+						const Icon = iconFor(category);
 						return (
 							<button
 								key={category.id}
@@ -129,12 +160,13 @@ export function QuestionTabs({ categories, active, onChange, children }: Questio
 								tabIndex={isActive ? 0 : -1}
 								onClick={() => onChange(category.id)}
 								className={cn(
-									'whitespace-nowrap border-b-2 px-3 py-2.5 text-sm font-medium transition-colors duration-150',
+									'flex items-center gap-1.5 whitespace-nowrap border-b-2 px-3 py-2.5 text-sm font-medium transition-colors duration-150',
 									isActive
 										? 'border-primary text-primary'
 										: 'border-transparent text-muted-foreground hover:border-border hover:text-foreground',
 								)}
 							>
+								<Icon className="h-4 w-4" aria-hidden="true" />
 								{shortLabelFor(category)}
 							</button>
 						);

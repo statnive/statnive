@@ -11,6 +11,16 @@ vi.mock('lucide-react', () => {
 		createElement('span', { className, 'data-testid': 'icon' });
 	return {
 		Pin: Icon,
+		BarChart3: Icon,
+		Activity: Icon,
+		FileText: Icon,
+		Share2: Icon,
+		Send: Icon,
+		Globe: Icon,
+		Monitor: Icon,
+		Gauge: Icon,
+		DollarSign: Icon,
+		Zap: Icon,
 	};
 });
 
