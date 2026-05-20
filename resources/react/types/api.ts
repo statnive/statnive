@@ -109,3 +109,69 @@ export interface SettingsState {
 }
 
 export type DateRange = 'today' | '7d' | '30d' | 'this-month' | 'last-month' | 'custom';
+
+// =================================================================
+// Advisor (Ask me!) types — match src/Advisor/Questions.php + AdvisorController.
+// =================================================================
+
+export type AdvisorPlan = 'free' | 'paid';
+export type AdvisorConfidence = 'direct' | 'calculated' | 'proxy';
+
+export interface AdvisorCategory {
+	id: string;
+	label: string;
+	label_en: string;
+}
+
+export interface AdvisorQuestion {
+	id: string;
+	category_id: string;
+	category: string;
+	category_en: string;
+	question: string;
+	question_en: string;
+	keywords: string[];
+	plan: AdvisorPlan;
+	surface: string;
+	viz_hint: string;
+	confidence: AdvisorConfidence;
+	depends_on_schema?: string;
+	searchable: string[];
+}
+
+export interface AdvisorQuestionsResponse {
+	categories: AdvisorCategory[];
+	questions: AdvisorQuestion[];
+}
+
+export type AdvisorAnswerStatus = 'ok' | 'coming_soon' | 'error';
+
+export type AdvisorAnswerReason =
+	| 'schema_gap_v1_1'
+	| 'paid_growth_v2'
+	| 'handler_pending';
+
+export interface AdvisorAnswer {
+	id: string;
+	status: AdvisorAnswerStatus;
+	value: unknown;
+	viz: string;
+	source?: string | null;
+	plan?: AdvisorPlan;
+	confidence?: AdvisorConfidence;
+	reason?: AdvisorAnswerReason;
+	code?: string;
+	message?: string;
+}
+
+export interface AdvisorAnswersResponse {
+	answers: AdvisorAnswer[];
+	from: string;
+	to: string;
+}
+
+export interface AdvisorPreferencesResponse {
+	pinned_questions: string[];
+	max_pins: number;
+	defaults?: string[];
+}

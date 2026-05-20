@@ -18,6 +18,7 @@ import {
 	Activity,
 	DollarSign,
 	Settings,
+	Pin,
 } from 'lucide-react';
 
 // Per-page nav scoping. Layout chrome (header bar + tab strip) stays the
@@ -26,6 +27,7 @@ import {
 // future plug in by adding a branch to useScopedNav().
 const OVERVIEW_NAV = [
 	{ to: '/', label: 'Overview', icon: BarChart3 },
+	{ to: '/ask', label: 'Ask me!', icon: Pin },
 	{ to: '/pages', label: 'Pages', icon: FileText },
 	{ to: '/referrers', label: 'Referrers', icon: Share2 },
 	{ to: '/geography', label: 'Geography', icon: Globe },
@@ -59,6 +61,10 @@ function deriveScopedNav(path: string): ScopedNav {
 	}
 	return {
 		navItems: OVERVIEW_NAV,
+		// Date picker is hidden on Real-time (live counter has its own time
+		// horizon) and on the Ask me! pinned tab (where the picker still
+		// applies but rendering inside the Ask me! page would be confusing —
+		// keep it in the global header).
 		showDatePicker: !path.startsWith('/realtime'),
 		headerSlot: null,
 	};
