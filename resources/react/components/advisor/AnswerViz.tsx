@@ -1,5 +1,7 @@
+import { useMemo } from 'react';
 import { __ } from '@wordpress/i18n';
-import type { AdvisorAnswer, AdvisorQuestion } from '@/types/api';
+import { formatPercentChange } from '@/lib/utils';
+import type { AdvisorAnswer, AdvisorQuestion, AdvisorVizHint } from '@/types/api';
 
 /**
  * Renders the answer body for an expanded QuestionCard.
@@ -21,177 +23,211 @@ interface AnswerVizProps {
 	answer: AdvisorAnswer;
 }
 
+interface VizContext {
+	value: Record<string, unknown> | undefined;
+	formatNumber: (n: number) => string;
+	answer: AdvisorAnswer;
+}
+
+type VizRenderer = (ctx: VizContext) => JSX.Element;
+
 export function AnswerViz({ question, answer }: AnswerVizProps) {
-	const viz = answer.viz || question.viz_hint;
-	const value = answer.value as Record<string, unknown> | undefined;
-	const lang = document.documentElement.lang || 'en';
+	const viz = (answer.viz || question.viz_hint) as AdvisorVizHint;
+	// Memoise the Intl.NumberFormat instance per locale so table / grouped-bar
+	// renderers don't allocate one per row (up to 10 allocations per render
+	// otherwise). `document.documentElement.lang` is checked at render time
+	// because the SPA can switch site language without remounting this card.
+	const lang =
+		typeof document !== 'undefined' ? document.documentElement.lang || 'en' : 'en';
+	const formatNumber = useMemo(() => {
+		const fmt = new Intl.NumberFormat(lang);
+		return (n: number) => fmt.format(n);
+	}, [lang]);
 
-	if (viz === 'kpi_tile') {
-		// KPI tile shape: `{ visitors }` / `{ sessions }` / `{ pageviews }`.
-		const metric = pickKpi(value);
-		return (
-			<div className="flex items-baseline gap-3">
-				<div
-					className="text-5xl font-bold tabular-nums leading-none text-[color:var(--color-primary)]"
-					style={{ letterSpacing: '-0.02em' }}
-				>
-					{metric.value !== undefined
-						? new Intl.NumberFormat(lang).format(metric.value)
-						: '—'}
-				</div>
-				<div className="text-[13px] text-muted-foreground">{metric.label}</div>
+	const ctx: VizContext = {
+		value: answer.value as Record<string, unknown> | undefined,
+		formatNumber,
+		answer,
+	};
+	const renderer = VIZ_RENDERERS[viz] ?? renderJsonFallback;
+	return renderer(ctx);
+}
+
+const renderKpiTile: VizRenderer = ({ value, formatNumber }) => {
+	// KPI tile shape: `{ visitors }` / `{ sessions }` / `{ pageviews }`.
+	const metric = pickKpi(value);
+	return (
+		<div className="flex items-baseline gap-3">
+			<div
+				className="text-5xl font-bold tabular-nums leading-none text-[color:var(--color-primary)]"
+				style={{ letterSpacing: '-0.02em' }}
+			>
+				{metric.value !== undefined ? formatNumber(metric.value) : '—'}
 			</div>
-		);
-	}
+			<div className="text-[13px] text-muted-foreground">{metric.label}</div>
+		</div>
+	);
+};
 
-	if (viz === 'delta') {
-		// Period-comparison shape (Q5/Q6/Q10/Q11): `{ current, previous,
-		// delta_pct }` OR anomaly summary `{ current, baseline, delta_pct,
-		// on_date }`.
-		const current = typeof value?.current === 'number' ? value.current : undefined;
-		const previous =
-			typeof value?.previous === 'number'
-				? value.previous
-				: typeof value?.baseline === 'number'
-					? value.baseline
-					: undefined;
-		const deltaPct = typeof value?.delta_pct === 'number' ? value.delta_pct : 0;
+const renderDelta: VizRenderer = ({ value, formatNumber }) => {
+	// Period-comparison shape (Q5/Q6/Q10/Q11): `{ current, previous,
+	// delta_pct }` OR anomaly summary `{ current, baseline, delta_pct,
+	// on_date }`.
+	const current = typeof value?.current === 'number' ? value.current : undefined;
+	const previous =
+		typeof value?.previous === 'number'
+			? value.previous
+			: typeof value?.baseline === 'number'
+				? value.baseline
+				: undefined;
+	const deltaPct = typeof value?.delta_pct === 'number' ? value.delta_pct : 0;
 
-		const positive = deltaPct > 0;
-		const negative = deltaPct < 0;
-		const arrow = positive ? '↑' : negative ? '↓' : '•';
-		const chipTone = positive
-			? 'bg-[color:var(--color-accent)]/10 text-[color:var(--color-sn-green-dk)]'
-			: negative
-				? 'bg-destructive/10 text-destructive'
-				: 'bg-muted text-muted-foreground';
+	const positive = deltaPct > 0;
+	const negative = deltaPct < 0;
+	const arrow = positive ? '↑' : negative ? '↓' : '•';
+	const chipTone = positive
+		? 'bg-[color:var(--color-accent)]/10 text-[color:var(--color-sn-green-dk)]'
+		: negative
+			? 'bg-destructive/10 text-destructive'
+			: 'bg-muted text-muted-foreground';
 
-		return (
-			<div className="flex items-baseline gap-3">
-				<div
-					className="text-5xl font-bold tabular-nums leading-none text-[color:var(--color-primary)]"
-					style={{ letterSpacing: '-0.02em' }}
-				>
-					{current !== undefined ? new Intl.NumberFormat(lang).format(current) : '—'}
-				</div>
-				<span
-					className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-semibold tabular-nums ${chipTone}`}
-				>
-					<span aria-hidden="true">{arrow}</span>
-					{Math.abs(deltaPct).toFixed(1)}%
+	return (
+		<div className="flex items-baseline gap-3">
+			<div
+				className="text-5xl font-bold tabular-nums leading-none text-[color:var(--color-primary)]"
+				style={{ letterSpacing: '-0.02em' }}
+			>
+				{current !== undefined ? formatNumber(current) : '—'}
+			</div>
+			<span
+				className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-semibold tabular-nums ${chipTone}`}
+			>
+				<span aria-hidden="true">{arrow}</span>
+				{formatPercentChange(deltaPct)}
+			</span>
+			{previous !== undefined && (
+				<span className="text-[13px] text-muted-foreground">
+					{__('vs', 'statnive')} {formatNumber(previous)}
 				</span>
-				{previous !== undefined && (
-					<span className="text-[13px] text-muted-foreground">
-						{__('vs', 'statnive')} {new Intl.NumberFormat(lang).format(previous)}
-					</span>
-				)}
-			</div>
-		);
-	}
+			)}
+		</div>
+	);
+};
 
-	if (viz === 'table') {
-		const rows = Array.isArray(value?.rows) ? value.rows : [];
-		if (rows.length === 0) {
-			return <p className="text-sm text-muted-foreground">{__('No data yet.', 'statnive')}</p>;
-		}
-		return (
-			<div className="overflow-x-auto">
-				<table className="w-full border-collapse text-sm">
-					<thead>
-						<tr className="text-left text-[11px] uppercase tracking-wide text-muted-foreground">
-							{Object.keys(rows[0]).map((k) => (
-								<th key={k} className="border-b border-border py-2 pr-4 font-medium">
-									{k}
-								</th>
+const renderTable: VizRenderer = ({ value }) => {
+	const rows = Array.isArray(value?.rows) ? value.rows : [];
+	if (rows.length === 0) {
+		return <p className="text-sm text-muted-foreground">{__('No data yet.', 'statnive')}</p>;
+	}
+	return (
+		<div className="overflow-x-auto">
+			<table className="w-full border-collapse text-sm">
+				<thead>
+					<tr className="text-left text-[11px] uppercase tracking-wide text-muted-foreground">
+						{Object.keys(rows[0]).map((k) => (
+							<th key={k} className="border-b border-border py-2 pr-4 font-medium">
+								{k}
+							</th>
+						))}
+					</tr>
+				</thead>
+				<tbody>
+					{rows.slice(0, 10).map((row, i) => (
+						<tr
+							key={i}
+							className="border-b border-border/40 last:border-b-0 hover:bg-muted/40"
+						>
+							{Object.values(row as Record<string, unknown>).map((v, j) => (
+								<td
+									key={j}
+									className={`py-2 pr-4 tabular-nums ${
+										j === 0
+											? 'font-medium text-[color:var(--color-primary)]'
+											: 'text-foreground'
+									}`}
+								>
+									{typeof v === 'string' || typeof v === 'number'
+										? String(v)
+										: String(v ?? '')}
+								</td>
 							))}
 						</tr>
-					</thead>
-					<tbody>
-						{rows.slice(0, 10).map((row, i) => (
-							<tr
-								key={i}
-								className="border-b border-border/40 last:border-b-0 hover:bg-muted/40"
-							>
-								{Object.values(row as Record<string, unknown>).map((v, j) => (
-									<td
-										key={j}
-										className={`py-2 pr-4 tabular-nums ${
-											j === 0
-												? 'font-medium text-[color:var(--color-primary)]'
-												: 'text-foreground'
-										}`}
-									>
-										{typeof v === 'string' || typeof v === 'number'
-											? String(v)
-											: String(v ?? '')}
-									</td>
-								))}
-							</tr>
-						))}
-					</tbody>
-				</table>
-			</div>
-		);
-	}
+					))}
+				</tbody>
+			</table>
+		</div>
+	);
+};
 
-	if (viz === 'donut' || viz === 'bar' || viz === 'map') {
-		// Q41 channels, Q72 countries, Q81 devices, plus all the cat-4/6/7
-		// helpers that return `{ rows: [...] }` with sessions / visitors per
-		// group. v1 renders a horizontal bar with a navy→green gradient so
-		// the brand reads without pulling in a charting lib.
-		const rows = Array.isArray(value?.rows) ? (value.rows as Record<string, unknown>[]) : [];
-		const totals = rows.map((r) => Number(r.sessions ?? r.visitors ?? 0));
-		const max = Math.max(...totals, 1);
+const renderGroupedBar: VizRenderer = ({ value, formatNumber }) => {
+	// Q41 channels, Q72 countries, Q81 devices, plus all the cat-4/6/7
+	// helpers that return `{ rows: [...] }` with sessions / visitors per
+	// group. v1 renders a horizontal bar with a navy→green gradient so
+	// the brand reads without pulling in a charting lib. Shared across
+	// `donut` / `bar` / `map` viz hints.
+	const rows = Array.isArray(value?.rows) ? (value.rows as Record<string, unknown>[]) : [];
+	const totals = rows.map((r) => Number(r.sessions ?? r.visitors ?? 0));
+	const max = Math.max(...totals, 1);
 
-		if (rows.length === 0) {
-			return <p className="text-sm text-muted-foreground">{__('No data yet.', 'statnive')}</p>;
-		}
-
-		return (
-			<ul className="space-y-2.5">
-				{rows.slice(0, 10).map((row, i) => {
-					const label = String(
-						row.channel ?? row.device ?? row.network ?? row.name ?? row.code ?? '—',
-					);
-					const count = Number(row.sessions ?? row.visitors ?? 0);
-					const pct = (count / max) * 100;
-					return (
-						<li
-							key={i}
-							className="grid grid-cols-[1fr_auto] items-center gap-3 text-sm"
-						>
-							<div className="space-y-1">
-								<div className="text-[13px] font-medium text-[color:var(--color-primary)]">
-									{label}
-								</div>
-								<div className="relative h-2 overflow-hidden rounded-full bg-muted">
-									<div
-										className="h-full rounded-full transition-[width] duration-300 ease-out"
-										style={{
-											width: `${pct.toFixed(1)}%`,
-											background:
-												'linear-gradient(90deg, var(--color-primary) 0%, var(--color-accent) 100%)',
-										}}
-										aria-hidden="true"
-									/>
-								</div>
-							</div>
-							<div className="font-mono text-xs tabular-nums text-muted-foreground">
-								{new Intl.NumberFormat(lang).format(count)}
-							</div>
-						</li>
-					);
-				})}
-			</ul>
-		);
+	if (rows.length === 0) {
+		return <p className="text-sm text-muted-foreground">{__('No data yet.', 'statnive')}</p>;
 	}
 
 	return (
-		<pre className="overflow-x-auto rounded bg-muted/40 p-3 text-xs">
-			{JSON.stringify(answer.value, null, 2)}
-		</pre>
+		<ul className="space-y-2.5">
+			{rows.slice(0, 10).map((row, i) => {
+				const label = String(
+					row.channel ?? row.device ?? row.network ?? row.name ?? row.code ?? '—',
+				);
+				const count = Number(row.sessions ?? row.visitors ?? 0);
+				const pct = (count / max) * 100;
+				return (
+					<li key={i} className="grid grid-cols-[1fr_auto] items-center gap-3 text-sm">
+						<div className="space-y-1">
+							<div className="text-[13px] font-medium text-[color:var(--color-primary)]">
+								{label}
+							</div>
+							<div className="relative h-2 overflow-hidden rounded-full bg-muted">
+								<div
+									className="h-full rounded-full transition-[width] duration-300 ease-out"
+									style={{
+										width: `${pct.toFixed(1)}%`,
+										background:
+											'linear-gradient(90deg, var(--color-primary) 0%, var(--color-accent) 100%)',
+									}}
+									aria-hidden="true"
+								/>
+							</div>
+						</div>
+						<div className="font-mono text-xs tabular-nums text-muted-foreground">
+							{formatNumber(count)}
+						</div>
+					</li>
+				);
+			})}
+		</ul>
 	);
-}
+};
+
+const renderJsonFallback: VizRenderer = ({ answer }) => (
+	<pre className="overflow-x-auto rounded bg-muted/40 p-3 text-xs">
+		{JSON.stringify(answer.value, null, 2)}
+	</pre>
+);
+
+/**
+ * Viz hint → renderer dispatch. Mirror of `Questions::VIZ_*` on the server;
+ * anything missing falls through to the JSON preview (dev-only — the
+ * coming-soon path renders before this for non-handler questions).
+ */
+const VIZ_RENDERERS: Partial<Record<AdvisorVizHint, VizRenderer>> = {
+	kpi_tile: renderKpiTile,
+	delta: renderDelta,
+	table: renderTable,
+	donut: renderGroupedBar,
+	bar: renderGroupedBar,
+	map: renderGroupedBar,
+};
 
 /** Pick the canonical KPI from the answer value, with a localized label. */
 function pickKpi(value: Record<string, unknown> | undefined): {

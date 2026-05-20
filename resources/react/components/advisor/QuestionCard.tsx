@@ -96,11 +96,20 @@ export function QuestionCard({ question, pinned, startExpanded = false }: Questi
 					aria-disabled={isComingSoon}
 					aria-label={question.question}
 					className={cn(
-						'flex flex-1 items-center gap-2 text-left text-sm font-medium',
-						isComingSoon && 'cursor-not-allowed text-muted-foreground',
+						'flex flex-1 items-center gap-2 text-left',
+						isComingSoon && 'cursor-not-allowed',
 					)}
 				>
-					<span className="flex-1 truncate" title={question.question}>
+					<span
+						className={cn(
+							'flex-1 truncate text-[15px] font-semibold tracking-tight',
+							isComingSoon
+								? 'text-muted-foreground'
+								: 'text-[color:var(--color-primary)]',
+						)}
+						style={{ letterSpacing: '-0.01em' }}
+						title={question.question}
+					>
 						{question.question}
 					</span>
 					<ChipCluster question={question} />

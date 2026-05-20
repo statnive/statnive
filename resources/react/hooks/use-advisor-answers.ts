@@ -19,6 +19,9 @@ export function useAdvisorAnswers(ids: string[], enabled: boolean = true) {
 	const { params } = useDateRange();
 	const { from, to } = params;
 	const queryClient = useQueryClient();
+	// Sort+join is cheap for the ≤20 pinned IDs; TanStack compares the
+	// resulting queryKey by structural equality so the same set of IDs
+	// keeps the same cache slot across renders regardless of array order.
 	const cacheKeyIds = [...ids].sort().join(',');
 
 	return useQuery({

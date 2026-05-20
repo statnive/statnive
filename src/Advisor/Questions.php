@@ -33,7 +33,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *   plan         'free'|'paid' — Free questions resolve today; Paid render with
  *                                "🟡 Coming soon" chip in v1 (no upgrade CTA)
  *   surface      string — the Statnive report or API path that holds the data
- *   viz_hint     string — UI viz template hint (kpi_tile|table|donut|map|funnel|live|bar|coming_soon)
+ *   viz_hint     string — UI viz template hint; see `Questions::VIZ_*` constants
  *   confidence   'direct'|'calculated'|'proxy' — answer-tier badge
  *   depends_on_schema  optional string — column the answer needs but Statnive
  *                                        doesn't have today (e.g. `entry_count`)
@@ -54,6 +54,33 @@ final class Questions {
 	public const CONF_PROXY      = 'proxy';
 
 	/**
+	 * UI viz template hints. Mirrored in `resources/react/types/api.ts`
+	 * (`AdvisorVizHint`) so the AnswerViz dispatch and the inventory share a
+	 * single vocabulary.
+	 */
+	public const VIZ_KPI_TILE    = 'kpi_tile';
+	public const VIZ_TABLE       = 'table';
+	public const VIZ_DONUT       = 'donut';
+	public const VIZ_BAR         = 'bar';
+	public const VIZ_MAP         = 'map';
+	public const VIZ_DELTA       = 'delta';
+	public const VIZ_LINE        = 'line';
+	public const VIZ_LIVE        = 'live';
+	public const VIZ_LIVE_TABLE  = 'live_table';
+	public const VIZ_STATUS      = 'status';
+	public const VIZ_FUNNEL      = 'funnel';
+	public const VIZ_ANOMALY     = 'anomaly';
+	public const VIZ_COMING_SOON = 'coming_soon';
+	public const VIZ_ERROR       = 'error';
+
+	/**
+	 * Resolver-only response status codes for the `status` envelope key.
+	 */
+	public const STATUS_OK          = 'ok';
+	public const STATUS_COMING_SOON = 'coming_soon';
+	public const STATUS_ERROR       = 'error';
+
+	/**
 	 * Schema-gap markers — values match the columns research #71 flagged as
 	 * missing from the current `summary` table. Questions tagged with these
 	 * keys render the `🟡 Coming soon` (v1.1) chip until the follow-on schema
@@ -67,10 +94,20 @@ final class Questions {
 	/**
 	 * Aggregate the full 120-question inventory.
 	 *
+	 * Memoised within a request: the inventory is deterministic (constant
+	 * strings + `__()` lookups), so we cache the assembled array. This
+	 * avoids re-evaluating the 98-case `translate_question_text()` switch
+	 * 120 times every time a caller hits the inventory (resolver `find()`,
+	 * REST endpoint, `valid_ids()`, `with_searchable()`).
+	 *
 	 * @return array<int, array<string, mixed>>
 	 */
 	public static function all(): array {
-		return array_merge(
+		static $cached = null;
+		if ( null !== $cached ) {
+			return $cached;
+		}
+		$cached = array_merge(
 			self::traffic_overview(),
 			self::real_time_tracking_health(),
 			self::pages_and_content(),
@@ -82,6 +119,7 @@ final class Questions {
 			self::revenue(),
 			self::events_and_privacy()
 		);
+		return $cached;
 	}
 
 	/**
@@ -92,31 +130,39 @@ final class Questions {
 	 * `apply_filters('statnive_advisor_questions', $list)` lets future PRs
 	 * inject questions via a filter (forward-compat per plan §G.2).
 	 *
+	 * The pre-filter enriched inventory is memoised so the bilingual
+	 * `searchable[]` array isn't rebuilt every call. The filter is still
+	 * re-applied each call so test mutations / runtime additions surface.
+	 *
 	 * @return array<int, array<string, mixed>>
 	 */
 	public static function with_searchable(): array {
-		$cat_by_id = [];
-		foreach ( Categories::all() as $c ) {
-			$cat_by_id[ $c['id'] ] = $c;
-		}
+		static $cached_pre_filter = null;
+		if ( null === $cached_pre_filter ) {
+			$cat_by_id = [];
+			foreach ( Categories::all() as $c ) {
+				$cat_by_id[ $c['id'] ] = $c;
+			}
 
-		$out = [];
-		foreach ( self::all() as $q ) {
-			$cat              = $cat_by_id[ $q['category_id'] ] ?? [
-				'label'    => $q['category_id'],
-				'label_en' => $q['category_id'],
-			];
-			$q['category']    = $cat['label'];
-			$q['category_en'] = $cat['label_en'];
-			$searchable       = array_filter(
-				array_merge(
-					[ $q['question'], $q['question_en'], $q['category'], $q['category_en'] ],
-					$q['keywords']
-				),
-				static fn( $s ) => is_string( $s ) && '' !== $s
-			);
-			$q['searchable']  = array_values( array_unique( $searchable ) );
-			$out[]            = $q;
+			$out = [];
+			foreach ( self::all() as $q ) {
+				$cat              = $cat_by_id[ $q['category_id'] ] ?? [
+					'label'    => $q['category_id'],
+					'label_en' => $q['category_id'],
+				];
+				$q['category']    = $cat['label'];
+				$q['category_en'] = $cat['label_en'];
+				$searchable       = array_filter(
+					array_merge(
+						[ $q['question'], $q['question_en'], $q['category'], $q['category_en'] ],
+						$q['keywords']
+					),
+					static fn( $s ) => is_string( $s ) && '' !== $s
+				);
+				$q['searchable']  = array_values( array_unique( $searchable ) );
+				$out[]            = $q;
+			}
+			$cached_pre_filter = $out;
 		}
 
 		/**
@@ -125,13 +171,17 @@ final class Questions {
 		 * Future PRs (Phase 14 Paid unlocks, new analytics surfaces) can
 		 * inject additional questions here without modifying core inventory.
 		 *
-		 * @param array<int, array<string, mixed>> $out Inventory rows.
+		 * @param array<int, array<string, mixed>> $cached_pre_filter Inventory rows.
 		 */
-		return (array) apply_filters( 'statnive_advisor_questions', $out );
+		return (array) apply_filters( 'statnive_advisor_questions', $cached_pre_filter );
 	}
 
 	/**
 	 * Look up a single inventory row by ID. Returns null if not found.
+	 *
+	 * Uses `with_searchable()` so the filter-injected rows surface — but
+	 * since `with_searchable()`'s pre-filter inventory is memoised, the
+	 * cost per call is just the filter re-apply + a single linear scan.
 	 *
 	 * @param string $id Question ID.
 	 * @return array<string, mixed>|null

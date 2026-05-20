@@ -200,6 +200,20 @@ final class AdvisorController extends WP_REST_Controller {
 		$from = isset( $body['from'] ) ? (string) $body['from'] : gmdate( 'Y-m-d', strtotime( '-7 days' ) );
 		$to   = isset( $body['to'] ) ? (string) $body['to'] : gmdate( 'Y-m-d' );
 
+		// Reject inverted ranges explicitly. `BETWEEN $from AND $to` would
+		// silently return zero rows on the server (because MySQL's BETWEEN
+		// is `$from <= col AND col <= $to`), so the client would render an
+		// empty answer with no clue why. A 400 here surfaces the mistake.
+		if ( $from > $to ) {
+			return new WP_REST_Response(
+				[
+					'message' => 'from must be on or before to.',
+					'code'    => 'invalid_date_range',
+				],
+				400
+			);
+		}
+
 		$resolver = new QuestionResolver();
 		$result   = $resolver->resolve_batch(
 			$ids,
@@ -224,22 +238,39 @@ final class AdvisorController extends WP_REST_Controller {
 	}
 
 	/**
-	 * Format the per-question timing breakdown as an RFC 8673 `Server-Timing`
+	 * Format the per-question timing breakdown as a W3C `Server-Timing`
 	 * header value: `metric;dur=42;desc="db", metric;dur=8;desc="cache", …`
+	 *
+	 * Per the W3C Server-Timing spec the metric name should be unique within
+	 * the header. When the client sends the same question_id twice (or `total`
+	 * collides with a hypothetical `qN`), we disambiguate by appending a `__n`
+	 * suffix so DevTools renders each timing as a distinct row.
 	 *
 	 * @param array<int, array<string, mixed>> $entries Timing entries.
 	 */
 	private static function format_server_timing( array $entries ): string {
 		$parts = [];
+		$seen  = [];
 		foreach ( $entries as $e ) {
 			$id   = isset( $e['id'] ) ? (string) $e['id'] : 'q';
 			$ms   = isset( $e['ms'] ) ? (float) $e['ms'] : 0.0;
 			$desc = isset( $e['desc'] ) ? (string) $e['desc'] : '';
 
-			$id_safe   = preg_replace( '/[^A-Za-z0-9_\-]/', '', $id );
-			$desc_safe = preg_replace( '/[^A-Za-z0-9_\-]/', '', $desc );
+			$id_safe   = (string) preg_replace( '/[^A-Za-z0-9_\-]/', '', $id );
+			$desc_safe = (string) preg_replace( '/[^A-Za-z0-9_\-]/', '', $desc );
+			if ( '' === $id_safe ) {
+				$id_safe = 'q';
+			}
 
-			$entry = sprintf( '%s;dur=%.1f', $id_safe, $ms );
+			$count = $seen[ $id_safe ] ?? 0;
+			if ( $count > 0 ) {
+				$emit_id = $id_safe . '__' . $count;
+			} else {
+				$emit_id = $id_safe;
+			}
+			$seen[ $id_safe ] = $count + 1;
+
+			$entry = sprintf( '%s;dur=%.1f', $emit_id, $ms );
 			if ( '' !== $desc_safe ) {
 				$entry .= ';desc="' . $desc_safe . '"';
 			}

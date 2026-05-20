@@ -117,6 +117,27 @@ export type DateRange = 'today' | '7d' | '30d' | 'this-month' | 'last-month' | '
 export type AdvisorPlan = 'free' | 'paid';
 export type AdvisorConfidence = 'direct' | 'calculated' | 'proxy';
 
+/**
+ * Viz template hints emitted by the server. Mirrors the `Questions::VIZ_*`
+ * constants on the PHP side; both must stay in sync. The AnswerViz component
+ * dispatches on these values.
+ */
+export type AdvisorVizHint =
+	| 'kpi_tile'
+	| 'table'
+	| 'donut'
+	| 'bar'
+	| 'map'
+	| 'delta'
+	| 'line'
+	| 'live'
+	| 'live_table'
+	| 'status'
+	| 'funnel'
+	| 'anomaly'
+	| 'coming_soon'
+	| 'error';
+
 export interface AdvisorCategory {
 	id: string;
 	label: string;
@@ -133,7 +154,7 @@ export interface AdvisorQuestion {
 	keywords: string[];
 	plan: AdvisorPlan;
 	surface: string;
-	viz_hint: string;
+	viz_hint: AdvisorVizHint;
 	confidence: AdvisorConfidence;
 	depends_on_schema?: string;
 	searchable: string[];
@@ -155,7 +176,7 @@ export interface AdvisorAnswer {
 	id: string;
 	status: AdvisorAnswerStatus;
 	value: unknown;
-	viz: string;
+	viz: AdvisorVizHint;
 	source?: string | null;
 	plan?: AdvisorPlan;
 	confidence?: AdvisorConfidence;

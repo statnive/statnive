@@ -28,8 +28,11 @@ export function PinnedTab({ pinnedIds, maxPins, questions }: PinnedTabProps) {
 	// without firing its own request.
 	useAdvisorAnswers(pinnedIds, pinnedIds.length > 0);
 
+	// The parent QuestionTabs tabpanel already wraps content in
+	// `mx-auto max-w-7xl px-4 py-6`, so this component returns a Fragment
+	// and adds only its own layout spacing.
 	return (
-		<div className="mx-auto max-w-7xl">
+		<>
 			<SearchBox questions={questions} pinnedIds={pinnedIds} />
 
 			{pinnedQuestions.length === 0 ? (
@@ -54,13 +57,13 @@ export function PinnedTab({ pinnedIds, maxPins, questions }: PinnedTabProps) {
 					</p>
 				</>
 			)}
-		</div>
+		</>
 	);
 }
 
 function EmptyPinned() {
 	return (
-		<div className="mx-auto max-w-7xl px-5 py-10 text-center">
+		<div className="px-5 py-10 text-center">
 			<p className="text-base font-medium">
 				{__('No pinned questions yet.', 'statnive')}
 			</p>
