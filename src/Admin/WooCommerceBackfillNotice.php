@@ -187,10 +187,14 @@ final class WooCommerceBackfillNotice {
 		echo '<p>';
 		self::render_post_button( self::RETRY_ACTION, __( 'Try again', 'statnive' ), true );
 		echo '</p><p><em>';
+		// %s is a hardcoded literal HTML snippet (the CLI command shown as
+		// <code>) — never user input — so the printf below intentionally
+		// emits an unescaped substitution.
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		printf(
 			/* translators: %s: literal WP-CLI command, not translatable */
 			esc_html__( 'You can also run %s from the command line for a manual import.', 'statnive' ),
-			'<code>wp statnive wc-backfill</code>' // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			'<code>wp statnive wc-backfill</code>'
 		);
 		echo '</em></p></div>';
 	}
@@ -202,10 +206,12 @@ final class WooCommerceBackfillNotice {
 		echo '<div class="notice notice-warning"><p><strong>';
 		esc_html_e( "Statnive can't import your existing WooCommerce orders automatically on this host.", 'statnive' );
 		echo '</strong></p><p>';
+		// %s is a hardcoded literal HTML snippet — never user input.
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		printf(
 			/* translators: %s: literal WP-CLI command */
 			esc_html__( 'Background scheduling (Action Scheduler) is not available. Run %s from the command line to import historical orders.', 'statnive' ),
-			'<code>wp statnive wc-backfill</code>' // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			'<code>wp statnive wc-backfill</code>'
 		);
 		echo '</p></div>';
 	}
