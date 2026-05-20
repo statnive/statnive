@@ -17,11 +17,13 @@ final class AdminMenuManager {
 
 	/** First submenu reuses parent slug to suppress WP's duplicated parent label. */
 	public const MENU_SLUG_OVERVIEW = 'statnive';
+	public const MENU_SLUG_ASK      = 'statnive-ask';
 	public const MENU_SLUG_REVENUE  = 'statnive-revenue';
 	public const MENU_SLUG_SETTINGS = 'statnive-settings';
 
 	/** SPA hash-routes — match TanStack Router paths in resources/react/app.tsx. */
 	private const ROUTE_OVERVIEW = '/';
+	private const ROUTE_ASK      = '/ask';
 	private const ROUTE_REVENUE  = '/revenue';
 	private const ROUTE_SETTINGS = '/settings';
 
@@ -57,6 +59,15 @@ final class AdminMenuManager {
 			__( 'Overview', 'statnive' ),
 			Capability::VIEW_REPORTS,
 			self::MENU_SLUG_OVERVIEW,
+			[ self::class, 'render_page' ]
+		);
+
+		add_submenu_page(
+			self::MENU_SLUG_OVERVIEW,
+			__( 'Ask me!', 'statnive' ),
+			__( 'Ask me!', 'statnive' ),
+			Capability::VIEW_REPORTS,
+			self::MENU_SLUG_ASK,
 			[ self::class, 'render_page' ]
 		);
 
@@ -164,7 +175,7 @@ final class AdminMenuManager {
 		$page = sanitize_text_field( wp_unslash( $_GET['page'] ?? '' ) );
 		return in_array(
 			$page,
-			[ self::MENU_SLUG_OVERVIEW, self::MENU_SLUG_REVENUE, self::MENU_SLUG_SETTINGS ],
+			[ self::MENU_SLUG_OVERVIEW, self::MENU_SLUG_ASK, self::MENU_SLUG_REVENUE, self::MENU_SLUG_SETTINGS ],
 			true
 		);
 	}
@@ -181,6 +192,8 @@ final class AdminMenuManager {
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		$page = sanitize_text_field( wp_unslash( $_GET['page'] ?? '' ) );
 		switch ( $page ) {
+			case self::MENU_SLUG_ASK:
+				return self::ROUTE_ASK;
 			case self::MENU_SLUG_REVENUE:
 				return self::ROUTE_REVENUE;
 			case self::MENU_SLUG_SETTINGS:
