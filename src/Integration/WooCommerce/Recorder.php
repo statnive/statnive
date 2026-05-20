@@ -284,9 +284,9 @@ final class Recorder {
 			if ( ! method_exists( $coupon_item, 'get_code' ) ) {
 				continue;
 			}
-			$code            = (string) $coupon_item->get_code();
-			$discount_amount = (float) $coupon_item->get_discount();
-			$discount_tax    = (float) $coupon_item->get_discount_tax();
+			$code                           = (string) $coupon_item->get_code();
+			$discount_amount                = (float) $coupon_item->get_discount();
+			$discount_tax                   = (float) $coupon_item->get_discount_tax();
 			$by_code[ strtolower( $code ) ] = [
 				'code'            => $code,
 				'discount_amount' => $discount_amount,
@@ -449,6 +449,10 @@ final class Recorder {
 		);
 		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
 		unset( $table );
+
+		// Tell the backfill UX a row landed — keeps the gap-detection notice
+		// honest without waiting up to 5 minutes for the cache to expire.
+		BackfillService::invalidate_gap_transient();
 	}
 
 	/**
