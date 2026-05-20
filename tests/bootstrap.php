@@ -442,6 +442,19 @@ if ( ! function_exists( 'sanitize_textarea_field' ) ) {
 	}
 }
 
+if ( ! function_exists( 'delete_user_meta' ) ) {
+	function delete_user_meta( int $user_id, string $key ): bool {
+		unset( $GLOBALS['statnive_test_user_meta'][ $user_id ][ $key ] );
+		return true;
+	}
+}
+
+if ( ! function_exists( 'get_locale' ) ) {
+	function get_locale(): string {
+		return $GLOBALS['statnive_test_locale'] ?? 'en_US';
+	}
+}
+
 if ( ! function_exists( 'wp_generate_password' ) ) {
 	function wp_generate_password( int $length = 24, bool $special_chars = true, bool $extra_special_chars = false ): string {
 		return 'test_password_' . $length;

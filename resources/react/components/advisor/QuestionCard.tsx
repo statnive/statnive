@@ -86,6 +86,7 @@ export function QuestionCard({ question, pinned, startExpanded = false }: Questi
 					aria-expanded={expanded}
 					aria-controls={panelId}
 					aria-disabled={isComingSoon}
+					aria-label={question.question}
 					className={cn(
 						'flex flex-1 items-center gap-2 text-left text-sm font-medium',
 						isComingSoon && 'cursor-not-allowed text-muted-foreground',
