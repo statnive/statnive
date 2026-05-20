@@ -1,26 +1,38 @@
-# Statnive
+# Statnive — Privacy-first Analytics + WooCommerce Revenue
 
 **Simple stats, clear decisions.**
 
-[![Version](https://img.shields.io/badge/version-0.4.10-blue.svg)](https://statnive.com)
+[![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://statnive.com)
 [![PHP](https://img.shields.io/badge/PHP-8.1%2B-8892BF.svg)](https://www.php.net/)
 [![WordPress](https://img.shields.io/badge/WordPress-6.2%2B-21759B.svg)](https://wordpress.org/)
+[![WooCommerce](https://img.shields.io/badge/WooCommerce-7.0%2B-96588A.svg)](https://woocommerce.com/)
 [![License](https://img.shields.io/badge/license-GPL--2.0--or--later-green.svg)](https://www.gnu.org/licenses/gpl-2.0.html)
 
-Privacy-first analytics for WordPress. No cookies, no third-party transfers, no complicated dashboards — just the metrics that matter.
+Privacy-first analytics for WordPress, with a full **WooCommerce Revenue Report** built in. No cookies, no third-party transfers, no complicated dashboards — just the metrics that matter, plus the revenue lens for stores that need it.
 
 - **Cookieless by design** — No cookies, localStorage, or fingerprinting. Ever.
 - **Real-time dashboard** — Active visitors, active pages, and a live pageview feed.
+- **WooCommerce Revenue Report** — Net revenue, AOV, refund rate, channel attribution, top products, and the cart→checkout→purchase funnel — all inside WordPress, read-only against WooCommerce.
 - **AI source tracking** — Dedicated channel for ChatGPT, Claude, Gemini, Perplexity and 9 more.
 - **Self-hosted** — All data stays in your own WordPress database. Designed to support GDPR, CCPA and APPI compliance.
 
 ## Features
 
 ### Analytics Dashboard
-- **8 dashboard screens**: Overview, Pages, Referrers, Geography, Devices, Languages, Real-time, Settings
+- **Three top-level admin pages**: Overview (with Pages, Referrers, Geography, Devices, Languages, Real-time tabs), Revenue Report, Settings
 - Real-time visitor counter and live pageview feed
 - Comparison mode (current vs previous period)
 - CSV export for all data views
+
+### WooCommerce Revenue Report
+- **Headline KPIs**: net revenue, orders, AOV, conversion rate, refund rate — with period-over-period deltas
+- **Revenue by channel** — Organic Search, Paid Search, Social, Paid Social, Email, Direct, Referral, AI Assistants
+- **Top products** ranked by revenue, with units and per-product trend
+- **Cart → checkout → purchase funnel** with named drop-off rates
+- **Zero-touch backfill** — historical WooCommerce orders are imported automatically the first time you open Statnive on a store with existing orders, via Action Scheduler in the background. No CLI required (but `wp statnive wc-backfill` is available if you prefer).
+- **HPOS + Block Checkout compatible** — read-only against WooCommerce; the Recorder only ever calls `$order->get_*()` getters and never writes to a WooCommerce table or post meta.
+- **Attribution from WooCommerce 8.5+ Order Attribution** — UTM, referrer, device, session — snapshotted at order record time, never live-joined.
+- **No setup, no separate license, no tracking code to add** — install on a WooCommerce store and the Revenue tab works.
 
 ### Privacy & Compliance
 - Cookieless tracking with daily-rotating SHA-256 salt
@@ -115,7 +127,7 @@ composer phpcs            # WordPress Coding Standards
 | **Backend** | PHP 8.1+, WordPress Plugin API, PSR-4 autoloading, service container |
 | **Frontend** | React 18, TypeScript, TanStack Router/Query, Tailwind CSS, shadcn/ui, Recharts |
 | **Tracker** | Vanilla JS, IIFE bundle (<5KB gzipped), compile-time feature flags |
-| **Database** | 21+ normalized tables, star schema, binary visitor hashes, pre-aggregated summaries |
+| **Database** | 26 normalized tables (21 analytics + 5 WooCommerce: orders, attribution, items, refunds, coupons), star schema, binary visitor hashes, pre-aggregated summaries, DECIMAL(19,4) money columns |
 | **Privacy** | SHA-256 hashing, daily-rotating CSPRNG salt, zero persistent PII |
 
 ## License model

@@ -1,4 +1,4 @@
-=== Statnive – Simple, Real-time, Privacy-first Web Analytics ===
+=== Statnive – Privacy-first Web Analytics + WooCommerce Revenue Report ===
 Contributors: parhumm
 Tags: analytics, privacy, statistics, gdpr, cookieless
 Requires at least: 6.2
@@ -8,27 +8,29 @@ Stable tag: 1.0.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Privacy-first WordPress analytics — cookieless, self-hosted, real-time. A simple Google Analytics alternative with GeoIP and AI-source tracking.
+Privacy-first WordPress analytics with WooCommerce revenue tracking — cookieless, self-hosted, real-time. GeoIP and AI-source attribution.
 
 == Description ==
 
-**The privacy-first analytics plugin for WordPress.**
+**The privacy-first analytics plugin for WordPress — now with a full WooCommerce Revenue Report.**
 
-See exactly who visits your site, where they come from, and what they do — without cookies, third-party trackers, or sending visitor data to anyone. All analytics live in your own WordPress database.
+See exactly who visits your site, where they come from, what they do, and — on WooCommerce stores — how that converts into revenue. No cookies, no third-party trackers, no visitor data sent anywhere. All analytics and revenue data live in your own WordPress database.
 
 Open source under GPLv2. Self-hosted in your own database — nothing ever leaves your server.
 
-Install, activate, open Statnive — your dashboard fills up within minutes. No tracking code to paste, no account to create.
+Install, activate, open Statnive — your dashboard fills up within minutes. No tracking code to paste, no account to create. If WooCommerce is active, existing orders are auto-imported in the background so the Revenue Report fills in within minutes.
 
 = Why Statnive? =
 
 * **No cookies. No fingerprinting. No third-party transfers.** Designed to support GDPR, CCPA, and APPI compliance.
 * **Honors GPC and DNT** server-side, integrates with the WordPress Consent API.
 * **Daily-rotating salted hashes** — cross-day and cross-site tracking are mathematically impossible.
-* **Eight focused dashboard pages.** No clutter, no upsells.
+* **One plugin for analytics AND WooCommerce revenue** — no separate add-on, no separate license, no clutter, no upsells.
 
 = Key Features =
 
+* **WooCommerce Revenue Report** — Net revenue, orders, AOV, conversion rate, refund rate (with period-over-period deltas) · revenue by channel (8 channels including AI Assistants) · top products · cart→checkout→purchase funnel with named drop-off rates. Built on WooCommerce 8.5+ Order Attribution; HPOS + Block Checkout compatible; read-only against WooCommerce.
+* **Zero-touch backfill for existing stores** — On a WooCommerce store with existing orders, Statnive auto-imports your history in the background via Action Scheduler the first time you open the Revenue Report. No CLI required (but `wp statnive wc-backfill` is also available).
 * **Real-time** — Active visitor count, active pages, live pageview feed.
 * **Smart channel grouping** — Direct, Organic Search, Social Media, Email, Referral, Paid Search, Paid Social, and a dedicated **AI Assistants** channel for ChatGPT, Claude, Gemini, Perplexity, Copilot, NotebookLM, Meta AI, Le Chat, Deepseek, You, iAsk, Jasper, and Writesonic.
 * **Custom events + engagement** — Link clicks (and tagged button clicks via `statnive-event-*` classes), form submissions, downloads, outbound links, time on page, scroll depth.
@@ -36,7 +38,7 @@ Install, activate, open Statnive — your dashboard fills up within minutes. No 
 * **Geography in tiers** — Zero-config timezone country mapping; optional CDN headers; optional one-click DB-IP city download (free); optional MaxMind GeoLite2.
 * **Configurable retention** — 30 / 90 / 180 / 365 days, or Forever. Daily WP-Cron purge.
 * **WordPress Privacy API** — Personal-data export and erase registered automatically.
-* **WP-CLI** — `wp statnive cron run` for sites with `DISABLE_WP_CRON`.
+* **WP-CLI** — `wp statnive cron run` for sites with `DISABLE_WP_CRON`; `wp statnive wc-backfill` for manual WooCommerce imports.
 
 Source code at [github.com/statnive/statnive](https://github.com/statnive/statnive). Learn more at [statnive.com](https://statnive.com).
 
@@ -68,7 +70,9 @@ In your WordPress database, in tables prefixed `statnive_`. Nothing leaves your 
 
 = Does it work with WooCommerce? =
 
-Statnive tracks pageviews, events, sessions, and referrers on WooCommerce stores like any other WordPress site. Dedicated WooCommerce revenue tracking with Revenue per Visitor (RPV) is on the roadmap.
+Yes — Statnive ships a full WooCommerce Revenue Report. Net revenue, orders, AOV, refund rate, revenue by channel (UTM + referrer + AI assistants), top products, and the cart → checkout → purchase funnel — all inside WordPress, on the **Statnive → Revenue Report** page. The Revenue Report is read-only against WooCommerce (the Recorder only ever calls `$order->get_*()` getters; it never writes to a WooCommerce table or order meta) and is compatible with HPOS and Block Checkout.
+
+If you install Statnive on a store that already has orders, the historical data is imported automatically in the background via Action Scheduler. No CLI required, but `wp statnive wc-backfill` is available if you prefer to drive it manually.
 
 = How much does it slow down my site? =
 
