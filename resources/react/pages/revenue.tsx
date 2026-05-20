@@ -293,7 +293,13 @@ const STEP_LABELS: Record<string, string> = {
 
 function FunnelCard({ data, isLoading }: FunnelCardProps) {
 	const steps = data?.steps ?? [];
-	const max = steps[0]?.sessions ?? 1;
+	// Anchor every bar to the LARGEST step (not just step 0) so the funnel
+	// still renders sensibly when the tracker hasn't captured product-view
+	// events yet but orders ARE present from the backfill — in that case
+	// "Completed purchase" is the max, gets 100% width, and the zero-event
+	// rows render as the full funnel drop (0% width). When step 0 is the
+	// max (healthy funnel) the layout is identical to before.
+	const max = Math.max( ...steps.map( ( s ) => s.sessions ), 1 );
 	return (
 		<section className="rounded-lg border border-border bg-card">
 			<header className="flex items-baseline justify-between border-b border-border px-5 py-4">
