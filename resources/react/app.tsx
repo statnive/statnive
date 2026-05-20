@@ -15,6 +15,7 @@ import { GeographyPage } from '@/pages/geography';
 import { DevicesPage } from '@/pages/devices';
 import { LanguagesPage } from '@/pages/languages';
 import { RealtimePage } from '@/pages/realtime';
+import { RevenuePage } from '@/pages/revenue';
 import { SettingsPage } from '@/pages/settings';
 import type { DateRange } from '@/types/api';
 
@@ -88,6 +89,12 @@ const realtimeRoute = createRoute({
 	component: RealtimePage,
 });
 
+const revenueRoute = createRoute({
+	getParentRoute: () => rootRoute,
+	path: '/revenue',
+	component: RevenuePage,
+});
+
 const settingsRoute = createRoute({
 	getParentRoute: () => rootRoute,
 	path: '/settings',
@@ -102,8 +109,21 @@ const routeTree = rootRoute.addChildren([
 	devicesRoute,
 	languagesRoute,
 	realtimeRoute,
+	revenueRoute,
 	settingsRoute,
 ]);
+
+// Set hash before router init so initialRoute is picked up on first render,
+// bypassing a post-mount navigate. replaceState avoids firing hashchange.
+const initialRoute = window.StatniveDashboard?.initialRoute;
+if (
+	typeof initialRoute === 'string' &&
+	initialRoute.length > 0 &&
+	initialRoute !== '/' &&
+	(window.location.hash === '' || window.location.hash === '#/')
+) {
+	window.history.replaceState(null, '', `#${initialRoute}`);
+}
 
 // Use hash history since we're inside WP admin (single admin page).
 const hashHistory = createHashHistory();

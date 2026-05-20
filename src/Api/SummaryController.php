@@ -11,6 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 use Statnive\Api\Concerns\CachesResponses;
 use Statnive\Api\Concerns\ValidatesDateRange;
 use Statnive\Database\TableRegistry;
+use Statnive\Capability;
 use WP_REST_Controller;
 use WP_REST_Request;
 use WP_REST_Response;
@@ -79,7 +80,7 @@ final class SummaryController extends WP_REST_Controller {
 	 * @return bool
 	 */
 	public function get_items_permissions_check( $request ): bool {
-		return current_user_can( 'manage_options' );
+		return Capability::can_view_reports();
 	}
 
 	/**

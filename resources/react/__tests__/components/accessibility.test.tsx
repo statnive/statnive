@@ -40,6 +40,7 @@ vi.mock('lucide-react', () => {
 		Monitor: Icon,
 		Languages: Icon,
 		Activity: Icon,
+		DollarSign: Icon,
 		Settings: Icon,
 	};
 });

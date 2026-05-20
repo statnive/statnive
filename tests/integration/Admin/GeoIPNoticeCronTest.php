@@ -21,7 +21,7 @@ defined( 'ABSPATH' ) || define( 'ABSPATH', dirname( __DIR__, 6 ) . '/' );
  *  - Fresh heartbeats silence the notice (managed-host case).
  *  - The notice contains the §25 cause / fix / auto-action triplet plus
  *    the §28 "Run cleanup now" form button and a valid nonce.
- *  - The page-scope guard at ReactHandler::HOOK_SUFFIX is honoured.
+ *  - The page-scope guard at ReactHandler::HOOK_SUFFIXES is honoured.
  *
  * Mirrors the AdminAssetScopeTest pattern — the integration test job is
  * currently gated off in CI (PHPUnit 11 vs the WP test framework) but
@@ -48,7 +48,7 @@ final class GeoIPNoticeCronTest extends WP_UnitTestCase {
 		}
 
 		// Force a Statnive admin screen so the notice's own page guard passes.
-		set_current_screen( ReactHandler::HOOK_SUFFIX );
+		set_current_screen( ReactHandler::HOOK_SUFFIXES[0] );
 	}
 
 	public function tear_down(): void {

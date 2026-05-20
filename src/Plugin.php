@@ -14,9 +14,11 @@ use Statnive\Container\CoreServiceProvider;
 use Statnive\Container\PrivacyServiceProvider;
 use Statnive\Container\ServiceContainer;
 use Statnive\Container\ServiceProvider;
+use Statnive\Container\WooCommerceServiceProvider;
 use Statnive\Cron\CronRegistrar;
 use Statnive\Database\DatabaseFactory;
 use Statnive\Database\Migrator;
+use Statnive\Integration\WooCommerce\Detector as WooCommerceDetector;
 
 /**
  * Plugin bootstrap class.
@@ -42,6 +44,7 @@ final class Plugin {
 		AnalyticsServiceProvider::class,
 		PrivacyServiceProvider::class,
 		AdminServiceProvider::class,
+		WooCommerceServiceProvider::class,
 	];
 
 	/**
@@ -64,9 +67,18 @@ final class Plugin {
 		// Database schema migrations (runs on plugins_loaded, bails fast when nothing pending).
 		Migrator::init();
 
+		// Synthetic capability used by every admin page + REST endpoint.
+		// Resolves to view_woocommerce_reports OR manage_options so admins
+		// on non-WooCommerce sites still see the Statnive menu.
+		Capability::init();
+
+		// Declare HPOS + Block Checkout compatibility before WC boots.
+		WooCommerceDetector::init();
+
 		// WP-CLI commands (loaded only when WP-CLI is the SAPI).
 		if ( defined( 'WP_CLI' ) && WP_CLI ) {
 			\WP_CLI::add_command( 'statnive cron', \Statnive\Cli\CronCommand::class );
+			\WP_CLI::add_command( 'statnive wc-backfill', \Statnive\Cli\WooCommerceBackfillCommand::class );
 		}
 
 		self::register_hooks();

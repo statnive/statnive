@@ -15,6 +15,7 @@ import {
 	Monitor,
 	Languages,
 	Activity,
+	DollarSign,
 	Settings,
 } from 'lucide-react';
 
@@ -26,6 +27,7 @@ const navItems = [
 	{ to: '/devices', label: 'Devices', icon: Monitor },
 	{ to: '/languages', label: 'Languages', icon: Languages },
 	{ to: '/realtime', label: 'Real-time', icon: Activity },
+	{ to: '/revenue', label: 'Revenue', icon: DollarSign },
 	{ to: '/settings', label: 'Settings', icon: Settings },
 ] as const;
 
