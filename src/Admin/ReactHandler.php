@@ -35,6 +35,7 @@ final class ReactHandler {
 	 */
 	public const HOOK_SUFFIXES = [
 		'toplevel_page_statnive',
+		'statnive_page_statnive-ask',
 		'statnive_page_statnive-revenue',
 		'statnive_page_statnive-settings',
 	];
