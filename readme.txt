@@ -4,7 +4,7 @@ Tags: analytics, privacy, statistics, gdpr, cookieless
 Requires at least: 6.2
 Tested up to: 6.9
 Requires PHP: 8.1
-Stable tag: 1.0.0-dev
+Stable tag: 1.0.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -144,6 +144,9 @@ No visitor data is ever sent to any external service. All analytics data remains
 All analytics data stays in your WordPress database. Raw IPs are used only for the optional GeoIP lookup and are never persisted. Statnive registers with the WordPress Privacy API for personal-data export and erasure.
 
 == Changelog ==
+
+= 1.0.0 - 2026-05-20 =
+* New: WooCommerce Revenue Report (v1.0.0).
 
 = 0.4.13 - 2026-05-13 =
 * Changed: PHP floor raised from 8.0 to 8.1 (PHP 8.0 EOL was Nov 2023).

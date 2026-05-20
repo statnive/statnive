@@ -1,6 +1,6 @@
 {
 	"name": "statnive",
-	"version": "1.0.0-dev",
+	"version": "1.0.0",
 	"private": true,
 	"license": "GPL-2.0-or-later",
 	"description": "Simple stats, clear decisions. Privacy-first analytics for WordPress.",
