@@ -1,4 +1,4 @@
-=== Statnive – Privacy-first Web Analytics + WooCommerce Revenue Report ===
+=== Statnive – Privacy-first Analytics + Revenue Reports for WooCommerce ===
 Contributors: parhumm
 Tags: analytics, privacy, statistics, gdpr, cookieless
 Requires at least: 6.2

@@ -1,4 +1,4 @@
-# Statnive — Privacy-first Analytics + WooCommerce Revenue
+# Statnive — Privacy-first Analytics + Revenue Reports for WooCommerce
 
 **Simple stats, clear decisions.**
 
