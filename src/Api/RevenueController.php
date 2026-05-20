@@ -11,6 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 use Statnive\Api\Concerns\CachesResponses;
 use Statnive\Api\Concerns\ValidatesDateRange;
 use Statnive\Capability;
+use Statnive\Integration\WooCommerce\BackfillService;
 use Statnive\Integration\WooCommerce\Currency;
 use Statnive\Integration\WooCommerce\Detector;
 use Statnive\Integration\WooCommerce\ReportQueryService;
@@ -61,6 +62,18 @@ final class RevenueController extends WP_REST_Controller {
 				[
 					'methods'             => WP_REST_Server::READABLE,
 					'callback'            => [ $this, 'get_wc_status' ],
+					'permission_callback' => [ $this, 'permission_check' ],
+				],
+			]
+		);
+
+		register_rest_route(
+			$this->namespace,
+			'/' . self::BASE . '/backfill',
+			[
+				[
+					'methods'             => WP_REST_Server::CREATABLE,
+					'callback'            => [ $this, 'trigger_backfill' ],
 					'permission_callback' => [ $this, 'permission_check' ],
 				],
 			]
@@ -182,10 +195,33 @@ final class RevenueController extends WP_REST_Controller {
 				'attribution_enabled' => $status['attribution'],
 				'min_wc_required'     => $status['min_required'],
 				'recorder_failures'   => $failures,
+				'backfill'            => BackfillService::status_payload(),
 			],
 			null,
 			null
 		);
+	}
+
+	/**
+	 * POST /statnive/v1/revenue/backfill — manual re-trigger.
+	 *
+	 * The job auto-starts on first admin pageview when a gap is detected,
+	 * so this endpoint exists mostly for `failed` recovery and power-user
+	 * use. Idempotent: if a job is already pending/running, returns 409
+	 * with the current state.
+	 */
+	public function trigger_backfill(): WP_REST_Response {
+		$result  = BackfillService::start();
+		$payload = [
+			'ok'    => (bool) $result['ok'],
+			'state' => $result['state'],
+		];
+		if ( isset( $result['reason'] ) ) {
+			$payload['reason'] = $result['reason'];
+		}
+		$response = $this->envelope( $payload, null, null );
+		$response->set_status( (int) $result['http_status'] );
+		return $response;
 	}
 
 	/**

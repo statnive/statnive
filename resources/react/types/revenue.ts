@@ -17,6 +17,26 @@ export interface RevenueEnvelope<T> {
 	meta: RevenueMeta;
 }
 
+export type BackfillStatus = 'idle' | 'pending' | 'running' | 'done' | 'failed';
+
+export interface BackfillState {
+	status: BackfillStatus;
+	total: number;
+	processed: number;
+	refunds: number;
+	started_at: string | null;
+	finished_at: string | null;
+	last_error: string | null;
+}
+
+export interface BackfillPayload {
+	has_gap: boolean;
+	orders_in_wc: number | null;
+	orders_in_statnive: number;
+	action_scheduler_available: boolean;
+	state: BackfillState;
+}
+
 export interface WcStatus {
 	woocommerce_active: boolean;
 	woocommerce_version: string;
@@ -24,6 +44,13 @@ export interface WcStatus {
 	attribution_enabled: boolean;
 	min_wc_required: string;
 	recorder_failures: number;
+	backfill: BackfillPayload;
+}
+
+export interface BackfillTriggerResponse {
+	ok: boolean;
+	state: BackfillState;
+	reason?: string;
 }
 
 export interface RevenueSummary {

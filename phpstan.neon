@@ -35,7 +35,6 @@ parameters:
         -
             message: "#(Class|Parameter \\$[a-zA-Z_]+ of method [^ ]+ has invalid type|Method [^ ]+ has invalid return type|Call to method [^ ]+ on an unknown class) WC_Order(_Refund|_Item_Product)?( not found\\.|\\.)#"
             paths:
-                - src/Cli/*
                 - src/Integration/WooCommerce/*
         -
             message: "#Cannot call method (get_quantity|get_total|get_name|get_subtotal|get_total_tax|get_discount|get_discount_tax)\\(\\) on class-string\\|object(?:\\|WC_Order_Item_Product)?\\.#"

@@ -8,8 +8,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+use Statnive\Integration\WooCommerce\BackfillService;
 use Statnive\Integration\WooCommerce\Detector;
-use Statnive\Integration\WooCommerce\Recorder;
 use WP_CLI;
 
 /**
@@ -132,31 +132,27 @@ final class WooCommerceBackfillCommand {
 				break;
 			}
 
-			foreach ( $ids as $order_id ) {
-				if ( $limit > 0 && $processed >= $limit ) {
-					break 2;
+			// Honor the --limit flag by trimming the batch BEFORE handing it
+			// to the shared service (which doesn't know about that flag).
+			if ( $limit > 0 ) {
+				$remaining = $limit - $processed;
+				if ( $remaining <= 0 ) {
+					break;
 				}
-
-				$order_id = (int) $order_id;
-
-				// Re-record the order (idempotent on wc_order_id).
-				Recorder::on_paid_or_paying( $order_id );
-
-				// Also backfill any refunds attached to this order.
-				if ( function_exists( 'wc_get_order' ) ) {
-					$order = wc_get_order( $order_id );
-					if ( $order instanceof \WC_Order ) {
-						foreach ( $order->get_refunds() as $refund ) {
-							if ( method_exists( $refund, 'get_id' ) ) {
-								Recorder::on_refund( $order_id, (int) $refund->get_id() );
-								++$refunds;
-							}
-						}
-					}
+				if ( count( $ids ) > $remaining ) {
+					$ids = array_slice( $ids, 0, $remaining );
 				}
+			}
 
-				++$processed;
+			$result     = BackfillService::process_order_ids( array_map( 'intval', $ids ) );
+			$processed += (int) $result['processed'];
+			$refunds   += (int) $result['refunds'];
+			for ( $tick = 0; $tick < (int) $result['processed']; $tick++ ) {
 				$progress->tick();
+			}
+
+			if ( $limit > 0 && $processed >= $limit ) {
+				break;
 			}
 
 			++$page;

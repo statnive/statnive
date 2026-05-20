@@ -7,6 +7,7 @@ import { useDateRange } from '@/hooks/use-date-range';
 import { DateRangePicker } from '@/components/shared/date-range-picker';
 import { useKeyboardShortcuts } from '@/hooks/use-keyboard-shortcuts';
 import { registerWpCommands } from '@/lib/wp-commands';
+import { SettingsActions } from './settings-actions';
 import {
 	BarChart3,
 	FileText,
@@ -19,7 +20,11 @@ import {
 	Settings,
 } from 'lucide-react';
 
-const navItems = [
+// Per-page nav scoping. Layout chrome (header bar + tab strip) stays the
+// same on every page — only the tab items and the right-slot content
+// (date picker vs settings CTAs) vary. New top-level pages added in
+// future plug in by adding a branch to useScopedNav().
+const OVERVIEW_NAV = [
 	{ to: '/', label: 'Overview', icon: BarChart3 },
 	{ to: '/pages', label: 'Pages', icon: FileText },
 	{ to: '/referrers', label: 'Referrers', icon: Share2 },
@@ -27,9 +32,37 @@ const navItems = [
 	{ to: '/devices', label: 'Devices', icon: Monitor },
 	{ to: '/languages', label: 'Languages', icon: Languages },
 	{ to: '/realtime', label: 'Real-time', icon: Activity },
-	{ to: '/revenue', label: 'Revenue', icon: DollarSign },
+] as const;
+
+const REVENUE_NAV = [
+	{ to: '/revenue', label: 'Revenue Overview', icon: DollarSign },
+] as const;
+
+const SETTINGS_NAV = [
 	{ to: '/settings', label: 'Settings', icon: Settings },
 ] as const;
+
+type NavItem = { to: string; label: string; icon: typeof BarChart3 };
+
+interface ScopedNav {
+	navItems: ReadonlyArray<NavItem>;
+	showDatePicker: boolean;
+	headerSlot: ReactNode;
+}
+
+function deriveScopedNav(path: string): ScopedNav {
+	if (path.startsWith('/settings')) {
+		return { navItems: SETTINGS_NAV, showDatePicker: false, headerSlot: <SettingsActions /> };
+	}
+	if (path.startsWith('/revenue')) {
+		return { navItems: REVENUE_NAV, showDatePicker: true, headerSlot: null };
+	}
+	return {
+		navItems: OVERVIEW_NAV,
+		showDatePicker: !path.startsWith('/realtime'),
+		headerSlot: null,
+	};
+}
 
 interface DashboardLayoutProps {
 	children: ReactNode;
@@ -43,8 +76,10 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
 
 	const { range, setDateRange } = useDateRange();
 
-	const showDatePicker =
-		!currentPath.startsWith('/realtime') && !currentPath.startsWith('/settings');
+	const { navItems, showDatePicker, headerSlot } = useMemo(
+		() => deriveScopedNav(currentPath),
+		[currentPath],
+	);
 
 	// Register WP Command Palette commands on mount.
 	useEffect(() => {
@@ -56,7 +91,9 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
 		);
 	}, [router]);
 
-	// Keyboard shortcuts: 1-8 for tab navigation.
+	// Keyboard shortcuts: numeric keys 1-N for the tabs visible on this
+	// page. Auto-rescopes per page so the user doesn't get a stale
+	// shortcut mapping when navigating between top-level pages.
 	const shortcuts = useMemo(
 		() =>
 			Object.fromEntries(
@@ -69,7 +106,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
 						}),
 				]),
 			),
-		[router],
+		[router, navItems],
 	);
 	useKeyboardShortcuts(shortcuts);
 
@@ -101,7 +138,11 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
 							— {siteTitle}
 						</span>
 					</div>
-					{showDatePicker && <DateRangePicker value={range} onChange={setDateRange} />}
+					{showDatePicker ? (
+						<DateRangePicker value={range} onChange={setDateRange} />
+					) : (
+						headerSlot
+					)}
 				</div>
 			</header>
 

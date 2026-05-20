@@ -45,9 +45,11 @@ wp_clear_scheduled_hook( 'statnive_weekly_geoip_update' );
 wp_clear_scheduled_hook( 'statnive_import_batch' );
 // v1.0.0 — WooCommerce rollup hooks.
 wp_clear_scheduled_hook( 'statnive_rollup_daily' );
-// Action Scheduler hook (no-op when AS isn't loaded).
+// Action Scheduler hooks (no-op when AS isn't loaded). Both calls are
+// scoped to Statnive's own hook names — never touches WC's AS queues.
 if ( function_exists( 'as_unschedule_all_actions' ) ) {
 	as_unschedule_all_actions( 'statnive/rollup/daily' );
+	as_unschedule_all_actions( 'statnive/wc/backfill/chunk', null, 'statnive' );
 }
 
 // ----------------------------------------------------------------------------
@@ -142,3 +144,6 @@ delete_option( 'statnive_db_version' );
 delete_option( 'statnive_version' );
 delete_option( 'statnive_delete_data_on_uninstall' );
 delete_option( 'statnive_email_pepper' );
+// v1.0.0 — WooCommerce backfill state + cache.
+delete_option( 'statnive_wc_backfill_state' );
+delete_transient( 'statnive_wc_backfill_gap' );

@@ -42,6 +42,8 @@ vi.mock('lucide-react', () => {
 		Activity: Icon,
 		DollarSign: Icon,
 		Settings: Icon,
+		Star: Icon,
+		Bug: Icon,
 	};
 });
 
@@ -95,18 +97,23 @@ describe('DashboardLayout accessibility', () => {
 		expect(nav).toBeInTheDocument();
 	});
 
-	// All 8 nav tabs present
-	it('renders all 8 navigation tabs', () => {
+	// The Overview-domain tabs are visible on the default ("/") route.
+	// Revenue Overview and Settings are scoped to their own pages (see
+	// dashboard-layout.test.tsx for the cross-page nav-scoping coverage).
+	it('renders the 7 Overview-domain navigation tabs on /', () => {
 		render(
 			<DashboardLayout>
 				<p>Dashboard content</p>
 			</DashboardLayout>,
 		);
 
-		const expectedTabs = ['Overview', 'Pages', 'Referrers', 'Geography', 'Devices', 'Languages', 'Real-time', 'Settings'];
+		const expectedTabs = ['Overview', 'Pages', 'Referrers', 'Geography', 'Devices', 'Languages', 'Real-time'];
 		expectedTabs.forEach((tab) => {
 			expect(screen.getByText(tab)).toBeInTheDocument();
 		});
+		// Revenue Overview + Settings live in their own page scopes.
+		expect(screen.queryByText('Revenue Overview')).not.toBeInTheDocument();
+		expect(screen.queryByText('Settings')).not.toBeInTheDocument();
 	});
 
 	// Active tab has aria-current="page"
