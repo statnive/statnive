@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { __, sprintf } from '@wordpress/i18n';
+import { __ } from '@wordpress/i18n';
 import { X, Pin } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { AnswerViz } from './AnswerViz';
@@ -165,15 +165,6 @@ export function AnswerModal({ question, pinned, onClose }: AnswerModalProps) {
 								? __('Pinned', 'statnive')
 								: __('Pin this question', 'statnive')}
 						</button>
-						{answer?.source && (
-							<span className="text-[11px] text-muted-foreground/75">
-								{sprintf(
-									/* translators: %s: REST endpoint path */
-									__('Source: %s', 'statnive'),
-									answer.source,
-								)}
-							</span>
-						)}
 					</div>
 				)}
 			</div>

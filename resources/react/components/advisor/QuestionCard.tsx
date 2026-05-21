@@ -255,13 +255,6 @@ function ExpandedBody({
 	return (
 		<div className="px-15 pb-6 pt-1">
 			<AnswerViz question={question} answer={answer} />
-			<div className="mt-4 border-t border-border/50 pt-3 text-[12px] text-muted-foreground/75">
-				{answer.source && (
-					<span>
-						{__('Source', 'statnive')}: <code className="text-[11px]">{answer.source}</code>
-					</span>
-				)}
-			</div>
 		</div>
 	);
 }
