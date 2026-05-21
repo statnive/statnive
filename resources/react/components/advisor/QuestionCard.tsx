@@ -225,7 +225,7 @@ function ComingSoonCaption({ question }: { question: AdvisorQuestion }) {
 			? __('Live in v1.1 — auto-enables when ready.', 'statnive')
 			: __('Unlocks in Statnive Growth v2.', 'statnive');
 	return (
-		<div className="px-5 pb-3 pt-0 text-[13px] text-muted-foreground/70">{reasonText}</div>
+		<div className="px-15 pb-3 pt-0 text-[13px] text-muted-foreground/70">{reasonText}</div>
 	);
 }
 
@@ -240,20 +240,20 @@ function ExpandedBody({
 }): ReactNode {
 	if (isLoading || !answer) {
 		return (
-			<div className="px-5 pb-6 pt-1">
+			<div className="px-15 pb-6 pt-1">
 				<div className="h-16 animate-pulse rounded bg-muted" />
 			</div>
 		);
 	}
 	if (answer.status === 'error') {
 		return (
-			<div className="px-5 pb-5 pt-1 text-sm text-destructive">
+			<div className="px-15 pb-5 pt-1 text-sm text-destructive">
 				{__("Couldn't load this answer.", 'statnive')}
 			</div>
 		);
 	}
 	return (
-		<div className="px-5 pb-6 pt-1">
+		<div className="px-15 pb-6 pt-1">
 			<AnswerViz question={question} answer={answer} />
 			<div className="mt-4 border-t border-border/50 pt-3 text-[12px] text-muted-foreground/75">
 				{answer.source && (
