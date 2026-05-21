@@ -928,9 +928,9 @@ final class QuestionResolver {
 		);
 
 		$out = [
-			'visitors' => (int) ( $row['visitors'] ?? 0 ),
-			'sessions' => (int) ( $row['sessions'] ?? 0 ),
-			'views'    => (int) ( $row['views'] ?? 0 ),
+			'visitors' => (int) $row['visitors'],
+			'sessions' => (int) $row['sessions'],
+			'views'    => (int) $row['views'],
 		];
 
 		if ( $from <= $today && $to >= $today ) {
@@ -1011,10 +1011,10 @@ final class QuestionResolver {
 		usort(
 			$series,
 			static function ( $a, $b ) use ( $asc ) {
-				$av = (int) ( $a['visitors'] ?? 0 );
-				$bv = (int) ( $b['visitors'] ?? 0 );
+				$av = (int) $a['visitors'];
+				$bv = (int) $b['visitors'];
 				if ( $av === $bv ) {
-					return strcmp( (string) ( $a['date'] ?? '' ), (string) ( $b['date'] ?? '' ) );
+					return strcmp( (string) $a['date'], (string) $b['date'] );
 				}
 				return $asc ? ( $av - $bv ) : ( $bv - $av );
 			}
@@ -1022,8 +1022,8 @@ final class QuestionResolver {
 
 		return array_map(
 			static fn( $r ) => [
-				'date'     => (string) ( $r['date'] ?? '' ),
-				'visitors' => (int) ( $r['visitors'] ?? 0 ),
+				'date'     => (string) $r['date'],
+				'visitors' => (int) $r['visitors'],
 			],
 			array_slice( $series, 0, 5 )
 		);
@@ -1088,12 +1088,12 @@ final class QuestionResolver {
 				ARRAY_A
 			);
 			if ( is_array( $today_row ) ) {
-				$out   = array_values( array_filter( $out, static fn( $r ) => ( $r['date'] ?? '' ) !== $today ) );
+				$out   = array_values( array_filter( $out, static fn( $r ) => $r['date'] !== $today ) );
 				$out[] = [
 					'date'     => $today,
-					'visitors' => (int) ( $today_row['visitors'] ?? 0 ),
-					'sessions' => (int) ( $today_row['sessions'] ?? 0 ),
-					'views'    => (int) ( $today_row['views'] ?? 0 ),
+					'visitors' => (int) $today_row['visitors'],
+					'sessions' => (int) $today_row['sessions'],
+					'views'    => (int) $today_row['views'],
 				];
 				usort( $out, static fn( $a, $b ) => strcmp( (string) $a['date'], (string) $b['date'] ) );
 			}
@@ -2329,11 +2329,11 @@ final class QuestionResolver {
 		$totals = [];
 		foreach ( $aggregated as $row ) {
 			$uri            = (string) ( $row['uri'] ?? '' );
-			$totals[ $uri ] = ( $totals[ $uri ] ?? 0 ) + (int) ( $row['views'] ?? 0 );
+			$totals[ $uri ] = ( $totals[ $uri ] ?? 0 ) + (int) $row['views'];
 		}
 		foreach ( $today_rows as $row ) {
 			$uri            = (string) ( $row['uri'] ?? '' );
-			$totals[ $uri ] = ( $totals[ $uri ] ?? 0 ) + (int) ( $row['views'] ?? 0 );
+			$totals[ $uri ] = ( $totals[ $uri ] ?? 0 ) + (int) $row['views'];
 		}
 		arsort( $totals, SORT_NUMERIC );
 		$totals = array_slice( $totals, 0, 10, true );

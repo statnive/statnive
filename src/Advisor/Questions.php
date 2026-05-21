@@ -224,7 +224,11 @@ final class Questions {
 	// identical (the literal string vs the same string verbatim).
 	// =================================================================
 
-	/** 12 questions */
+	/**
+	 * Inventory for the category (12 questions).
+	 *
+	 * @return array<int, array<string, mixed>>
+	 */
 	private static function traffic_overview(): array {
 		$cat = Categories::TRAFFIC_OVERVIEW;
 		return [
@@ -363,7 +367,11 @@ final class Questions {
 		];
 	}
 
-	/** 10 questions */
+	/**
+	 * Inventory for the category (10 questions).
+	 *
+	 * @return array<int, array<string, mixed>>
+	 */
 	private static function real_time_tracking_health(): array {
 		$cat = Categories::REAL_TIME_TRACKING_HEALTH;
 		return [
@@ -480,7 +488,11 @@ final class Questions {
 		];
 	}
 
-	/** 18 questions */
+	/**
+	 * Inventory for the category (18 questions).
+	 *
+	 * @return array<int, array<string, mixed>>
+	 */
 	private static function pages_and_content(): array {
 		$cat = Categories::PAGES_AND_CONTENT;
 		return [
@@ -505,7 +517,11 @@ final class Questions {
 		];
 	}
 
-	/** 16 questions */
+	/**
+	 * Inventory for the category (16 questions).
+	 *
+	 * @return array<int, array<string, mixed>>
+	 */
 	private static function referrers_and_channels(): array {
 		$cat = Categories::REFERRERS_AND_CHANNELS;
 		return [
@@ -528,7 +544,11 @@ final class Questions {
 		];
 	}
 
-	/** 15 questions */
+	/**
+	 * Inventory for the category (15 questions).
+	 *
+	 * @return array<int, array<string, mixed>>
+	 */
 	private static function campaigns_and_utm(): array {
 		$cat = Categories::CAMPAIGNS_AND_UTM;
 		return [
@@ -550,7 +570,11 @@ final class Questions {
 		];
 	}
 
-	/** 9 questions */
+	/**
+	 * Inventory for the category (9 questions).
+	 *
+	 * @return array<int, array<string, mixed>>
+	 */
 	private static function geography_and_language(): array {
 		$cat = Categories::GEOGRAPHY_AND_LANGUAGE;
 		return [
@@ -566,7 +590,11 @@ final class Questions {
 		];
 	}
 
-	/** 12 questions */
+	/**
+	 * Inventory for the category (12 questions).
+	 *
+	 * @return array<int, array<string, mixed>>
+	 */
 	private static function devices_and_browsers(): array {
 		$cat = Categories::DEVICES_AND_BROWSERS;
 		return [
@@ -585,7 +613,11 @@ final class Questions {
 		];
 	}
 
-	/** 8 questions */
+	/**
+	 * Inventory for the category (8 questions).
+	 *
+	 * @return array<int, array<string, mixed>>
+	 */
 	private static function engagement_and_quality(): array {
 		$cat = Categories::ENGAGEMENT_AND_QUALITY;
 		return [
@@ -600,7 +632,11 @@ final class Questions {
 		];
 	}
 
-	/** 15 questions — all Paid (WooCommerce-gated). */
+	/**
+	 * Inventory for the category (15 questions).
+	 *
+	 * @return array<int, array<string, mixed>>
+	 */
 	private static function revenue(): array {
 		$cat = Categories::REVENUE;
 		return [
@@ -622,7 +658,11 @@ final class Questions {
 		];
 	}
 
-	/** 5 questions — all Paid (Events + Privacy Audit are API-only today). */
+	/**
+	 * Inventory for the category (5 questions).
+	 *
+	 * @return array<int, array<string, mixed>>
+	 */
 	private static function events_and_privacy(): array {
 		$cat = Categories::EVENTS_AND_PRIVACY;
 		return [
