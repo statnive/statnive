@@ -94,20 +94,28 @@ final class Questions {
 	/**
 	 * Aggregate the full 120-question inventory.
 	 *
-	 * Memoised within a request: the inventory is deterministic (constant
-	 * strings + `__()` lookups), so we cache the assembled array. This
-	 * avoids re-evaluating the 98-case `translate_question_text()` switch
-	 * 120 times every time a caller hits the inventory (resolver `find()`,
-	 * REST endpoint, `valid_ids()`, `with_searchable()`).
+	 * Memoised per-locale within a request: the inventory is deterministic
+	 * for a given locale (constant strings + `__()` lookups), so we cache
+	 * the assembled array keyed on `determine_locale()`. This avoids re-
+	 * evaluating the 98-case `translate_question_text()` switch 120 times
+	 * every time a caller hits the inventory (resolver `find()`, REST
+	 * endpoint, `valid_ids()`, `with_searchable()`).
+	 *
+	 * Keying on locale is required because PHP-FPM workers are reused
+	 * across requests with different user locales (via `determine_locale()`
+	 * honouring per-user `locale` profile meta). A non-keyed static would
+	 * leak whichever language was first translated into all subsequent
+	 * requests on the same worker.
 	 *
 	 * @return array<int, array<string, mixed>>
 	 */
 	public static function all(): array {
-		static $cached = null;
-		if ( null !== $cached ) {
-			return $cached;
+		static $cached = [];
+		$locale        = function_exists( 'determine_locale' ) ? (string) determine_locale() : ( function_exists( 'get_locale' ) ? (string) get_locale() : 'en_US' );
+		if ( isset( $cached[ $locale ] ) ) {
+			return $cached[ $locale ];
 		}
-		$cached = array_merge(
+		$cached[ $locale ] = array_merge(
 			self::traffic_overview(),
 			self::real_time_tracking_health(),
 			self::pages_and_content(),
@@ -119,7 +127,7 @@ final class Questions {
 			self::revenue(),
 			self::events_and_privacy()
 		);
-		return $cached;
+		return $cached[ $locale ];
 	}
 
 	/**
@@ -130,15 +138,19 @@ final class Questions {
 	 * `apply_filters('statnive_advisor_questions', $list)` lets future PRs
 	 * inject questions via a filter (forward-compat per plan §G.2).
 	 *
-	 * The pre-filter enriched inventory is memoised so the bilingual
-	 * `searchable[]` array isn't rebuilt every call. The filter is still
-	 * re-applied each call so test mutations / runtime additions surface.
+	 * The pre-filter enriched inventory is memoised per-locale so the
+	 * bilingual `searchable[]` array isn't rebuilt every call. The filter
+	 * is still re-applied each call so test mutations / runtime additions
+	 * surface. Locale-keyed for the same reason as `all()` — a non-keyed
+	 * static leaks the first request's translations across PHP-FPM-worker
+	 * reuse.
 	 *
 	 * @return array<int, array<string, mixed>>
 	 */
 	public static function with_searchable(): array {
-		static $cached_pre_filter = null;
-		if ( null === $cached_pre_filter ) {
+		static $cached_pre_filter = [];
+		$locale                   = function_exists( 'determine_locale' ) ? (string) determine_locale() : ( function_exists( 'get_locale' ) ? (string) get_locale() : 'en_US' );
+		if ( ! isset( $cached_pre_filter[ $locale ] ) ) {
 			$cat_by_id = [];
 			foreach ( Categories::all() as $c ) {
 				$cat_by_id[ $c['id'] ] = $c;
@@ -162,7 +174,7 @@ final class Questions {
 				$q['searchable']  = array_values( array_unique( $searchable ) );
 				$out[]            = $q;
 			}
-			$cached_pre_filter = $out;
+			$cached_pre_filter[ $locale ] = $out;
 		}
 
 		/**
@@ -173,7 +185,7 @@ final class Questions {
 		 *
 		 * @param array<int, array<string, mixed>> $cached_pre_filter Inventory rows.
 		 */
-		return (array) apply_filters( 'statnive_advisor_questions', $cached_pre_filter );
+		return (array) apply_filters( 'statnive_advisor_questions', $cached_pre_filter[ $locale ] );
 	}
 
 	/**

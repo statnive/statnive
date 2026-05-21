@@ -455,6 +455,17 @@ if ( ! function_exists( 'get_locale' ) ) {
 	}
 }
 
+if ( ! function_exists( 'determine_locale' ) ) {
+	/**
+	 * Mirrors WordPress's `determine_locale()` for unit tests: returns the
+	 * user-level locale override (if set), falling back to the site locale.
+	 * Tests inject overrides via $GLOBALS['statnive_test_user_locale'].
+	 */
+	function determine_locale(): string {
+		return $GLOBALS['statnive_test_user_locale'] ?? get_locale();
+	}
+}
+
 if ( ! function_exists( 'wp_generate_password' ) ) {
 	function wp_generate_password( int $length = 24, bool $special_chars = true, bool $extra_special_chars = false ): string {
 		return 'test_password_' . $length;

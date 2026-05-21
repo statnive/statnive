@@ -122,8 +122,14 @@ final class AdvisorController extends WP_REST_Controller {
 	public function get_questions( WP_REST_Request $request ): WP_REST_Response {
 		unset( $request );
 
-		$locale    = function_exists( 'get_locale' ) ? get_locale() : 'en_US';
-		$cache_key = 'statnive_advisor_inv_v' . (int) get_option( 'statnive_cache_version', 0 ) . '_' . md5( $locale );
+		// REST resolves translations via `determine_locale()` (which honours
+		// per-user `locale` profile meta), so two users on the same site can
+		// receive different translations. Keying the transient on
+		// `get_locale()` would let user A's translated inventory leak to
+		// user B. Use `determine_locale()` to match what `__()` will return
+		// for this request.
+		$locale    = function_exists( 'determine_locale' ) ? determine_locale() : ( function_exists( 'get_locale' ) ? get_locale() : 'en_US' );
+		$cache_key = 'statnive_advisor_inv_v' . (int) get_option( 'statnive_cache_version', 0 ) . '_' . md5( (string) $locale );
 
 		$cached = get_transient( $cache_key );
 		if ( false !== $cached && is_array( $cached ) ) {
