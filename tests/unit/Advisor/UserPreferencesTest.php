@@ -78,8 +78,6 @@ final class UserPreferencesTest extends TestCase {
 	}
 
 	public function test_pin_appends_idempotently(): void {
-		// Start below cap so there's room to actually pin a new id.
-		UserPreferences::set( 7, [ 'q2', 'q41' ] );
 		$first  = UserPreferences::pin( 7, 'q42' );
 		$second = UserPreferences::pin( 7, 'q42' );
 		$this->assertContains( 'q42', $first );

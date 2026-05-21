@@ -29,11 +29,11 @@ final class UserPreferences {
 	/**
 	 * Maximum number of pinned questions per user (Free tier).
 	 *
-	 * Caps the home tab at 5 pins in v1. The Growth-tier unlock in
-	 * roadmap Phase 14 raises the ceiling to 20 alongside the Paid
+	 * Caps the home tab at 10 pins in v1. The Growth-tier unlock in
+	 * roadmap Phase 14 raises the ceiling to 50 alongside the Paid
 	 * question library — see jaan-to/outputs/ROADMAP-WP-STATNIVE.md.
 	 */
-	public const MAX_PINS = 5;
+	public const MAX_PINS = 10;
 
 	/**
 	 * Default pinned set applied when a user has no existing meta entry.

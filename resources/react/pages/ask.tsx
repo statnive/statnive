@@ -5,6 +5,7 @@ import { useAdvisorPreferences } from '@/hooks/use-advisor-preferences';
 import { QuestionTabs, PINNED_TAB_ID } from '@/components/advisor/QuestionTabs';
 import { PinnedTab } from '@/components/advisor/PinnedTab';
 import { CategoryTab } from '@/components/advisor/CategoryTab';
+import { PinCapHint } from '@/components/advisor/PinCapHint';
 
 /**
  * "Ask me!" — Statnive Advisor v1 page.
@@ -49,18 +50,21 @@ export function AskPage() {
 	}
 
 	const pinnedIds = prefs?.pinned_questions ?? [];
-	const maxPins = prefs?.max_pins ?? 5;
+	const maxPins = prefs?.max_pins ?? 10;
 
 	return (
-		<QuestionTabs categories={inv.categories} active={active} onChange={setActive}>
-			{active === PINNED_TAB_ID ? (
-				<PinnedTab pinnedIds={pinnedIds} maxPins={maxPins} questions={inv.questions} />
-			) : (
-				<CategoryTab
-					questions={questionsByCategory[active] ?? []}
-					pinnedIds={pinnedIds}
-				/>
-			)}
-		</QuestionTabs>
+		<>
+			<QuestionTabs categories={inv.categories} active={active} onChange={setActive}>
+				{active === PINNED_TAB_ID ? (
+					<PinnedTab pinnedIds={pinnedIds} maxPins={maxPins} questions={inv.questions} />
+				) : (
+					<CategoryTab
+						questions={questionsByCategory[active] ?? []}
+						pinnedIds={pinnedIds}
+					/>
+				)}
+			</QuestionTabs>
+			<PinCapHint />
+		</>
 	);
 }
