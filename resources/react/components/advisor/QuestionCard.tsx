@@ -59,11 +59,29 @@ export function QuestionCard({ question, pinned, startExpanded = false }: Questi
 				expanded && 'bg-muted/20',
 			)}
 		>
-			{/* Header row */}
-			<div className="flex items-center gap-3 px-6 py-4">
+			{/* Header row — the whole row is the expand target so clicks
+			    anywhere outside the pin button toggle the accordion. Keep
+			    the inner expand button for keyboard a11y (Tab → Enter). */}
+			<div
+				className={cn(
+					'flex items-center gap-3 px-6 py-4',
+					!isComingSoon && 'cursor-pointer',
+				)}
+				onClick={(e) => {
+					// Pin button (and anything inside it) owns its own click;
+					// bail so the expand toggle doesn't fire twice.
+					const target = e.target as HTMLElement;
+					if (target.closest('[data-statnive-pin]')) return;
+					toggleExpand();
+				}}
+			>
 				<button
 					type="button"
-					onClick={togglePin}
+					data-statnive-pin
+					onClick={(e) => {
+						e.stopPropagation();
+						togglePin();
+					}}
 					aria-pressed={pinned}
 					aria-label={
 						pinned
@@ -90,7 +108,12 @@ export function QuestionCard({ question, pinned, startExpanded = false }: Questi
 				<button
 					type="button"
 					id={headingId}
-					onClick={toggleExpand}
+					onClick={(e) => {
+						// Stop propagation so the outer row's click handler
+						// doesn't fire a second time and cancel the toggle.
+						e.stopPropagation();
+						toggleExpand();
+					}}
 					aria-expanded={expanded}
 					aria-controls={panelId}
 					aria-disabled={isComingSoon}

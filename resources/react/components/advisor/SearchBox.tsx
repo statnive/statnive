@@ -111,7 +111,7 @@ export function SearchBox({ questions, pinnedIds }: SearchBoxProps) {
 					aria-expanded={open}
 					aria-controls="statnive-advisor-suggestions"
 					role="combobox"
-					className="h-10 w-full rounded-md border border-border bg-card text-sm ltr:pl-10 ltr:pr-16 rtl:pr-10 rtl:pl-16 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+					className="h-10 w-full rounded-md border border-border bg-card text-sm ltr:pl-11 ltr:pr-20 rtl:pr-11 rtl:pl-20 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
 				/>
 				<span
 					aria-hidden="true"
