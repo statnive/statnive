@@ -41,6 +41,30 @@ final class ReportQueryService {
 	private const COUNTED_STATUSES = "('processing','completed')";
 
 	/**
+	 * The column expression revenue reports use to date-bucket an order.
+	 *
+	 * `date_paid_gmt` is the canonical "when did revenue happen" timestamp.
+	 * For normal checkouts it equals `date_created_gmt`. For subscription
+	 * renewals and BACS / cheque / cash-on-delivery orders that sit pending
+	 * before payment clears, the two diverge — and the user's mental model
+	 * of revenue lines up with `date_paid_gmt`, not the original order
+	 * creation. We coalesce so on-hold / pending orders (no payment yet)
+	 * still appear under their creation date.
+	 *
+	 * Perf note: wrapping in COALESCE prevents the query planner from using
+	 * the (status, date_created_gmt) composite index for date pruning — the
+	 * status prefix still filters first, so impact is bounded by the count
+	 * of `processing` + `completed` orders. Acceptable for v1.0.0; a stored
+	 * generated column + index on this expression is a v1.x perf-pass item.
+	 */
+	private const REVENUE_DATE = 'COALESCE(date_paid_gmt, date_created_gmt)';
+
+	/**
+	 * Same column, qualified with table alias `o` for joined queries.
+	 */
+	private const REVENUE_DATE_O = 'COALESCE(o.date_paid_gmt, o.date_created_gmt)';
+
+	/**
 	 * Headline KPI summary for §1 Revenue Report.
 	 *
 	 * @param string $from Inclusive start date YYYY-MM-DD.
@@ -64,7 +88,7 @@ final class ReportQueryService {
 				 FROM {$orders}
 				 WHERE deleted_at IS NULL
 				   AND status IN " . self::COUNTED_STATUSES . '
-				   AND DATE(date_created_gmt) BETWEEN %s AND %s',
+				   AND DATE(' . self::REVENUE_DATE . ') BETWEEN %s AND %s',
 				$from,
 				$to
 			),
@@ -108,15 +132,15 @@ final class ReportQueryService {
 		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
 		$rows = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT
-					DATE(date_created_gmt) AS day,
+				'SELECT
+					DATE(' . self::REVENUE_DATE . ') AS day,
 					COALESCE(SUM(net_total - refund_total),0) AS revenue,
 					COUNT(*) AS orders
-				 FROM {$orders}
+				 FROM ' . $orders . '
 				 WHERE deleted_at IS NULL
-				   AND status IN " . self::COUNTED_STATUSES . '
-				   AND DATE(date_created_gmt) BETWEEN %s AND %s
-				 GROUP BY DATE(date_created_gmt)
+				   AND status IN ' . self::COUNTED_STATUSES . '
+				   AND DATE(' . self::REVENUE_DATE . ') BETWEEN %s AND %s
+				 GROUP BY DATE(' . self::REVENUE_DATE . ')
 				 ORDER BY day ASC',
 				$from,
 				$to
@@ -158,7 +182,7 @@ final class ReportQueryService {
 				 LEFT JOIN {$attr} a ON a.order_id = o.wc_order_id
 				 WHERE o.deleted_at IS NULL
 				   AND o.status IN " . self::COUNTED_STATUSES . '
-				   AND DATE(o.date_created_gmt) BETWEEN %s AND %s
+				   AND DATE(' . self::REVENUE_DATE_O . ') BETWEEN %s AND %s
 				 GROUP BY a.channel
 				 ORDER BY revenue DESC',
 				$from,
@@ -205,7 +229,7 @@ final class ReportQueryService {
 				 LEFT JOIN {$attr} a ON a.order_id = o.wc_order_id
 				 WHERE o.deleted_at IS NULL
 				   AND o.status IN " . self::COUNTED_STATUSES . '
-				   AND DATE(o.date_created_gmt) BETWEEN %s AND %s
+				   AND DATE(' . self::REVENUE_DATE_O . ') BETWEEN %s AND %s
 				   AND (a.utm_source_lower IS NOT NULL OR a.utm_medium_lower IS NOT NULL OR a.utm_campaign_lower IS NOT NULL)
 				 GROUP BY a.utm_source_lower, a.utm_medium_lower, a.utm_campaign_lower
 				 ORDER BY revenue DESC
@@ -254,7 +278,7 @@ final class ReportQueryService {
 				 LEFT JOIN {$attr} a ON a.order_id = o.wc_order_id
 				 WHERE o.deleted_at IS NULL
 				   AND o.status IN " . self::COUNTED_STATUSES . '
-				   AND DATE(o.date_created_gmt) BETWEEN %s AND %s
+				   AND DATE(' . self::REVENUE_DATE_O . ') BETWEEN %s AND %s
 				   AND a.first_landing_path IS NOT NULL
 				 GROUP BY a.first_landing_path
 				 ORDER BY revenue DESC
@@ -302,7 +326,7 @@ final class ReportQueryService {
 				 JOIN {$orders} o ON o.wc_order_id = i.order_id
 				 WHERE o.deleted_at IS NULL
 				   AND o.status IN " . self::COUNTED_STATUSES . '
-				   AND DATE(o.date_created_gmt) BETWEEN %s AND %s
+				   AND DATE(' . self::REVENUE_DATE_O . ') BETWEEN %s AND %s
 				   AND i.parent_product_id > 0
 				 GROUP BY i.parent_product_id
 				 ORDER BY revenue DESC
@@ -370,7 +394,7 @@ final class ReportQueryService {
 				"SELECT COUNT(*) FROM {$orders}
 				 WHERE deleted_at IS NULL
 				   AND status IN " . self::COUNTED_STATUSES . '
-				   AND DATE(date_created_gmt) BETWEEN %s AND %s',
+				   AND DATE(' . self::REVENUE_DATE . ') BETWEEN %s AND %s',
 				$from,
 				$to
 			)
@@ -382,9 +406,16 @@ final class ReportQueryService {
 			'sessions' => $purchases,
 		];
 
-		$first = $steps[0]['sessions'];
-		$last  = $steps[ count( $steps ) - 1 ]['sessions'];
-		$conv  = $first > 0 ? ( $last / $first ) : 0.0;
+		// Overall conversion: orders / widest funnel-mouth count we have.
+		// In a healthy funnel step 0 (product views) is the widest, so the
+		// result is the canonical conv rate. When the tracker hasn't captured
+		// product views yet but orders are present from the backfill, step 0
+		// is 0 — fall back to whatever non-zero step IS the widest so the %
+		// isn't a misleading "0.00". When every step is 0, return null so the
+		// UI renders "—".
+		$last   = $steps[ count( $steps ) - 1 ]['sessions'];
+		$widest = max( array_column( $steps, 'sessions' ) );
+		$conv   = $widest > 0 ? ( $last / $widest ) : null;
 
 		return [
 			'steps'              => $steps,
@@ -419,7 +450,7 @@ final class ReportQueryService {
 				 JOIN {$orders} o ON o.wc_order_id = c.order_id
 				 WHERE o.deleted_at IS NULL
 				   AND o.status IN " . self::COUNTED_STATUSES . '
-				   AND DATE(o.date_created_gmt) BETWEEN %s AND %s
+				   AND DATE(' . self::REVENUE_DATE_O . ') BETWEEN %s AND %s
 				 GROUP BY c.code_lower
 				 ORDER BY redemptions DESC
 				 LIMIT %d',
@@ -459,18 +490,18 @@ final class ReportQueryService {
 		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
 		$trend_rows = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT DATE(r.date_gmt) AS day,
+				'SELECT DATE(r.date_gmt) AS day,
 				   SUM(r.amount) / NULLIF(
-					 (SELECT SUM(o2.gross_total) FROM {$orders} o2
+					 (SELECT SUM(o2.gross_total) FROM ' . $orders . ' o2
 					  WHERE o2.deleted_at IS NULL
-					    AND o2.status IN " . self::COUNTED_STATUSES . "
-					    AND DATE(o2.date_created_gmt) = DATE(r.date_gmt)),
+					    AND o2.status IN ' . self::COUNTED_STATUSES . '
+					    AND DATE(COALESCE(o2.date_paid_gmt, o2.date_created_gmt)) = DATE(r.date_gmt)),
 					 0
 				   ) AS rate
-				 FROM {$refunds} r
+				 FROM ' . $refunds . ' r
 				 WHERE DATE(r.date_gmt) BETWEEN %s AND %s
 				 GROUP BY DATE(r.date_gmt)
-				 ORDER BY day ASC",
+				 ORDER BY day ASC',
 				$from,
 				$to
 			),
@@ -487,7 +518,7 @@ final class ReportQueryService {
 				 FROM {$items} i
 				 JOIN {$orders} o ON o.wc_order_id = i.order_id
 				 WHERE o.deleted_at IS NULL
-				   AND DATE(o.date_created_gmt) BETWEEN %s AND %s
+				   AND DATE(' . self::REVENUE_DATE_O . ') BETWEEN %s AND %s
 				   AND i.refund_amount > 0
 				 GROUP BY i.parent_product_id
 				 ORDER BY amount DESC
