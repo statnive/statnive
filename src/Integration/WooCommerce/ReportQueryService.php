@@ -50,6 +50,12 @@ final class ReportQueryService {
 	 * of revenue lines up with `date_paid_gmt`, not the original order
 	 * creation. We coalesce so on-hold / pending orders (no payment yet)
 	 * still appear under their creation date.
+	 *
+	 * Perf note: wrapping in COALESCE prevents the query planner from using
+	 * the (status, date_created_gmt) composite index for date pruning — the
+	 * status prefix still filters first, so impact is bounded by the count
+	 * of `processing` + `completed` orders. Acceptable for v1.0.0; a stored
+	 * generated column + index on this expression is a v1.x perf-pass item.
 	 */
 	private const REVENUE_DATE = 'COALESCE(date_paid_gmt, date_created_gmt)';
 
@@ -400,21 +406,16 @@ final class ReportQueryService {
 			'sessions' => $purchases,
 		];
 
-		// Overall conversion: orders / largest funnel-mouth count we have.
-		// In a healthy funnel the first step (product views) is the widest,
-		// so first === max and the result is the canonical conv rate.
-		// When the tracker hasn't captured product views yet but orders are
-		// present from the backfill, first === 0 — fall back to whatever
-		// non-zero step IS the widest so the % isn't a misleading "0.00".
-		// When no step has any data, return null so the UI can render "—".
-		$last     = $steps[ count( $steps ) - 1 ]['sessions'];
-		$widest   = 0;
-		foreach ( $steps as $step ) {
-			if ( $step['sessions'] > $widest ) {
-				$widest = $step['sessions'];
-			}
-		}
-		$conv = $widest > 0 ? ( $last / $widest ) : null;
+		// Overall conversion: orders / widest funnel-mouth count we have.
+		// In a healthy funnel step 0 (product views) is the widest, so the
+		// result is the canonical conv rate. When the tracker hasn't captured
+		// product views yet but orders are present from the backfill, step 0
+		// is 0 — fall back to whatever non-zero step IS the widest so the %
+		// isn't a misleading "0.00". When every step is 0, return null so the
+		// UI renders "—".
+		$last   = $steps[ count( $steps ) - 1 ]['sessions'];
+		$widest = max( array_column( $steps, 'sessions' ) );
+		$conv   = $widest > 0 ? ( $last / $widest ) : null;
 
 		return [
 			'steps'              => $steps,

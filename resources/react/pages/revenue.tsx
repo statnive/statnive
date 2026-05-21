@@ -357,9 +357,7 @@ function FunnelCard({ data, isLoading }: FunnelCardProps) {
 									<span
 										className="w-16 text-right text-xs tabular-nums text-muted-foreground"
 										title={
-											conv === null
-												? undefined
-												: i === 0
+											conv === null || i === 0
 												? undefined
 												: sprintf(
 													/* translators: 1: current step label, 2: previous step label */
