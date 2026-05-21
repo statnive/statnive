@@ -91,7 +91,7 @@ export interface RevenueFunnelStep {
 
 export interface RevenueFunnelResponse {
 	steps: RevenueFunnelStep[];
-	overall_conversion: number;
+	overall_conversion: number | null;
 }
 
 export interface RevenueCouponRow {

@@ -310,7 +310,9 @@ function FunnelCard({ data, isLoading }: FunnelCardProps) {
 					<span className="text-sm text-muted-foreground tabular-nums">
 						{sprintf(
 							__('Overall: %s', 'statnive'),
-							`${(data.overall_conversion * 100).toFixed(2)}%`
+							data.overall_conversion === null
+								? '—'
+								: `${(data.overall_conversion * 100).toFixed(2)}%`
 						)}
 					</span>
 				)}
@@ -327,7 +329,14 @@ function FunnelCard({ data, isLoading }: FunnelCardProps) {
 						{steps.map((s: RevenueFunnelStep, i: number) => {
 							const width = (s.sessions / max) * 100;
 							const prev = i === 0 ? null : ( steps[i - 1]?.sessions ?? null );
-							const drop = prev && prev > 0 ? ((prev - s.sessions) / prev) * 100 : null;
+							// Per-step CONVERSION rate (current ÷ previous).
+							// Step 0 has no previous step → null → renders as "—".
+							// prev = 0 (no source population) → null → "—".
+							// > 100% is possible when the orders count exceeds the
+							// upstream event count (events not captured yet). We
+							// surface that honestly rather than clamping.
+							const conv =
+								prev !== null && prev > 0 ? (s.sessions / prev) * 100 : null;
 							const isLast = i === steps.length - 1;
 							return (
 								<li key={s.step} className="grid grid-cols-[160px_1fr_4rem] items-center gap-3">
@@ -345,8 +354,22 @@ function FunnelCard({ data, isLoading }: FunnelCardProps) {
 											<span className="tabular-nums">{formatNumber(s.sessions)}</span>
 										</div>
 									</div>
-									<span className="w-16 text-right text-xs tabular-nums text-muted-foreground">
-										{drop !== null ? `−${drop.toFixed(0)}%` : '—'}
+									<span
+										className="w-16 text-right text-xs tabular-nums text-muted-foreground"
+										title={
+											conv === null
+												? undefined
+												: i === 0
+												? undefined
+												: sprintf(
+													/* translators: 1: current step label, 2: previous step label */
+													__('Conversion from %2$s → %1$s', 'statnive'),
+													__(STEP_LABELS[s.step] ?? s.step, 'statnive'),
+													__(STEP_LABELS[steps[i - 1]?.step ?? ''] ?? steps[i - 1]?.step ?? '', 'statnive')
+												)
+										}
+									>
+										{conv !== null ? `${conv.toFixed(0)}%` : '—'}
 									</span>
 								</li>
 							);
