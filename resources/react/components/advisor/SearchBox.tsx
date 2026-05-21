@@ -85,7 +85,7 @@ export function SearchBox({ questions, pinnedIds }: SearchBoxProps) {
 		<div className="relative mx-auto w-full max-w-3xl px-5 pb-4">
 			<div className="relative">
 				<Search
-					className="pointer-events-none absolute top-1/2 -translate-y-1/2 ltr:left-3 rtl:right-3 h-4 w-4 text-muted-foreground"
+					className="pointer-events-none absolute top-1/2 -translate-y-1/2 start-3.5 h-4 w-4 text-muted-foreground"
 					aria-hidden="true"
 				/>
 				<input
@@ -111,11 +111,11 @@ export function SearchBox({ questions, pinnedIds }: SearchBoxProps) {
 					aria-expanded={open}
 					aria-controls="statnive-advisor-suggestions"
 					role="combobox"
-					className="h-10 w-full rounded-md border border-border bg-card text-sm ltr:pl-11 ltr:pr-20 rtl:pr-11 rtl:pl-20 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+					className="h-10 w-full rounded-md border border-border bg-card text-sm ps-11 pe-20 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
 				/>
 				<span
 					aria-hidden="true"
-					className="pointer-events-none absolute top-1/2 -translate-y-1/2 ltr:right-3 rtl:left-3 text-[11px] font-medium text-muted-foreground/60"
+					className="pointer-events-none absolute top-1/2 -translate-y-1/2 end-3 text-[11px] font-medium text-muted-foreground/60"
 				>
 					{isMacPlatform() ? '⌘K' : 'Ctrl+K'}
 				</span>
