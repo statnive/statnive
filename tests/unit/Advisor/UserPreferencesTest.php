@@ -58,20 +58,10 @@ final class UserPreferencesTest extends TestCase {
 	}
 
 	public function test_set_enforces_max_pins_cap(): void {
-		// First 25 valid IDs, expecting truncation to 20.
-		$all_ids = [];
-		for ( $i = 1; $i <= 25 && count( $all_ids ) < 25; $i++ ) {
-			if ( in_array( "q{$i}", array_slice( \Statnive\Advisor\Questions::valid_ids(), 0, 25 ), true ) ) {
-				$all_ids[] = "q{$i}";
-			}
-		}
-		// Easier: just take the first 25 from inventory directly.
-		$all_ids = array_slice( \Statnive\Advisor\Questions::valid_ids(), 0, 25 );
-		$this->assertCount( 25, $all_ids );
-
-		$stored = UserPreferences::set( 7, $all_ids );
+		$over_cap = array_slice( \Statnive\Advisor\Questions::valid_ids(), 0, UserPreferences::MAX_PINS + 5 );
+		$stored   = UserPreferences::set( 7, $over_cap );
 		$this->assertCount( UserPreferences::MAX_PINS, $stored );
-		$this->assertSame( array_slice( $all_ids, 0, UserPreferences::MAX_PINS ), $stored );
+		$this->assertSame( array_slice( $over_cap, 0, UserPreferences::MAX_PINS ), $stored );
 	}
 
 	public function test_get_filters_orphan_ids_after_schema_churn(): void {
@@ -88,6 +78,8 @@ final class UserPreferencesTest extends TestCase {
 	}
 
 	public function test_pin_appends_idempotently(): void {
+		// Start below cap so there's room to actually pin a new id.
+		UserPreferences::set( 7, [ 'q2', 'q41' ] );
 		$first  = UserPreferences::pin( 7, 'q42' );
 		$second = UserPreferences::pin( 7, 'q42' );
 		$this->assertContains( 'q42', $first );

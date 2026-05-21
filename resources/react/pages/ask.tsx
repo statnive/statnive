@@ -49,7 +49,7 @@ export function AskPage() {
 	}
 
 	const pinnedIds = prefs?.pinned_questions ?? [];
-	const maxPins = prefs?.max_pins ?? 20;
+	const maxPins = prefs?.max_pins ?? 5;
 
 	return (
 		<QuestionTabs categories={inv.categories} active={active} onChange={setActive}>

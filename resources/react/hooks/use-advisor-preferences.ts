@@ -35,7 +35,7 @@ export function useAdvisorPinMutations() {
 			const previous = queryClient.getQueryData<AdvisorPreferencesResponse>(QUERY_KEY);
 			queryClient.setQueryData<AdvisorPreferencesResponse>(QUERY_KEY, (old) => ({
 				pinned_questions: next,
-				max_pins: old?.max_pins ?? 20,
+				max_pins: old?.max_pins ?? 5,
 				defaults: old?.defaults,
 			}));
 			return { previous };
@@ -51,7 +51,7 @@ export function useAdvisorPinMutations() {
 	const pin = (id: string) => {
 		const current = queryClient.getQueryData<AdvisorPreferencesResponse>(QUERY_KEY);
 		const existing = current?.pinned_questions ?? [];
-		const max = current?.max_pins ?? 20;
+		const max = current?.max_pins ?? 5;
 		if (existing.includes(id)) return;
 		if (existing.length >= max) return; // Cap.
 		writePinned.mutate([...existing, id]);
