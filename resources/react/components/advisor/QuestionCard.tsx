@@ -85,8 +85,16 @@ export function QuestionCard({ question, pinned, startExpanded = false }: Questi
 					aria-pressed={pinned}
 					aria-label={
 						pinned
-							? sprintf(__('Unpin "%s"', 'statnive'), question.question)
-							: sprintf(__('Pin "%s"', 'statnive'), question.question)
+							? sprintf(
+									/* translators: %s: question text */
+									__('Unpin "%s"', 'statnive'),
+									question.question,
+								)
+							: sprintf(
+									/* translators: %s: question text */
+									__('Pin "%s"', 'statnive'),
+									question.question,
+								)
 					}
 					disabled={isComingSoon || isPending}
 					className={cn(
