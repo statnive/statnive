@@ -201,20 +201,41 @@ function ChipCluster({ question }: { question: AdvisorQuestion }) {
 			</span>
 		);
 	}
-	// Free questions: confidence indicator only (no redundant "Free" label —
-	// the absence of "Coming soon" already signals availability).
-	const confidenceGlyph =
-		question.confidence === 'direct'
-			? '🟢'
-			: question.confidence === 'calculated'
-				? '🟡'
-				: '🔴';
+	// Confidence dot: monochrome, varies by solidity not hue so it doesn't
+	// borrow traffic-light semantics (red ≠ bad answer, just indirect).
+	// Hover reveals the full tier description.
+	const conf = question.confidence;
+	const tierLabel =
+		conf === 'direct'
+			? __('Direct', 'statnive')
+			: conf === 'calculated'
+				? __('Calculated', 'statnive')
+				: __('Proxy', 'statnive');
+	const tierDescription =
+		conf === 'direct'
+			? __('Read straight from stored data.', 'statnive')
+			: conf === 'calculated'
+				? __('Derived one step from stored data.', 'statnive')
+				: __('Closest available stand-in, indicative not authoritative.', 'statnive');
+	const dotClass =
+		conf === 'direct'
+			? 'bg-foreground/65'
+			: conf === 'calculated'
+				? 'bg-foreground/35'
+				: 'border border-foreground/45 bg-transparent';
 	return (
 		<span
-			className="inline-flex items-center text-[11px] text-muted-foreground"
-			aria-hidden="true"
+			role="img"
+			aria-label={`${tierLabel}: ${tierDescription}`}
+			className="group/conf relative inline-flex h-4 w-4 shrink-0 items-center justify-center"
 		>
-			{confidenceGlyph}
+			<span className={cn('h-1.5 w-1.5 rounded-full transition-opacity', dotClass)} />
+			<span
+				role="tooltip"
+				className="pointer-events-none absolute end-0 top-full z-10 mt-2 hidden w-max max-w-[220px] rounded-md border border-border bg-card px-2.5 py-1.5 text-start text-[11px] leading-snug text-muted-foreground shadow-sm group-hover/conf:block"
+			>
+				<span className="font-semibold text-foreground">{tierLabel}.</span> {tierDescription}
+			</span>
 		</span>
 	);
 }

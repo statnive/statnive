@@ -79,9 +79,11 @@ describe('QuestionCard', () => {
 	it('renders collapsed by default for a Free question', () => {
 		render(withQueryClient(<QuestionCard question={freeQuestion()} pinned={false} />));
 		expect(screen.getByText('How many people visited this week?')).toBeInTheDocument();
-		// Quieter chip cluster — Free questions show only the confidence
-		// glyph (🟢 for `direct`), no redundant "Free" label.
-		expect(screen.getByText('🟢')).toBeInTheDocument();
+		// Quieter chip cluster — monochrome confidence dot with the tier
+		// description on hover, replacing the loud traffic-light emoji.
+		expect(
+			screen.getByRole('img', { name: /Direct: Read straight from stored data/i }),
+		).toBeInTheDocument();
 		expect(screen.queryByText('Free')).not.toBeInTheDocument();
 	});
 
