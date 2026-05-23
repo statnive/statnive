@@ -29,6 +29,16 @@ final class DataPurgeJob {
 	public const HOOK = 'statnive_daily_data_purge';
 
 	/**
+	 * Heartbeat option written by `Statnive\Privacy\DataPurger::purge()`
+	 * (and read by Statnive\Admin\CronHealth). The constant lives here
+	 * with the other Job constants so the hook→option mapping stays
+	 * adjacent.
+	 *
+	 * @var string
+	 */
+	public const LAST_RUN_OPTION = 'statnive_last_purge';
+
+	/**
 	 * Register the cron hook callback.
 	 */
 	public static function init(): void {
@@ -37,8 +47,14 @@ final class DataPurgeJob {
 
 	/**
 	 * Execute data purge.
+	 *
+	 * Always records the cron-health heartbeat before any retention
+	 * gating — Statnive\Admin\CronHealth needs to know that cron fired,
+	 * regardless of whether the user has retention configured.
 	 */
 	public static function run(): void {
+		update_option( self::LAST_RUN_OPTION, gmdate( 'c' ), false );
+
 		// Check table sizes before purge (§28.4 disk-full detection).
 		self::check_storage_health();
 

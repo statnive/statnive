@@ -1,0 +1,26 @@
+POT regeneration evidence — release v0.4.8
+
+statnive.php             mtime: 2026-05-04 06:48:05  (version-bump)
+languages/statnive.pot   mtime: 2026-05-04 09:58:39  (regenerated for v0.4.8)
+
+Status: FRESH — POT mtime is newer than statnive.php. Ready for SVN push.
+
+Regen command (run on host, NOT inside wp-env, since wp-cli's i18n command
+does static PHP analysis and does not need a loaded WordPress install):
+
+  cd statnive
+  wp i18n make-pot . languages/statnive.pot --slug=statnive --domain=statnive \
+    --exclude=tests,vendor,node_modules,public,statnive-dist,playwright-report,test-results,releases,resources/react,bin
+
+This bypasses the three wp-env env blockers documented in gate-run.log
+(DNS resolver, git-over-SSH, virtiofs mount on path with spaces). Worth
+adding to the release-zip skill as the preferred local POT regen path.
+
+Diff vs v0.4.7 POT (4 lines, 0 string changes):
+  - Project-Id-Version: Statnive 0.4.7 → 0.4.8
+  - POT-Creation-Date: 2026-05-03T12:08:16+00:00 → 2026-05-04T07:58:39+00:00
+
+112 msgid entries, identical set to v0.4.7. v0.4.8 introduced no new
+translatable strings (FrontendHandler::enqueue_tracker change is internal
+control flow with no user-facing copy; readme/changelog/version-bumps are
+not translated).

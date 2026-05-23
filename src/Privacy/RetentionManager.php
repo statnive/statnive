@@ -21,9 +21,9 @@ final class RetentionManager {
 	 * @return string One of 'forever', 'delete', 'archive'.
 	 */
 	public static function get_mode(): string {
-		$mode  = get_option( 'statnive_retention_mode', 'delete' );
+		$mode  = get_option( 'statnive_retention_mode', 'forever' );
 		$valid = [ 'forever', 'delete', 'archive' ];
-		return in_array( $mode, $valid, true ) ? $mode : 'delete';
+		return in_array( $mode, $valid, true ) ? $mode : 'forever';
 	}
 
 	/**
@@ -32,7 +32,7 @@ final class RetentionManager {
 	 * @return int Number of days to retain data.
 	 */
 	public static function get_retention_days(): int {
-		return max( 30, min( (int) get_option( 'statnive_retention_days', 90 ), 3650 ) );
+		return max( 30, min( (int) get_option( 'statnive_retention_days', 3650 ), 3650 ) );
 	}
 
 	/**

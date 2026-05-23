@@ -25,8 +25,7 @@
 			"device_detection",
 			"languages",
 			"form_tracking_cf7",
-			"custom_events",
-			"email_reports"
+			"custom_events"
 		],
 		"limits": {
 			"retention_days": 365,
@@ -45,7 +44,6 @@
 			"languages",
 			"form_tracking_cf7",
 			"custom_events",
-			"email_reports",
 			"woocommerce_revenue",
 			"all_forms",
 			"rest_api",

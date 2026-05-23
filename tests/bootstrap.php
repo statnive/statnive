@@ -51,6 +51,18 @@ if ( ! defined( 'MINUTE_IN_SECONDS' ) ) {
 	define( 'MINUTE_IN_SECONDS', 60 );
 }
 
+if ( ! defined( 'HOUR_IN_SECONDS' ) ) {
+	define( 'HOUR_IN_SECONDS', 60 * 60 );
+}
+
+if ( ! defined( 'DAY_IN_SECONDS' ) ) {
+	define( 'DAY_IN_SECONDS', 24 * 60 * 60 );
+}
+
+if ( ! defined( 'WEEK_IN_SECONDS' ) ) {
+	define( 'WEEK_IN_SECONDS', 7 * 24 * 60 * 60 );
+}
+
 if ( ! function_exists( 'wp_hash' ) ) {
 	function wp_hash( string $data, string $scheme = 'auth' ): string {
 		// Stub: use hash_hmac with a fixed salt for deterministic unit tests.
@@ -72,6 +84,27 @@ if ( ! function_exists( 'update_option' ) ) {
 	 * @param mixed $value
 	 */
 	function update_option( string $option, $value, $autoload = null ): bool {
+		$GLOBALS['statnive_test_options'][ $option ] = $value;
+		return true;
+	}
+}
+
+if ( ! function_exists( 'delete_option' ) ) {
+	function delete_option( string $option ): bool {
+		$existed = array_key_exists( $option, $GLOBALS['statnive_test_options'] ?? [] );
+		unset( $GLOBALS['statnive_test_options'][ $option ] );
+		return $existed;
+	}
+}
+
+if ( ! function_exists( 'add_option' ) ) {
+	/**
+	 * @param mixed $value
+	 */
+	function add_option( string $option, $value = '', string $deprecated = '', $autoload = null ): bool {
+		if ( array_key_exists( $option, $GLOBALS['statnive_test_options'] ?? [] ) ) {
+			return false;
+		}
 		$GLOBALS['statnive_test_options'][ $option ] = $value;
 		return true;
 	}
@@ -104,7 +137,18 @@ if ( ! function_exists( 'delete_transient' ) ) {
 }
 
 if ( ! function_exists( 'apply_filters' ) ) {
+	/**
+	 * Stub with a test override: if a callable is registered at
+	 * $GLOBALS['statnive_test_filters'][$hook_name], it is invoked with
+	 * the default value. Otherwise the default passes through.
+	 *
+	 * @param mixed $value
+	 * @return mixed
+	 */
 	function apply_filters( string $hook_name, $value ) {
+		if ( isset( $GLOBALS['statnive_test_filters'][ $hook_name ] ) && is_callable( $GLOBALS['statnive_test_filters'][ $hook_name ] ) ) {
+			return $GLOBALS['statnive_test_filters'][ $hook_name ]( $value );
+		}
 		return $value;
 	}
 }
@@ -274,10 +318,49 @@ if ( ! function_exists( 'wp_schedule_event' ) ) {
 
 if ( ! function_exists( 'wp_next_scheduled' ) ) {
 	/**
-	 * @return false
+	 * Returns a value from $GLOBALS['statnive_test_scheduled'][$hook] when
+	 * set; otherwise false. Tests inject schedules by writing to that
+	 * array directly.
+	 *
+	 * @return int|false
 	 */
 	function wp_next_scheduled( string $hook, array $args = [] ) {
+		if ( isset( $GLOBALS['statnive_test_scheduled'][ $hook ] ) ) {
+			return (int) $GLOBALS['statnive_test_scheduled'][ $hook ];
+		}
 		return false;
+	}
+}
+
+if ( ! function_exists( 'wp_get_environment_type' ) ) {
+	function wp_get_environment_type(): string {
+		return $GLOBALS['statnive_test_env_type'] ?? 'production';
+	}
+}
+
+if ( ! function_exists( 'get_current_user_id' ) ) {
+	function get_current_user_id(): int {
+		return (int) ( $GLOBALS['statnive_test_user_id'] ?? 0 );
+	}
+}
+
+if ( ! function_exists( 'get_user_meta' ) ) {
+	/**
+	 * @return mixed
+	 */
+	function get_user_meta( int $user_id, string $key, bool $single = false ) {
+		$value = $GLOBALS['statnive_test_user_meta'][ $user_id ][ $key ] ?? '';
+		return $single ? $value : (array) $value;
+	}
+}
+
+if ( ! function_exists( 'update_user_meta' ) ) {
+	/**
+	 * @param mixed $value
+	 */
+	function update_user_meta( int $user_id, string $key, $value ): bool {
+		$GLOBALS['statnive_test_user_meta'][ $user_id ][ $key ] = $value;
+		return true;
 	}
 }
 
@@ -370,6 +453,23 @@ if ( ! function_exists( 'deactivate_plugins' ) ) {
 	}
 }
 
+if ( ! function_exists( 'wp_upload_dir' ) ) {
+	/**
+	 * @return array{basedir: string, baseurl: string, path: string, url: string, subdir: string, error: false}
+	 */
+	function wp_upload_dir(): array {
+		$base = sys_get_temp_dir() . '/statnive-unit-uploads';
+		return [
+			'basedir' => $base,
+			'baseurl' => 'http://example.test/uploads',
+			'path'    => $base,
+			'url'     => 'http://example.test/uploads',
+			'subdir'  => '',
+			'error'   => false,
+		];
+	}
+}
+
 /*
  * Statnive constants for unit tests.
  */
@@ -387,7 +487,7 @@ if ( ! defined( 'STATNIVE_PATH' ) ) {
 }
 
 if ( ! defined( 'STATNIVE_MIN_PHP' ) ) {
-	define( 'STATNIVE_MIN_PHP', '8.0' );
+	define( 'STATNIVE_MIN_PHP', '8.1' );
 }
 
 if ( ! defined( 'STATNIVE_MIN_WP' ) ) {

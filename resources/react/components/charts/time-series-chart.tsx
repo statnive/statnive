@@ -10,6 +10,7 @@ import {
 } from 'recharts';
 import { __ } from '@wordpress/i18n';
 import type { DailyMetric } from '@/types/api';
+import { CHART_AXIS_TICK, CHART_GRID, CHART_SERIES } from '@/lib/chart-colors';
 import { formatNumber, prefersReducedMotion } from '@/lib/utils';
 
 interface TimeSeriesChartProps {
@@ -47,15 +48,15 @@ export function TimeSeriesChart({ data }: TimeSeriesChartProps) {
 		<>
 			<ResponsiveContainer width="100%" height={300}>
 				<LineChart data={data} margin={{ top: 5, right: 20, left: 0, bottom: 5 }}>
-					<CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+					<CartesianGrid strokeDasharray="2 4" stroke={CHART_GRID} />
 					<XAxis
 						dataKey="date"
-						tick={{ fontSize: 12, fill: '#6b7280' }}
+						tick={{ fontSize: 12, fill: CHART_AXIS_TICK }}
 						tickLine={false}
-						axisLine={{ stroke: '#e5e7eb' }}
+						axisLine={{ stroke: CHART_GRID }}
 					/>
 					<YAxis
-						tick={{ fontSize: 12, fill: '#6b7280' }}
+						tick={{ fontSize: 12, fill: CHART_AXIS_TICK }}
 						tickLine={false}
 						axisLine={false}
 						width={50}
@@ -66,8 +67,8 @@ export function TimeSeriesChart({ data }: TimeSeriesChartProps) {
 						type="monotone"
 						dataKey="visitors"
 						name={visitorsLabel}
-						stroke="#2271b1"
-						strokeWidth={2}
+						stroke={CHART_SERIES[0]}
+						strokeWidth={2.5}
 						dot={false}
 						isAnimationActive={!prefersReducedMotion}
 					/>
@@ -75,9 +76,8 @@ export function TimeSeriesChart({ data }: TimeSeriesChartProps) {
 						type="monotone"
 						dataKey="sessions"
 						name={sessionsLabel}
-						stroke="#93c5fd"
-						strokeWidth={2}
-						strokeDasharray="5 5"
+						stroke={CHART_SERIES[1]}
+						strokeWidth={2.5}
 						dot={false}
 						isAnimationActive={!prefersReducedMotion}
 					/>

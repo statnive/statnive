@@ -9,7 +9,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 use Statnive\Api\Concerns\CachesResponses;
+use Statnive\Api\Concerns\ValidatesDateRange;
 use Statnive\Database\TableRegistry;
+use Statnive\Capability;
 use WP_REST_Controller;
 use WP_REST_Request;
 use WP_REST_Response;
@@ -24,6 +26,7 @@ use WP_REST_Server;
 final class SourcesController extends WP_REST_Controller {
 
 	use CachesResponses;
+	use ValidatesDateRange;
 
 	/**
 	 * Route namespace.
@@ -66,7 +69,10 @@ final class SourcesController extends WP_REST_Controller {
 						],
 						'limit'       => [
 							'default'           => 20,
+							'type'              => 'integer',
+							'minimum'           => 1,
 							'sanitize_callback' => 'absint',
+							'validate_callback' => 'rest_validate_request_arg',
 						],
 						'group_by'    => [
 							'default'           => '',
@@ -77,7 +83,10 @@ final class SourcesController extends WP_REST_Controller {
 						],
 						'per_channel' => [
 							'default'           => 10,
+							'type'              => 'integer',
+							'minimum'           => 1,
 							'sanitize_callback' => 'absint',
+							'validate_callback' => 'rest_validate_request_arg',
 						],
 					],
 				],
@@ -92,7 +101,7 @@ final class SourcesController extends WP_REST_Controller {
 	 * @return bool
 	 */
 	public function get_items_permissions_check( $request ): bool {
-		return current_user_can( 'manage_options' );
+		return Capability::can_view_reports();
 	}
 
 	/**
@@ -131,14 +140,14 @@ final class SourcesController extends WP_REST_Controller {
 		// phpcs:disable WordPress.DB.DirectDatabaseQuery.NoCaching
 		$rows = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT COALESCE(r.channel, 'Direct') AS channel, COALESCE(r.name, '') AS name, COALESCE(r.domain, '') AS domain,
+				"SELECT COALESCE(r.channel, 'Direct') AS channel, COALESCE(r.name, '') AS name, COALESCE(MIN(r.domain), '') AS domain,
 					COUNT(DISTINCT s.visitor_id) AS visitors,
 					COUNT(DISTINCT s.ID) AS sessions,
 					SUM(s.total_views) AS views
 				FROM %i s
 				LEFT JOIN %i r ON s.referrer_id = r.ID
 				WHERE s.started_at BETWEEN %s AND %s
-				GROUP BY r.channel, r.name, r.domain
+				GROUP BY r.channel, r.name
 				ORDER BY visitors DESC
 				LIMIT %d",
 				$sessions,
@@ -218,14 +227,14 @@ final class SourcesController extends WP_REST_Controller {
 		$source_rows = $wpdb->get_results(
 			$wpdb->prepare(
 				"SELECT COALESCE(r.channel, 'Direct') AS channel,
-					COALESCE(r.name, '') AS name, COALESCE(r.domain, '') AS domain,
+					COALESCE(r.name, '') AS name, COALESCE(MIN(r.domain), '') AS domain,
 					COUNT(DISTINCT s.visitor_id) AS visitors,
 					COUNT(DISTINCT s.ID) AS sessions,
 					SUM(s.total_views) AS views
 				FROM %i s
 				LEFT JOIN %i r ON s.referrer_id = r.ID
 				WHERE s.started_at BETWEEN %s AND %s
-				GROUP BY r.channel, r.name, r.domain
+				GROUP BY r.channel, r.name
 				ORDER BY r.channel, visitors DESC
 				LIMIT 500",
 				$sessions,
@@ -289,15 +298,5 @@ final class SourcesController extends WP_REST_Controller {
 		}
 
 		return $result;
-	}
-
-	/**
-	 * Validate a date parameter.
-	 *
-	 * @param string $value Date string.
-	 * @return bool
-	 */
-	public function validate_date( $value ): bool {
-		return (bool) preg_match( '/^\d{4}-\d{2}-\d{2}$/', $value );
 	}
 }

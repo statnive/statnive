@@ -8,10 +8,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+use Statnive\Admin\CronHealth;
 use Statnive\Cron\DailyAggregationJob;
 use Statnive\Cron\DataPurgeJob;
+use Statnive\Cron\SaltRotationJob;
 use Statnive\Database\Migrator;
 use Statnive\Database\TableRegistry;
+use Statnive\Service\GeoIPDownloader;
+use Statnive\Service\GeoIPService;
+use Statnive\Capability;
 use WP_REST_Controller;
 use WP_REST_Request;
 use WP_REST_Response;
@@ -80,6 +85,18 @@ final class DiagnosticsController extends WP_REST_Controller {
 				],
 			]
 		);
+
+		register_rest_route(
+			$this->namespace,
+			'/diagnostics/enable-dbip-city',
+			[
+				[
+					'methods'             => WP_REST_Server::CREATABLE,
+					'callback'            => [ $this, 'enable_dbip_city' ],
+					'permission_callback' => [ $this, 'permissions_check' ],
+				],
+			]
+		);
 	}
 
 	/**
@@ -90,7 +107,7 @@ final class DiagnosticsController extends WP_REST_Controller {
 	 */
 	public function permissions_check( $request ): bool {
 		unset( $request );
-		return current_user_can( 'manage_options' );
+		return Capability::can_view_reports();
 	}
 
 	/**
@@ -157,6 +174,9 @@ final class DiagnosticsController extends WP_REST_Controller {
 				'enabled'             => (bool) get_option( 'statnive_geoip_enabled', false ),
 				'maxmind_key_present' => '' !== (string) get_option( 'statnive_maxmind_license_key', '' ),
 				'database_present'    => self::geoip_database_present(),
+				'source_detected'     => GeoIPService::detect_source(),
+				'cdn_header_present'  => null !== GeoIPService::first_cdn_header_name(),
+				'dbip_city_active'    => GeoIPDownloader::is_dbip_city_active(),
 			],
 		];
 
@@ -185,10 +205,13 @@ final class DiagnosticsController extends WP_REST_Controller {
 			'message' => 'views table resolved (' . $views_table . ')',
 		];
 
-		// Step 2: synthetic write attempt.
+		// Step 2: synthetic write skipped to avoid polluting the analytics
+		// tables. Real tracker write health is asserted by the read-back step
+		// below and by the Real-time view, which only renders rows the
+		// tracker pipeline actually inserted.
 		$steps['synthetic_write'] = [
 			'ok'      => true,
-			'message' => 'self-test write skipped in v0.3.x — full pipeline self-test ships in v0.3.2',
+			'message' => 'synthetic write intentionally skipped — tracker write health is verified by the read-back step and by recent activity in the Real-time view',
 		];
 
 		// Step 3: read-back of the most recent row.
@@ -253,8 +276,10 @@ final class DiagnosticsController extends WP_REST_Controller {
 		}
 
 		$duration_s = microtime( true ) - $start;
-		update_option( 'statnive_last_purge', gmdate( 'c' ) );
-		update_option( 'statnive_last_purge_duration', $duration_s );
+		// `statnive_last_purge` is written by DataPurgeJob::run() itself
+		// at the cron-health heartbeat — only the duration is recorded
+		// here, since it is observed only at the diagnostic call site.
+		update_option( 'statnive_last_purge_duration', $duration_s, false );
 
 		return new WP_REST_Response(
 			[
@@ -263,6 +288,39 @@ final class DiagnosticsController extends WP_REST_Controller {
 				'duration_s' => round( $duration_s, 3 ),
 			],
 			$ok ? 200 : 500
+		);
+	}
+
+	/**
+	 * Opt the user into the DB-IP IP-to-City Lite database.
+	 *
+	 * One-shot RPC — no persistent setting written. Schedules a single-event
+	 * firing of the existing weekly GeoIP cron for ~5 seconds out (first
+	 * download) and arms a 1-hour pending transient so the cron callback
+	 * picks up the work even before the .mmdb file lands. Once the file is
+	 * on disk, file presence becomes the steady-state signal and the
+	 * transient is irrelevant.
+	 *
+	 * Capability is enforced by `permissions_check` (`manage_options`).
+	 *
+	 * @param WP_REST_Request $request The incoming request.
+	 * @return WP_REST_Response 202 Accepted with a status payload.
+	 */
+	public function enable_dbip_city( WP_REST_Request $request ): WP_REST_Response {
+		unset( $request );
+
+		// If the file is already on disk, the user re-clicked — fire a refresh
+		// instead of declining the call. Idempotent.
+		GeoIPDownloader::enable_dbip_city();
+
+		return new WP_REST_Response(
+			[
+				'status'           => 'pending',
+				'message'          => 'DB-IP IP-to-City Lite download scheduled. The database will appear in your uploads directory within ~30 seconds.',
+				'pending'          => true,
+				'database_present' => file_exists( GeoIPDownloader::get_dbip_city_path() ),
+			],
+			202
 		);
 	}
 
@@ -299,25 +357,51 @@ final class DiagnosticsController extends WP_REST_Controller {
 	/**
 	 * Cron status for every Statnive scheduled hook.
 	 *
+	 * Implements WP.org submission checklist §29 line 654 in full —
+	 * each entry exposes `next_run_iso`, `last_run_iso`, and `is_stale`,
+	 * so support and the admin notice can read the same source of truth
+	 * (Statnive\Admin\CronHealth) for cron-health questions.
+	 *
 	 * @return array<string, mixed>
 	 */
 	private static function cron_status(): array {
+		// Canonical hook list pulled from the Job class constants so the
+		// schema cannot drift if a new hook is registered. CronHealth is
+		// the single source of truth for next/last/is_stale per hook.
 		$hooks = [
-			'statnive_daily_salt_rotation',
-			'statnive_daily_aggregation',
-			'statnive_daily_data_purge',
-			'statnive_email_report',
-			'statnive_weekly_geoip_update',
+			SaltRotationJob::HOOK,
+			DailyAggregationJob::HOOK,
+			DataPurgeJob::HOOK,
+			GeoIPDownloader::CRON_HOOK,
 		];
+
+		$by_hook = CronHealth::job_status();
 
 		$status = [
 			'wp_cron_disabled' => defined( 'DISABLE_WP_CRON' ) && DISABLE_WP_CRON,
+			'any_stale'        => CronHealth::any_stale(),
 			'jobs'             => [],
 		];
 
 		foreach ( $hooks as $hook ) {
-			$next                    = wp_next_scheduled( $hook );
-			$status['jobs'][ $hook ] = false !== $next ? gmdate( 'c', (int) $next ) : null;
+			if ( isset( $by_hook[ $hook ] ) ) {
+				$status['jobs'][ $hook ] = [
+					'next_run_iso' => $by_hook[ $hook ]['next_run_iso'],
+					'last_run_iso' => $by_hook[ $hook ]['last_run_iso'],
+					'is_stale'     => $by_hook[ $hook ]['is_stale'],
+				];
+				continue;
+			}
+
+			// Hook not currently scheduled (opt-out feature, e.g. GeoIP
+			// when the user has not enabled it). Record next/last as null
+			// so support can still distinguish "not scheduled" from
+			// "scheduled and stale".
+			$status['jobs'][ $hook ] = [
+				'next_run_iso' => null,
+				'last_run_iso' => CronHealth::last_run_for_hook( $hook ),
+				'is_stale'     => false,
+			];
 		}
 
 		return $status;

@@ -8,7 +8,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+use Statnive\Api\Concerns\ValidatesDateRange;
 use Statnive\Database\TableRegistry;
+use Statnive\Capability;
 use WP_REST_Controller;
 use WP_REST_Request;
 use WP_REST_Response;
@@ -22,6 +24,8 @@ use WP_REST_Server;
  * - GET /wp-json/statnive/v1/pages/exit
  */
 final class PagesDetailController extends WP_REST_Controller {
+
+	use ValidatesDateRange;
 
 	/**
 	 * Route namespace.
@@ -87,7 +91,7 @@ final class PagesDetailController extends WP_REST_Controller {
 	 * @return bool
 	 */
 	public function permissions_check( $request ): bool {
-		return current_user_can( 'manage_options' );
+		return Capability::can_view_reports();
 	}
 
 	/**
@@ -194,15 +198,5 @@ final class PagesDetailController extends WP_REST_Controller {
 		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
 
 		return new WP_REST_Response( is_array( $rows ) ? $rows : [], 200 );
-	}
-
-	/**
-	 * Validate a date string (YYYY-MM-DD).
-	 *
-	 * @param mixed $value Value to validate.
-	 * @return bool
-	 */
-	public function validate_date( $value ): bool {
-		return (bool) preg_match( '/^\d{4}-\d{2}-\d{2}$/', $value );
 	}
 }

@@ -25,6 +25,14 @@ final class SaltRotationJob {
 	public const HOOK = 'statnive_daily_salt_rotation';
 
 	/**
+	 * Heartbeat option written by `run()` and read by
+	 * Statnive\Admin\CronHealth.
+	 *
+	 * @var string
+	 */
+	public const LAST_RUN_OPTION = 'statnive_last_salt_rotation';
+
+	/**
 	 * Register the cron hook callback.
 	 */
 	public static function init(): void {
@@ -33,11 +41,16 @@ final class SaltRotationJob {
 
 	/**
 	 * Execute salt rotation.
+	 *
+	 * Records the run timestamp in `statnive_last_salt_rotation` whether
+	 * or not a rotation was due — the option is the cron-health heartbeat
+	 * read by Statnive\Admin\CronHealth, not a "rotation happened" flag.
 	 */
 	public static function run(): void {
 		if ( SaltManager::should_rotate() ) {
 			SaltManager::rotate();
 		}
+		update_option( self::LAST_RUN_OPTION, gmdate( 'c' ), false );
 	}
 
 	/**

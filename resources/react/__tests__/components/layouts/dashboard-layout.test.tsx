@@ -30,7 +30,10 @@ vi.mock('lucide-react', () => {
 		Monitor: icon('Monitor'),
 		Languages: icon('Languages'),
 		Activity: icon('Activity'),
+		DollarSign: icon('DollarSign'),
 		Settings: icon('Settings'),
+		Star: icon('Star'),
+		Bug: icon('Bug'),
 	};
 });
 
@@ -146,5 +149,61 @@ describe('DashboardLayout — DateRangePicker', () => {
 		expect(router.state.location.search).toEqual(
 			expect.objectContaining({ range: '30d' }),
 		);
+	});
+});
+
+describe('DashboardLayout — per-page nav scoping', () => {
+	beforeEach(() => {
+		vi.restoreAllMocks();
+	});
+
+	it('shows Overview-domain tabs on / and hides Revenue + Settings', async () => {
+		await renderApp('/');
+		expect(screen.getByText('Pages')).toBeInTheDocument();
+		expect(screen.getByText('Referrers')).toBeInTheDocument();
+		expect(screen.getByText('Real-time')).toBeInTheDocument();
+		expect(screen.queryByText('Revenue Overview')).not.toBeInTheDocument();
+		expect(screen.queryByText('Settings')).not.toBeInTheDocument();
+	});
+
+	it('shows only "Revenue Overview" tab on /revenue', async () => {
+		await renderApp('/revenue');
+		expect(screen.getByText('Revenue Overview')).toBeInTheDocument();
+		expect(screen.queryByText('Pages')).not.toBeInTheDocument();
+		expect(screen.queryByText('Settings')).not.toBeInTheDocument();
+	});
+
+	it('shows only "Settings" tab on /settings', async () => {
+		await renderApp('/settings');
+		expect(screen.getByText('Settings')).toBeInTheDocument();
+		expect(screen.queryByText('Pages')).not.toBeInTheDocument();
+		expect(screen.queryByText('Revenue Overview')).not.toBeInTheDocument();
+	});
+
+	it('renders the two Settings CTAs with secure external-link attributes', async () => {
+		await renderApp('/settings');
+		const reviewLink = screen.getByText('Give 5 Stars 😅').closest('a');
+		const issuesLink = screen.getByText('Report Issues').closest('a');
+
+		expect(reviewLink).toBeTruthy();
+		expect(reviewLink).toHaveAttribute('href', 'https://wordpress.org/support/plugin/statnive/reviews/#new-post');
+		expect(reviewLink).toHaveAttribute('target', '_blank');
+		expect(reviewLink).toHaveAttribute('rel', 'noopener noreferrer');
+
+		expect(issuesLink).toBeTruthy();
+		expect(issuesLink).toHaveAttribute('href', 'https://github.com/statnive/statnive/issues');
+		expect(issuesLink).toHaveAttribute('target', '_blank');
+		expect(issuesLink).toHaveAttribute('rel', 'noopener noreferrer');
+	});
+
+	it('keeps header chrome consistent across routes (logo + slot + tab strip)', async () => {
+		for (const path of ['/', '/revenue', '/settings']) {
+			const { unmount } = await renderApp(path);
+			// Logo + brand text exist on every page.
+			expect(screen.getByText('Statnive')).toBeInTheDocument();
+			// Tab strip wrapper is the dashboard <nav>.
+			expect(screen.getByRole('navigation', { name: 'Dashboard navigation' })).toBeInTheDocument();
+			unmount();
+		}
 	});
 });

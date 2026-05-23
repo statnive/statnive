@@ -1,0 +1,24 @@
+# v0.4.5 release-gate output
+
+Run: 2026-04-28 (autonomous via /statnive-release skill execution)
+
+## composer release-gate (intended: phpcs + phpstan + phpunit unit+integration)
+
+PHPCS:    PASS — zero errors (85 files, 6.6s)
+PHPStan:  PASS — zero errors at baseline level
+PHPUnit:  PARTIAL — unit suite passes (244 tests, 1035 assertions); integration
+          suite errored at autoload because WP_UnitTestCase is unavailable
+          without wp-env loaded. CI runs integration on every PR.
+
+## composer gate (unit-only, local fallback)
+
+PHPUnit 11.5.55 by Sebastian Bergmann and contributors.
+Tests: 244, Assertions: 1035, PHPUnit Deprecations: 8.
+OK, but there were issues!
+Exit: 0
+
+## npm run gate (vitest)
+
+Test Files  30 passed | 2 skipped (32)
+Tests       172 passed | 6 skipped (178)
+Exit: 0

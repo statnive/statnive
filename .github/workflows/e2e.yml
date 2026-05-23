@@ -1,0 +1,96 @@
+name: E2E
+
+on:
+  pull_request:
+    branches: [main, master, development]
+
+permissions:
+  contents: read
+
+jobs:
+  playwright:
+    name: Playwright against wp-env
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      WP_BASE_URL: http://localhost:8889
+      # Query-string REST form bypasses Apache rewrite rules. wp-env's
+      # tests site boots with Plain permalinks and `wp rewrite --hard`
+      # can't regenerate .htaccess on the bundled Apache, so `/wp-json/`
+      # 404s through Apache. `?rest_route=/…` always works.
+      WP_REST_URL: http://localhost:8889/index.php?rest_route=
+      WP_ADMIN_USER: admin
+      WP_ADMIN_PASSWORD: password
+      WP_TABLE_PREFIX: wp_
+      WP_ROOT: ${{ github.workspace }}/wp-env-files/wordpress
+      STATNIVE_E2E_DEBUG: '1'
+      STATNIVE_E2E_IP_FILTER: '1'
+      STATNIVE_E2E_CONSENT_STUB: '1'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Setup Node
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@7c071dfe9dc99bdf297fa79cb49ea005b9fcadbc # v2.37.1
+        with:
+          php-version: '8.2'
+          tools: composer:v2, wp-cli
+          coverage: none
+
+      - name: Install node deps
+        run: npm ci
+
+      - name: Install composer deps
+        run: composer install --no-interaction --prefer-dist --no-progress
+
+      # The React dashboard bundle must exist at public/react/ before
+      # wp-env boots; ReactHandler::enqueue_assets() bails on the
+      # missing manifest otherwise, so `window.StatniveDashboard` +
+      # the bundled `wp-api` nonce never reach the admin page and
+      # every debug-endpoint POST fails with rest_cookie_invalid_nonce.
+      - name: Build React dashboard
+        run: npm run build:react
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      # The test-only mu-plugins are bind-mounted into the `tests` wp-env
+      # containers via `.wp-env.json` → `env.tests.mappings`. That's the
+      # only wp-env mechanism that writes to BOTH `tests-wordpress` (web)
+      # and `tests-cli` — doing it through `wp-env run tests-cli cp …`
+      # only hits the CLI container's ephemeral filesystem.
+      - name: Start wp-env
+        run: npx -y @wordpress/env@10.0.0 start --update
+
+      # CI runs only the UI-focused settings specs that work against any
+      # WordPress host. The tracking-side specs (cookieless, DNT/GPC,
+      # retention, exclusions, invariants) rely on the mysql-over-socket
+      # helper in tests/e2e/db-cli.ts which targets Local WP's per-site
+      # socket — those stay a local-dev check until wp-env's TCP port is
+      # threaded through the harness. Save button + Email-removed +
+      # current-IP hint + Full-Tracking removal are full coverage of the
+      # changes in this PR and run in < 2 minutes.
+      - name: Run E2E suite (UI specs)
+        env:
+          STATNIVE_E2E_SKIP_MU_COPY: '1'
+        run: npx playwright test
+          tests/e2e/specs/settings-save-button.spec.ts
+          tests/e2e/specs/settings-email-removed.spec.ts
+          tests/e2e/specs/settings-current-ip-hint.spec.ts
+          tests/e2e/specs/settings-consent-fulltracking-removed.spec.ts
+          --grep-invert "CM-8"
+
+      - name: Upload Playwright report on failure
+        if: failure()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7

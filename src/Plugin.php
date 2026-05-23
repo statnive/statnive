@@ -14,9 +14,11 @@ use Statnive\Container\CoreServiceProvider;
 use Statnive\Container\PrivacyServiceProvider;
 use Statnive\Container\ServiceContainer;
 use Statnive\Container\ServiceProvider;
+use Statnive\Container\WooCommerceServiceProvider;
 use Statnive\Cron\CronRegistrar;
 use Statnive\Database\DatabaseFactory;
 use Statnive\Database\Migrator;
+use Statnive\Integration\WooCommerce\Detector as WooCommerceDetector;
 
 /**
  * Plugin bootstrap class.
@@ -42,6 +44,7 @@ final class Plugin {
 		AnalyticsServiceProvider::class,
 		PrivacyServiceProvider::class,
 		AdminServiceProvider::class,
+		WooCommerceServiceProvider::class,
 	];
 
 	/**
@@ -57,15 +60,25 @@ final class Plugin {
 
 		self::$initialized = true;
 
-		// WordPress auto-loads translations for wp.org-hosted plugins since 4.6.
-		// load_plugin_textdomain() is no longer needed and triggers a PCP warning.
+		// WP 4.6+ auto-loads translations for wp.org-hosted plugins; PCP's
+		// DiscouragedFunctions sniff flags an explicit textdomain-loader call,
+		// so the call is intentionally absent. `.pot` still ships in languages/.
 
 		// Database schema migrations (runs on plugins_loaded, bails fast when nothing pending).
 		Migrator::init();
 
+		// Synthetic capability used by every admin page + REST endpoint.
+		// Resolves to view_woocommerce_reports OR manage_options so admins
+		// on non-WooCommerce sites still see the Statnive menu.
+		Capability::init();
+
+		// Declare HPOS + Block Checkout compatibility before WC boots.
+		WooCommerceDetector::init();
+
 		// WP-CLI commands (loaded only when WP-CLI is the SAPI).
 		if ( defined( 'WP_CLI' ) && WP_CLI ) {
 			\WP_CLI::add_command( 'statnive cron', \Statnive\Cli\CronCommand::class );
+			\WP_CLI::add_command( 'statnive wc-backfill', \Statnive\Cli\WooCommerceBackfillCommand::class );
 		}
 
 		self::register_hooks();
@@ -121,7 +134,7 @@ final class Plugin {
 		if ( ! ( defined( 'WP_CLI' ) && WP_CLI ) && ! current_user_can( 'activate_plugins' ) ) {
 			wp_die(
 				esc_html__( 'You do not have permission to activate plugins.', 'statnive' ),
-				'Plugin Activation Error',
+				esc_html__( 'Plugin Activation Error', 'statnive' ),
 				[ 'back_link' => true ]
 			);
 		}
@@ -137,7 +150,7 @@ final class Plugin {
 						PHP_VERSION
 					)
 				),
-				'Plugin Activation Error',
+				esc_html__( 'Plugin Activation Error', 'statnive' ),
 				[ 'back_link' => true ]
 			);
 		}
@@ -153,7 +166,7 @@ final class Plugin {
 						get_bloginfo( 'version' )
 					)
 				),
-				'Plugin Activation Error',
+				esc_html__( 'Plugin Activation Error', 'statnive' ),
 				[ 'back_link' => true ]
 			);
 		}
@@ -187,6 +200,12 @@ final class Plugin {
 	public static function deactivate(): void {
 		// Remove all scheduled cron events.
 		CronRegistrar::deregister_all();
+
+		// Cancel any in-flight Action Scheduler chunks for the WC backfill.
+		// AS may not be loaded when WC has been deactivated first, so guard.
+		if ( function_exists( 'as_unschedule_all_actions' ) ) {
+			as_unschedule_all_actions( \Statnive\Integration\WooCommerce\BackfillService::HOOK, null, \Statnive\Integration\WooCommerce\BackfillService::GROUP );
+		}
 
 		flush_rewrite_rules();
 	}

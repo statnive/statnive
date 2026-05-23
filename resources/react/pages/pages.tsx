@@ -6,6 +6,7 @@ import { useEntryPages, useExitPages } from '@/hooks/use-entry-exit-pages';
 import { DataTable, type Column } from '@/components/shared/data-table';
 import { DualBarCell } from '@/components/shared/dual-bar-cell';
 import { formatDuration } from '@/lib/utils';
+import { HEADING_H2 } from '@/lib/typography';
 import type { PageRow, EntryExitPage } from '@/types/api';
 import { Search } from 'lucide-react';
 
@@ -79,13 +80,14 @@ export function PagesPage() {
 
 	return (
 		<div className="space-y-6">
-			<h2 className="text-lg font-semibold">{__('Pages', 'statnive')}</h2>
+			<h2 className={HEADING_H2}>{__('Pages', 'statnive')}</h2>
 
 			{/* Search */}
 			<div className="relative max-w-sm">
 				<Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
 				<input
 					type="text"
+					aria-label={__('Search pages', 'statnive')}
 					placeholder={__('Search pages...', 'statnive')}
 					value={search}
 					onChange={(e) => setSearch(e.target.value)}

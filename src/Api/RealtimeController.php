@@ -9,6 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 use Statnive\Database\TableRegistry;
+use Statnive\Capability;
 use WP_REST_Controller;
 use WP_REST_Request;
 use WP_REST_Response;
@@ -67,7 +68,7 @@ final class RealtimeController extends WP_REST_Controller {
 	 * @return bool
 	 */
 	public function get_items_permissions_check( $request ): bool {
-		return current_user_can( 'manage_options' );
+		return Capability::can_view_reports();
 	}
 
 	/**
@@ -108,13 +109,13 @@ final class RealtimeController extends WP_REST_Controller {
 
 		$active_pages = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT ru.uri, COALESCE(res.cached_title, '') AS title, COUNT(DISTINCT s.visitor_id) AS visitors
+				"SELECT ru.uri, COALESCE(res.cached_title, '') AS title, COUNT(DISTINCT s.visitor_id) AS visitors, MAX(v.viewed_at) AS last_view
 				FROM %i v
 				INNER JOIN %i s ON v.session_id = s.ID
 				INNER JOIN %i ru ON v.resource_uri_id = ru.ID
 				LEFT JOIN (SELECT resource_id, MIN(cached_title) AS cached_title FROM %i GROUP BY resource_id) res ON ru.resource_id = res.resource_id
 				WHERE v.viewed_at >= %s
-				GROUP BY ru.uri, res.cached_title ORDER BY visitors DESC LIMIT 10",
+				GROUP BY ru.uri, res.cached_title ORDER BY last_view DESC LIMIT 10",
 				$views,
 				$sessions,
 				$resource_uris,
@@ -150,9 +151,17 @@ final class RealtimeController extends WP_REST_Controller {
 		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery
 		// phpcs:enable WordPress.DB.DirectDatabaseQuery.NoCaching
 
+		$active_pages_list = is_array( $active_pages ) ? array_map(
+			static function ( array $row ): array {
+				unset( $row['last_view'] );
+				return $row;
+			},
+			$active_pages
+		) : [];
+
 		$result = [
 			'active_visitors' => $active_count,
-			'active_pages'    => is_array( $active_pages ) ? $active_pages : [],
+			'active_pages'    => $active_pages_list,
 			'recent_feed'     => is_array( $recent_feed ) ? $recent_feed : [],
 		];
 

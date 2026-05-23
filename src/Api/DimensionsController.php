@@ -9,7 +9,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 use Statnive\Api\Concerns\CachesResponses;
+use Statnive\Api\Concerns\ValidatesDateRange;
 use Statnive\Database\TableRegistry;
+use Statnive\Capability;
 use WP_REST_Controller;
 use WP_REST_Request;
 use WP_REST_Response;
@@ -24,6 +26,7 @@ use WP_REST_Server;
 final class DimensionsController extends WP_REST_Controller {
 
 	use CachesResponses;
+	use ValidatesDateRange;
 
 	/**
 	 * Route namespace.
@@ -59,15 +62,22 @@ final class DimensionsController extends WP_REST_Controller {
 						],
 						'from'  => [
 							'required'          => true,
+							'type'              => 'string',
+							'validate_callback' => [ $this, 'validate_date' ],
 							'sanitize_callback' => 'sanitize_text_field',
 						],
 						'to'    => [
 							'required'          => true,
+							'type'              => 'string',
+							'validate_callback' => [ $this, 'validate_date' ],
 							'sanitize_callback' => 'sanitize_text_field',
 						],
 						'limit' => [
 							'default'           => 20,
+							'type'              => 'integer',
+							'minimum'           => 1,
 							'sanitize_callback' => 'absint',
+							'validate_callback' => 'rest_validate_request_arg',
 						],
 					],
 				],
@@ -82,7 +92,7 @@ final class DimensionsController extends WP_REST_Controller {
 	 * @return bool
 	 */
 	public function get_items_permissions_check( $request ): bool {
-		return current_user_can( 'manage_options' );
+		return Capability::can_view_reports();
 	}
 
 	/**

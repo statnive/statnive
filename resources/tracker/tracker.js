@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * Statnive Tracker — Privacy-first analytics tracking script.
  *
@@ -5,6 +6,7 @@
  * Size target: <5KB gzipped.
  *
  * @package Statnive
+ * @license GPL-2.0-or-later
  */
 
 // ES imports — Vite bundles these into the IIFE at build time.
@@ -108,11 +110,6 @@ window.statnive = window.statnive || function() {
 	 */
 	function sendToUrl(url, payload) {
 		payload = applyTransform(payload);
-		// CSRF nonce — minted server-side, sent as body field (not header)
-		// because text/plain content-type avoids CORS preflight.
-		if (config.nonce) {
-			payload._statnonce = config.nonce;
-		}
 		var body = JSON.stringify(payload);
 
 		if (navigator.sendBeacon) {

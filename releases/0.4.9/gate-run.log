@@ -1,0 +1,46 @@
+=== /statnive-release-zip gate matrix — v0.4.9 ===
+
+S-1 PHPCS                          PASS  85 files, 0 errors (composer phpcs)
+S-2 PHPStan                        PASS  [OK] No errors (composer phpstan)
+S-3 PHPUnit unit                   PASS  244/244 tests, 1035 assertions (composer gate)
+S-4 Vitest                         PASS  172 passed + 6 skipped (npm run gate)
+S-5 PCP plugin_repo                DEFERRED-TO-CI  Local wp-env env blockers (DNS, git+SSH,
+                                   virtiofs path-with-spaces). CI on the release commit
+                                   will run wordpress/plugin-check-action strict:true —
+                                   binding evidence comes from there.
+
+C-1  ABSPATH guards + sub-checks   PASS  (C-1.archives WARN — flagged ZIPs are in
+                                   statnive-dist/, playwright-report/, test-results/,
+                                   all excluded by .distignore; verified absent from
+                                   the dist ZIP by C-14)
+C-2  LICENSE                       PASS
+C-3  No phone-home in activation   PASS
+C-4  No api.statnive.com           PASS
+C-5  readme.txt                    PASS  (size 10183 bytes / 10240 limit, after the
+                                   v0.4.9 changelog entry was kept to a single line)
+C-6  Output escaping               PASS
+C-7  MaxMind                       PASS  (no bundled .mmdb, no P3TERX, canonical URL)
+C-8  No custom updater             PASS
+C-9  No bundled core libs          PASS
+C-10 No external CDN               PASS
+C-11 Cron cleanup                  PASS
+C-12 Uninstall                     PASS
+C-13 SVN assets                    PASS
+C-14 ZIP integrity                 PASS  (332 files, 1161262 bytes, version 0.4.9
+                                   matches, top-level=statnive/, zero hidden files,
+                                   all required files present including the new
+                                   public/react/manifest.json — moved out of .vite/).
+                                   composer.json grep false-positive WAIVED per
+                                   LEARN.md (composer.json must ship alongside vendor/).
+C-15 dbDelta format                PASS
+C-16 i18n                          PASS  (POT regenerated 2026-05-04 for 0.4.9,
+                                   newer than statnive.php)
+C-17 Privacy hooks                 PASS  (privacy_policy_content, exporters,
+                                   erasers, GPC + DNT signals)
+
+=== Hidden files in ZIP (was the v0.4.8 bug) ===
+zero — verified by `unzip -l statnive-0.4.9.zip | grep '/\.'`
+
+=== ZIP delta v0.4.8 -> v0.4.9 ===
+v0.4.8: 1164047 bytes / 336 files (with .env.local + .githooks/pre-commit + .vite/manifest.json)
+v0.4.9: 1161262 bytes / 332 files (4 hidden files removed; manifest moved to public/react/manifest.json)

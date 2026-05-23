@@ -1,31 +1,42 @@
 /**
  * E2E test environment configuration.
  *
- * Reads from environment variables with sensible defaults
- * for local WP Playground testing.
+ * Targets the running Local WP site that hosts this plugin checkout —
+ * same site the Playwright MCP attaches to. Override any field via env
+ * for CI (wp-env, Docker, etc.).
  */
+const defaultBaseUrl = process.env.WP_BASE_URL || 'http://localhost:10013';
+
 export const env = {
 	/** WordPress base URL. */
-	baseUrl: process.env.WP_BASE_URL || 'http://localhost:8080',
+	baseUrl: defaultBaseUrl,
 
 	/** WordPress admin username. */
-	adminUser: process.env.WP_ADMIN_USER || 'admin',
+	adminUser: process.env.WP_ADMIN_USER || 'statnive_e2e',
 
 	/** WordPress admin password. */
-	adminPassword: process.env.WP_ADMIN_PASSWORD || 'password',
+	adminPassword: process.env.WP_ADMIN_PASSWORD || 'statnive_e2e_pw_2026',
 
 	/** REST API base URL. */
-	restUrl: process.env.WP_REST_URL || `${process.env.WP_BASE_URL || 'http://localhost:8080'}/wp-json`,
-
-	/** Database connection (for DB-oracle assertions). */
-	db: {
-		host: process.env.DB_HOST || '127.0.0.1',
-		port: parseInt(process.env.DB_PORT || '3306', 10),
-		user: process.env.DB_USER || 'root',
-		password: process.env.DB_PASSWORD || 'root',
-		database: process.env.DB_NAME || 'wordpress',
-	},
+	restUrl: process.env.WP_REST_URL || `${defaultBaseUrl}/wp-json`,
 
 	/** WordPress table prefix. */
 	tablePrefix: process.env.WP_TABLE_PREFIX || 'wp_',
+
+	/**
+	 * Absolute path to the WordPress install root (directory that contains
+	 * `wp-config.php`). `wp-cli` is invoked with this as its CWD so that
+	 * DB credentials are picked up from `wp-config.php` without the harness
+	 * needing to know Local's per-site MySQL socket.
+	 */
+	wpRoot: process.env.WP_ROOT || '/Users/parhumm/Local Sites/statnive-test/app/public',
+
+	/**
+	 * Local WP ships its own MySQL socket at a per-site path under
+	 * `Library/Application Support/Local/run/<siteId>/mysql/mysqld.sock`.
+	 * Exporting `STATNIVE_E2E_MYSQL_SOCKET` lets the Node-side DB helpers
+	 * (`db-cli.ts`) connect without relying on `wp db query` working through
+	 * wp-config.php.
+	 */
+	mysqlSocket: process.env.STATNIVE_E2E_MYSQL_SOCKET || '',
 };

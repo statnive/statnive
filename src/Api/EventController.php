@@ -53,6 +53,8 @@ final class EventController extends WP_REST_Controller {
 		'signature',
 		'properties',
 		'consent_granted',
+		// Backward-compat: cached tracker bundles still emit this field.
+		// Server no longer validates it. See HitController::ALLOWED_KEYS.
 		'_statnonce',
 	];
 
@@ -112,12 +114,34 @@ final class EventController extends WP_REST_Controller {
 			'properties'      => [
 				'type'              => 'object',
 				'validate_callback' => 'rest_validate_request_arg',
+				'sanitize_callback' => [ self::class, 'sanitize_properties' ],
 			],
 			'consent_granted' => [
 				'type'              => 'boolean',
 				'validate_callback' => 'rest_validate_request_arg',
 			],
 		];
+	}
+
+	/**
+	 * Sanitize event properties to a flat key-value map.
+	 *
+	 * Only scalar values are retained — nested structures are dropped
+	 * because EventService stores properties as flat JSON.
+	 *
+	 * @param mixed $value Properties value.
+	 * @return array<string, string|int|float|bool> Sanitized flat map.
+	 */
+	public static function sanitize_properties( $value ): array {
+		$raw = is_object( $value ) ? get_object_vars( $value ) : ( is_array( $value ) ? $value : [] );
+		$out = [];
+		foreach ( $raw as $k => $v ) {
+			if ( ! is_scalar( $v ) ) {
+				continue;
+			}
+			$out[ sanitize_text_field( (string) $k ) ] = is_string( $v ) ? sanitize_text_field( $v ) : $v;
+		}
+		return $out;
 	}
 
 	/**
@@ -165,20 +189,19 @@ final class EventController extends WP_REST_Controller {
 			return self::error_response( [ 'invalid_signature', 'Request signature is invalid.', 403 ] );
 		}
 
-		// CSRF nonce — hardening layer alongside HMAC (Checklist §7).
-		$nonce_error = PayloadValidator::validate_nonce( $data );
-		if ( null !== $nonce_error ) {
-			return self::error_response( $nonce_error );
-		}
+		// HMAC alone is the CSRF boundary here. See HitController::create_item
+		// for the rationale — WP nonces break behind page caches.
 
 		// Privacy enforcement.
+		$ip              = IpExtractor::extract();
 		$consent_granted = ! empty( $data['consent_granted'] );
 		$privacy_check   = PrivacyManager::check_request_privacy(
 			[
 				'HTTP_DNT'     => sanitize_text_field( wp_unslash( $_SERVER['HTTP_DNT'] ?? '' ) ),
 				'HTTP_SEC_GPC' => sanitize_text_field( wp_unslash( $_SERVER['HTTP_SEC_GPC'] ?? '' ) ),
 			],
-			$consent_granted
+			$consent_granted,
+			$ip
 		);
 
 		if ( ! $privacy_check->allowed() ) {
@@ -187,7 +210,7 @@ final class EventController extends WP_REST_Controller {
 
 		// Rate limiting (60 req/min per IP).
 		// Key is salted SHA-256 of the raw IP — raw IP is never persisted.
-		$ip_key = 'statnive_rate_' . hash( 'sha256', IpExtractor::extract() . wp_salt( 'auth' ) );
+		$ip_key = 'statnive_rate_' . hash( 'sha256', $ip . wp_salt( 'auth' ) );
 		$count  = (int) get_transient( $ip_key );
 		if ( $count >= 60 ) {
 			return self::error_response( [ 'rate_limited', 'Too many requests.', 429 ] );

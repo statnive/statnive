@@ -5,10 +5,11 @@ interface KpiCardProps {
 	label: string;
 	value: string;
 	change?: number;
+	helper?: string;
 	isLoading?: boolean;
 }
 
-export function KpiCard({ label, value, change, isLoading = false }: KpiCardProps) {
+export function KpiCard({ label, value, change, helper, isLoading = false }: KpiCardProps) {
 	if (isLoading) {
 		return (
 			<div className="rounded-lg border border-border bg-card p-4">
@@ -20,18 +21,18 @@ export function KpiCard({ label, value, change, isLoading = false }: KpiCardProp
 
 	return (
 		<div className="rounded-lg border border-border bg-card p-4">
-			<p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+			<p className="font-display text-[11px] font-medium uppercase leading-[1.4] tracking-[0.12em] text-muted-foreground">
 				{label}
 			</p>
-			<div className="mt-1 flex items-baseline gap-2">
-				<span className="text-3xl font-bold tabular-nums">{value}</span>
+			<div className="mt-2.5 flex items-baseline gap-2">
+				<span className="font-display text-[34px] font-medium leading-none tracking-[-0.5px] tabular-nums">{value}</span>
 				{change !== undefined && (
 					<span
 						className={cn(
 							'rounded-full px-1.5 py-0.5 text-xs font-medium',
 							change >= 0
-								? 'bg-green-100 text-green-800'
-								: 'bg-red-100 text-red-800',
+								? 'bg-revenue/10 text-revenue-dark'
+								: 'bg-destructive/10 text-destructive',
 						)}
 						aria-label={sprintf(
 							/* translators: 1: "up" or "down", 2: percentage change */
@@ -45,6 +46,9 @@ export function KpiCard({ label, value, change, isLoading = false }: KpiCardProp
 					</span>
 				)}
 			</div>
+			{helper && (
+				<p className="mt-2 text-xs text-muted-foreground tabular-nums">{helper}</p>
+			)}
 		</div>
 	);
 }

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * Statnive Core Tracker — Minimal inline pageview tracker.
  *
@@ -7,6 +8,7 @@
  * Size target: <300 bytes minified, <180 bytes gzipped.
  *
  * @package Statnive
+ * @license GPL-2.0-or-later
  */
 (function(w, d, n) {
 	'use strict';
@@ -44,8 +46,7 @@
 		timezone: w.Intl && Intl.DateTimeFormat ? Intl.DateTimeFormat().resolvedOptions().timeZone : '',
 		signature: h.signature || '',
 		page_url: w.location.pathname || '/',
-		page_query: w.location.search ? w.location.search.substring(1) : '',
-		_statnonce: c.nonce || ''
+		page_query: w.location.search ? w.location.search.substring(1) : ''
 	};
 
 	// Send via sendBeacon (preferred) or fetch(keepalive).

@@ -6,15 +6,12 @@ All libraries listed below are GPL-compatible. Each library's original license f
 
 | Package | License | URL |
 |---------|---------|-----|
-| composer/autoload | MIT | https://getcomposer.org |
+| composer/ca-bundle | MIT | https://github.com/composer/ca-bundle |
 | geoip2/geoip2 | Apache-2.0 | https://github.com/maxmind/GeoIP2-php |
-| league/flysystem | MIT | https://github.com/thephpleague/flysystem |
-| league/mime-type-detection | MIT | https://github.com/thephpleague/mime-type-detection |
 | matomo/device-detector | LGPL-3.0-or-later | https://github.com/matomo-org/device-detector |
 | maxmind-db/reader | Apache-2.0 | https://github.com/maxmind/MaxMind-DB-Reader-php |
 | maxmind/web-service-common | Apache-2.0 | https://github.com/maxmind/web-service-common-php |
 | mustangostang/spyc | MIT | https://github.com/mustangostang/spyc |
-| psr/container | MIT | https://github.com/php-fig/container |
 
 ## License Compatibility
 

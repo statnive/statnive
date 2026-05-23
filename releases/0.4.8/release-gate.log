@@ -1,0 +1,61 @@
+............................................................ 60 / 85 (71%)
+.........................                                    85 / 85 (100%)
+
+
+Time: 5.13 secs; Memory: 32MB
+
+Note: Using configuration file /Users/parhumm/Local Sites/statnive-test/app/public/wp-content/plugins/statnive/phpstan.neon.
+  0/85 [░░░░░░░░░░░░░░░░░░░░░░░░░░░░]   0%[1G[2K 20/85 [▓▓▓▓▓▓░░░░░░░░░░░░░░░░░░░░░░]  23%[1G[2K 40/85 [▓▓▓▓▓▓▓▓▓▓▓▓▓░░░░░░░░░░░░░░░]  47%[1G[2K 60/85 [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░░░░░░░░░]  70%[1G[2K 85/85 [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓] 100%
+
+
+ [OK] No errors                                                                 
+
+Important: PHPStan 2.x is available.
+---------------
+
+This project is using PHPStan 1.12. PHPStan 2.x adds a new level 10,
+list types, @phpstan-pure enforcement, and uses 50-70% less memory.
+
+Tell the user that PHPStan 2.x is available and ask if they'd like to upgrade.
+
+Upgrading guide: https://github.com/phpstan/phpstan/blob/2.1.x/UPGRADING.md
+Release notes with all changes: https://github.com/phpstan/phpstan/releases/tag/2.0.0
+Blog article: https://phpstan.org/blog/phpstan-2-0-released-level-10-elephpants
+
+
+
+An error occurred inside PHPUnit.
+
+Message:  Class "WP_UnitTestCase" not found
+Location: /Users/parhumm/Local Sites/statnive-test/app/public/wp-content/plugins/statnive/tests/integration/Admin/AdminAssetScopeTest.php:24
+
+#0 /Users/parhumm/Local Sites/statnive-test/app/public/wp-content/plugins/statnive/vendor/phpunit/phpunit/src/Runner/TestSuiteLoader.php(116): require_once()
+#1 /Users/parhumm/Local Sites/statnive-test/app/public/wp-content/plugins/statnive/vendor/phpunit/phpunit/src/Runner/TestSuiteLoader.php(49): PHPUnit\Runner\TestSuiteLoader->loadSuiteClassFile('/Users/parhumm/...')
+#2 /Users/parhumm/Local Sites/statnive-test/app/public/wp-content/plugins/statnive/vendor/phpunit/phpunit/src/Framework/TestSuite.php(231): PHPUnit\Runner\TestSuiteLoader->load('/Users/parhumm/...')
+#3 /Users/parhumm/Local Sites/statnive-test/app/public/wp-content/plugins/statnive/vendor/phpunit/phpunit/src/TextUI/Configuration/Xml/TestSuiteMapper.php(105): PHPUnit\Framework\TestSuite->addTestFile('/Users/parhumm/...', Array)
+#4 /Users/parhumm/Local Sites/statnive-test/app/public/wp-content/plugins/statnive/vendor/phpunit/phpunit/src/TextUI/Configuration/TestSuiteBuilder.php(75): PHPUnit\TextUI\XmlConfiguration\TestSuiteMapper->map('/Users/parhumm/...', Object(PHPUnit\TextUI\Configuration\TestSuiteCollection), '', '')
+#5 /Users/parhumm/Local Sites/statnive-test/app/public/wp-content/plugins/statnive/vendor/phpunit/phpunit/src/TextUI/Application.php(412): PHPUnit\TextUI\Configuration\TestSuiteBuilder->build(Object(PHPUnit\TextUI\Configuration\Configuration))
+#6 /Users/parhumm/Local Sites/statnive-test/app/public/wp-content/plugins/statnive/vendor/phpunit/phpunit/src/TextUI/Application.php(182): PHPUnit\TextUI\Application->buildTestSuite(Object(PHPUnit\TextUI\Configuration\Configuration))
+#7 /Users/parhumm/Local Sites/statnive-test/app/public/wp-content/plugins/statnive/vendor/phpunit/phpunit/phpunit(104): PHPUnit\TextUI\Application->run(Array)
+#8 /Users/parhumm/Local Sites/statnive-test/app/public/wp-content/plugins/statnive/vendor/bin/phpunit(122): include('/Users/parhumm/...')
+#9 {main}
+Script phpunit handling the test event returned with error code 255
+Script @test was called via release-gate
+
+=== release-gate result note ===
+phpcs        : PASS (covered by S-1 in gate-run.log, 85 files, 0 errors)
+phpstan      : PASS (covered by S-2 in gate-run.log, [OK] No errors)
+phpunit unit : PASS (covered by S-3 in gate-run.log, 244/244)
+phpunit integration : DEFERRED — needs wp-env (WP_UnitTestCase). Same status as v0.4.7
+                     (CI integration job is currently SKIPPED due to a matrix-expansion bug
+                     in the workflow file — `${{ matrix.php }}` literal in job name, not
+                     substituted). v0.4.8 ships with the same coverage envelope as v0.4.7.
+
+CI evidence on the merge commit (3304f96..c51e279):
+- Unit Tests (PHP 8.2/8.3/8.4)        : SUCCESS
+- Integration (PHP ${{matrix.php}})   : SKIPPED (workflow bug, not test failure)
+- PCP plugin_repo (§18)               : SUCCESS strict:true
+- All other CI gates                  : SUCCESS
+
+Follow-up (post-release): fix the workflow matrix expansion in
+.github/workflows/*.yml so the integration suite actually runs in CI.

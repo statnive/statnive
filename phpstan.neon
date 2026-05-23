@@ -1,6 +1,6 @@
 parameters:
     level: 6
-    phpVersion: 80000
+    phpVersion: 80100
     paths:
         - src
         - statnive.php
@@ -18,6 +18,32 @@ parameters:
             paths:
                 - src/Cli/*
                 - src/Plugin.php
+        -
+            message: "#Function WP_CLI\\\\Utils\\\\make_progress_bar not found\\.#"
+            paths:
+                - src/Cli/*
+        # WooCommerce classes and functions are only available when the
+        # WooCommerce plugin is active. All Integration/WooCommerce/* code is
+        # routed through SafeHook::wrap() and gated by Detector::is_active()
+        # at runtime. The WC-stubs package is not vendored to keep dev-dep
+        # footprint small; we ignore the resulting "unknown class" / "unknown
+        # function" diagnostics here.
+        -
+            message: "#Function wc_get_(?:orders|order) not found\\.#"
+            paths:
+                - src/Cli/*
+        -
+            message: "#(Class|Parameter \\$[a-zA-Z_]+ of method [^ ]+ has invalid type|Method [^ ]+ has invalid return type|Call to method [^ ]+ on an unknown class) WC_Order(_Refund|_Item_Product)?( not found\\.|\\.)#"
+            paths:
+                - src/Integration/WooCommerce/*
+        -
+            message: "#Cannot call method (get_quantity|get_total|get_name|get_subtotal|get_total_tax|get_discount|get_discount_tax)\\(\\) on class-string\\|object(?:\\|WC_Order_Item_Product)?\\.#"
+            paths:
+                - src/Integration/WooCommerce/*
+        -
+            message: "#Else branch is unreachable because ternary operator condition is always true\\.#"
+            paths:
+                - src/Integration/WooCommerce/FunnelEvents.php
 
 includes:
     - vendor/szepeviktor/phpstan-wordpress/extension.neon

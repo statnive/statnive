@@ -9,6 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 use Statnive\Service\GeoIPDownloader;
+use Statnive\Capability;
 use WP_REST_Controller;
 use WP_REST_Request;
 use WP_REST_Response;
@@ -51,11 +52,21 @@ final class SettingsController extends WP_REST_Controller {
 		'statnive_retention_mode',
 		'statnive_excluded_ips',
 		'statnive_excluded_roles',
-		'statnive_email_reports',
-		'statnive_email_frequency',
 		'statnive_geoip_enabled',
 		'statnive_maxmind_license_key',
 	];
+
+	private const CONSENT_MODES   = [ 'cookieless', 'disabled-until-consent' ];
+	private const RETENTION_MODES = [ 'forever', 'delete', 'archive' ];
+	private const RETENTION_MIN   = 30;
+	private const RETENTION_MAX   = 3650;
+
+	/**
+	 * Sentinel returned by GET when a license key is set, and treated as
+	 * "no change" by PUT so masked round-trips don't clobber the stored
+	 * key. Mirrored client-side as `MASKED_PLACEHOLDER` in resources/react/types/api.ts.
+	 */
+	public const MASKED_PLACEHOLDER = '********';
 
 	/**
 	 * Register routes.
@@ -74,6 +85,7 @@ final class SettingsController extends WP_REST_Controller {
 					'methods'             => WP_REST_Server::EDITABLE,
 					'callback'            => [ $this, 'update_settings' ],
 					'permission_callback' => [ $this, 'permissions_check' ],
+					'args'                => self::get_update_args(),
 				],
 			]
 		);
@@ -86,7 +98,7 @@ final class SettingsController extends WP_REST_Controller {
 	 * @return bool
 	 */
 	public function permissions_check( $request ): bool {
-		return current_user_can( 'manage_options' );
+		return Capability::can_view_reports();
 	}
 
 	/**
@@ -98,20 +110,23 @@ final class SettingsController extends WP_REST_Controller {
 	public function get_settings( WP_REST_Request $request ): WP_REST_Response {
 		$has_license_key = '' !== get_option( 'statnive_maxmind_license_key', '' );
 
+		$consent_mode = get_option( 'statnive_consent_mode', 'cookieless' );
+		if ( ! in_array( $consent_mode, self::CONSENT_MODES, true ) ) {
+			$consent_mode = 'cookieless';
+		}
+
 		return new WP_REST_Response(
 			[
 				'tracking_enabled'    => (bool) get_option( 'statnive_tracking_enabled', true ),
 				'respect_dnt'         => (bool) get_option( 'statnive_respect_dnt', true ),
 				'respect_gpc'         => (bool) get_option( 'statnive_respect_gpc', true ),
-				'consent_mode'        => get_option( 'statnive_consent_mode', 'cookieless' ),
-				'retention_days'      => (int) get_option( 'statnive_retention_days', 90 ),
-				'retention_mode'      => get_option( 'statnive_retention_mode', 'delete' ),
+				'consent_mode'        => $consent_mode,
+				'retention_days'      => (int) get_option( 'statnive_retention_days', 3650 ),
+				'retention_mode'      => get_option( 'statnive_retention_mode', 'forever' ),
 				'excluded_ips'        => get_option( 'statnive_excluded_ips', '' ),
 				'excluded_roles'      => get_option( 'statnive_excluded_roles', [] ),
-				'email_reports'       => (bool) get_option( 'statnive_email_reports', false ),
-				'email_frequency'     => get_option( 'statnive_email_frequency', 'weekly' ),
 				'geoip_enabled'       => (bool) get_option( 'statnive_geoip_enabled', false ),
-				'maxmind_license_key' => $has_license_key ? '********' : '',
+				'maxmind_license_key' => $has_license_key ? self::MASKED_PLACEHOLDER : '',
 			],
 			200
 		);
@@ -139,14 +154,12 @@ final class SettingsController extends WP_REST_Controller {
 			'retention_mode'      => 'statnive_retention_mode',
 			'excluded_ips'        => 'statnive_excluded_ips',
 			'excluded_roles'      => 'statnive_excluded_roles',
-			'email_reports'       => 'statnive_email_reports',
-			'email_frequency'     => 'statnive_email_frequency',
 			'geoip_enabled'       => 'statnive_geoip_enabled',
 			'maxmind_license_key' => 'statnive_maxmind_license_key',
 		];
 
 		// Process maxmind_license_key first so geoip_enabled can check it.
-		if ( isset( $body['maxmind_license_key'] ) && '********' !== $body['maxmind_license_key'] ) {
+		if ( isset( $body['maxmind_license_key'] ) && self::MASKED_PLACEHOLDER !== $body['maxmind_license_key'] ) {
 			update_option( 'statnive_maxmind_license_key', sanitize_text_field( (string) $body['maxmind_license_key'] ) );
 		}
 
@@ -200,6 +213,74 @@ final class SettingsController extends WP_REST_Controller {
 	}
 
 	/**
+	 * Argument schema for the PUT route.
+	 *
+	 * Declares types and sanitize/validate callbacks so WordPress REST
+	 * framework validates input before the handler runs. The handler still
+	 * applies allowlist + sanitize_setting() as defense-in-depth.
+	 *
+	 * @return array<string, array<string, mixed>>
+	 */
+	private static function get_update_args(): array {
+		return [
+			'tracking_enabled'    => [
+				'type'              => 'boolean',
+				'sanitize_callback' => 'rest_sanitize_boolean',
+				'validate_callback' => 'rest_validate_request_arg',
+			],
+			'respect_dnt'         => [
+				'type'              => 'boolean',
+				'sanitize_callback' => 'rest_sanitize_boolean',
+				'validate_callback' => 'rest_validate_request_arg',
+			],
+			'respect_gpc'         => [
+				'type'              => 'boolean',
+				'sanitize_callback' => 'rest_sanitize_boolean',
+				'validate_callback' => 'rest_validate_request_arg',
+			],
+			'consent_mode'        => [
+				'type'              => 'string',
+				'enum'              => self::CONSENT_MODES,
+				'sanitize_callback' => 'sanitize_text_field',
+				'validate_callback' => 'rest_validate_request_arg',
+			],
+			'retention_days'      => [
+				'type'              => 'integer',
+				'minimum'           => self::RETENTION_MIN,
+				'maximum'           => self::RETENTION_MAX,
+				'sanitize_callback' => 'absint',
+				'validate_callback' => 'rest_validate_request_arg',
+			],
+			'retention_mode'      => [
+				'type'              => 'string',
+				'enum'              => self::RETENTION_MODES,
+				'sanitize_callback' => 'sanitize_text_field',
+				'validate_callback' => 'rest_validate_request_arg',
+			],
+			'excluded_ips'        => [
+				'type'              => 'string',
+				'sanitize_callback' => 'sanitize_textarea_field',
+				'validate_callback' => 'rest_validate_request_arg',
+			],
+			'excluded_roles'      => [
+				'type'              => 'array',
+				'items'             => [ 'type' => 'string' ],
+				'validate_callback' => 'rest_validate_request_arg',
+			],
+			'geoip_enabled'       => [
+				'type'              => 'boolean',
+				'sanitize_callback' => 'rest_sanitize_boolean',
+				'validate_callback' => 'rest_validate_request_arg',
+			],
+			'maxmind_license_key' => [
+				'type'              => 'string',
+				'sanitize_callback' => 'sanitize_text_field',
+				'validate_callback' => 'rest_validate_request_arg',
+			],
+		];
+	}
+
+	/**
 	 * Sanitize a setting value by key.
 	 *
 	 * @param string $key   Setting key.
@@ -208,13 +289,12 @@ final class SettingsController extends WP_REST_Controller {
 	 */
 	private function sanitize_setting( string $key, mixed $value ): mixed {
 		return match ( $key ) {
-			'tracking_enabled', 'respect_dnt', 'respect_gpc', 'email_reports', 'geoip_enabled' => (bool) $value,
-			'retention_days' => max( 30, min( absint( $value ), 3650 ) ),
+			'tracking_enabled', 'respect_dnt', 'respect_gpc', 'geoip_enabled' => (bool) $value,
+			'retention_days' => max( self::RETENTION_MIN, min( absint( $value ), self::RETENTION_MAX ) ),
 			'excluded_ips' => sanitize_textarea_field( (string) $value ),
 			'excluded_roles' => is_array( $value ) ? array_map( 'sanitize_text_field', $value ) : [],
-			'consent_mode' => ( in_array( $value, [ 'full', 'cookieless', 'disabled-until-consent' ], true ) ? $value : 'cookieless' ),
-			'retention_mode' => ( in_array( $value, [ 'forever', 'delete', 'archive' ], true ) ? $value : 'delete' ),
-			'email_frequency' => ( in_array( $value, [ 'weekly', 'monthly' ], true ) ? $value : 'weekly' ),
+			'consent_mode' => ( in_array( $value, self::CONSENT_MODES, true ) ? $value : 'cookieless' ),
+			'retention_mode' => ( in_array( $value, self::RETENTION_MODES, true ) ? $value : 'forever' ),
 			'maxmind_license_key' => sanitize_text_field( (string) $value ),
 			default => sanitize_text_field( (string) $value ),
 		};

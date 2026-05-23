@@ -1,0 +1,17 @@
+POT regeneration: SKIPPED — wp-env unavailable in this build environment.
+
+The POT file may be older than the latest source. New translatable strings
+introduced in v0.4.5 (the DB-IP CTA copy in geography.tsx, the new error
+message, the "GeoIP data © DB-IP under CC-BY 4.0" attribution) are not in
+the .pot until it is regenerated. This must run before the SVN push to
+wordpress.org.
+
+Regenerate via:
+
+    cd statnive
+    npx wp-env start
+    npx wp-env run cli wp i18n make-pot \
+        /var/www/html/wp-content/plugins/statnive \
+        languages/statnive.pot
+
+Or in CI on a machine with network access to wp-env's WordPress version cache.

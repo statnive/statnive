@@ -67,7 +67,6 @@ final class AnalyticsServiceProvider implements ServiceProvider {
 					new \Statnive\Api\EventController(),
 					new \Statnive\Api\EngagementController(),
 					new \Statnive\Api\EventsStatsController(),
-					new \Statnive\Api\ImportController(),
 					new \Statnive\Api\DiagnosticsController(),
 				];
 
@@ -91,8 +90,17 @@ final class AnalyticsServiceProvider implements ServiceProvider {
 		$ua     = $profile->get( 'user_agent', '' );
 
 		// GeoIP resolution (uses raw IP before it's discarded).
+		// Tiers fall through on empty country_code: MaxMind → CDN headers → timezone.
+		// All upstream privacy gates (DNT/GPC) have already filtered the request.
 		try {
 			$geo = GeoIPService::resolve( $raw_ip );
+			if ( '' === $geo['country_code'] ) {
+				$geo = GeoIPService::resolve_from_request_headers();
+			}
+			if ( '' === $geo['country_code'] ) {
+				$tz  = (string) $profile->get( 'timezone', '' );
+				$geo = GeoIPService::resolve_from_timezone( $tz );
+			}
 			$profile->with_geo_ip(
 				$geo['country_code'],
 				$geo['country_name'],

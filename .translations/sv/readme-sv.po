@@ -1,0 +1,456 @@
+# Translation of Plugins - Statnive - Stable Readme (latest release) in Swedish
+# This file is distributed under the same license as the Plugins - Statnive - Stable Readme (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2026-05-16 10:00+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Statnive translation seed v0.4.13\n"
+"Language: sv_SE\n"
+"Project-Id-Version: Plugins - Statnive - Stable Readme (latest release)\n"
+
+#. Plugin title (from === Statnive ... === line).
+msgid "Statnive – Simple, Real-time, Privacy-first Web Analytics"
+msgstr "Statnive – Enkel, integritetsvänlig webbanalys i realtid"
+
+#. Short description
+#: readme.txt:short-description
+msgid "Privacy-first WordPress analytics — cookieless, self-hosted, real-time. A simple Google Analytics alternative with GeoIP and AI-source tracking."
+msgstr "Integritetsvänlig webbanalys för WordPress – utan kakor, självhostad, i realtid. Ett enkelt alternativ till Google Analytics med GeoIP och spårning av AI-källor."
+
+#. Section heading
+#: readme.txt:section-description
+msgid "Description"
+msgstr "Beskrivning"
+
+#. Description tagline
+#: readme.txt:description-tagline
+msgid "**The privacy-first analytics plugin for WordPress.**"
+msgstr "**Det integritetsvänliga analystillägget för WordPress.**"
+
+#. Description paragraph
+#: readme.txt:description-p1
+msgid "See exactly who visits your site, where they come from, and what they do — without cookies, third-party trackers, or sending visitor data to anyone. All analytics live in your own WordPress database."
+msgstr "Se exakt vilka som besöker din webbplats, varifrån de kommer och vad de gör – utan kakor, tredjepartsspårare eller att besökardata skickas till någon. All analys finns i din egen WordPress-databas."
+
+#. Description paragraph
+#: readme.txt:description-p2
+msgid "Open source under GPLv2. Self-hosted in your own database — nothing ever leaves your server."
+msgstr "Öppen källkod under GPLv2. Självhostad i din egen databas – inget lämnar någonsin din server."
+
+#. Description paragraph
+#: readme.txt:description-p3
+msgid "Install, activate, open Statnive — your dashboard fills up within minutes. No tracking code to paste, no account to create."
+msgstr "Installera, aktivera, öppna Statnive – din kontrollpanel fylls inom några minuter. Ingen spårningskod att klistra in, inget konto att skapa."
+
+#. Sub-heading: Why Statnive?
+#: readme.txt:why-statnive-heading
+msgid "Why Statnive?"
+msgstr "Varför Statnive?"
+
+#. Why bullet
+#: readme.txt:why-bullet-1
+msgid "**No cookies. No fingerprinting. No third-party transfers.** Designed to support GDPR, CCPA, and APPI compliance."
+msgstr "**Inga kakor. Ingen fingerprinting. Inga överföringar till tredje part.** Utformad för att stödja efterlevnad av GDPR, CCPA och APPI."
+
+#. Why bullet
+#: readme.txt:why-bullet-2
+msgid "**Honors GPC and DNT** server-side, integrates with the WordPress Consent API."
+msgstr "**Respekterar GPC och DNT** på serversidan och integrerar med WordPress Consent API."
+
+#. Why bullet
+#: readme.txt:why-bullet-3
+msgid "**Daily-rotating salted hashes** — cross-day and cross-site tracking are mathematically impossible."
+msgstr "**Saltade hashar som roteras dagligen** – spårning mellan dagar och mellan webbplatser är matematiskt omöjlig."
+
+#. Why bullet
+#: readme.txt:why-bullet-4
+msgid "**Eight focused dashboard pages.** No clutter, no upsells."
+msgstr "**Åtta fokuserade sidor i kontrollpanelen.** Inget skräp, inga mersäljningar."
+
+#. Sub-heading: Key Features
+#: readme.txt:key-features-heading
+msgid "Key Features"
+msgstr "Huvudfunktioner"
+
+#. Feature bullet
+#: readme.txt:feature-bullet-1
+msgid "**Real-time** — Active visitor count, active pages, live pageview feed."
+msgstr "**Realtid** – Antal aktiva besökare, aktiva sidor, direktsänt flöde av sidvisningar."
+
+#. Feature bullet
+#: readme.txt:feature-bullet-2
+msgid "**Smart channel grouping** — Direct, Organic Search, Social Media, Email, Referral, Paid Search, Paid Social, and a dedicated **AI Assistants** channel for ChatGPT, Claude, Gemini, Perplexity, Copilot, NotebookLM, Meta AI, Le Chat, Deepseek, You, iAsk, Jasper, and Writesonic."
+msgstr "**Smart kanalgruppering** – Direkt, organisk sökning, sociala medier, e-post, hänvisning, betald sökning, betald social och en dedikerad kanal för **AI-assistenter** med ChatGPT, Claude, Gemini, Perplexity, Copilot, NotebookLM, Meta AI, Le Chat, Deepseek, You, iAsk, Jasper och Writesonic."
+
+#. Feature bullet
+#: readme.txt:feature-bullet-3
+msgid "**Custom events + engagement** — Link clicks (and tagged button clicks via `statnive-event-*` classes), form submissions, downloads, outbound links, time on page, scroll depth."
+msgstr "**Anpassade händelser och engagemang** – Länkklick (och taggade knappklick via klasserna `statnive-event-*`), formulärinlämningar, nedladdningar, utgående länkar, tid på sidan och scrolldjup."
+
+#. Feature bullet
+#: readme.txt:feature-bullet-4
+msgid "**Bot vs human separation** — Real visitors and automated traffic in distinct buckets."
+msgstr "**Separation mellan bot och människa** – Riktiga besökare och automatiserad trafik i separata kategorier."
+
+#. Feature bullet
+#: readme.txt:feature-bullet-5
+msgid "**Geography in tiers** — Zero-config timezone country mapping; optional CDN headers; optional one-click DB-IP city download (free); optional MaxMind GeoLite2."
+msgstr "**Geografi i flera nivåer** – Landmappning från tidszon utan konfiguration, valfria CDN-headrar, valfri ettklicksnedladdning av DB-IP-stad (kostnadsfri) och valfri MaxMind GeoLite2."
+
+#. Feature bullet
+#: readme.txt:feature-bullet-6
+msgid "**Configurable retention** — 30 / 90 / 180 / 365 days, or Forever. Daily WP-Cron purge."
+msgstr "**Konfigurerbar lagringstid** – 30, 90, 180 eller 365 dagar, eller för alltid. Daglig rensning via WP-Cron."
+
+#. Feature bullet
+#: readme.txt:feature-bullet-7
+msgid "**WordPress Privacy API** — Personal-data export and erase registered automatically."
+msgstr "**WordPress Privacy API** – Export och radering av personuppgifter registreras automatiskt."
+
+#. Feature bullet
+#: readme.txt:feature-bullet-8
+msgid "**WP-CLI** — `wp statnive cron run` for sites with `DISABLE_WP_CRON`."
+msgstr "**WP-CLI** – `wp statnive cron run` för webbplatser med `DISABLE_WP_CRON`."
+
+#. Description paragraph
+#: readme.txt:description-p4
+msgid "Source code at [github.com/statnive/statnive](https://github.com/statnive/statnive). Learn more at [statnive.com](https://statnive.com)."
+msgstr "Källkod på [github.com/statnive/statnive](https://github.com/statnive/statnive). Läs mer på [statnive.com](https://statnive.com)."
+
+#. Section heading
+#: readme.txt:section-installation
+msgid "Installation"
+msgstr "Installation"
+
+#. Install step
+#: readme.txt:install-step-1
+msgid "Upload the `statnive` folder to `/wp-content/plugins/`."
+msgstr "Ladda upp mappen `statnive` till `/wp-content/plugins/`."
+
+#. Install step
+#: readme.txt:install-step-2
+msgid "Activate the plugin through the **Plugins** menu in WordPress."
+msgstr "Aktivera tillägget via menyn **Tillägg** i WordPress."
+
+#. Install step
+#: readme.txt:install-step-3
+msgid "Open **Statnive** in the admin sidebar."
+msgstr "Öppna **Statnive** i sidopanelen i administrationen."
+
+#. Install closing paragraph
+#: readme.txt:install-closing
+msgid "That's it. Tracking begins immediately — no configuration, no account, no tracking code to paste."
+msgstr "Det är allt. Spårningen startar omedelbart – ingen konfiguration, inget konto, ingen spårningskod att klistra in."
+
+#. Section heading
+#: readme.txt:section-faq
+msgid "Frequently Asked Questions"
+msgstr "Vanliga frågor"
+
+#. FAQ Q
+#: readme.txt:faq-q1
+msgid "Does Statnive use cookies?"
+msgstr "Använder Statnive kakor?"
+
+#. FAQ A
+#: readme.txt:faq-a1
+msgid "No. Statnive is 100% cookie-free. Visitor identification is a daily-rotating salted hash that cannot be used to track individuals across days or sites."
+msgstr "Nej. Statnive är 100 % utan kakor. Besökare identifieras med en saltad hash som roteras dagligen och som inte kan användas för att spåra individer mellan olika dagar eller webbplatser."
+
+#. FAQ Q
+#: readme.txt:faq-q2
+msgid "Is Statnive GDPR compliant?"
+msgstr "Är Statnive GDPR-kompatibelt?"
+
+#. FAQ A
+#: readme.txt:faq-a2
+msgid "Statnive is **designed to support** GDPR, CCPA, APPI, and PIPL compliance: no cookies, no PII storage, daily rotating hashes, configurable retention, WordPress Privacy API export/erase, and server-side respect for GPC and DNT signals. Final compliance always depends on your configuration and your privacy policy."
+msgstr "Statnive är **utformat för att stödja** efterlevnad av GDPR, CCPA, APPI och PIPL: inga kakor, ingen lagring av personuppgifter, hashar som roteras dagligen, konfigurerbar lagringstid, export och radering via WordPress Privacy API samt respekt för GPC- och DNT-signaler på serversidan. Slutlig efterlevnad beror alltid på din konfiguration och din integritetspolicy."
+
+#. FAQ Q
+#: readme.txt:faq-q3
+msgid "How does visitor counting work without cookies?"
+msgstr "Hur fungerar besökarräkning utan kakor?"
+
+#. FAQ A
+#: readme.txt:faq-a3
+msgid "A salted SHA-256 hash of the visitor's anonymized IP plus User-Agent. The salt rotates daily, so the same visitor gets a different hash tomorrow — cross-day stitching is impossible while daily uniques stay accurate."
+msgstr "En saltad SHA-256-hash av besökarens anonymiserade IP-adress plus User-Agent. Saltet roteras dagligen, så samma besökare får en annan hash i morgon – det går inte att koppla samman besök mellan dagar, men antalet unika besökare per dag förblir korrekt."
+
+#. FAQ Q
+#: readme.txt:faq-q4
+msgid "Where is my data stored?"
+msgstr "Var lagras mina data?"
+
+#. FAQ A
+#: readme.txt:faq-a4
+msgid "In your WordPress database, in tables prefixed `statnive_`. Nothing leaves your server unless you explicitly enable the optional MaxMind or DB-IP GeoIP downloads (one-time database files, never visitor data). When you uninstall the plugin, all tables and uploaded GeoIP files are removed."
+msgstr "I din WordPress-databas, i tabeller med prefixet `statnive_`. Inget lämnar din server om du inte uttryckligen aktiverar de valfria GeoIP-nedladdningarna från MaxMind eller DB-IP (engångsfiler med databas, aldrig besökardata). När du avinstallerar tillägget tas alla tabeller och uppladdade GeoIP-filer bort."
+
+#. FAQ Q
+#: readme.txt:faq-q5
+msgid "Does it work with WooCommerce?"
+msgstr "Fungerar det med WooCommerce?"
+
+#. FAQ A
+#: readme.txt:faq-a5
+msgid "Statnive tracks pageviews, events, sessions, and referrers on WooCommerce stores like any other WordPress site. Dedicated WooCommerce revenue tracking with Revenue per Visitor (RPV) is on the roadmap."
+msgstr "Statnive spårar sidvisningar, händelser, sessioner och hänvisare på WooCommerce-butiker precis som på andra WordPress-webbplatser. Dedikerad intäktsspårning för WooCommerce med intäkt per besökare (RPV) finns på färdplanen."
+
+#. FAQ Q
+#: readme.txt:faq-q6
+msgid "How much does it slow down my site?"
+msgstr "Hur mycket saktar det ner min webbplats?"
+
+#. FAQ A
+#: readme.txt:faq-a6
+msgid "The tracker script is small (~2 KB gzipped) and loads asynchronously, so it does not block your page render. The hit endpoint writes a single row per pageview. Dashboard queries run against pre-aggregated daily summaries rather than raw events."
+msgstr "Spårningsskriptet är litet (cirka 2 kB gzippat) och laddas asynkront, så det blockerar inte sidans rendering. Hit-endpointen skriver en enda rad per sidvisning. Frågor från kontrollpanelen körs mot föraggregerade dagliga sammanställningar i stället för mot råa händelser."
+
+#. FAQ Q
+#: readme.txt:faq-q7
+msgid "Can I run Statnive alongside Google Analytics or Matomo?"
+msgstr "Kan jag köra Statnive parallellt med Google Analytics eller Matomo?"
+
+#. FAQ A
+#: readme.txt:faq-a7
+msgid "Yes. Statnive is fully independent. Many users run Statnive as their primary privacy-friendly analytics and keep GA4 for advertising attribution."
+msgstr "Ja. Statnive är helt oberoende. Många användare kör Statnive som sitt primära integritetsvänliga analysverktyg och behåller GA4 för annonsattribution."
+
+#. FAQ Q
+#: readme.txt:faq-q8
+msgid "What can cause \"no data\"?"
+msgstr "Vad kan orsaka ”inga data”?"
+
+#. FAQ A
+#: readme.txt:faq-a8
+msgid "Common causes: ad blockers, aggressive page caching, CSP rules blocking `fetch`/`sendBeacon` (allow `connect-src 'self'`), GPC or DNT enabled, or `DISABLE_WP_CRON` without a system cron. Exclude `/wp-json/statnive/v1/hit` and `admin-ajax.php?action=statnive_hit` from page caches."
+msgstr "Vanliga orsaker: annonsblockerare, aggressiv sidcache, CSP-regler som blockerar `fetch`/`sendBeacon` (tillåt `connect-src 'self'`), GPC eller DNT aktiverat, eller `DISABLE_WP_CRON` utan system-cron. Undanta `/wp-json/statnive/v1/hit` och `admin-ajax.php?action=statnive_hit` från sidcachar."
+
+#. FAQ Q
+#: readme.txt:faq-q9
+msgid "How does Geography work?"
+msgstr "Hur fungerar geografi?"
+
+#. FAQ A
+#: readme.txt:faq-a9
+msgid "Four tiers, falling through automatically: (1) browser timezone → country, ~80% accurate, no external call; (2) CDN country headers (Cloudflare, CloudFront, Vercel) when present; (3) optional one-click DB-IP IP-to-City Lite (free, CC-BY 4.0); (4) optional MaxMind GeoLite2 (free with an account). Tiers 3 and 4 are opt-in via a discrete user click."
+msgstr "Fyra nivåer som faller tillbaka automatiskt: (1) webbläsarens tidszon → land, cirka 80 % korrekt, utan externa anrop; (2) CDN-land-headrar (Cloudflare, CloudFront, Vercel) när de finns; (3) valfri ettklicksnedladdning DB-IP IP-to-City Lite (kostnadsfri, CC-BY 4.0); (4) valfri MaxMind GeoLite2 (kostnadsfri med konto). Nivå 3 och 4 aktiveras endast efter ett uttryckligt klick av användaren."
+
+#. FAQ Q
+#: readme.txt:faq-q10
+msgid "Does Statnive count bots as real visitors?"
+msgstr "Räknar Statnive bottar som riktiga besökare?"
+
+#. FAQ A
+#: readme.txt:faq-a10
+msgid "No. ~200 server-side bot UA patterns and tracker-side fingerprints (webdriver, automation flags) bucket bots separately, so \"Visitors\" and \"Pageviews\" reflect humans only."
+msgstr "Nej. Cirka 200 mönster av bot-User-Agent på serversidan tillsammans med fingeravtryck på spårarsidan (webdriver, automatiseringsflaggor) placerar bottar i en egen kategori, så ”Besökare” och ”Sidvisningar” speglar bara människor."
+
+#. Section heading
+#: readme.txt:section-screenshots
+msgid "Screenshots"
+msgstr "Skärmbilder"
+
+#. Screenshot caption 1
+#: readme.txt:screenshot-1
+msgid "Know your traffic at a glance — visitors, sessions, pageviews and trends that matter"
+msgstr "Se din trafik med en blick – besökare, sessioner, sidvisningar och trender som spelar roll"
+
+#. Screenshot caption 2
+#: readme.txt:screenshot-2
+msgid "Find what's actually driving results — top sources and top pages side by side"
+msgstr "Hitta vad som faktiskt ger resultat – toppkällor och toppsidor sida vid sida"
+
+#. Screenshot caption 3
+#: readme.txt:screenshot-3
+msgid "Every page, ranked by what matters — search, sort, find your best content"
+msgstr "Varje sida, rangordnad efter det som spelar roll – sök, sortera, hitta ditt bästa innehåll"
+
+#. Screenshot caption 4
+#: readme.txt:screenshot-4
+msgid "See where visitors arrive and leave — entry and exit pages side by side"
+msgstr "Se var besökarna kommer in och går ut – ingångs- och utgångssidor sida vid sida"
+
+#. Screenshot caption 5
+#: readme.txt:screenshot-5
+msgid "Understand where your traffic comes from — referral, direct, organic, social, AI"
+msgstr "Förstå varifrån din trafik kommer – hänvisning, direkt, organisk, social, AI"
+
+#. Screenshot caption 6
+#: readme.txt:screenshot-6
+msgid "Desktop, mobile, bots — device, browser and OS breakdowns in one view"
+msgstr "Dator, mobil, bottar – fördelningar på enhet, webbläsare och operativsystem i en vy"
+
+#. Screenshot caption 7
+#: readme.txt:screenshot-7
+msgid "Reach across languages and regions — see which languages your visitors speak"
+msgstr "Nå ut över språk och regioner – se vilka språk dina besökare talar"
+
+#. Screenshot caption 8
+#: readme.txt:screenshot-8
+msgid "Watch your site breathe in real time — active visitors and live pageviews"
+msgstr "Se din webbplats andas i realtid – aktiva besökare och sidvisningar live"
+
+#. Section heading
+#: readme.txt:section-external-services
+msgid "External Services"
+msgstr "Externa tjänster"
+
+#. External Services intro
+#: readme.txt:external-services-intro
+msgid "This plugin connects to two third-party services, both **opt-in via explicit user action**. No visitor data is ever sent to either service."
+msgstr "Detta tillägg ansluter till två tredjepartstjänster, båda **aktiveras endast genom uttryckligt val av användaren**. Inga besökardata skickas någonsin till någon av tjänsterna."
+
+#. External Services subsection heading
+#: readme.txt:maxmind-heading
+msgid "MaxMind GeoLite2 (optional)"
+msgstr "MaxMind GeoLite2 (valfri)"
+
+#. MaxMind description
+#: readme.txt:maxmind-description
+msgid "Used to download the MaxMind GeoLite2-City database for high-accuracy visitor geolocation. Requires a free MaxMind account and a license key the user pastes into Settings → GeoIP. Accuracy: approximate city/region only — not for identifying individuals or households."
+msgstr "Används för att ladda ner databasen MaxMind GeoLite2-City för geolokalisering av besökare med hög precision. Kräver ett kostnadsfritt MaxMind-konto och en licensnyckel som användaren klistrar in under Inställningar → GeoIP. Precision: endast ungefärlig stad/region – inte för att identifiera personer eller hushåll."
+
+#. MaxMind bullet
+#: readme.txt:maxmind-bullet-source
+msgid "Source: MaxMind (https://www.maxmind.com), downloaded from https://download.maxmind.com/app/geoip_download"
+msgstr "Källa: MaxMind (https://www.maxmind.com), nedladdas från https://download.maxmind.com/app/geoip_download"
+
+#. MaxMind bullet
+#: readme.txt:maxmind-bullet-when
+msgid "When: Weekly via WP-Cron, only after the user enables GeoIP and configures a license key"
+msgstr "När: Varje vecka via WP-Cron, endast efter att användaren har aktiverat GeoIP och konfigurerat en licensnyckel"
+
+#. MaxMind bullet
+#: readme.txt:maxmind-bullet-data-sent
+msgid "Data sent: License key + standard HTTP request headers. No visitor data is transmitted."
+msgstr "Data som skickas: Licensnyckel och vanliga HTTP-anropsheaders. Inga besökardata skickas."
+
+#. MaxMind bullet
+#: readme.txt:maxmind-bullet-data-received
+msgid "Data received: GeoLite2-City.mmdb file, stored in your `wp-content/uploads/statnive/` directory"
+msgstr "Data som tas emot: filen GeoLite2-City.mmdb, lagras i katalogen `wp-content/uploads/statnive/`"
+
+#. MaxMind bullet
+#: readme.txt:maxmind-bullet-purpose
+msgid "Purpose: Approximate visitor geolocation (country / region / coarse city)"
+msgstr "Syfte: Ungefärlig geolokalisering av besökare (land / region / grov stad)"
+
+#. MaxMind bullet
+#: readme.txt:maxmind-bullet-signup
+msgid "Sign up for a MaxMind account: https://www.maxmind.com/en/geolite2/signup"
+msgstr "Skapa ett MaxMind-konto: https://www.maxmind.com/en/geolite2/signup"
+
+#. MaxMind bullet
+#: readme.txt:maxmind-bullet-license
+msgid "Get your license key: https://www.maxmind.com/en/accounts/current/license-key"
+msgstr "Hämta din licensnyckel: https://www.maxmind.com/en/accounts/current/license-key"
+
+#. MaxMind bullet
+#: readme.txt:maxmind-bullet-privacy
+msgid "MaxMind Privacy Policy: https://www.maxmind.com/en/privacy-policy"
+msgstr "MaxMinds integritetspolicy: https://www.maxmind.com/en/privacy-policy"
+
+#. MaxMind bullet
+#: readme.txt:maxmind-bullet-terms
+msgid "MaxMind Terms of Use: https://www.maxmind.com/en/terms-of-use"
+msgstr "MaxMinds användarvillkor: https://www.maxmind.com/en/terms-of-use"
+
+#. MaxMind bullet
+#: readme.txt:maxmind-bullet-eula
+msgid "MaxMind GeoLite2 EULA: https://www.maxmind.com/en/geolite2/eula"
+msgstr "MaxMind GeoLite2 EULA: https://www.maxmind.com/en/geolite2/eula"
+
+#. MaxMind attribution
+#: readme.txt:maxmind-attribution
+msgid "This product includes GeoLite Data created by MaxMind, available from https://www.maxmind.com."
+msgstr "Denna produkt innehåller GeoLite-data skapade av MaxMind, tillgängliga från https://www.maxmind.com."
+
+#. External Services subsection heading
+#: readme.txt:dbip-heading
+msgid "DB-IP IP-to-City Lite (optional)"
+msgstr "DB-IP IP-to-City Lite (valfri)"
+
+#. DB-IP description
+#: readme.txt:dbip-description
+msgid "Used to download the free DB-IP IP-to-City Lite database. No account, no license key, no EULA. Accuracy: approximate city/region only — not for identifying individuals or households."
+msgstr "Används för att ladda ner den kostnadsfria databasen DB-IP IP-to-City Lite. Inget konto, ingen licensnyckel, ingen EULA. Precision: endast ungefärlig stad/region – inte för att identifiera personer eller hushåll."
+
+#. DB-IP bullet
+#: readme.txt:dbip-bullet-source
+msgid "Source: DB-IP (https://db-ip.com), downloaded from https://download.db-ip.com/free/"
+msgstr "Källa: DB-IP (https://db-ip.com), nedladdas från https://download.db-ip.com/free/"
+
+#. DB-IP bullet
+#: readme.txt:dbip-bullet-when
+msgid "When: One-shot user click \"Enable city-level geography\" on the Geography page, then monthly via WP-Cron for refresh"
+msgstr "När: Ett enskilt klick av användaren på ”Aktivera geografi på stadsnivå” på sidan Geografi, därefter månadsvis uppdatering via WP-Cron"
+
+#. DB-IP bullet
+#: readme.txt:dbip-bullet-data-sent
+msgid "Data sent: Standard HTTP request headers only (no visitor data, no account, no key)"
+msgstr "Data som skickas: Endast vanliga HTTP-anropsheaders (inga besökardata, inget konto, ingen nyckel)"
+
+#. DB-IP bullet
+#: readme.txt:dbip-bullet-data-received
+msgid "Data received: dbip-city-lite-YYYY-MM.mmdb.gz file, decompressed to your `wp-content/uploads/statnive/` directory"
+msgstr "Data som tas emot: filen dbip-city-lite-YYYY-MM.mmdb.gz, packas upp i katalogen `wp-content/uploads/statnive/`"
+
+#. DB-IP bullet
+#: readme.txt:dbip-bullet-purpose
+msgid "Purpose: Approximate visitor geolocation (city / region / country)"
+msgstr "Syfte: Ungefärlig geolokalisering av besökare (stad / region / land)"
+
+#. DB-IP bullet
+#: readme.txt:dbip-bullet-terms
+msgid "DB-IP Terms: https://db-ip.com/tos.php"
+msgstr "DB-IP:s villkor: https://db-ip.com/tos.php"
+
+#. DB-IP bullet
+#: readme.txt:dbip-bullet-privacy
+msgid "DB-IP Privacy Policy: https://db-ip.com/privacy.php"
+msgstr "DB-IP:s integritetspolicy: https://db-ip.com/privacy.php"
+
+#. DB-IP bullet
+#: readme.txt:dbip-bullet-license
+msgid "License: CC-BY 4.0"
+msgstr "Licens: CC-BY 4.0"
+
+#. DB-IP attribution
+#: readme.txt:dbip-attribution
+msgid "GeoIP data © DB-IP under CC-BY 4.0."
+msgstr "GeoIP-data © DB-IP under CC-BY 4.0."
+
+#. External services closing
+#: readme.txt:external-services-closing
+msgid "No visitor data is ever sent to any external service. All analytics data remains in your WordPress database."
+msgstr "Inga besökardata skickas någonsin till någon extern tjänst. Alla analysdata stannar i din WordPress-databas."
+
+#. Section heading
+#: readme.txt:section-privacy-policy
+msgid "Privacy Policy"
+msgstr "Integritetspolicy"
+
+#. Privacy policy body
+#: readme.txt:privacy-policy-body
+msgid "All analytics data stays in your WordPress database. Raw IPs are used only for the optional GeoIP lookup and are never persisted. Statnive registers with the WordPress Privacy API for personal-data export and erasure."
+msgstr "Alla analysdata stannar i din WordPress-databas. Råa IP-adresser används endast för det valfria GeoIP-uppslaget och lagras aldrig. Statnive registrerar sig hos WordPress Privacy API för export och radering av personuppgifter."
+
+#. Section heading
+#: readme.txt:section-changelog
+msgid "Changelog"
+msgstr "Ändringslogg"
+
+#. Section heading
+#: readme.txt:section-upgrade-notice
+msgid "Upgrade Notice"
+msgstr "Uppgraderingsnotis"
+
+#. Upgrade Notice body for the latest version.
+#: readme.txt:upgrade-notice-body
+msgid "First public release on WordPress.org."
+msgstr "Första publika utgåvan på WordPress.org."

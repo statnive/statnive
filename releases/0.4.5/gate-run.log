@@ -1,0 +1,48 @@
+# v0.4.5 gate run — 2026-04-28T22:18:00Z
+
+## Static (S-1..S-5)
+- S-1 phpcs    [PASS] zero errors (85 files, 6.6s)
+- S-2 phpstan  [PASS] zero errors at baseline level
+- S-3 phpunit  [PASS] 244/244 tests, 1035 assertions (unit suite)
+                 deferred: integration suite — wp-env unavailable in this dev environment;
+                 CI runs the full suite on every PR.
+- S-4 vitest   [PASS] 172 passed, 6 skipped (30 files)
+- S-5 PCP      [WARN] wp-env unavailable — must re-run via CI on the built ZIP before SVN push
+
+## Source-tree (C-1..C-12, C-15..C-17)
+- C-1  ABSPATH guard           [PASS]
+- C-2  LICENSE + GPL text      [PASS]
+- C-2a THIRD-PARTY-LICENSES    [PASS] (.txt)
+- C-3  no phone-home in activate [PASS]
+       (verified: no `wp_remote_*`, `download_url`, `GeoIPDownloader::download|enable_dbip_city`
+        invocations inside Plugin::activate — DB-IP one-click is REST-only)
+- C-4  no api.statnive.com refs  [PASS]
+- C-5  readme.txt               [PASS]
+  - C-5a External Services      [PASS] (MaxMind + DB-IP blocks present)
+  - C-5b MaxMind attribution    [PASS]
+  - C-5d Stable tag matches     [PASS] 0.4.5
+  - C-5h size cap (10240B)      [PASS] 10116B
+- C-6  output escaping heuristic [PASS]
+- C-7  MaxMind hygiene           [PASS]
+- C-8  no custom updater         [PASS]
+- C-9  no bundled core libs      [PASS]
+- C-10 no external CDN enqueues  [PASS]
+- C-11 cron schedule==clear      [PASS] (DB-IP reuses existing statnive_weekly_geoip_update hook)
+- C-12 uninstall.php             [PASS]
+- C-15 dbDelta SQL formatting    [PASS]
+- C-16 i18n infrastructure       [PASS]
+- C-17 privacy hooks             [PASS]
+
+## Post-build (C-13, C-14)
+- C-13 SVN /assets/              [PASS]
+- C-14 ZIP integrity
+  - top-level=statnive            [PASS]
+  - required files                [PASS] (statnive.php, readme.txt, uninstall.php, vendor/autoload.php, LICENSE, THIRD-PARTY-LICENSES.txt)
+  - forbidden patterns            [PASS]
+    Note: 7 composer.json files present (1× plugin + 6× vendor) — intentional per
+    LEARN.md (v0.4.2 PCP-warning fix). Leak regex updated to exclude composer.json
+    while keeping composer.lock forbidden.
+  - size 1.07 MB                  [PASS]
+  - 333 files                     [PASS]
+  - Version 0.4.5 in ZIP          [PASS]
+  - .min.js source/maps           [PASS]

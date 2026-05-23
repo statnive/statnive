@@ -1,0 +1,24 @@
+Statnive v0.4.4 — composer release-gate + npm run gate
+========================================================
+Date: 2026-04-27
+Branch: development
+
+composer phpcs        PASS  85/85 files, 0 errors, 6.09s
+composer phpstan      PASS  [OK] No errors
+composer test:unit    PASS  239/239 tests, 1030 assertions, 0.4s
+                            (8 PHPUnit deprecations — pre-existing, not
+                            introduced by this release)
+composer test         FAIL  Class "WP_UnitTestCase" not found
+                            (integration suite, /tmp/wordpress-tests-lib
+                            not installed; same condition as v0.4.3 — see
+                            v0.4.3 SIGN-OFF.md for the same waiver)
+
+npm run gate          PASS  167/167 tests + 6 skipped, 8.17s
+                            (vitest, 30 test files passed, 2 skipped)
+
+Waiver
+------
+Local integration tests cannot run without wp-env or
+/tmp/wordpress-tests-lib. CI runs the integration job currently gated
+off (PHPUnit 11 attributes vs WP test framework parseTestMethodAnnotations
+removal — tracked separately). All other release-gate steps green.

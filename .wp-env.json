@@ -3,5 +3,15 @@
   "phpVersion": "8.2",
   "plugins": ["."],
   "port": 8888,
-  "testsPort": 8889
+  "testsPort": 8889,
+  "env": {
+    "tests": {
+      "mappings": {
+        "wp-content/mu-plugins/statnive-ip-filter.php": "./tests/e2e/fixtures/mu-plugins/statnive-ip-filter.php",
+        "wp-content/mu-plugins/statnive-consent-stub.php": "./tests/e2e/fixtures/mu-plugins/statnive-consent-stub.php",
+        "wp-content/mu-plugins/statnive-e2e-debug.php": "./tests/e2e/fixtures/mu-plugins/statnive-e2e-debug.php",
+        "wp-content/mu-plugins/.statnive-e2e-on": "./tests/e2e/fixtures/mu-plugins/.statnive-e2e-on"
+      }
+    }
+  }
 }

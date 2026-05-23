@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Statnive\Frontend;
 
-use Statnive\Http\PayloadValidator;
 use Statnive\Security\HmacValidator;
+use Statnive\Service\ExclusionMatcher;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -56,6 +56,15 @@ final class FrontendHandler {
 
 		// Don't track admin pages.
 		if ( is_admin() ) {
+			return;
+		}
+
+		// Excluded-role visitors: skip the tracker entirely. The /hit endpoint
+		// can't enforce this on its own — REST cookie auth requires X-WP-Nonce
+		// that the tracker's sendBeacon/fetch payload doesn't carry, so
+		// PrivacyManager::check_request_privacy sees a guest. The gate has to
+		// happen at enqueue time, where wp_get_current_user() is reliable.
+		if ( ExclusionMatcher::is_excluded_role() ) {
 			return;
 		}
 
@@ -181,7 +190,6 @@ final class FrontendHandler {
 			'eventUrl'      => esc_url_raw( rest_url( 'statnive/v1/event' ) ),
 			'engagementUrl' => esc_url_raw( rest_url( 'statnive/v1/engagement' ) ),
 			'ajaxUrl'       => esc_url_raw( admin_url( 'admin-ajax.php' ) ),
-			'nonce'         => wp_create_nonce( PayloadValidator::NONCE_ACTION ),
 			'hitParams'     => [
 				'resource_type' => $resource_type,
 				'resource_id'   => (string) $resource_id,

@@ -1,0 +1,1045 @@
+# Translation of Plugins - Statnive - Stable (latest release) in Swedish
+# This file is distributed under the same license as the Plugins - Statnive - Stable (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2026-05-16 10:00+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Statnive translation seed v0.4.13\n"
+"Language: sv_SE\n"
+"Project-Id-Version: Plugins - Statnive - Stable (latest release)\n"
+
+#. Plugin Name of the plugin
+#: statnive.php
+msgid "Statnive – Simple, Real-time, Privacy-first Web Analytics"
+msgstr "Statnive – Enkel, integritetsvänlig webbanalys i realtid"
+
+#. Plugin URI of the plugin
+#. Author URI of the plugin
+#: statnive.php
+msgid "https://statnive.com"
+msgstr ""
+
+#. Description of the plugin
+#: statnive.php
+msgid "Simple stats, clear decisions. Privacy-first analytics for WordPress."
+msgstr "Enkel statistik, tydliga beslut. Integritetsvänlig webbanalys för WordPress."
+
+#. Author of the plugin
+#: statnive.php
+#: src/Admin/AdminMenuManager.php:39
+msgid "Statnive"
+msgstr "Statnive"
+
+#: src/Admin/AdminBarWidget.php:56
+msgid "Statnive — Today's visitors"
+msgstr "Statnive – Dagens besökare"
+
+#: src/Admin/AdminMenuManager.php:38
+#: src/Privacy/PrivacyEraser.php:43
+#: src/Privacy/PrivacyExporter.php:43
+msgid "Statnive Analytics"
+msgstr "Statnive Analytics"
+
+#: src/Admin/CronHealth.php:86
+msgid "Daily salt rotation"
+msgstr "Daglig saltrotation"
+
+#: src/Admin/CronHealth.php:91
+msgid "Daily data aggregation"
+msgstr "Daglig dataaggregering"
+
+#: src/Admin/CronHealth.php:96
+msgid "Retention cleanup"
+msgstr "Rensning av lagrad data"
+
+#: src/Admin/CronHealth.php:101
+msgid "Weekly GeoIP database update"
+msgstr "Veckovis uppdatering av GeoIP-databasen"
+
+#: src/Admin/GeoIPNotice.php:96
+msgid "Statnive: GeoIP is enabled but no MaxMind license key is configured."
+msgstr "Statnive: GeoIP är aktiverat men ingen MaxMind-licensnyckel är konfigurerad."
+
+#: src/Admin/GeoIPNotice.php:97
+msgid "Impact: visitor country/region data will not appear in your reports. Page tracking, sources, devices and all other metrics continue to work normally."
+msgstr "Påverkan: data om besökarnas land och region visas inte i dina rapporter. Sidspårning, källor, enheter och alla andra mått fortsätter att fungera normalt."
+
+#: src/Admin/GeoIPNotice.php:98
+msgid "What Statnive will do: retry the GeoIP database download every week. No additional alerts will be raised until the key is added or GeoIP is disabled."
+msgstr "Det här gör Statnive: försöker ladda ner GeoIP-databasen igen varje vecka. Inga fler varningar visas förrän nyckeln har lagts till eller GeoIP har inaktiverats."
+
+#. translators: 1: MaxMind signup URL, 2: MaxMind EULA URL
+#: src/Admin/GeoIPNotice.php:102
+#, php-format
+msgid "<strong>To fix:</strong> <a href=\"%1$s\" target=\"_blank\" rel=\"noopener\">get a free MaxMind license key</a> (requires accepting the <a href=\"%2$s\" target=\"_blank\" rel=\"noopener\">GeoLite2 EULA</a>) and paste it into Settings → GeoIP. Or disable GeoIP in Settings to dismiss this notice."
+msgstr "<strong>Så här åtgärdar du:</strong> <a href=\"%1$s\" target=\"_blank\" rel=\"noopener\">skaffa en kostnadsfri MaxMind-licensnyckel</a> (kräver att du godkänner <a href=\"%2$s\" target=\"_blank\" rel=\"noopener\">GeoLite2 EULA</a>) och klistra in den i Inställningar → GeoIP. Eller inaktivera GeoIP i Inställningar för att stänga denna notis."
+
+#: src/Admin/GeoIPNotice.php:139
+msgid "Statnive: WordPress cron jobs are not running on time."
+msgstr "Statnive: WordPress cron-jobb körs inte i tid."
+
+#: src/Admin/GeoIPNotice.php:143
+msgid "These Statnive background jobs have not completed within their normal window:"
+msgstr "Följande Statnive-bakgrundsjobb har inte slutförts inom sitt vanliga tidsfönster:"
+
+#. translators: 1: example crontab line, 2: WP-CLI command
+#: src/Admin/GeoIPNotice.php:154
+#, php-format
+msgid "<strong>To fix:</strong> add a system cron that pings <code>wp-cron.php</code> every five minutes — for example <code>%1$s</code> — or run <code>%2$s</code> via WP-CLI."
+msgstr "<strong>Så här åtgärdar du:</strong> lägg till en system-cron som pingar <code>wp-cron.php</code> var femte minut – till exempel <code>%1$s</code> – eller kör <code>%2$s</code> via WP-CLI."
+
+#: src/Admin/GeoIPNotice.php:166
+msgid "What Statnive will do automatically: this notice self-dismisses as soon as every job runs again within its normal window. Clicking \"Run cleanup now\" below records a fresh heartbeat, which clears the warning until the next scheduled cycle."
+msgstr "Det här gör Statnive automatiskt: denna notis försvinner av sig själv så snart alla jobb körs igen inom sitt vanliga tidsfönster. När du klickar på ”Kör rensning nu” nedan registreras en ny hjärtslagssignal som rensar varningen fram till nästa schemalagda cykel."
+
+#: src/Admin/GeoIPNotice.php:172
+msgid "Run cleanup now"
+msgstr "Kör rensning nu"
+
+#: src/Admin/GeoIPNotice.php:177
+msgid "Dismiss"
+msgstr "Stäng"
+
+#: src/Admin/GeoIPNotice.php:179
+msgid "Dismiss this Statnive cron warning"
+msgstr "Stäng denna Statnive cron-varning"
+
+#. translators: %s = job label, e.g. "Daily data aggregation"
+#: src/Admin/GeoIPNotice.php:273
+#, php-format
+msgid "%s — has not run yet."
+msgstr "%s – har inte körts ännu."
+
+#. translators: 1: job label, 2: localised date/time of last successful run
+#: src/Admin/GeoIPNotice.php:287
+#, php-format
+msgid "%1$s — last ran %2$s."
+msgstr "%1$s – kördes senast %2$s."
+
+#: src/Admin/GeoIPNotice.php:307
+msgid "You do not have permission to run Statnive cron jobs."
+msgstr "Du har inte behörighet att köra Statnives cron-jobb."
+
+#: src/Admin/GeoIPNotice.php:316
+msgid "Statnive cron jobs ran successfully. The warning will reappear if cron stops firing again."
+msgstr "Statnives cron-jobb kördes utan problem. Varningen visas igen om cron slutar köras."
+
+#. translators: %s = error message
+#: src/Admin/GeoIPNotice.php:321
+#, php-format
+msgid "Statnive cron run failed: %s"
+msgstr "Statnives cron-körning misslyckades: %s"
+
+#: src/Admin/GeoIPNotice.php:353
+msgid "You do not have permission to dismiss this notice."
+msgstr "Du har inte behörighet att stänga denna notis."
+
+#: src/Cron/CronRegistrar.php:32
+msgid "Once Weekly"
+msgstr "En gång i veckan"
+
+#: src/Database/Migrator.php:259
+msgid "Statnive: plugin version mismatch detected."
+msgstr "Statnive: avvikande tilläggsversion upptäcktes."
+
+#. translators: 1: stored schema version, 2: running plugin version
+#: src/Database/Migrator.php:263
+#, php-format
+msgid "Your database schema is at version %1$s but the running plugin is version %2$s. This may happen if you downgraded the plugin. Please re-install the latest version to avoid data inconsistencies."
+msgstr "Ditt databasschema är version %1$s men tillägget som körs är version %2$s. Detta kan hända om du nedgraderade tillägget. Installera om den senaste versionen för att undvika datainkonsekvenser."
+
+#: src/Plugin.php:124
+msgid "You do not have permission to activate plugins."
+msgstr "Du har inte behörighet att aktivera tillägg."
+
+#: src/Plugin.php:125
+#: src/Plugin.php:141
+#: src/Plugin.php:157
+msgid "Plugin Activation Error"
+msgstr "Fel vid aktivering av tillägg"
+
+#. translators: 1: Required PHP version, 2: Current PHP version
+#: src/Plugin.php:136
+#: statnive.php:68
+#, php-format
+msgid "Statnive requires PHP %1$s or higher. You are running PHP %2$s."
+msgstr "Statnive kräver PHP %1$s eller högre. Du kör PHP %2$s."
+
+#. translators: 1: Required WordPress version, 2: Current WordPress version
+#: src/Plugin.php:152
+#: statnive.php:93
+#, php-format
+msgid "Statnive requires WordPress %1$s or higher. You are running WordPress %2$s."
+msgstr "Statnive kräver WordPress %1$s eller högre. Du kör WordPress %2$s."
+
+#: src/Privacy/ComplianceAuditor.php:70
+msgid "Consent mode configured"
+msgstr "Samtyckesläge konfigurerat"
+
+#. translators: %s: consent mode name.
+#: src/Privacy/ComplianceAuditor.php:74
+#, php-format
+msgid "Consent mode: %s"
+msgstr "Samtyckesläge: %s"
+
+#: src/Privacy/ComplianceAuditor.php:75
+msgid "No consent mode configured. Set one in Settings."
+msgstr "Inget samtyckesläge konfigurerat. Ange ett under Inställningar."
+
+#: src/Privacy/ComplianceAuditor.php:88
+msgid "Do Not Track honored"
+msgstr "Do Not Track respekteras"
+
+#: src/Privacy/ComplianceAuditor.php:91
+msgid "DNT header is respected."
+msgstr "DNT-headern respekteras."
+
+#: src/Privacy/ComplianceAuditor.php:92
+msgid "DNT header is not honored. Consider enabling for privacy compliance."
+msgstr "DNT-headern respekteras inte. Överväg att aktivera den för bättre integritetsefterlevnad."
+
+#: src/Privacy/ComplianceAuditor.php:105
+msgid "Global Privacy Control honored"
+msgstr "Global Privacy Control respekteras"
+
+#: src/Privacy/ComplianceAuditor.php:108
+msgid "GPC header is respected."
+msgstr "GPC-headern respekteras."
+
+#: src/Privacy/ComplianceAuditor.php:109
+msgid "GPC header is not honored. Required under some US state laws."
+msgstr "GPC-headern respekteras inte. Krävs enligt vissa amerikanska delstatslagar."
+
+#: src/Privacy/ComplianceAuditor.php:123
+msgid "Data retention configured"
+msgstr "Lagringstid konfigurerad"
+
+#. translators: %1$d: number of days, %2$s: retention mode.
+#: src/Privacy/ComplianceAuditor.php:127
+#, php-format
+msgid "Data retained for %1$d days (%2$s mode)."
+msgstr "Data sparas i %1$d dagar (läge: %2$s)."
+
+#: src/Privacy/ComplianceAuditor.php:128
+msgid "Data retained forever. Consider setting a retention period for compliance."
+msgstr "Data sparas för alltid. Överväg att ställa in en lagringstid för efterlevnad."
+
+#: src/Privacy/ComplianceAuditor.php:142
+msgid "Privacy policy page published"
+msgstr "Integritetspolicy publicerad"
+
+#: src/Privacy/ComplianceAuditor.php:145
+msgid "Privacy policy page is published. Statnive content auto-generated."
+msgstr "Integritetspolicyn är publicerad. Statnives innehåll har genererats automatiskt."
+
+#: src/Privacy/ComplianceAuditor.php:146
+msgid "No published privacy policy page found. Create one in Settings → Privacy."
+msgstr "Ingen publicerad integritetspolicy hittades. Skapa en under Inställningar → Integritet."
+
+#: src/Privacy/ComplianceAuditor.php:159
+msgid "No raw IP addresses stored"
+msgstr "Inga råa IP-adresser lagras"
+
+#: src/Privacy/ComplianceAuditor.php:161
+msgid "IP addresses are discarded immediately after hashing and GeoIP lookup."
+msgstr "IP-adresser kastas omedelbart efter hashning och GeoIP-uppslag."
+
+#: src/Privacy/ComplianceAuditor.php:181
+msgid "Daily salt rotation active"
+msgstr "Daglig saltrotation aktiv"
+
+#. translators: %s: datetime of last salt rotation.
+#: src/Privacy/ComplianceAuditor.php:185
+#, php-format
+msgid "Last rotation: %s"
+msgstr "Senaste rotation: %s"
+
+#: src/Privacy/ComplianceAuditor.php:186
+msgid "Salt rotation may not be running. Check WP-Cron."
+msgstr "Saltrotationen kan ha stannat. Kontrollera WP-Cron."
+
+#: src/Privacy/ComplianceAuditor.php:198
+msgid "Cookie-free tracking"
+msgstr "Spårning utan kakor"
+
+#: src/Privacy/ComplianceAuditor.php:200
+msgid "Statnive uses no cookies, localStorage, or sessionStorage by design."
+msgstr "Statnive använder inga kakor, localStorage eller sessionStorage – det är inbyggt i designen."
+
+#: src/Privacy/ComplianceAuditor.php:213
+#: src/Privacy/ComplianceAuditor.php:222
+msgid "Data purge operational"
+msgstr "Datarensning fungerar"
+
+#: src/Privacy/ComplianceAuditor.php:215
+msgid "Retention mode is \"forever\" — no purge needed."
+msgstr "Lagringsläget är ”för alltid” – ingen rensning behövs."
+
+#: src/Privacy/ComplianceAuditor.php:225
+msgid "Data purge cron is scheduled."
+msgstr "Cron för datarensning är schemalagd."
+
+#: src/Privacy/ComplianceAuditor.php:226
+msgid "Data purge cron not scheduled. Deactivate and reactivate the plugin."
+msgstr "Cron för datarensning är inte schemalagd. Inaktivera och aktivera tillägget igen."
+
+#: src/Privacy/ComplianceAuditor.php:239
+msgid "HTTPS enabled"
+msgstr "HTTPS aktiverat"
+
+#: src/Privacy/ComplianceAuditor.php:242
+msgid "Site is served over HTTPS."
+msgstr "Webbplatsen levereras via HTTPS."
+
+#: src/Privacy/ComplianceAuditor.php:243
+msgid "Site not using HTTPS. Analytics data transmitted in plaintext."
+msgstr "Webbplatsen använder inte HTTPS. Analysdata skickas i klartext."
+
+#. translators: %d: number of sessions anonymized
+#: src/Privacy/PrivacyEraser.php:124
+#, php-format
+msgid "Anonymized %d analytics session(s). Aggregate statistics preserved."
+msgstr "Anonymiserade %d analyssessioner. Aggregerad statistik bevaras."
+
+#: src/Privacy/PrivacyExporter.php:102
+msgid "Session Start"
+msgstr "Sessionsstart"
+
+#: src/Privacy/PrivacyExporter.php:106
+msgid "Session End"
+msgstr "Sessionsslut"
+
+#: src/Privacy/PrivacyExporter.php:107
+msgid "Active"
+msgstr "Aktiv"
+
+#: src/Privacy/PrivacyExporter.php:110
+msgid "Pages Viewed"
+msgstr "Visade sidor"
+
+#: src/Privacy/PrivacyExporter.php:114
+msgid "Duration (seconds)"
+msgstr "Längd (sekunder)"
+
+#: src/Privacy/PrivacyExporter.php:139
+msgid "Pages Visited"
+msgstr "Besökta sidor"
+
+#: src/Privacy/PrivacyExporter.php:146
+msgid "Statnive Analytics Sessions"
+msgstr "Statnive Analytics-sessioner"
+
+#: src/Privacy/PrivacyExporter.php:147
+msgid "Analytics sessions recorded by Statnive. No IP addresses or cookies are stored."
+msgstr "Analyssessioner som registrerats av Statnive. Inga IP-adresser eller kakor lagras."
+
+#: src/Privacy/PrivacyPolicyGenerator.php:55
+msgid "Analytics (Statnive)"
+msgstr "Webbanalys (Statnive)"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:56
+msgid "This website uses Statnive, a privacy-first analytics plugin that runs entirely on our server. No data is shared with third-party services."
+msgstr "Denna webbplats använder Statnive, ett integritetsvänligt analystillägg som körs helt på vår server. Inga data delas med tredjepartstjänster."
+
+#: src/Privacy/PrivacyPolicyGenerator.php:59
+msgid "Cookies & Tracking"
+msgstr "Kakor och spårning"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:60
+msgid "Statnive does not use cookies, localStorage, sessionStorage, or any form of browser fingerprinting. Visitor identification uses a daily-rotating cryptographic hash that cannot be reversed or used to track individuals across days."
+msgstr "Statnive använder inga kakor, localStorage, sessionStorage eller någon form av fingerprinting i webbläsaren. Identifiering av besökare sker via en kryptografisk hash som roterar dagligen och som inte kan vändas eller användas för att spåra individer mellan olika dagar."
+
+#: src/Privacy/PrivacyPolicyGenerator.php:63
+msgid "Data Collected"
+msgstr "Insamlade uppgifter"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:64
+msgid "We collect the following anonymized data for each page visit:"
+msgstr "Vi samlar in följande anonymiserade uppgifter för varje sidbesök:"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:66
+msgid "Page URL visited (without query parameters)"
+msgstr "Besökt sid-URL (utan frågeparametrar)"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:67
+msgid "Referrer URL (domain only, query parameters stripped)"
+msgstr "Hänvisar-URL (endast domän, frågeparametrar borttagna)"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:68
+msgid "Country and city (derived from IP, which is immediately discarded)"
+msgstr "Land och stad (härlett från IP, som omedelbart kastas)"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:69
+msgid "Device type, browser, and operating system"
+msgstr "Enhetstyp, webbläsare och operativsystem"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:70
+msgid "Screen resolution, language, and timezone"
+msgstr "Skärmupplösning, språk och tidszon"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:74
+msgid "IP Address Handling"
+msgstr "Hantering av IP-adresser"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:75
+msgid "Your IP address is never stored. It is used only momentarily to determine your approximate geographic location and to generate a one-way cryptographic hash for visit counting. The IP is discarded immediately after processing and cannot be recovered from the stored hash."
+msgstr "Din IP-adress lagras aldrig. Den används endast tillfälligt för att bestämma din ungefärliga geografiska plats och för att generera en envägs kryptografisk hash för räkning av besök. IP-adressen kastas omedelbart efter behandling och kan inte återskapas från den lagrade hashen."
+
+#: src/Privacy/PrivacyPolicyGenerator.php:76
+msgid "When no IP-derived geolocation source is configured, an approximate country may be inferred from your browser’s timezone setting. The timezone string is processed on this site’s server only and is not transmitted to any third party."
+msgstr "När ingen IP-baserad geolokaliseringskälla är konfigurerad kan ett ungefärligt land härledas från din webbläsares tidszonsinställning. Tidszonssträngen behandlas endast på denna webbplats server och överförs inte till någon tredje part."
+
+#: src/Privacy/PrivacyPolicyGenerator.php:79
+msgid "Consent"
+msgstr "Samtycke"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:81
+msgid "Because Statnive uses no cookies and stores no personal data, analytics run in cookieless mode without requiring consent under most privacy regulations."
+msgstr "Eftersom Statnive varken använder kakor eller lagrar personuppgifter körs webbanalysen i kakfritt läge utan krav på samtycke enligt de flesta integritetsregler."
+
+#: src/Privacy/PrivacyPolicyGenerator.php:83
+msgid "Analytics are disabled until you provide explicit consent through our cookie/consent banner. No data is collected before consent is granted."
+msgstr "Webbanalysen är inaktiverad tills du ger uttryckligt samtycke via vår cookie- eller samtyckesbanner. Inga uppgifter samlas in innan samtycke har lämnats."
+
+#: src/Privacy/PrivacyPolicyGenerator.php:85
+msgid "Analytics are active for all visitors. You may opt out using your browser's Do Not Track or Global Privacy Control settings."
+msgstr "Webbanalysen är aktiv för alla besökare. Du kan välja bort den genom inställningarna Do Not Track eller Global Privacy Control i din webbläsare."
+
+#: src/Privacy/PrivacyPolicyGenerator.php:90
+msgid "Do Not Track & Global Privacy Control"
+msgstr "Do Not Track och Global Privacy Control"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:93
+msgid "Do Not Track (DNT)"
+msgstr "Do Not Track (DNT)"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:96
+msgid "Global Privacy Control (GPC)"
+msgstr "Global Privacy Control (GPC)"
+
+#. translators: %s: comma-separated list of privacy signals
+#: src/Privacy/PrivacyPolicyGenerator.php:100
+#, php-format
+msgid "We honor the following browser privacy signals: %s. When enabled, no analytics data is collected."
+msgstr "Vi respekterar följande integritetssignaler från webbläsaren: %s. När de är aktiverade samlas inga analysdata in."
+
+#: src/Privacy/PrivacyPolicyGenerator.php:106
+msgid "Data Retention"
+msgstr "Datalagring"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:108
+msgid "Aggregated analytics data is retained indefinitely. No personal data is stored."
+msgstr "Aggregerade analysdata sparas tills vidare. Inga personuppgifter lagras."
+
+#. translators: %d: number of days
+#: src/Privacy/PrivacyPolicyGenerator.php:112
+#, php-format
+msgid "Raw analytics data is automatically deleted after %d days. Only aggregated statistics are retained for historical reporting."
+msgstr "Råa analysdata raderas automatiskt efter %d dagar. Endast aggregerad statistik sparas för historisk rapportering."
+
+#: src/Privacy/PrivacyPolicyGenerator.php:118
+msgid "Your Rights"
+msgstr "Dina rättigheter"
+
+#: src/Privacy/PrivacyPolicyGenerator.php:119
+msgid "You may request export or deletion of any analytics data associated with your user account through the WordPress personal data tools. Anonymous visitor data cannot be attributed to individuals due to the cookieless, hash-based architecture."
+msgstr "Du kan begära export eller radering av alla analysdata som är kopplade till ditt användarkonto via WordPress verktyg för personuppgifter. Anonyma besökardata kan inte kopplas till enskilda personer tack vare den kakfria, hashbaserade arkitekturen."
+
+#: src/Privacy/SiteHealthIntegration.php:33
+msgid "Statnive Privacy Compliance"
+msgstr "Statnives integritetsefterlevnad"
+
+#: src/Privacy/SiteHealthIntegration.php:38
+msgid "Statnive Data Retention"
+msgstr "Statnives datalagring"
+
+#: src/Privacy/SiteHealthIntegration.php:55
+msgid "Statnive privacy compliance is strong."
+msgstr "Statnives integritetsefterlevnad är stark."
+
+#: src/Privacy/SiteHealthIntegration.php:58
+msgid "Statnive privacy settings could be improved. Review the Privacy Audit in your dashboard."
+msgstr "Statnives integritetsinställningar kan förbättras. Granska integritetsgranskningen i din kontrollpanel."
+
+#: src/Privacy/SiteHealthIntegration.php:61
+msgid "Statnive privacy compliance needs attention. Open Settings to configure privacy options."
+msgstr "Statnives integritetsefterlevnad behöver ses över. Öppna Inställningar för att konfigurera integritetsalternativen."
+
+#. translators: %d: compliance score
+#: src/Privacy/SiteHealthIntegration.php:67
+#, php-format
+msgid "Statnive Privacy Score: %d/100"
+msgstr "Statnive integritetspoäng: %d/100"
+
+#: src/Privacy/SiteHealthIntegration.php:79
+msgid "Review Privacy Settings"
+msgstr "Granska integritetsinställningar"
+
+#: src/Privacy/SiteHealthIntegration.php:96
+msgid "Statnive: Data retained indefinitely"
+msgstr "Statnive: data sparas tills vidare"
+
+#: src/Privacy/SiteHealthIntegration.php:102
+msgid "Analytics data is retained forever. Consider setting a retention period for data minimization best practices."
+msgstr "Analysdata sparas för alltid. Överväg att ställa in en lagringstid för att följa principen om dataminimering."
+
+#: src/Privacy/SiteHealthIntegration.php:106
+msgid "Configure Retention"
+msgstr "Konfigurera lagringstid"
+
+#. translators: %1$d: days, %2$s: mode
+#: src/Privacy/SiteHealthIntegration.php:115
+#, php-format
+msgid "Statnive: %1$d-day retention (%2$s)"
+msgstr "Statnive: %1$d dagars lagring (%2$s)"
+
+#: src/Privacy/SiteHealthIntegration.php:124
+msgid "Data retention is configured with automatic cleanup."
+msgstr "Lagringstiden är konfigurerad med automatisk rensning."
+
+#: statnive.php:111
+msgid "Statnive: Composer autoloader not found. Please run \"composer install\" in the plugin directory."
+msgstr "Statnive: Composer-autoloader hittades inte. Kör ”composer install” i tilläggets katalog."
+
+# React/TypeScript-source strings (merged by bin/extract-react-pot.mjs).
+
+#: resources/react/components/charts/pie-chart-card.tsx:88
+msgid "Total"
+msgstr "Totalt"
+
+#: resources/react/components/charts/pie-chart-card.tsx:101
+#: resources/react/pages/devices.tsx:57
+#: resources/react/pages/devices.tsx:64
+msgid "Name"
+msgstr "Namn"
+
+#: resources/react/components/charts/pie-chart-card.tsx:102
+#: resources/react/components/charts/time-series-chart.tsx:44
+#: resources/react/components/shared/dual-bar-cell.tsx:22
+#: resources/react/pages/overview.tsx:115
+msgid "Visitors"
+msgstr "Besökare"
+
+#: resources/react/components/charts/pie-chart-card.tsx:103
+msgid "Percentage"
+msgstr "Procent"
+
+#: resources/react/components/charts/time-series-chart.tsx:45
+#: resources/react/components/shared/dual-bar-cell.tsx:31
+#: resources/react/pages/overview.tsx:121
+msgid "Sessions"
+msgstr "Sessioner"
+
+#: resources/react/components/charts/time-series-chart.tsx:89
+msgid "Visitors and sessions over time"
+msgstr "Besökare och sessioner över tid"
+
+#: resources/react/components/charts/time-series-chart.tsx:92
+msgid "Date"
+msgstr "Datum"
+
+#: resources/react/components/layouts/dashboard-layout.tsx:81
+msgid "Skip to content"
+msgstr "Hoppa till innehåll"
+
+#: resources/react/components/layouts/dashboard-layout.tsx:107
+msgid "Dashboard navigation"
+msgstr "Navigering i kontrollpanelen"
+
+#: resources/react/components/shared/data-table.tsx:40
+msgid "No data available"
+msgstr "Inga data tillgängliga"
+
+#: resources/react/components/shared/date-range-picker.tsx:20
+msgid "Date range"
+msgstr "Datumintervall"
+
+#: resources/react/components/shared/kpi-card.tsx:39
+msgid "Change %1$s %2$s versus previous period"
+msgstr "Förändring %1$s %2$s jämfört med föregående period"
+
+#: resources/react/components/shared/kpi-card.tsx:40
+msgid "up"
+msgstr "upp"
+
+#: resources/react/components/shared/kpi-card.tsx:40
+msgid "down"
+msgstr "ner"
+
+#: resources/react/components/shared/realtime-counter.tsx:14
+msgid "%d active visitors"
+msgstr "%d aktiva besökare"
+
+#: resources/react/components/shared/realtime-counter.tsx:25
+msgid "online"
+msgstr "online"
+
+#: resources/react/lib/wp-commands.ts:26
+msgid "Statnive: Go to Overview"
+msgstr "Statnive: Gå till Översikt"
+
+#: resources/react/lib/wp-commands.ts:27
+msgid "Statnive: Go to Pages"
+msgstr "Statnive: Gå till Sidor"
+
+#: resources/react/lib/wp-commands.ts:28
+msgid "Statnive: Go to Referrers"
+msgstr "Statnive: Gå till Hänvisare"
+
+#: resources/react/lib/wp-commands.ts:29
+msgid "Statnive: Go to Geography"
+msgstr "Statnive: Gå till Geografi"
+
+#: resources/react/lib/wp-commands.ts:30
+msgid "Statnive: Go to Devices"
+msgstr "Statnive: Gå till Enheter"
+
+#: resources/react/lib/wp-commands.ts:31
+msgid "Statnive: Go to Real-time"
+msgstr "Statnive: Gå till Realtid"
+
+#: resources/react/lib/wp-commands.ts:32
+msgid "Statnive: Go to Settings"
+msgstr "Statnive: Gå till Inställningar"
+
+#: resources/react/pages/devices.tsx:32
+msgid "Unknown"
+msgstr "Okänd"
+
+#: resources/react/pages/devices.tsx:40
+msgid "Human"
+msgstr "Människa"
+
+#: resources/react/pages/devices.tsx:41
+msgid "Bot"
+msgstr "Bot"
+
+#: resources/react/pages/devices.tsx:58
+#: resources/react/pages/devices.tsx:65
+#: resources/react/pages/geography.tsx:39
+#: resources/react/pages/geography.tsx:48
+#: resources/react/pages/languages.tsx:22
+#: resources/react/pages/overview.tsx:58
+#: resources/react/pages/referrers.tsx:40
+msgid "Visitors / Sessions"
+msgstr "Besökare / sessioner"
+
+#: resources/react/pages/devices.tsx:70
+msgid "No device data for this period. If your site has traffic, data should appear within minutes. If nothing shows after 10 minutes, check Settings → Diagnostics."
+msgstr "Inga enhetsdata för denna period. Om din webbplats har trafik bör data dyka upp inom några minuter. Om inget visas efter 10 minuter, kolla Inställningar → Diagnostik."
+
+#: resources/react/pages/devices.tsx:74
+msgid "Devices"
+msgstr "Enheter"
+
+#: resources/react/pages/devices.tsx:79
+msgid "Device Distribution"
+msgstr "Fördelning av enheter"
+
+#: resources/react/pages/devices.tsx:84
+msgid "Bot vs Human"
+msgstr "Bot mot människa"
+
+#: resources/react/pages/devices.tsx:93
+msgid "Browsers"
+msgstr "Webbläsare"
+
+#: resources/react/pages/devices.tsx:96
+msgid "Operating Systems"
+msgstr "Operativsystem"
+
+#: resources/react/pages/geography.tsx:38
+#: resources/react/pages/geography.tsx:47
+msgid "Country"
+msgstr "Land"
+
+#: resources/react/pages/geography.tsx:46
+msgid "City"
+msgstr "Stad"
+
+#: resources/react/pages/geography.tsx:54
+msgid "No geography data for this period. If your site has traffic, data should appear within minutes. If nothing shows after 10 minutes, check Settings → Diagnostics."
+msgstr "Inga geografidata för denna period. Om din webbplats har trafik bör data dyka upp inom några minuter. Om inget visas efter 10 minuter, kolla Inställningar → Diagnostik."
+
+#: resources/react/pages/geography.tsx:55
+msgid "No geography data for this period. The free DB-IP city database is active; data will appear as traffic arrives."
+msgstr "Inga geografidata för denna period. Den kostnadsfria DB-IP-stadsdatabasen är aktiv – data dyker upp efterhand som trafik kommer in."
+
+#: resources/react/pages/geography.tsx:56
+msgid "No visitors with a resolvable country in this period. Country detection via your CDN is active; data will appear as traffic arrives."
+msgstr "Inga besökare med ett land som kunde fastställas under denna period. Landidentifiering via ditt CDN är aktiv – data dyker upp efterhand som trafik kommer in."
+
+#: resources/react/pages/geography.tsx:57
+msgid "No visitors with a resolvable country in this period. Approximate country is being derived from each visitor’s browser timezone; for precise city-level data, enable DB-IP below or configure MaxMind GeoIP in Settings → GeoIP."
+msgstr "Inga besökare med ett land som kunde fastställas under denna period. Ungefärligt land härleds från varje besökares webbläsares tidszon. För exakta data på stadsnivå, aktivera DB-IP nedan eller konfigurera MaxMind GeoIP under Inställningar → GeoIP."
+
+#: resources/react/pages/geography.tsx:58
+msgid "Geography resolution is currently disabled. Re-enable the timezone fallback, configure MaxMind GeoIP, or place your site behind a CDN that sets a country header."
+msgstr "Geografisk uppslagning är för närvarande inaktiverad. Aktivera tidszonsreservlösningen igen, konfigurera MaxMind GeoIP eller placera din webbplats bakom ett CDN som sätter en land-header."
+
+#: resources/react/pages/geography.tsx:67
+msgid "Geography"
+msgstr "Geografi"
+
+#: resources/react/pages/geography.tsx:73
+msgid "Want city-level data?"
+msgstr "Vill du ha data på stadsnivå?"
+
+#: resources/react/pages/geography.tsx:75
+msgid "Enable the free DB-IP city database. No account, no key — one click. ~80 MB downloads to your uploads directory. CC-BY-4.0."
+msgstr "Aktivera den kostnadsfria DB-IP-stadsdatabasen. Inget konto, ingen nyckel – ett klick. Cirka 80 MB laddas ner till din uppladdningskatalog. CC-BY-4.0."
+
+#: resources/react/pages/geography.tsx:85
+msgid "Enabling…"
+msgstr "Aktiverar…"
+
+#: resources/react/pages/geography.tsx:86
+msgid "Enable city-level geography"
+msgstr "Aktivera geografi på stadsnivå"
+
+#: resources/react/pages/geography.tsx:91
+msgid "Could not enable DB-IP. Try again, or configure MaxMind in Settings → GeoIP."
+msgstr "Kunde inte aktivera DB-IP. Försök igen eller konfigurera MaxMind under Inställningar → GeoIP."
+
+#: resources/react/pages/geography.tsx:99
+msgid "Countries"
+msgstr "Länder"
+
+#: resources/react/pages/geography.tsx:102
+msgid "Cities"
+msgstr "Städer"
+
+#: resources/react/pages/geography.tsx:108
+msgid "GeoIP data © DB-IP under CC-BY 4.0"
+msgstr "GeoIP-data © DB-IP under CC-BY 4.0"
+
+#: resources/react/pages/languages.tsx:21
+msgid "Language"
+msgstr "Språk"
+
+#: resources/react/pages/languages.tsx:29
+msgid "Languages"
+msgstr "Språk"
+
+#: resources/react/pages/languages.tsx:32
+msgid "Visitor Languages"
+msgstr "Besökarnas språk"
+
+#: resources/react/pages/languages.tsx:38
+msgid "No language data for this period. If your site has traffic, data should appear within minutes. If nothing shows after 10 minutes, check Settings → Diagnostics."
+msgstr "Inga språkdata för denna period. Om din webbplats har trafik bör data dyka upp inom några minuter. Om inget visas efter 10 minuter, kolla Inställningar → Diagnostik."
+
+#: resources/react/pages/overview.tsx:46
+#: resources/react/pages/referrers.tsx:38
+msgid "Source"
+msgstr "Källa"
+
+#: resources/react/pages/overview.tsx:49
+#: resources/react/pages/overview.tsx:51
+#: resources/react/pages/referrers.tsx:104
+msgid "Direct"
+msgstr "Direkt"
+
+#: resources/react/pages/overview.tsx:81
+#: resources/react/pages/pages.tsx:57
+#: resources/react/pages/pages.tsx:72
+msgid "Page"
+msgstr "Sida"
+
+#: resources/react/pages/overview.tsx:90
+#: resources/react/pages/pages.tsx:65
+msgid "Visitors / Views"
+msgstr "Besökare / visningar"
+
+#: resources/react/pages/overview.tsx:101
+msgid "Today"
+msgstr "Idag"
+
+#: resources/react/pages/overview.tsx:104
+msgid "Last %s"
+msgstr "Senaste %s"
+
+#: resources/react/pages/overview.tsx:110
+msgid "Overview"
+msgstr "Översikt"
+
+#: resources/react/pages/overview.tsx:127
+msgid "Pageviews"
+msgstr "Sidvisningar"
+
+#: resources/react/pages/overview.tsx:133
+#: resources/react/pages/pages.tsx:66
+msgid "Avg Duration"
+msgstr "Genomsnittlig längd"
+
+#: resources/react/pages/overview.tsx:145
+msgid "Visitors & Sessions — %s"
+msgstr "Besökare och sessioner – %s"
+
+#: resources/react/pages/overview.tsx:156
+msgid "Top Sources"
+msgstr "Toppkällor"
+
+#: resources/react/pages/overview.tsx:162
+msgid "No traffic sources recorded yet. New visits will appear within a few minutes — if nothing shows after 10 minutes, run the self-test under Settings → Diagnostics or check Settings → Tracking is enabled."
+msgstr "Inga trafikkällor har registrerats ännu. Nya besök dyker upp inom några minuter – om inget visas efter 10 minuter, kör självtestet under Inställningar → Diagnostik eller kontrollera att spårning är aktiverad under Inställningar."
+
+#: resources/react/pages/overview.tsx:167
+msgid "Top Pages"
+msgstr "Toppsidor"
+
+#: resources/react/pages/overview.tsx:173
+msgid "No page data recorded yet. Tracking is active — pageviews will appear after the next visit. If nothing shows after 10 minutes, run the self-test under Settings → Diagnostics."
+msgstr "Inga siddata har registrerats ännu. Spårning är aktiv – sidvisningar dyker upp efter nästa besök. Om inget visas efter 10 minuter, kör självtestet under Inställningar → Diagnostik."
+
+#: resources/react/pages/pages.tsx:76
+msgid "Entries / Visitors"
+msgstr "Ingångar / besökare"
+
+#: resources/react/pages/pages.tsx:77
+msgid "Exits / Visitors"
+msgstr "Utgångar / besökare"
+
+#: resources/react/pages/pages.tsx:79
+msgid "No page data for this period. If your site has traffic, data should appear within minutes. If nothing shows after 10 minutes, check Settings → Diagnostics."
+msgstr "Inga siddata för denna period. Om din webbplats har trafik bör data dyka upp inom några minuter. Om inget visas efter 10 minuter, kolla Inställningar → Diagnostik."
+
+#: resources/react/pages/pages.tsx:83
+msgid "Pages"
+msgstr "Sidor"
+
+#: resources/react/pages/pages.tsx:90
+msgid "Search pages"
+msgstr "Sök sidor"
+
+#: resources/react/pages/pages.tsx:91
+msgid "Search pages..."
+msgstr "Sök sidor…"
+
+#: resources/react/pages/pages.tsx:101
+msgid "Top Content"
+msgstr "Toppinnehåll"
+
+#: resources/react/pages/pages.tsx:115
+msgid "Entry Pages"
+msgstr "Ingångssidor"
+
+#: resources/react/pages/pages.tsx:126
+msgid "Exit Pages"
+msgstr "Utgångssidor"
+
+#: resources/react/pages/realtime.tsx:12
+msgid "Real-time"
+msgstr "Realtid"
+
+#: resources/react/pages/realtime.tsx:22
+msgid "Active Visitors"
+msgstr "Aktiva besökare"
+
+#: resources/react/pages/realtime.tsx:30
+msgid "%s active visitors"
+msgstr "%s aktiva besökare"
+
+#: resources/react/pages/realtime.tsx:41
+msgid "Active Pages"
+msgstr "Aktiva sidor"
+
+#: resources/react/pages/realtime.tsx:60
+msgid "No active pages"
+msgstr "Inga aktiva sidor"
+
+#: resources/react/pages/realtime.tsx:68
+msgid "Recent Pageviews"
+msgstr "Senaste sidvisningar"
+
+#: resources/react/pages/realtime.tsx:89
+msgid "No recent activity"
+msgstr "Ingen aktivitet nyligen"
+
+#: resources/react/pages/referrers.tsx:37
+msgid "Campaign"
+msgstr "Kampanj"
+
+#: resources/react/pages/referrers.tsx:39
+msgid "Medium"
+msgstr "Medium"
+
+#: resources/react/pages/referrers.tsx:45
+msgid "No referrer data for this period. If your site has traffic, data should appear within minutes. If nothing shows after 10 minutes, check Settings → Diagnostics."
+msgstr "Inga hänvisardata för denna period. Om din webbplats har trafik bör data dyka upp inom några minuter. Om inget visas efter 10 minuter, kolla Inställningar → Diagnostik."
+
+#: resources/react/pages/referrers.tsx:49
+msgid "Referrers"
+msgstr "Hänvisare"
+
+#: resources/react/pages/referrers.tsx:60
+msgid "%s sessions"
+msgstr "%s sessioner"
+
+#: resources/react/pages/referrers.tsx:70
+msgid "All Sources"
+msgstr "Alla källor"
+
+#: resources/react/pages/referrers.tsx:72
+msgid "Loading sources"
+msgstr "Laddar källor"
+
+#: resources/react/pages/referrers.tsx:94
+msgid "%1$s visitors · %2$s sessions"
+msgstr "%1$s besökare · %2$s sessioner"
+
+#: resources/react/pages/referrers.tsx:119
+msgid "UTM Campaigns"
+msgstr "UTM-kampanjer"
+
+#: resources/react/pages/referrers.tsx:119
+msgid "No UTM parameters tracked yet. UTM-tagged links will appear here once visitors arrive through them."
+msgstr "Inga UTM-parametrar har spårats ännu. UTM-taggade länkar visas här så snart besökare kommer in via dem."
+
+#: resources/react/pages/settings.tsx:12
+msgid "30 days"
+msgstr "30 dagar"
+
+#: resources/react/pages/settings.tsx:13
+msgid "90 days"
+msgstr "90 dagar"
+
+#: resources/react/pages/settings.tsx:14
+msgid "180 days"
+msgstr "180 dagar"
+
+#: resources/react/pages/settings.tsx:15
+msgid "1 year"
+msgstr "1 år"
+
+#: resources/react/pages/settings.tsx:16
+msgid "Forever"
+msgstr "För alltid"
+
+#: resources/react/pages/settings.tsx:115
+#: resources/react/pages/settings.tsx:70
+msgid "Settings"
+msgstr "Inställningar"
+
+#: resources/react/pages/settings.tsx:95
+msgid "Save failed."
+msgstr "Det gick inte att spara."
+
+#: resources/react/pages/settings.tsx:123
+msgid "Saved ✓"
+msgstr "Sparat ✓"
+
+#: resources/react/pages/settings.tsx:138
+msgid "Saving…"
+msgstr "Sparar…"
+
+#: resources/react/pages/settings.tsx:138
+msgid "Save"
+msgstr "Spara"
+
+#: resources/react/pages/settings.tsx:145
+msgid "Privacy"
+msgstr "Integritet"
+
+#: resources/react/pages/settings.tsx:158
+msgid "Cookieless"
+msgstr "Utan kakor"
+
+#: resources/react/pages/settings.tsx:160
+msgid "Recommended"
+msgstr "Rekommenderas"
+
+#: resources/react/pages/settings.tsx:164
+msgid "No cookies, privacy-first. Designed to support GDPR/CCPA/APPI compliance."
+msgstr "Inga kakor, integritetsvänligt som standard. Utformat för att stödja efterlevnad av GDPR, CCPA och APPI."
+
+#: resources/react/pages/settings.tsx:176
+msgid "Disabled Until Consent"
+msgstr "Inaktiverad till samtycke"
+
+#: resources/react/pages/settings.tsx:178
+msgid "Tracking stays off until a consent-banner plugin signals approval. Also honors plugins that implement the WordPress Consent API."
+msgstr "Spårning är avstängd tills ett samtyckesbanner-tillägg signalerar godkännande. Respekterar även tillägg som använder WordPress Consent API."
+
+#: resources/react/pages/settings.tsx:187
+msgid "Works with Real Cookie Banner, Complianz, CookieYes, or any WordPress Consent API plugin."
+msgstr "Fungerar med Real Cookie Banner, Complianz, CookieYes eller andra tillägg som använder WordPress Consent API."
+
+#: resources/react/pages/settings.tsx:204
+msgid "Respect Do Not Track"
+msgstr "Respektera Do Not Track"
+
+#: resources/react/pages/settings.tsx:206
+msgid "Skip visitors whose browser sends the DNT signal."
+msgstr "Hoppa över besökare vars webbläsare skickar DNT-signalen."
+
+#: resources/react/pages/settings.tsx:217
+msgid "Respect Global Privacy Control"
+msgstr "Respektera Global Privacy Control"
+
+#: resources/react/pages/settings.tsx:219
+msgid "Skip visitors whose browser sends the GPC signal. Legally recognized in California and other regions."
+msgstr "Hoppa över besökare vars webbläsare skickar GPC-signalen. Juridiskt erkänd i Kalifornien och andra regioner."
+
+#: resources/react/pages/settings.tsx:244
+msgid "How long stats are kept before deletion. Shorter = more privacy-friendly and a smaller database. Longer = year-over-year comparisons."
+msgstr "Hur länge statistik sparas innan den raderas. Kortare = mer integritetsvänligt och mindre databas. Längre = jämförelser år för år."
+
+#: resources/react/pages/settings.tsx:253
+msgid "Exclusions"
+msgstr "Undantag"
+
+#: resources/react/pages/settings.tsx:255
+msgid "Excluded IP Addresses"
+msgstr "Undantagna IP-adresser"
+
+#: resources/react/pages/settings.tsx:266
+msgid "Tracking requests from these IPs or ranges are ignored — handy for hiding your own team. One per line. Supports CIDR (e.g., 10.0.0.0/8) and IPv6."
+msgstr "Spårningsförfrågningar från dessa IP-adresser eller intervall ignoreras – praktiskt för att dölja ditt eget team. En per rad. Stöder CIDR (t.ex. 10.0.0.0/8) och IPv6."
+
+#: resources/react/pages/settings.tsx:273
+msgid "Your IP right now:"
+msgstr "Din IP just nu:"
+
+#: resources/react/pages/settings.tsx:283
+msgid "Add to exclusions"
+msgstr "Lägg till i undantag"
+
+#: resources/react/pages/settings.tsx:291
+msgid "GeoIP"
+msgstr "GeoIP"
+
+#: resources/react/pages/settings.tsx:296
+msgid "MaxMind License Key"
+msgstr "MaxMind-licensnyckel"
+
+#: resources/react/pages/settings.tsx:307
+msgid "Paste your free MaxMind license key"
+msgstr "Klistra in din kostnadsfria MaxMind-licensnyckel"
+
+#: resources/react/pages/settings.tsx:311
+msgid "Get a free key:"
+msgstr "Skaffa en kostnadsfri nyckel:"
+
+#: resources/react/pages/settings.tsx:320
+msgid "then paste it here."
+msgstr "klistra sedan in den här."
+
+#: resources/react/pages/settings.tsx:323
+msgid "A key is currently saved. Clear this field to remove it, or paste a new one to replace it."
+msgstr "En nyckel är sparad. Töm fältet för att ta bort den, eller klistra in en ny för att ersätta den."
+
+#: resources/react/pages/settings.tsx:338
+msgid "Enable MaxMind GeoIP"
+msgstr "Aktivera MaxMind GeoIP"
+
+#: resources/react/pages/settings.tsx:340
+msgid "Activates the weekly MaxMind GeoLite2-City download (~70 MB to your uploads directory). Requires a license key above. The first lookup happens after the next WP-Cron tick."
+msgstr "Aktiverar den veckovisa MaxMind GeoLite2-City-nedladdningen (cirka 70 MB till din uppladdningskatalog). Kräver en licensnyckel ovan. Den första uppslagningen sker vid nästa WP-Cron-tick."
+
+#: resources/react/pages/settings.tsx:349
+msgid "Prefer no account? Use the one-click DB-IP IP-to-City Lite download on the Geography page instead — it is free and account-less."
+msgstr "Föredrar du att slippa konto? Använd ettklicksnedladdningen DB-IP IP-to-City Lite på sidan Geografi i stället – den är kostnadsfri och kontolös."

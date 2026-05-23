@@ -8,7 +8,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+use Statnive\Api\Concerns\ValidatesDateRange;
 use Statnive\Database\TableRegistry;
+use Statnive\Capability;
 use WP_REST_Controller;
 use WP_REST_Request;
 use WP_REST_Response;
@@ -22,6 +24,8 @@ use WP_REST_Server;
  * - GET /statnive/v1/events/(?P<name>[a-zA-Z0-9_]+) — single event detail
  */
 final class EventsStatsController extends WP_REST_Controller {
+
+	use ValidatesDateRange;
 
 	protected $namespace = 'statnive/v1';
 	protected $rest_base = 'events';
@@ -94,7 +98,7 @@ final class EventsStatsController extends WP_REST_Controller {
 	 * @return bool
 	 */
 	public function permissions_check( $request ): bool {
-		return current_user_can( 'manage_options' );
+		return Capability::can_view_reports();
 	}
 
 	/**
@@ -203,15 +207,5 @@ final class EventsStatsController extends WP_REST_Controller {
 			],
 			200
 		);
-	}
-
-	/**
-	 * Validate a date string (YYYY-MM-DD).
-	 *
-	 * @param mixed $value Value to validate.
-	 * @return bool
-	 */
-	public function validate_date( $value ): bool {
-		return (bool) preg_match( '/^\d{4}-\d{2}-\d{2}$/', $value );
 	}
 }

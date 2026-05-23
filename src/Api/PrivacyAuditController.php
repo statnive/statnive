@@ -9,6 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 use Statnive\Privacy\ComplianceAuditor;
+use Statnive\Capability;
 use WP_REST_Controller;
 use WP_REST_Request;
 use WP_REST_Response;
@@ -60,7 +61,7 @@ final class PrivacyAuditController extends WP_REST_Controller {
 	 * @return bool
 	 */
 	public function get_audit_permissions_check( $request ): bool {
-		return current_user_can( 'manage_options' );
+		return Capability::can_view_reports();
 	}
 
 	/**

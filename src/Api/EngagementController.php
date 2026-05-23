@@ -12,6 +12,7 @@ use Statnive\Database\TableRegistry;
 use Statnive\Http\PayloadValidator;
 use Statnive\Http\PayloadValidatorException;
 use Statnive\Security\HmacValidator;
+use Statnive\Service\IpExtractor;
 use WP_REST_Controller;
 use WP_REST_Request;
 use WP_REST_Response;
@@ -45,11 +46,18 @@ final class EngagementController extends WP_REST_Controller {
 		'scroll_depth',
 		'pvid',
 		'page_url',
+		// Backward-compat: cached tracker bundles still emit this field.
+		// Server no longer validates it. See HitController::ALLOWED_KEYS.
 		'_statnonce',
 	];
 
 	/**
-	 * Register routes.
+	 * Register the /engagement route.
+	 *
+	 * Schema-driven validation, same model as HitController. Public endpoint
+	 * (`__return_true`) protected by HMAC signature + page_url host validation
+	 * + transient rate limiting. WP nonces are deliberately not used because
+	 * they break behind page caches.
 	 */
 	public function register_routes(): void {
 		register_rest_route(
@@ -146,11 +154,18 @@ final class EngagementController extends WP_REST_Controller {
 			return self::error_response( [ 'invalid_signature', 'Request signature is invalid.', 403 ] );
 		}
 
-		// CSRF nonce — hardening layer alongside HMAC (Checklist §7).
-		$nonce_error = PayloadValidator::validate_nonce( $data );
-		if ( null !== $nonce_error ) {
-			return self::error_response( $nonce_error );
+		// HMAC alone is the CSRF boundary here. See HitController::create_item
+		// for the rationale — WP nonces break behind page caches.
+
+		// Basic rate limiting via transient (60 req/min per IP).
+		// Key is salted SHA-256 of the raw IP — raw IP is never persisted.
+		$ip     = IpExtractor::extract();
+		$ip_key = 'statnive_rate_' . hash( 'sha256', $ip . wp_salt( 'auth' ) );
+		$count  = (int) get_transient( $ip_key );
+		if ( $count >= 60 ) {
+			return self::error_response( [ 'rate_limited', 'Too many requests.', 429 ] );
 		}
+		set_transient( $ip_key, $count + 1, MINUTE_IN_SECONDS );
 
 		$engagement_time = absint( $data['engagement_time'] ?? 0 );
 		$scroll_depth    = min( absint( $data['scroll_depth'] ?? 0 ), 100 );

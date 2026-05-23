@@ -42,6 +42,12 @@ final class TableRegistry {
 		'events',
 		'exclusions',
 		'reports',
+		// v1.0.0 — WooCommerce Revenue Report tables.
+		'orders',
+		'order_attribution',
+		'order_items',
+		'order_refunds',
+		'order_coupons',
 	];
 
 	/**

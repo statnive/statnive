@@ -1,0 +1,7 @@
+2026-05-04 13:22:44 languages/statnive.pot
+2026-05-04 12:58:57 statnive.php
+
+Status: FRESH — POT regenerated 2026-05-04 for 0.4.9 via
+wp i18n make-pot . languages/statnive.pot --slug=statnive --domain=statnive --exclude=...
+(host wp-cli, no wp-env required — i18n make-pot is static PHP analysis)
+112 msgid entries, identical set to v0.4.7/v0.4.8 (no new translatable strings).

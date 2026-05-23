@@ -36,6 +36,38 @@ vi.mock('@/hooks/use-dimensions', () => ({
 	useDimensions: (...args: unknown[]) => mockUseDimensions(...args),
 }));
 
+const mockUseGeoSource = vi.fn(() => 'maxmind' as const);
+const mockUseDbipCityActive = vi.fn(() => false);
+vi.mock('@/hooks/use-geo-source', () => ({
+	useGeoSource: () => mockUseGeoSource(),
+	useDbipCityActive: () => mockUseDbipCityActive(),
+}));
+
+const mockMutate = vi.fn();
+const mockInvalidate = vi.fn();
+const mutationState = { isPending: false, isSuccess: false, isError: false };
+vi.mock('@tanstack/react-query', async () => {
+	const actual = await vi.importActual<Record<string, unknown>>('@tanstack/react-query');
+	return {
+		...actual,
+		useMutation: () => ({
+			mutate: mockMutate,
+			...mutationState,
+		}),
+		useQueryClient: () => ({
+			invalidateQueries: mockInvalidate,
+		}),
+	};
+});
+
+const mockApiPost = vi.fn();
+vi.mock('@/lib/api-client', () => ({
+	apiPost: (path: string) => mockApiPost(path),
+	apiGet: vi.fn(),
+	apiPut: vi.fn(),
+	getCurrentIp: () => '127.0.0.1',
+}));
+
 import { GeographyPage } from '@/pages/geography';
 
 // ---------------------------------------------------------------------------
@@ -45,6 +77,120 @@ import { GeographyPage } from '@/pages/geography';
 describe('GeographyPage', () => {
 	beforeEach(() => {
 		vi.restoreAllMocks();
+		mockUseGeoSource.mockReturnValue('maxmind');
+		mockUseDbipCityActive.mockReturnValue(false);
+		mockMutate.mockClear();
+		mockInvalidate.mockClear();
+		mockApiPost.mockClear();
+		mutationState.isPending = false;
+		mutationState.isSuccess = false;
+		mutationState.isError = false;
+	});
+
+	describe('empty state by geo source', () => {
+		beforeEach(() => {
+			mockUseDimensions.mockReturnValue({ data: [], isLoading: false });
+		});
+
+		it('explains the timezone fallback is active when source is timezone', () => {
+			mockUseGeoSource.mockReturnValue('timezone');
+
+			render(<GeographyPage />);
+
+			expect(
+				screen.getAllByText(/derived from each visitor’s browser timezone/),
+			).toHaveLength(2);
+		});
+
+		it('shows "data will appear" when CDN headers are active but period is empty', () => {
+			mockUseGeoSource.mockReturnValue('cdn_headers');
+
+			render(<GeographyPage />);
+
+			expect(
+				screen.getAllByText(/Country detection via your CDN is active/),
+			).toHaveLength(2);
+		});
+
+		it('flags resolution as disabled when source is none', () => {
+			mockUseGeoSource.mockReturnValue('none');
+
+			render(<GeographyPage />);
+
+			expect(
+				screen.getAllByText(/Geography resolution is currently disabled/),
+			).toHaveLength(2);
+		});
+
+		it('shows the existing empty copy when MaxMind is configured but period is empty', () => {
+			mockUseGeoSource.mockReturnValue('maxmind');
+
+			render(<GeographyPage />);
+
+			expect(
+				screen.getAllByText(/No geography data for this period/),
+			).toHaveLength(2);
+		});
+
+		it('shows DB-IP active copy when source is dbip_city and period is empty', () => {
+			mockUseGeoSource.mockReturnValue('dbip_city');
+			mockUseDbipCityActive.mockReturnValue(true);
+
+			render(<GeographyPage />);
+
+			expect(
+				screen.getAllByText(/free DB-IP city database is active/),
+			).toHaveLength(2);
+		});
+	});
+
+	describe('DB-IP one-click CTA', () => {
+		beforeEach(() => {
+			mockUseDimensions.mockReturnValue({ data: [], isLoading: false });
+		});
+
+		it('renders the CTA when source is cdn_headers and DB-IP is not active', () => {
+			mockUseGeoSource.mockReturnValue('cdn_headers');
+			mockUseDbipCityActive.mockReturnValue(false);
+
+			render(<GeographyPage />);
+
+			expect(screen.getByText(/Want city-level data\?/)).toBeInTheDocument();
+			expect(screen.getByRole('button', { name: /Enable city-level geography/ })).toBeInTheDocument();
+		});
+
+		it('hides the CTA once DB-IP is active', () => {
+			mockUseGeoSource.mockReturnValue('dbip_city');
+			mockUseDbipCityActive.mockReturnValue(true);
+
+			render(<GeographyPage />);
+
+			expect(screen.queryByText(/Want city-level data\?/)).not.toBeInTheDocument();
+			expect(screen.queryByRole('button', { name: /Enable city-level geography/ })).not.toBeInTheDocument();
+		});
+
+		it('hides the CTA when MaxMind is the active source', () => {
+			mockUseGeoSource.mockReturnValue('maxmind');
+			mockUseDbipCityActive.mockReturnValue(false);
+
+			render(<GeographyPage />);
+
+			expect(screen.queryByText(/Want city-level data\?/)).not.toBeInTheDocument();
+		});
+
+		it('shows the DB-IP attribution footer only when source is dbip_city', () => {
+			mockUseGeoSource.mockReturnValue('cdn_headers');
+			mockUseDbipCityActive.mockReturnValue(false);
+
+			const { rerender } = render(<GeographyPage />);
+			expect(screen.queryByText(/GeoIP data © DB-IP/)).not.toBeInTheDocument();
+
+			mockUseGeoSource.mockReturnValue('dbip_city');
+			mockUseDbipCityActive.mockReturnValue(true);
+			rerender(<GeographyPage />);
+
+			expect(screen.getByText(/GeoIP data © DB-IP/)).toBeInTheDocument();
+		});
 	});
 
 	// REQ-1.18 — Countries table with visitor and session counts

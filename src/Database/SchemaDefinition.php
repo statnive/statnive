@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Star schema design with sessions as the central hub.
  * All definitions follow strict dbDelta formatting rules:
  * - Lowercase type keywords.
- * - Two spaces before PRIMARY KEY.
+ * - Two leading spaces before the primary-key declaration.
  * - One column per line.
  * - No IF NOT EXISTS.
  * - No foreign key constraints (D-07: improves INSERT performance).
@@ -24,7 +24,7 @@ final class SchemaDefinition {
 	/**
 	 * Get all table definitions as dbDelta-compatible SQL.
 	 *
-	 * @return string Complete SQL for all 21 tables.
+	 * @return string Complete SQL for all 26 tables.
 	 */
 	public static function get_sql(): string {
 		global $wpdb;
@@ -309,6 +309,113 @@ final class SchemaDefinition {
   updated_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY  (ID),
   KEY idx_created_by (created_by)
+) {$charset_collate};\n\n";
+
+		// 22. Orders — one row per WooCommerce order. Idempotency on wc_order_id.
+		$sql .= "CREATE TABLE {$prefix}orders (
+  ID bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  wc_order_id bigint(20) unsigned NOT NULL,
+  wc_order_key varchar(64) DEFAULT NULL,
+  parent_order_id bigint(20) unsigned DEFAULT NULL,
+  status varchar(32) NOT NULL DEFAULT 'pending',
+  currency char(10) NOT NULL DEFAULT 'USD',
+  gross_total decimal(19,4) NOT NULL DEFAULT 0,
+  net_total decimal(19,4) NOT NULL DEFAULT 0,
+  tax_total decimal(19,4) NOT NULL DEFAULT 0,
+  shipping_total decimal(19,4) NOT NULL DEFAULT 0,
+  discount_total decimal(19,4) NOT NULL DEFAULT 0,
+  refund_total decimal(19,4) NOT NULL DEFAULT 0,
+  item_count smallint(6) NOT NULL DEFAULT 0,
+  customer_email_hash char(64) DEFAULT NULL,
+  customer_user_id bigint(20) unsigned DEFAULT NULL,
+  is_first_purchase tinyint(1) NOT NULL DEFAULT 0,
+  date_created_gmt datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  date_paid_gmt datetime DEFAULT NULL,
+  date_updated_gmt datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  created_via varchar(32) DEFAULT NULL,
+  payment_method varchar(64) DEFAULT NULL,
+  deleted_at datetime DEFAULT NULL,
+  PRIMARY KEY  (ID),
+  UNIQUE KEY uk_wc_order_id (wc_order_id),
+  KEY idx_status_created (status, date_created_gmt),
+  KEY idx_status (status),
+  KEY idx_customer_email_hash (customer_email_hash)
+) {$charset_collate};\n\n";
+
+		// 23. Order attribution — 1:1 with orders.
+		$sql .= "CREATE TABLE {$prefix}order_attribution (
+  order_id bigint(20) unsigned NOT NULL,
+  source_type varchar(32) DEFAULT NULL,
+  channel varchar(32) DEFAULT NULL,
+  utm_source varchar(100) DEFAULT NULL,
+  utm_medium varchar(100) DEFAULT NULL,
+  utm_campaign varchar(100) DEFAULT NULL,
+  utm_term varchar(100) DEFAULT NULL,
+  utm_content varchar(100) DEFAULT NULL,
+  utm_source_lower varchar(100) DEFAULT NULL,
+  utm_medium_lower varchar(100) DEFAULT NULL,
+  utm_campaign_lower varchar(100) DEFAULT NULL,
+  referrer_host varchar(255) DEFAULT NULL,
+  first_landing_path varchar(255) DEFAULT NULL,
+  last_landing_path varchar(255) DEFAULT NULL,
+  session_pages int(11) unsigned DEFAULT NULL,
+  session_count int(11) unsigned DEFAULT NULL,
+  device_type varchar(16) DEFAULT NULL,
+  captured_at_gmt datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY  (order_id),
+  KEY idx_channel (channel),
+  KEY idx_utm_lower (utm_source_lower, utm_medium_lower, utm_campaign_lower),
+  KEY idx_first_landing (first_landing_path(64))
+) {$charset_collate};\n\n";
+
+		// 24. Order items — line items, snapshot product name + sku.
+		$sql .= "CREATE TABLE {$prefix}order_items (
+  ID bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  order_id bigint(20) unsigned NOT NULL,
+  wc_order_item_id bigint(20) unsigned NOT NULL,
+  product_id bigint(20) unsigned NOT NULL DEFAULT 0,
+  variation_id bigint(20) unsigned DEFAULT NULL,
+  parent_product_id bigint(20) unsigned NOT NULL DEFAULT 0,
+  sku varchar(100) DEFAULT NULL,
+  product_name varchar(255) NOT NULL DEFAULT '',
+  quantity int(11) NOT NULL DEFAULT 0,
+  subtotal decimal(19,4) NOT NULL DEFAULT 0,
+  total decimal(19,4) NOT NULL DEFAULT 0,
+  tax_total decimal(19,4) NOT NULL DEFAULT 0,
+  refund_quantity int(11) NOT NULL DEFAULT 0,
+  refund_amount decimal(19,4) NOT NULL DEFAULT 0,
+  PRIMARY KEY  (ID),
+  UNIQUE KEY uk_order_item (order_id, wc_order_item_id),
+  KEY idx_product_id (product_id),
+  KEY idx_parent_product (parent_product_id, total)
+) {$charset_collate};\n\n";
+
+		// 25. Order refunds — one row per refund (full or partial).
+		$sql .= "CREATE TABLE {$prefix}order_refunds (
+  ID bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  order_id bigint(20) unsigned NOT NULL,
+  wc_refund_id bigint(20) unsigned NOT NULL,
+  amount decimal(19,4) NOT NULL DEFAULT 0,
+  reason varchar(255) DEFAULT NULL,
+  date_gmt datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  refunded_by_user bigint(20) unsigned DEFAULT NULL,
+  PRIMARY KEY  (ID),
+  UNIQUE KEY uk_wc_refund_id (wc_refund_id),
+  KEY idx_order_date (order_id, date_gmt)
+) {$charset_collate};\n\n";
+
+		// 26. Order coupons — one row per coupon per order.
+		$sql .= "CREATE TABLE {$prefix}order_coupons (
+  ID bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  order_id bigint(20) unsigned NOT NULL,
+  coupon_id bigint(20) unsigned DEFAULT NULL,
+  code varchar(100) NOT NULL DEFAULT '',
+  code_lower varchar(100) NOT NULL DEFAULT '',
+  discount_amount decimal(19,4) NOT NULL DEFAULT 0,
+  discount_tax decimal(19,4) NOT NULL DEFAULT 0,
+  PRIMARY KEY  (ID),
+  UNIQUE KEY uk_order_code (order_id, code_lower),
+  KEY idx_code_lower (code_lower)
 ) {$charset_collate};\n\n";
 
 		return $sql;

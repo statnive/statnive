@@ -87,16 +87,25 @@ export interface RealtimeResponse {
 	recent_feed: { uri: string; country: string; browser: string; time: string }[];
 }
 
+/**
+ * Sentinel returned by `GET /settings` when a sensitive value (currently the
+ * MaxMind license key) is set. `PUT /settings` skips updating any field whose
+ * value is exactly this string, so masked round-trips are safe. Mirrored on
+ * the server in `src/Api/SettingsController.php`.
+ */
+export const MASKED_PLACEHOLDER = '********';
+
 export interface SettingsState {
-	consent_mode: 'full' | 'cookieless' | 'disabled-until-consent';
+	consent_mode: 'cookieless' | 'disabled-until-consent';
 	respect_dnt: boolean;
 	respect_gpc: boolean;
 	retention_days: number;
+	retention_mode: 'forever' | 'delete' | 'archive';
 	excluded_ips: string;
 	excluded_roles: string[];
-	email_reports: boolean;
-	email_frequency: 'weekly' | 'monthly';
 	tracking_enabled: boolean;
+	geoip_enabled: boolean;
+	maxmind_license_key: string;
 }
 
 export type DateRange = 'today' | '7d' | '30d' | 'this-month' | 'last-month' | 'custom';

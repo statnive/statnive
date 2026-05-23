@@ -59,6 +59,9 @@ final class HitController extends WP_REST_Controller {
 		'page_query',
 		'pvid',
 		'consent_granted',
+		// Backward-compat: cached tracker bundles in the wild still emit this
+		// field. Server no longer validates it (see create_item). Drop after
+		// the cache TTL of every existing CDN/host has expired.
 		'_statnonce',
 	];
 
@@ -222,20 +225,22 @@ final class HitController extends WP_REST_Controller {
 			return self::error_response( [ 'invalid_signature', 'Request signature is invalid.', 403 ] );
 		}
 
-		// CSRF nonce — hardening layer alongside HMAC (Checklist §7).
-		$nonce_error = PayloadValidator::validate_nonce( $data );
-		if ( null !== $nonce_error ) {
-			return self::error_response( $nonce_error );
-		}
+		// HMAC alone is the CSRF boundary here. WP nonces have a 12-24h tick
+		// and break for every page served from cache (HTML page caches, CDNs,
+		// browser bfcache). HMAC binds the request to resource_type+resource_id
+		// using the server-side wp_salt — an attacker can't forge it without
+		// the salt, with or without a cross-origin POST. See Checklist §7.
 
-		// Privacy enforcement: check consent mode, DNT, GPC headers.
+		// Privacy enforcement: excluded IP/role, consent mode, DNT, GPC.
+		$ip              = IpExtractor::extract();
 		$consent_granted = ! empty( $data['consent_granted'] );
 		$privacy_check   = PrivacyManager::check_request_privacy(
 			[
 				'HTTP_DNT'     => sanitize_text_field( wp_unslash( $_SERVER['HTTP_DNT'] ?? '' ) ),
 				'HTTP_SEC_GPC' => sanitize_text_field( wp_unslash( $_SERVER['HTTP_SEC_GPC'] ?? '' ) ),
 			],
-			$consent_granted
+			$consent_granted,
+			$ip
 		);
 
 		if ( ! $privacy_check->allowed() ) {
@@ -245,7 +250,6 @@ final class HitController extends WP_REST_Controller {
 
 		// Basic rate limiting via transient (60 req/min per IP).
 		// Key is salted SHA-256 of the raw IP — raw IP is never persisted.
-		$ip     = IpExtractor::extract();
 		$ip_key = 'statnive_rate_' . hash( 'sha256', $ip . wp_salt( 'auth' ) );
 		$count  = (int) get_transient( $ip_key );
 		if ( $count >= 60 ) {
