@@ -18,7 +18,6 @@ import {
 	Activity,
 	DollarSign,
 	Settings,
-	Pin,
 } from 'lucide-react';
 
 // Per-page nav scoping. Layout chrome (header bar + tab strip) stays the
@@ -27,7 +26,6 @@ import {
 // future plug in by adding a branch to useScopedNav().
 const OVERVIEW_NAV = [
 	{ to: '/', label: 'Overview', icon: BarChart3 },
-	{ to: '/ask', label: 'Ask me!', icon: Pin },
 	{ to: '/pages', label: 'Pages', icon: FileText },
 	{ to: '/referrers', label: 'Referrers', icon: Share2 },
 	{ to: '/geography', label: 'Geography', icon: Globe },
