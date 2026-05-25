@@ -126,15 +126,23 @@ No. ~200 server-side bot UA patterns and tracker-side fingerprints (webdriver, a
 
 == Screenshots ==
 
-1. Ask me! tab — pin your top questions and read the answers the moment you open Statnive. No AI, no third-party API, no question leaves your server.
-2. Know your traffic at a glance — visitors, sessions, pageviews and trends that matter
-3. Find what's actually driving results — top sources and top pages side by side
-4. Every page, ranked by what matters — search, sort, find your best content
-5. See where visitors arrive and leave — entry and exit pages side by side
-6. Understand where your traffic comes from — referral, direct, organic, social, AI
-7. Desktop, mobile, bots — device, browser and OS breakdowns in one view
-8. Reach across languages and regions — see which languages your visitors speak
-9. Watch your site breathe in real time — active visitors and live pageviews
+1. WooCommerce Revenue Report — net revenue, AOV, orders, refund rate, and revenue by channel (8 channels including AI Assistants), all inside WordPress. HPOS + Block Checkout compatible.
+2. Ask me! tab — pin your top 5 questions and read the answers the moment you open Statnive. 120 pre-built questions, computed locally, no AI, no third-party API, no data leaves your server.
+3. Privacy-first analytics overview — visitors, sessions, pageviews and trends in one fast dashboard. Cookieless, no fingerprinting, no third-party trackers.
+4. Real-time visitors and live pageviews — verify a campaign, watch a launch, confirm your tracking is alive, all without leaving WordPress.
+5. Visitor map and country breakdown — see which countries drive your WordPress traffic, with privacy-safe coarse geolocation (no IP storage, optional GeoIP).
+6. Traffic sources summary — referral, direct, organic search, social, and AI assistants ranked side by side. Know where every visit really came from.
+7. Top pages report — every page on your site ranked by views, with instant search and sort. Find your best content in seconds.
+8. Entry and exit pages, side by side — find what brings visitors in and where they leave. The foundation of every WordPress conversion-rate improvement.
+9. Smart channel grouping — Direct, Organic Search, Social Media, Email, Referral, Paid, and a dedicated AI Assistants channel (ChatGPT, Claude, Gemini, Perplexity, Copilot, and more).
+10. Desktop, mobile, tablet, bots — device, browser, and OS breakdowns in one privacy-first view. Real humans and bots stay in separate buckets.
+11. Reach across languages and regions — see which languages your WordPress visitors actually speak, and prioritise translations with confidence.
+12. Ask me! — Traffic answers. "How much traffic this week?" "Is traffic up or down?" Pre-built questions answered straight from your database, no AI.
+13. Ask me! — Referrer answers. "Which source drove the most visits?" "How much AI assistant traffic?" Same numbers as the dedicated report.
+14. Ask me! — Pages answers. "What are my top pages this week?" "Best landing page?" One click, no dashboard fishing.
+15. Ask me! — Real-time answers. "How many people are on my site right now?" "Is my tracking working?" Pinned, live, zero clicks.
+16. Ask me! — Campaign answers. "Did my last campaign work?" UTM-aware, WooCommerce-aware, answered straight from your database.
+17. Ask me! — Device answers. "Is my traffic mobile or desktop?" "Which browsers do my visitors use?" Bots stay separate from humans.
 
 == External Services ==
 
