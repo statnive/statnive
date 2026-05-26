@@ -67,6 +67,23 @@ function iconFor(category: AdvisorCategory): LucideIcon {
 	return CATEGORY_ICON[category.id] ?? BarChart3;
 }
 
+// 2×2 lookup keyed by `${isActive}-${isComingSoon}`. Each cell is the
+// Tailwind class string the category tab wears in that state.
+const TAB_STATE_CLASSES = {
+	'true-true':
+		'border-[color:var(--color-accent)]/40 bg-[color:var(--color-accent)]/3 text-foreground/70',
+	'true-false':
+		'border-[color:var(--color-accent)] bg-[color:var(--color-accent)]/5 text-primary',
+	'false-true':
+		'border-transparent text-muted-foreground/50 hover:text-muted-foreground/75',
+	'false-false':
+		'border-transparent text-muted-foreground hover:border-border hover:text-foreground',
+} as const;
+
+function tabStateClass(isActive: boolean, isComingSoon: boolean): string {
+	return TAB_STATE_CLASSES[`${isActive}-${isComingSoon}` as keyof typeof TAB_STATE_CLASSES];
+}
+
 interface QuestionTabsProps {
 	categories: AdvisorCategory[];
 	active: string;
@@ -182,13 +199,7 @@ export function QuestionTabs({
 								onClick={() => onChange(category.id)}
 								className={cn(
 									'flex items-center gap-1.5 whitespace-nowrap border-b-[3px] px-3 py-2.5 text-sm font-medium transition-colors duration-150',
-									isActive
-										? isComingSoon
-											? 'border-[color:var(--color-accent)]/40 bg-[color:var(--color-accent)]/3 text-foreground/70'
-											: 'border-[color:var(--color-accent)] bg-[color:var(--color-accent)]/5 text-primary'
-										: isComingSoon
-											? 'border-transparent text-muted-foreground/50 hover:text-muted-foreground/75'
-											: 'border-transparent text-muted-foreground hover:border-border hover:text-foreground',
+									tabStateClass(isActive, isComingSoon),
 								)}
 							>
 								<Icon
