@@ -71,10 +71,24 @@ interface QuestionTabsProps {
 	categories: AdvisorCategory[];
 	active: string;
 	onChange: (next: string) => void;
+	/**
+	 * Category IDs whose questions are all paid-deferred or schema-gapped.
+	 * Tabs in this Set render with a quieter className so owners can tell
+	 * at a glance which sections aren't live yet. Derived in AskPage from
+	 * the inventory; left optional so tests + future callers don't need
+	 * to pass it.
+	 */
+	comingSoonCategoryIds?: Set<string>;
 	children: ReactNode;
 }
 
-export function QuestionTabs({ categories, active, onChange, children }: QuestionTabsProps) {
+export function QuestionTabs({
+	categories,
+	active,
+	onChange,
+	comingSoonCategoryIds,
+	children,
+}: QuestionTabsProps) {
 	const listRef = useRef<HTMLDivElement | null>(null);
 
 	// Keyboard navigation: ←/→ cycle, Home / End jump.
@@ -152,6 +166,7 @@ export function QuestionTabs({ categories, active, onChange, children }: Questio
 
 					{categories.map((category) => {
 						const isActive = active === category.id;
+						const isComingSoon = comingSoonCategoryIds?.has(category.id) ?? false;
 						const Icon = iconFor(category);
 						return (
 							<button
@@ -162,19 +177,26 @@ export function QuestionTabs({ categories, active, onChange, children }: Questio
 								aria-controls={activePanelId}
 								aria-label={category.label}
 								data-tab-id={category.id}
+								data-coming-soon={isComingSoon ? 'true' : undefined}
 								tabIndex={isActive ? 0 : -1}
 								onClick={() => onChange(category.id)}
 								className={cn(
 									'flex items-center gap-1.5 whitespace-nowrap border-b-[3px] px-3 py-2.5 text-sm font-medium transition-colors duration-150',
 									isActive
-										? 'border-[color:var(--color-accent)] bg-[color:var(--color-accent)]/5 text-primary'
-										: 'border-transparent text-muted-foreground hover:border-border hover:text-foreground',
+										? isComingSoon
+											? 'border-[color:var(--color-accent)]/40 bg-[color:var(--color-accent)]/3 text-foreground/70'
+											: 'border-[color:var(--color-accent)] bg-[color:var(--color-accent)]/5 text-primary'
+										: isComingSoon
+											? 'border-transparent text-muted-foreground/50 hover:text-muted-foreground/75'
+											: 'border-transparent text-muted-foreground hover:border-border hover:text-foreground',
 								)}
 							>
 								<Icon
 									className={cn(
 										'h-4 w-4',
-										isActive && 'text-[color:var(--color-accent)]',
+										isActive && !isComingSoon && 'text-[color:var(--color-accent)]',
+										isActive && isComingSoon && 'text-[color:var(--color-accent)]/55',
+										!isActive && isComingSoon && 'opacity-60',
 									)}
 									aria-hidden="true"
 								/>

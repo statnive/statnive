@@ -124,4 +124,25 @@ describe('QuestionTabs', () => {
 		expect(panel).toBeInTheDocument();
 		expect(panel.querySelector('[data-testid="panel-content"]')).not.toBeNull();
 	});
+
+	it('marks tabs in comingSoonCategoryIds via data-coming-soon', () => {
+		const comingSoon = new Set<string>(['revenue']);
+		render(
+			<QuestionTabs
+				categories={categories}
+				active={PINNED_TAB_ID}
+				onChange={() => {}}
+				comingSoonCategoryIds={comingSoon}
+			>
+				<div />
+			</QuestionTabs>,
+		);
+		expect(screen.getByRole('tab', { name: 'Revenue' })).toHaveAttribute(
+			'data-coming-soon',
+			'true',
+		);
+		expect(screen.getByRole('tab', { name: 'Traffic Overview' })).not.toHaveAttribute(
+			'data-coming-soon',
+		);
+	});
 });

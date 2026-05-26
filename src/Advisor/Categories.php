@@ -39,12 +39,12 @@ final class Categories {
 	public static function ordered_ids(): array {
 		return [
 			self::TRAFFIC_OVERVIEW,
-			self::REAL_TIME_TRACKING_HEALTH,
 			self::PAGES_AND_CONTENT,
 			self::REFERRERS_AND_CHANNELS,
 			self::CAMPAIGNS_AND_UTM,
 			self::GEOGRAPHY_AND_LANGUAGE,
 			self::DEVICES_AND_BROWSERS,
+			self::REAL_TIME_TRACKING_HEALTH,
 			self::ENGAGEMENT_AND_QUALITY,
 			self::REVENUE,
 			self::EVENTS_AND_PRIVACY,

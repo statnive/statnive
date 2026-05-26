@@ -6,6 +6,7 @@ import { QuestionTabs, PINNED_TAB_ID } from '@/components/advisor/QuestionTabs';
 import { PinnedTab } from '@/components/advisor/PinnedTab';
 import { CategoryTab } from '@/components/advisor/CategoryTab';
 import { PinCapHint } from '@/components/advisor/PinCapHint';
+import { isQuestionComingSoon } from '@/lib/advisor';
 
 /**
  * "Ask me!" — Statnive Advisor v1 page.
@@ -22,15 +23,22 @@ export function AskPage() {
 
 	const [active, setActive] = useState<string>(PINNED_TAB_ID);
 
-	const questionsByCategory = useMemo(() => {
-		const map: Record<string, typeof inv extends { questions: infer T } ? T : never> =
-			{} as never;
-		if (!inv) return map;
+	const { questionsByCategory, comingSoonCategoryIds } = useMemo(() => {
+		type QuestionRow = NonNullable<typeof inv>['questions'][number];
+		const map: Record<string, QuestionRow[]> = {};
+		const comingSoon = new Set<string>();
+		if (!inv) return { questionsByCategory: map, comingSoonCategoryIds: comingSoon };
 		for (const q of inv.questions) {
-			if (!map[q.category_id]) map[q.category_id] = [] as never;
-			(map[q.category_id] as unknown as Array<(typeof inv.questions)[0]>).push(q);
+			(map[q.category_id] ||= []).push(q);
 		}
-		return map as Record<string, (typeof inv.questions)[0][]>;
+		// Auto-recomputes when Phase 14 flips Paid questions to Free —
+		// no follow-up code change needed.
+		for (const [catId, rows] of Object.entries(map)) {
+			if (rows.every(isQuestionComingSoon)) {
+				comingSoon.add(catId);
+			}
+		}
+		return { questionsByCategory: map, comingSoonCategoryIds: comingSoon };
 	}, [inv]);
 
 	if (isLoading || !inv) {
@@ -54,7 +62,12 @@ export function AskPage() {
 
 	return (
 		<>
-			<QuestionTabs categories={inv.categories} active={active} onChange={setActive}>
+			<QuestionTabs
+				categories={inv.categories}
+				active={active}
+				onChange={setActive}
+				comingSoonCategoryIds={comingSoonCategoryIds}
+			>
 				{active === PINNED_TAB_ID ? (
 					<PinnedTab pinnedIds={pinnedIds} maxPins={maxPins} questions={inv.questions} />
 				) : (
