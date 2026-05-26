@@ -1,4 +1,5 @@
 import { useMemo, useRef, useState, useEffect } from 'react';
+import { isQuestionComingSoon } from '@/lib/advisor';
 import type { AdvisorQuestion } from '@/types/api';
 
 /**
@@ -43,7 +44,7 @@ function buildIndex(questions: AdvisorQuestion[]): SearchIndex[] {
 		keywordsLower: q.keywords.map((k) => k.toLowerCase()),
 		categoryLower: q.category.toLowerCase(),
 		searchableLower: q.searchable.map((s) => s.toLowerCase()),
-		isComingSoon: q.plan === 'paid' || typeof q.depends_on_schema === 'string',
+		isComingSoon: isQuestionComingSoon(q),
 	}));
 }
 

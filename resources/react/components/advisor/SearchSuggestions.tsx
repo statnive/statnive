@@ -1,6 +1,7 @@
 import { __ } from '@wordpress/i18n';
 
 import { cn } from '@/lib/utils';
+import { isQuestionComingSoon } from '@/lib/advisor';
 import type { AdvisorQuestion } from '@/types/api';
 import type { SearchResult } from '@/hooks/use-advisor-search';
 
@@ -36,8 +37,7 @@ export function SearchSuggestions({
 			className="absolute left-5 right-5 z-30 mt-1 max-h-96 overflow-y-auto rounded-md border border-border bg-card shadow-lg"
 		>
 			{results.map(({ question }, i) => {
-				const isComingSoon =
-					question.plan === 'paid' || typeof question.depends_on_schema === 'string';
+				const isComingSoon = isQuestionComingSoon(question);
 				const isActive = i === selectedIndex;
 				return (
 					<li

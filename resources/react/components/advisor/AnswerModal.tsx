@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import { __ } from '@wordpress/i18n';
 import { X, Pin } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { isQuestionComingSoon } from '@/lib/advisor';
 import { AnswerViz } from './AnswerViz';
 import { useSingleAdvisorAnswer } from '@/hooks/use-advisor-answers';
 import { useAdvisorPinMutations } from '@/hooks/use-advisor-preferences';
@@ -30,8 +31,7 @@ interface AnswerModalProps {
 }
 
 export function AnswerModal({ question, pinned, onClose }: AnswerModalProps) {
-	const isComingSoon =
-		question.plan === 'paid' || typeof question.depends_on_schema === 'string';
+	const isComingSoon = isQuestionComingSoon(question);
 
 	const { data: answer, isLoading } = useSingleAdvisorAnswer(
 		isComingSoon ? null : question.id,

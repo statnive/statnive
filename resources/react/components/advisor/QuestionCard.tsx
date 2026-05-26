@@ -2,6 +2,7 @@ import { useState, useId, type ReactNode } from 'react';
 import { __, sprintf } from '@wordpress/i18n';
 import { ChevronDown, Pin } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { isQuestionComingSoon } from '@/lib/advisor';
 import type { AdvisorAnswer, AdvisorQuestion } from '@/types/api';
 import { useAdvisorPinMutations } from '@/hooks/use-advisor-preferences';
 import { useSingleAdvisorAnswer, useCachedAdvisorAnswer } from '@/hooks/use-advisor-answers';
@@ -183,10 +184,6 @@ export function QuestionCard({ question, pinned, startExpanded = false }: Questi
 			)}
 		</div>
 	);
-}
-
-function isQuestionComingSoon(q: AdvisorQuestion): boolean {
-	return q.plan === 'paid' || typeof q.depends_on_schema === 'string';
 }
 
 function ChipCluster({ question }: { question: AdvisorQuestion }) {

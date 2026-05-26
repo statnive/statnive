@@ -1,4 +1,5 @@
 import type { AdvisorQuestion } from '@/types/api';
+import { isQuestionComingSoon } from '@/lib/advisor';
 import { QuestionCard } from './QuestionCard';
 
 /**
@@ -12,10 +13,6 @@ import { QuestionCard } from './QuestionCard';
 interface CategoryTabProps {
 	questions: AdvisorQuestion[];
 	pinnedIds: string[];
-}
-
-function isComingSoon(q: AdvisorQuestion): boolean {
-	return q.plan === 'paid' || typeof q.depends_on_schema === 'string';
 }
 
 export function CategoryTab({ questions, pinnedIds }: CategoryTabProps) {
@@ -32,7 +29,7 @@ export function CategoryTab({ questions, pinnedIds }: CategoryTabProps) {
 	for (const q of questions) {
 		if (pinnedSet.has(q.id)) {
 			pinnedRows.push(q);
-		} else if (isComingSoon(q)) {
+		} else if (isQuestionComingSoon(q)) {
 			soonRows.push(q);
 		} else {
 			liveRows.push(q);
