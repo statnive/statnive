@@ -4,7 +4,7 @@ Tags: analytics, privacy, statistics, gdpr, cookieless
 Requires at least: 6.2
 Tested up to: 7.0
 Requires PHP: 8.1
-Stable tag: 1.0.0
+Stable tag: 1.1.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -187,6 +187,17 @@ No visitor data is ever sent to any external service. All analytics data remains
 All analytics data stays in your WordPress database. Raw IPs are used only for the optional GeoIP lookup and are never persisted. Statnive registers with the WordPress Privacy API for personal-data export and erasure.
 
 == Changelog ==
+
+= 1.1.0 - 2026-05-31 =
+* New: Ask me! Advisor admin page with 11 in-page tabs, 117 owner-phrased questions, per-user pinning, search + AnswerModal, dynamic time-based questions following the date picker.
+* New: Line chart viz, recommendation viz, Yes/No chip on delta viz, top-X label on KPI tile.
+* New: `statnive_advisor_evergreen_days` filter for q37 evergreen-posts cutoff.
+* Changed: WC Revenue date bucketing uses `COALESCE(date_paid_gmt, date_created_gmt)` so renewals + delayed-payment orders land on the right day.
+* Changed: Funnel "Overall %" denominator switched to widest-step; per-step UI shows conversion %, not drop %.
+* Changed: Inventory consolidated 120 → 117 (q1, q5, q25, q63 removed as degenerate hard-codes or duplicates).
+* Fix: q47 Direct-visits undercount, q46 social-network missing platforms, q42/q73/q82 top-X tiles, q10/q11 anomaly Yes/No clarity, plus 6 more user-reported card fixes.
+* Fix: `Plugin Name:` header parity, `Tested up to: 7.0`, PCP §18 `SuppressFilters` violation.
+* See CHANGELOG.md for the full list.
 
 = 1.0.0 - 2026-05-20 =
 * New: WooCommerce Revenue Report (v1.0.0).

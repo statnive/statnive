@@ -3,7 +3,7 @@
  * Plugin Name: Statnive – Privacy-first Analytics + Revenue Reports for WooCommerce
  * Plugin URI:  https://github.com/statnive/statnive
  * Description: Simple stats, clear decisions. Privacy-first analytics for WordPress.
- * Version:     1.0.0
+ * Version:     1.1.0
  * Requires PHP: 8.1
  * Requires at least: 6.2
  * Author:      Statnive
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Plugin version.
  */
-define( 'STATNIVE_VERSION', '1.0.0' );
+define( 'STATNIVE_VERSION', '1.1.0' );
 
 /**
  * Plugin root directory path.

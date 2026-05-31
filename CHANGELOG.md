@@ -7,6 +7,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-05-31
+
+### Added
+
+- **Ask me! Advisor** — new admin page (`Statnive → Ask me!`) with 11 in-page tabs (1 pinned home + 10 categories). 117 owner-phrased questions, each lazy-loading its answer from the same query path the dedicated report uses. Per-user pinning via `wp_usermeta` (`statnive_pinned_questions`), default 5 pins, max 10 per user. Search box with client-side typeahead + AnswerModal escape-hatch. 3 new REST routes under `/advisor` (questions, answers batch, preferences), all behind `Capability::can_view_reports`.
+- **Dynamic time-based questions** — q2 / q6 / q17 / q26 follow the dashboard date picker. The question text + the answer both update together when the picker changes. React substitutes the localised window phrase (today / in the last 7 days / 30 days / this month / last month / custom date range) into a sprintf-style template at render time. New `resources/react/lib/date-range-label.ts` formatter; reuses the existing `TimeSeriesChart` for q9's line viz.
+- **New viz primitives** — `line` (Recharts line chart via `TimeSeriesChart`) and `recommendation` (share % + one-line recommendation). Extended `delta` with optional Yes/No chip (q86 / q10 / q11). Extended `kpi_tile` with optional `label` (q42 / q73 / q82 "top X" tiles).
+- **WP Privacy API integration for the new user-meta** — exporter + eraser hooks cover `statnive_pinned_questions` (no PII, just question IDs).
+- **Documented filter** `statnive_advisor_evergreen_days` — power users can re-tighten q37's evergreen-post cutoff (default 90 days).
+
+### Changed
+
+- **Inventory consolidation 120 → 117** — q1 ("How many people visited my site today?"), q5 ("Is my traffic up or down compared with yesterday?"), q25 ("Which page got the most views today?"), q63 ("Did my influencer link send visitors?") deleted as degenerate hard-codes or duplicates of dynamic-window or differently-phrased peers.
+- **q10 / q11 anomaly questions** — reworded for clarity ("Has my traffic dropped sharply on the latest day?" / "Has my traffic spiked sharply on the latest day?") and now surface a Yes/No chip so the two questions return distinguishable answers off the same underlying data.
+- **q46 social-network leaderboard** — now matches by referrer name/domain instead of channel label only, so platforms SourceDetector classifies as Referral (e.g. Twitter/X on `t.co`) appear in the breakdown alongside Facebook / YouTube / LinkedIn.
+- **q47 direct-visits counter** — fixed an undercount: the helper used `WHERE s.referrer_id IS NULL` which missed sessions whose tracker classified them as Direct and stored a `referrers` row with `channel='Direct'`. Now mirrors q41's `COALESCE(r.channel, 'Direct') = 'Direct'` pattern.
+
+### Fixed
+
+- **WC Revenue date bucketing** — Revenue Report queries now bucket by `COALESCE(date_paid_gmt, date_created_gmt)` so subscription renewals + delayed-payment orders (BACS / cheque / cash-on-delivery) land on the day payment cleared, not the original subscription creation date.
+- **Funnel "Overall %"** — denominator switched to widest-step instead of first-step. Per-step UI now shows conversion %, not drop %.
+- **`Plugin Name:` header parity** — `statnive.php` and `readme.txt` H1 are now byte-identical after the "X for Y" trademark reformulation.
+- **`Tested up to:`** — bumped to 7.0 to clear the Header Parity CI gate.
+- **PCP §18** — dropped `'suppress_filters' => true` from `answer_latest_post_traffic`'s `get_posts()` call (was a `WordPressVIPMinimum.Performance.WPQueryParams.SuppressFilters` submission blocker).
+
+### Removed
+
+- Question IDs q1, q5, q25, q63 (see Changed). Pinned IDs in `wp_usermeta` are silently filtered via `Questions::valid_ids()` on next page-load — no error, no data loss.
+
 ## [1.0.0] - 2026-05-20
 
 ### Added
