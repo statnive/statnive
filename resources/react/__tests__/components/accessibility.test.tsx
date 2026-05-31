@@ -44,6 +44,7 @@ vi.mock('lucide-react', () => {
 		Settings: Icon,
 		Star: Icon,
 		Bug: Icon,
+		Pin: Icon,
 	};
 });
 

@@ -60,9 +60,28 @@ jobs:
           rsync -rc --exclude-from=.distignore ./ ../statnive-dist/statnive/
           ls -la ../statnive-dist/statnive/
 
-      # Step 1: Run the official action for GitHub annotations (errors fail here).
+      # Run the official action.
+      #
+      # Known-broken upstream: wordpress/plugin-check-action#579 — after
+      # GitHub rolled ubuntu24/20260525.161 (Node 24.16.0 / libuv 1.52.1),
+      # `@wordpress/env`'s URL-source plugin download path silently exits
+      # status 0 without starting Docker. The action auto-generates a
+      # `.wp-env.json` that declares plugin-check as a URL plugin, so every
+      # PCP CI run on this image fails with "Environment not initialized".
+      # Confirmed reproducible across multiple WP plugin maintainers
+      # (bisection by @westonruter on issue #579, 2026-05-28).
+      #
+      # `continue-on-error: true` keeps PCP failures visible in the PR
+      # check log without blocking merge. PCP locally during the release
+      # SKILL (`/statnive-release`) remains the canonical §18 gate per the
+      # learn-statnive-plugin.md "wp-env Local Bootstrap" lesson.
+      #
+      # REMOVE this once plugin-check-action ships v1.1.7+ with the
+      # upstream fix (install plugin-check via wp-cli post-start instead of
+      # via URL plugin in .wp-env.json).
       - name: Run official Plugin Check (plugin_repo category)
         uses: wordpress/plugin-check-action@18573eb38f13543484a1f095672dae3849a4fbb0 # v1.1.6
+        continue-on-error: true
         with:
           build-dir: ../statnive-dist/statnive
           categories: plugin_repo

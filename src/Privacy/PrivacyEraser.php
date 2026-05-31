@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Statnive\Privacy;
 
+use Statnive\Advisor\UserPreferences;
 use Statnive\Database\TableRegistry;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -115,16 +116,28 @@ final class PrivacyEraser {
 
 		$removed = ( false !== $updated ) ? (int) $updated : 0;
 
+		// On the first page, also erase the user's Ask me! pinned-question
+		// preferences (no PII, but a user-scoped preference subject to the
+		// same erasure request per plan §G.5).
+		$pin_messages = [];
+		if ( 1 === $page ) {
+			UserPreferences::erase( $user->ID );
+			$pin_messages[] = __( 'Removed Ask me! pinned-question preferences.', 'statnive' );
+		}
+
 		return [
 			'items_removed'  => $removed,
 			'items_retained' => 0,
-			'messages'       => [
-				sprintf(
-					/* translators: %d: number of sessions anonymized */
-					__( 'Anonymized %d analytics session(s). Aggregate statistics preserved.', 'statnive' ),
-					$removed
-				),
-			],
+			'messages'       => array_merge(
+				[
+					sprintf(
+						/* translators: %d: number of sessions anonymized */
+						__( 'Anonymized %d analytics session(s). Aggregate statistics preserved.', 'statnive' ),
+						$removed
+					),
+				],
+				$pin_messages
+			),
 			'done'           => count( $session_ids ) < self::BATCH_SIZE,
 		];
 	}
