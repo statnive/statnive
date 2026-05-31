@@ -1402,14 +1402,13 @@ final class QuestionResolver {
 	private function answer_latest_post_traffic( array $q ): array {
 		$latest = get_posts(
 			[
-				'post_type'        => 'post',
-				'post_status'      => 'publish',
-				'numberposts'      => 1,
-				'orderby'          => 'date',
-				'order'            => 'DESC',
-				'fields'           => 'ids',
-				'no_found_rows'    => true,
-				'suppress_filters' => true,
+				'post_type'     => 'post',
+				'post_status'   => 'publish',
+				'numberposts'   => 1,
+				'orderby'       => 'date',
+				'order'         => 'DESC',
+				'fields'        => 'ids',
+				'no_found_rows' => true,
 			]
 		);
 
