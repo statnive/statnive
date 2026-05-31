@@ -78,9 +78,11 @@ jobs:
       - name: Generate .wp-env.json (no URL plugin)
         working-directory: ../statnive-dist/statnive
         run: |
+          # `core` omitted on purpose: wp-env treats absent / null as "latest".
+          # The literal string "latest" is rejected with
+          # "Invalid or unrecognized source: latest".
           cat > .wp-env.json <<'EOF'
           {
-            "core": "latest",
             "port": 8880,
             "testsPort": 8881,
             "plugins": ["."]
