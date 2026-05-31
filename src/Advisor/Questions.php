@@ -483,8 +483,7 @@ final class Questions {
 		return [
 			self::q( 'q23', $cat, 'What are my top pages?', [ 'top pages', 'most viewed' ], self::PLAN_FREE, '/pages', 'table', self::CONF_DIRECT ),
 			self::q( 'q24', $cat, 'What are my most-read posts?', [ 'posts', 'most read', 'popular' ], self::PLAN_FREE, '/pages', 'table', self::CONF_DIRECT ),
-			self::q( 'q25', $cat, 'Which page got the most views today?', [ 'top page', 'today' ], self::PLAN_FREE, '/pages', 'table', self::CONF_DIRECT ),
-			self::q( 'q26', $cat, 'Which page got the most views this week?', [ 'top page', 'this week' ], self::PLAN_FREE, '/pages', 'table', self::CONF_DIRECT ),
+			self::q( 'q26', $cat, 'Which page got the most views %s?', [ 'top page', 'today', 'this week', 'this month', 'last month' ], self::PLAN_FREE, '/pages', 'table', self::CONF_DIRECT, null, 'current' ),
 			self::q( 'q27', $cat, 'What is my best landing page?', [ 'landing page', 'entry' ], self::PLAN_FREE, '/pages/entry', 'table', self::CONF_DIRECT, self::SCHEMA_ENTRY_COUNT ),
 			self::q( 'q28', $cat, 'Which pages do people enter from?', [ 'entry', 'landing' ], self::PLAN_FREE, '/pages/entry', 'table', self::CONF_DIRECT, self::SCHEMA_ENTRY_COUNT ),
 			self::q( 'q29', $cat, 'Which pages do people leave from?', [ 'exit', 'leave' ], self::PLAN_FREE, '/pages/exit', 'table', self::CONF_DIRECT, self::SCHEMA_EXIT_COUNT ),
@@ -675,6 +674,10 @@ final class Questions {
 	 * @param string             $viz_hint          UI viz template hint.
 	 * @param string             $confidence        One of `Questions::CONF_*`.
 	 * @param string|null        $depends_on_schema Schema column the answer needs (e.g. `entry_count`).
+	 * @param string|null        $dynamic_window    `'current'` or `'prior'` when the question's
+	 *                                              `$question_en` carries a `%s` placeholder for
+	 *                                              the date-window phrase. React substitutes the
+	 *                                              localised label at render time.
 	 * @return array<string, mixed>
 	 */
 	private static function q(
@@ -686,7 +689,8 @@ final class Questions {
 		string $surface,
 		string $viz_hint,
 		string $confidence,
-		?string $depends_on_schema = null
+		?string $depends_on_schema = null,
+		?string $dynamic_window = null
 	): array {
 		$row = [
 			'id'          => $id,
@@ -701,6 +705,9 @@ final class Questions {
 		];
 		if ( null !== $depends_on_schema ) {
 			$row['depends_on_schema'] = $depends_on_schema;
+		}
+		if ( null !== $dynamic_window ) {
+			$row['dynamic_window'] = $dynamic_window;
 		}
 		return $row;
 	}
@@ -724,10 +731,9 @@ final class Questions {
 				return __( 'What are my top pages?', 'statnive' );
 			case 'q24':
 				return __( 'What are my most-read posts?', 'statnive' );
-			case 'q25':
-				return __( 'Which page got the most views today?', 'statnive' );
 			case 'q26':
-				return __( 'Which page got the most views this week?', 'statnive' );
+				/* translators: %s is a date-range phrase from the date picker — e.g. "today", "this week", "in the last 30 days". */
+				return __( 'Which page got the most views %s?', 'statnive' );
 			case 'q27':
 				return __( 'What is my best landing page?', 'statnive' );
 			case 'q28':

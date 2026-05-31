@@ -3,11 +3,10 @@ import { __, sprintf } from '@wordpress/i18n';
 import { ChevronDown, Pin } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { isQuestionComingSoon } from '@/lib/advisor';
-import { formatDateRangeLabel, formatPriorRangeLabel } from '@/lib/date-range-label';
+import { resolveDynamicQuestion, useDynamicQuestionLabel } from '@/lib/dynamic-question';
 import type { AdvisorAnswer, AdvisorQuestion } from '@/types/api';
 import { useAdvisorPinMutations } from '@/hooks/use-advisor-preferences';
 import { useSingleAdvisorAnswer, useCachedAdvisorAnswer } from '@/hooks/use-advisor-answers';
-import { useDateRange } from '@/hooks/use-date-range';
 import { AnswerViz } from './AnswerViz';
 
 /**
@@ -34,15 +33,8 @@ export function QuestionCard({ question, pinned, startExpanded = false }: Questi
 	const headingId = useId();
 	const panelId = useId();
 
-	const { range, params } = useDateRange();
-	const dynamicLabel = question.dynamic_window
-		? question.dynamic_window === 'prior'
-			? formatPriorRangeLabel(range, params)
-			: formatDateRangeLabel(range, params)
-		: null;
-	const resolvedQuestion = dynamicLabel
-		? question.question.replace('%s', dynamicLabel)
-		: question.question;
+	const dynamicLabel = useDynamicQuestionLabel(question);
+	const resolved = resolveDynamicQuestion(question.question, dynamicLabel);
 
 	const { pin, unpin, isPending } = useAdvisorPinMutations();
 
@@ -152,9 +144,9 @@ export function QuestionCard({ question, pinned, startExpanded = false }: Questi
 								: 'text-[color:var(--color-primary)]',
 						)}
 						style={{ letterSpacing: '-0.01em' }}
-						title={resolvedQuestion}
+						title={resolved.text}
 					>
-						{dynamicLabel ? renderDynamicQuestion(question.question, dynamicLabel) : resolvedQuestion}
+						{resolved.node}
 					</span>
 					<ChipCluster question={question} />
 					{!isComingSoon && (
@@ -167,15 +159,6 @@ export function QuestionCard({ question, pinned, startExpanded = false }: Questi
 					)}
 				</button>
 			</div>
-
-			{/* Helper caption — dynamic-window questions follow the date picker
-			    above. Surfaced inline so owners learn the affordance without
-			    expanding the card. */}
-			{dynamicLabel && !isComingSoon && (
-				<p className="px-15 pb-2 pt-0 text-[11px] italic text-muted-foreground/70">
-					{__('Following the date picker above. Change the range to see a different period.', 'statnive')}
-				</p>
-			)}
 
 			{/* Coming-soon caption (always visible, never expandable) */}
 			{isComingSoon && <ComingSoonCaption question={question} />}
@@ -198,33 +181,13 @@ export function QuestionCard({ question, pinned, startExpanded = false }: Questi
 								question={question}
 								answer={answer}
 								isLoading={isLoading && answer === undefined}
+								dynamicLabel={dynamicLabel}
 							/>
 						)}
 					</div>
 				</div>
 			)}
 		</div>
-	);
-}
-
-/**
- * Split a sprintf-style question template on `%s` and wrap the dynamic
- * window phrase in a tinted-accent highlight. Returns a ReactNode so it
- * can slot directly into the question-text span.
- */
-function renderDynamicQuestion(template: string, label: string): ReactNode {
-	const idx = template.indexOf('%s');
-	if (idx < 0) return template;
-	const prefix = template.slice(0, idx);
-	const suffix = template.slice(idx + 2);
-	return (
-		<>
-			{prefix}
-			<span className="rounded bg-[color:var(--color-accent)]/10 px-1 font-bold text-foreground">
-				{label}
-			</span>
-			{suffix}
-		</>
 	);
 }
 
@@ -293,10 +256,12 @@ function ExpandedBody({
 	question,
 	answer,
 	isLoading,
+	dynamicLabel,
 }: {
 	question: AdvisorQuestion;
 	answer: AdvisorAnswer | undefined;
 	isLoading: boolean;
+	dynamicLabel: string | null;
 }): ReactNode {
 	if (isLoading || !answer) {
 		return (
@@ -315,6 +280,24 @@ function ExpandedBody({
 	return (
 		<div className="px-15 pb-6 pt-1">
 			<AnswerViz question={question} answer={answer} />
+			{dynamicLabel && <DynamicWindowCaption label={dynamicLabel} />}
 		</div>
+	);
+}
+
+/**
+ * Inline caption shown at the foot of a dynamic-window question's expanded
+ * body. Names the active window (`label`) and explicitly points at the
+ * date picker so the affordance is discoverable.
+ */
+function DynamicWindowCaption({ label }: { label: string }): ReactNode {
+	return (
+		<p className="mt-3 text-[11px] italic text-muted-foreground/70">
+			{sprintf(
+				/* translators: %s: localised window phrase, e.g. "today" / "in the last 30 days" / "28 May – 31 May 2026" */
+				__('Showing %s. Change the date picker above for a different period.', 'statnive'),
+				label,
+			)}
+		</p>
 	);
 }

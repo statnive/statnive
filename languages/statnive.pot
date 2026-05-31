@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-05-31T08:38:45+00:00\n"
+"POT-Creation-Date: 2026-05-31T11:27:07+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: statnive\n"
@@ -299,11 +299,11 @@ msgstr ""
 msgid "Events & Privacy"
 msgstr ""
 
-#: src/Advisor/QuestionResolver.php:1996
+#: src/Advisor/QuestionResolver.php:2003
 msgid "Local"
 msgstr ""
 
-#: src/Advisor/QuestionResolver.php:2000
+#: src/Advisor/QuestionResolver.php:2007
 msgid "International"
 msgstr ""
 
@@ -393,391 +393,389 @@ msgstr ""
 msgid "Are bots affecting my data?"
 msgstr ""
 
-#: src/Advisor/Questions.php:724
+#: src/Advisor/Questions.php:731
 msgid "What are my top pages?"
 msgstr ""
 
-#: src/Advisor/Questions.php:726
+#: src/Advisor/Questions.php:733
 msgid "What are my most-read posts?"
 msgstr ""
 
-#: src/Advisor/Questions.php:728
-msgid "Which page got the most views today?"
-msgstr ""
-
-#: src/Advisor/Questions.php:730
-msgid "Which page got the most views this week?"
-msgstr ""
-
-#: src/Advisor/Questions.php:732
-msgid "What is my best landing page?"
-msgstr ""
-
-#: src/Advisor/Questions.php:734
-msgid "Which pages do people enter from?"
-msgstr ""
-
+#. translators: %s is a date-range phrase from the date picker — e.g. "today", "this week", "in the last 30 days".
 #: src/Advisor/Questions.php:736
-msgid "Which pages do people leave from?"
+#, php-format
+msgid "Which page got the most views %s?"
 msgstr ""
 
 #: src/Advisor/Questions.php:738
-msgid "Which pages have the most exits?"
+msgid "What is my best landing page?"
 msgstr ""
 
 #: src/Advisor/Questions.php:740
-msgid "Which page titles get the most views?"
+msgid "Which pages do people enter from?"
 msgstr ""
 
 #: src/Advisor/Questions.php:742
-msgid "Did my latest post get traffic?"
+msgid "Which pages do people leave from?"
 msgstr ""
 
 #: src/Advisor/Questions.php:744
-msgid "Did my homepage get seen?"
+msgid "Which pages have the most exits?"
 msgstr ""
 
 #: src/Advisor/Questions.php:746
-msgid "How many people viewed my contact page?"
+msgid "Which page titles get the most views?"
 msgstr ""
 
 #: src/Advisor/Questions.php:748
-msgid "How many people viewed my about page?"
+msgid "Did my latest post get traffic?"
 msgstr ""
 
 #: src/Advisor/Questions.php:750
-msgid "How many people viewed my pricing page?"
+msgid "Did my homepage get seen?"
 msgstr ""
 
 #: src/Advisor/Questions.php:752
-msgid "Which old posts still get traffic?"
+msgid "How many people viewed my contact page?"
 msgstr ""
 
 #: src/Advisor/Questions.php:754
-msgid "Which pages are losing visitors?"
+msgid "How many people viewed my about page?"
 msgstr ""
 
 #: src/Advisor/Questions.php:756
-msgid "Which pages probably need updating?"
+msgid "How many people viewed my pricing page?"
 msgstr ""
 
 #: src/Advisor/Questions.php:758
-msgid "Which pages have the longest average duration?"
+msgid "Which old posts still get traffic?"
 msgstr ""
 
 #: src/Advisor/Questions.php:760
-msgid "Where is my traffic coming from?"
+msgid "Which pages are losing visitors?"
 msgstr ""
 
 #: src/Advisor/Questions.php:762
-msgid "Which channel sends the most traffic?"
+msgid "Which pages probably need updating?"
 msgstr ""
 
 #: src/Advisor/Questions.php:764
-msgid "How much traffic comes from Google?"
+msgid "Which pages have the longest average duration?"
 msgstr ""
 
 #: src/Advisor/Questions.php:766
-msgid "How much traffic comes from organic search?"
+msgid "Where is my traffic coming from?"
 msgstr ""
 
 #: src/Advisor/Questions.php:768
-msgid "How much traffic comes from social media?"
+msgid "Which channel sends the most traffic?"
 msgstr ""
 
 #: src/Advisor/Questions.php:770
-msgid "Which social network sends the most traffic?"
+msgid "How much traffic comes from Google?"
 msgstr ""
 
 #: src/Advisor/Questions.php:772
-msgid "How much traffic comes from direct visits?"
+msgid "How much traffic comes from organic search?"
 msgstr ""
 
 #: src/Advisor/Questions.php:774
-msgid "Did Reddit send traffic?"
+msgid "How much traffic comes from social media?"
 msgstr ""
 
 #: src/Advisor/Questions.php:776
-msgid "Did Twitter/X send traffic?"
+msgid "Which social network sends the most traffic?"
 msgstr ""
 
 #: src/Advisor/Questions.php:778
-msgid "Did Facebook send traffic?"
+msgid "How much traffic comes from direct visits?"
 msgstr ""
 
 #: src/Advisor/Questions.php:780
-msgid "Did Instagram send traffic?"
+msgid "Did Reddit send traffic?"
 msgstr ""
 
 #: src/Advisor/Questions.php:782
-msgid "Did YouTube send traffic?"
+msgid "Did Twitter/X send traffic?"
 msgstr ""
 
 #: src/Advisor/Questions.php:784
-msgid "Are AI tools sending traffic?"
+msgid "Did Facebook send traffic?"
 msgstr ""
 
 #: src/Advisor/Questions.php:786
-msgid "Is organic traffic increasing?"
+msgid "Did Instagram send traffic?"
 msgstr ""
 
 #: src/Advisor/Questions.php:788
-msgid "Is referral traffic increasing?"
+msgid "Did YouTube send traffic?"
 msgstr ""
 
 #: src/Advisor/Questions.php:790
-msgid "Which referrer sends low-quality traffic?"
+msgid "Are AI tools sending traffic?"
 msgstr ""
 
 #: src/Advisor/Questions.php:792
-msgid "Did my campaign drive traffic?"
+msgid "Is organic traffic increasing?"
 msgstr ""
 
 #: src/Advisor/Questions.php:794
-msgid "Which UTM campaign sent the most visitors?"
+msgid "Is referral traffic increasing?"
 msgstr ""
 
 #: src/Advisor/Questions.php:796
-msgid "Which UTM source sent the most traffic?"
+msgid "Which referrer sends low-quality traffic?"
 msgstr ""
 
 #: src/Advisor/Questions.php:798
-msgid "Which UTM medium sent the most traffic?"
+msgid "Did my campaign drive traffic?"
 msgstr ""
 
 #: src/Advisor/Questions.php:800
-msgid "Did my newsletter drive traffic?"
+msgid "Which UTM campaign sent the most visitors?"
 msgstr ""
 
 #: src/Advisor/Questions.php:802
-msgid "Did my email campaign work?"
+msgid "Which UTM source sent the most traffic?"
 msgstr ""
 
 #: src/Advisor/Questions.php:804
-msgid "Did my Facebook campaign send traffic?"
+msgid "Which UTM medium sent the most traffic?"
 msgstr ""
 
 #: src/Advisor/Questions.php:806
-msgid "Did my Google Ads campaign send traffic?"
+msgid "Did my newsletter drive traffic?"
 msgstr ""
 
 #: src/Advisor/Questions.php:808
-msgid "Which landing page did my campaign send people to?"
+msgid "Did my email campaign work?"
 msgstr ""
 
 #: src/Advisor/Questions.php:810
-msgid "Which UTM combination worked best by traffic?"
+msgid "Did my Facebook campaign send traffic?"
 msgstr ""
 
 #: src/Advisor/Questions.php:812
-msgid "Did Black Friday increase traffic?"
+msgid "Did my Google Ads campaign send traffic?"
 msgstr ""
 
 #: src/Advisor/Questions.php:814
-msgid "Which campaign had the best visitor quality?"
+msgid "Which landing page did my campaign send people to?"
 msgstr ""
 
 #: src/Advisor/Questions.php:816
-msgid "Which campaign had the highest bounce count?"
+msgid "Which UTM combination worked best by traffic?"
 msgstr ""
 
 #: src/Advisor/Questions.php:818
-msgid "Which campaign should I double down on?"
+msgid "Did Black Friday increase traffic?"
 msgstr ""
 
 #: src/Advisor/Questions.php:820
-msgid "What countries are my visitors from?"
+msgid "Which campaign had the best visitor quality?"
 msgstr ""
 
 #: src/Advisor/Questions.php:822
-msgid "Which country sends the most traffic?"
+msgid "Which campaign had the highest bounce count?"
 msgstr ""
 
 #: src/Advisor/Questions.php:824
-msgid "Is most of my traffic local or international?"
+msgid "Which campaign should I double down on?"
 msgstr ""
 
 #: src/Advisor/Questions.php:826
-msgid "What language are my visitors using?"
+msgid "What countries are my visitors from?"
 msgstr ""
 
 #: src/Advisor/Questions.php:828
-msgid "What cities are my visitors from?"
+msgid "Which country sends the most traffic?"
 msgstr ""
 
 #: src/Advisor/Questions.php:830
-msgid "Which city sends the most traffic?"
+msgid "Is most of my traffic local or international?"
 msgstr ""
 
 #: src/Advisor/Questions.php:832
-msgid "Did traffic from one country drop?"
+msgid "What language are my visitors using?"
 msgstr ""
 
 #: src/Advisor/Questions.php:834
-msgid "Which countries visit a specific page?"
+msgid "What cities are my visitors from?"
 msgstr ""
 
 #: src/Advisor/Questions.php:836
-msgid "Which countries visit product or pricing pages?"
+msgid "Which city sends the most traffic?"
 msgstr ""
 
 #: src/Advisor/Questions.php:838
-msgid "How much traffic is mobile vs desktop?"
+msgid "Did traffic from one country drop?"
 msgstr ""
 
 #: src/Advisor/Questions.php:840
-msgid "Which device type is most common?"
+msgid "Which countries visit a specific page?"
 msgstr ""
 
 #: src/Advisor/Questions.php:842
-msgid "How much traffic is tablet?"
+msgid "Which countries visit product or pricing pages?"
 msgstr ""
 
 #: src/Advisor/Questions.php:844
-msgid "Which browser do visitors use?"
+msgid "How much traffic is mobile vs desktop?"
 msgstr ""
 
 #: src/Advisor/Questions.php:846
-msgid "Which operating systems do visitors use?"
+msgid "Which device type is most common?"
 msgstr ""
 
 #: src/Advisor/Questions.php:848
-msgid "Is mobile traffic higher than desktop?"
+msgid "How much traffic is tablet?"
 msgstr ""
 
 #: src/Advisor/Questions.php:850
-msgid "Should I prioritize mobile design?"
+msgid "Which browser do visitors use?"
 msgstr ""
 
 #: src/Advisor/Questions.php:852
-msgid "Which pages are mostly viewed on mobile?"
+msgid "Which operating systems do visitors use?"
 msgstr ""
 
 #: src/Advisor/Questions.php:854
-msgid "Which OS/browser should I test first?"
+msgid "Is mobile traffic higher than desktop?"
 msgstr ""
 
 #: src/Advisor/Questions.php:856
-msgid "Does mobile look worse than desktop?"
+msgid "Should I prioritize mobile design?"
 msgstr ""
 
 #: src/Advisor/Questions.php:858
-msgid "Which device type exits more often?"
+msgid "Which pages are mostly viewed on mobile?"
 msgstr ""
 
 #: src/Advisor/Questions.php:860
-msgid "How much bot traffic is shown in device breakdown?"
+msgid "Which OS/browser should I test first?"
 msgstr ""
 
 #: src/Advisor/Questions.php:862
-msgid "Which pages have the most bounces?"
+msgid "Does mobile look worse than desktop?"
 msgstr ""
 
 #: src/Advisor/Questions.php:864
-msgid "Which pages have the highest exit count?"
+msgid "Which device type exits more often?"
 msgstr ""
 
 #: src/Advisor/Questions.php:866
-msgid "How long do visitors stay on average?"
+msgid "How much bot traffic is shown in device breakdown?"
 msgstr ""
 
 #: src/Advisor/Questions.php:868
-msgid "How many pages does each session view?"
+msgid "Which pages have the most bounces?"
 msgstr ""
 
 #: src/Advisor/Questions.php:870
-msgid "Which pages keep visitors engaged?"
+msgid "Which pages have the highest exit count?"
 msgstr ""
 
 #: src/Advisor/Questions.php:872
-msgid "Which traffic source sends engaged visitors?"
+msgid "How long do visitors stay on average?"
 msgstr ""
 
 #: src/Advisor/Questions.php:874
-msgid "Which pages may be broken or confusing?"
+msgid "How many pages does each session view?"
 msgstr ""
 
 #: src/Advisor/Questions.php:876
-msgid "What is the bounce rate for a page?"
+msgid "Which pages keep visitors engaged?"
 msgstr ""
 
 #: src/Advisor/Questions.php:878
-msgid "How many orders did I get?"
+msgid "Which traffic source sends engaged visitors?"
 msgstr ""
 
 #: src/Advisor/Questions.php:880
-msgid "How much gross revenue did I make?"
+msgid "Which pages may be broken or confusing?"
 msgstr ""
 
 #: src/Advisor/Questions.php:882
-msgid "How much net revenue did I make?"
+msgid "What is the bounce rate for a page?"
 msgstr ""
 
 #: src/Advisor/Questions.php:884
-msgid "What is my average order value?"
+msgid "How many orders did I get?"
 msgstr ""
 
 #: src/Advisor/Questions.php:886
-msgid "How much did I refund?"
+msgid "How much gross revenue did I make?"
 msgstr ""
 
 #: src/Advisor/Questions.php:888
-msgid "What is my refund rate?"
+msgid "How much net revenue did I make?"
 msgstr ""
 
 #: src/Advisor/Questions.php:890
-msgid "Which channel brings the most revenue?"
+msgid "What is my average order value?"
 msgstr ""
 
 #: src/Advisor/Questions.php:892
-msgid "Which UTM campaign brings the most revenue?"
+msgid "How much did I refund?"
 msgstr ""
 
 #: src/Advisor/Questions.php:894
-msgid "Which landing page brings the most revenue?"
+msgid "What is my refund rate?"
 msgstr ""
 
 #: src/Advisor/Questions.php:896
-msgid "Which product sells the most units?"
+msgid "Which channel brings the most revenue?"
 msgstr ""
 
 #: src/Advisor/Questions.php:898
-msgid "Which product makes the most revenue?"
+msgid "Which UTM campaign brings the most revenue?"
 msgstr ""
 
 #: src/Advisor/Questions.php:900
-msgid "Which coupon is used the most?"
+msgid "Which landing page brings the most revenue?"
 msgstr ""
 
 #: src/Advisor/Questions.php:902
-msgid "Which coupon gives the most discount?"
+msgid "Which product sells the most units?"
 msgstr ""
 
 #: src/Advisor/Questions.php:904
-msgid "What is my funnel conversion rate?"
+msgid "Which product makes the most revenue?"
 msgstr ""
 
 #: src/Advisor/Questions.php:906
-msgid "How much tax and shipping did customers pay?"
+msgid "Which coupon is used the most?"
 msgstr ""
 
 #: src/Advisor/Questions.php:908
-msgid "Which custom events happened most often?"
+msgid "Which coupon gives the most discount?"
 msgstr ""
 
 #: src/Advisor/Questions.php:910
-msgid "How many sessions included a specific event?"
+msgid "What is my funnel conversion rate?"
 msgstr ""
 
 #: src/Advisor/Questions.php:912
-msgid "Is a specific custom event firing?"
+msgid "How much tax and shipping did customers pay?"
 msgstr ""
 
 #: src/Advisor/Questions.php:914
-msgid "Is my privacy audit passing?"
+msgid "Which custom events happened most often?"
 msgstr ""
 
 #: src/Advisor/Questions.php:916
+msgid "How many sessions included a specific event?"
+msgstr ""
+
+#: src/Advisor/Questions.php:918
+msgid "Is a specific custom event firing?"
+msgstr ""
+
+#: src/Advisor/Questions.php:920
+msgid "Is my privacy audit passing?"
+msgstr ""
+
+#: src/Advisor/Questions.php:922
 msgid "What privacy or diagnostics warnings should I fix?"
 msgstr ""
 
@@ -1256,38 +1254,38 @@ msgstr ""
 
 # React/TypeScript-source strings (merged by bin/extract-react-pot.mjs).
 
-#: resources/react/components/advisor/AnswerModal.tsx:80
-#: resources/react/components/advisor/QuestionCard.tsx:285
+#: resources/react/components/advisor/AnswerModal.tsx:83
+#: resources/react/components/advisor/QuestionCard.tsx:248
 msgid "Live in v1.1 — auto-enables when ready."
 msgstr ""
 
-#: resources/react/components/advisor/AnswerModal.tsx:81
-#: resources/react/components/advisor/QuestionCard.tsx:286
+#: resources/react/components/advisor/AnswerModal.tsx:84
+#: resources/react/components/advisor/QuestionCard.tsx:249
 msgid "Unlocks in Statnive Growth v2."
 msgstr ""
 
-#: resources/react/components/advisor/AnswerModal.tsx:112
+#: resources/react/components/advisor/AnswerModal.tsx:115
 msgid "Free"
 msgstr ""
 
-#: resources/react/components/advisor/AnswerModal.tsx:112
+#: resources/react/components/advisor/AnswerModal.tsx:115
 msgid "Paid"
 msgstr ""
 
-#: resources/react/components/advisor/AnswerModal.tsx:121
+#: resources/react/components/advisor/AnswerModal.tsx:124
 msgid "Close answer"
 msgstr ""
 
-#: resources/react/components/advisor/AnswerModal.tsx:136
-#: resources/react/components/advisor/QuestionCard.tsx:311
+#: resources/react/components/advisor/AnswerModal.tsx:139
+#: resources/react/components/advisor/QuestionCard.tsx:276
 msgid "Couldn't load this answer."
 msgstr ""
 
-#: resources/react/components/advisor/AnswerModal.tsx:165
+#: resources/react/components/advisor/AnswerModal.tsx:168
 msgid "Pinned"
 msgstr ""
 
-#: resources/react/components/advisor/AnswerModal.tsx:166
+#: resources/react/components/advisor/AnswerModal.tsx:169
 msgid "Pin this question"
 msgstr ""
 
@@ -1361,48 +1359,48 @@ msgstr ""
 msgid "Pin any question from a category tab to see it here."
 msgstr ""
 
-#: resources/react/components/advisor/QuestionCard.tsx:103
+#: resources/react/components/advisor/QuestionCard.tsx:95
 msgid "Unpin \"%s\""
 msgstr ""
 
-#: resources/react/components/advisor/QuestionCard.tsx:108
+#: resources/react/components/advisor/QuestionCard.tsx:100
 msgid "Pin \"%s\""
 msgstr ""
 
-#: resources/react/components/advisor/QuestionCard.tsx:176
-msgid "Following the date picker above. Change the range to see a different period."
-msgstr ""
-
-#: resources/react/components/advisor/QuestionCard.tsx:239
-#: resources/react/components/advisor/SearchSuggestions.tsx:65
+#: resources/react/components/advisor/QuestionCard.tsx:202
+#: resources/react/components/advisor/SearchSuggestions.tsx:79
 msgid "Coming soon"
 msgstr ""
 
-#: resources/react/components/advisor/QuestionCard.tsx:249
+#: resources/react/components/advisor/QuestionCard.tsx:212
 #: resources/react/pages/overview.tsx:49
 #: resources/react/pages/overview.tsx:51
 #: resources/react/pages/referrers.tsx:104
 msgid "Direct"
 msgstr ""
 
-#: resources/react/components/advisor/QuestionCard.tsx:251
+#: resources/react/components/advisor/QuestionCard.tsx:214
 msgid "Calculated"
 msgstr ""
 
-#: resources/react/components/advisor/QuestionCard.tsx:252
+#: resources/react/components/advisor/QuestionCard.tsx:215
 msgid "Proxy"
 msgstr ""
 
-#: resources/react/components/advisor/QuestionCard.tsx:255
+#: resources/react/components/advisor/QuestionCard.tsx:218
 msgid "Read straight from stored data."
 msgstr ""
 
-#: resources/react/components/advisor/QuestionCard.tsx:257
+#: resources/react/components/advisor/QuestionCard.tsx:220
 msgid "Derived one step from stored data."
 msgstr ""
 
-#: resources/react/components/advisor/QuestionCard.tsx:258
+#: resources/react/components/advisor/QuestionCard.tsx:221
 msgid "Closest available stand-in, indicative not authoritative."
+msgstr ""
+
+#: resources/react/components/advisor/QuestionCard.tsx:298
+msgid "Showing %s. Change the date picker above for a different period."
 msgstr ""
 
 #: resources/react/components/advisor/QuestionTabs.tsx:151

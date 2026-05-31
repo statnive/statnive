@@ -3,6 +3,7 @@ import { __ } from '@wordpress/i18n';
 import { X, Pin } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { isQuestionComingSoon } from '@/lib/advisor';
+import { resolveDynamicQuestion, useDynamicQuestionLabel } from '@/lib/dynamic-question';
 import { AnswerViz } from './AnswerViz';
 import { useSingleAdvisorAnswer } from '@/hooks/use-advisor-answers';
 import { useAdvisorPinMutations } from '@/hooks/use-advisor-preferences';
@@ -32,6 +33,8 @@ interface AnswerModalProps {
 
 export function AnswerModal({ question, pinned, onClose }: AnswerModalProps) {
 	const isComingSoon = isQuestionComingSoon(question);
+	const dynamicLabel = useDynamicQuestionLabel(question);
+	const resolved = resolveDynamicQuestion(question.question, dynamicLabel);
 
 	const { data: answer, isLoading } = useSingleAdvisorAnswer(
 		isComingSoon ? null : question.id,
@@ -102,7 +105,7 @@ export function AnswerModal({ question, pinned, onClose }: AnswerModalProps) {
 				<div className="flex items-start gap-3 border-b border-border p-6 pb-4">
 					<div className="flex-1">
 						<h2 id={titleId} className="text-lg font-semibold">
-							{question.question}
+							{resolved.node}
 						</h2>
 						<p className="mt-1 text-[12px] text-muted-foreground">
 							<span>{question.category}</span>

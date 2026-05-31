@@ -233,8 +233,6 @@ final class QuestionResolver {
 				return $this->answer_q23( $from, $to, $q );
 			case 'q24':
 				return $this->answer_top_posts( $from, $to, $q );
-			case 'q25':
-				return $this->answer_top_page_today( $q );
 			case 'q26':
 				return $this->answer_top_page_week( $from, $to, $q );
 			case 'q31':
@@ -1322,18 +1320,10 @@ final class QuestionResolver {
 	}
 
 	/**
-	 * Resolve an Ask me! question.
+	 * Q26 — "Which page got the most views {dynamic window}?"
 	 *
-	 * @param array<string, mixed> $q Inventory row.
-	 * @return array<string, mixed>
-	 */
-	private function answer_top_page_today( array $q ): array {
-		$today = gmdate( 'Y-m-d' );
-		return $this->ok( $q, [ 'rows' => $this->load_top_pages( $today, $today, null ) ], Questions::VIZ_TABLE );
-	}
-
-	/**
-	 * Resolve an Ask me! question.
+	 * Picker-aware top-pages table. Folded q25 (today hard-code) into this
+	 * dynamic-window variant in the May 2026 consolidation.
 	 *
 	 * @param string               $from Date range start.
 	 * @param string               $to   Date range end.
