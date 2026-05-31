@@ -1593,45 +1593,48 @@ final class QuestionResolver {
 	 * @return array<string, mixed>
 	 */
 	private function answer_top_social_network( string $from, string $to, array $q ): array {
-		global $wpdb;
-		$sessions  = TableRegistry::get( 'sessions' );
-		$referrers = TableRegistry::get( 'referrers' );
+		// Bucket by canonical social-network display name using the same
+		// vocabulary the per-network handlers (q48-q52) match against.
+		// SourceDetector doesn't always tag every social platform with
+		// `channel='Social'` (Twitter/X is currently classified as
+		// Referral on most installs), so filtering by channel alone
+		// undercounts. Matching by referrer name/domain via the same
+		// helper q49/q50/... use guarantees parity: if `Did Twitter/X
+		// send traffic?` shows 8 visitors, q46 will surface "Twitter/X — 8"
+		// here too.
+		$platforms = [
+			'Facebook'  => [ 'facebook', 'fb.com', 'l.facebook' ],
+			'Twitter/X' => [ 'twitter', 'x.com', 't.co' ],
+			'YouTube'   => [ 'youtube', 'youtu.be' ],
+			'Instagram' => [ 'instagram', 'l.instagram' ],
+			'LinkedIn'  => [ 'linkedin' ],
+			'Reddit'    => [ 'reddit' ],
+			'TikTok'    => [ 'tiktok' ],
+			'Pinterest' => [ 'pinterest' ],
+			'Threads'   => [ 'threads.net' ],
+			'Mastodon'  => [ 'mastodon' ],
+		];
 
-		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-		$rows = $wpdb->get_results(
-			$wpdb->prepare(
-				'SELECT COALESCE(r.name, "Unknown") AS network,
-					COUNT(DISTINCT s.ID) AS sessions
-				FROM %i s
-				JOIN %i r ON r.ID = s.referrer_id
-				WHERE r.channel IN (%s, %s) AND s.started_at BETWEEN %s AND %s
-				GROUP BY r.name
-				ORDER BY sessions DESC
-				LIMIT 10',
-				$sessions,
-				$referrers,
-				'Social',
-				'Social Media',
-				$from . ' 00:00:00',
-				$to . ' 23:59:59'
-			),
-			ARRAY_A
-		);
-		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		$totals = [];
+		foreach ( $platforms as $display => $patterns ) {
+			$sessions = $this->count_referrer_sessions_by_patterns( $from, $to, $patterns );
+			if ( $sessions > 0 ) {
+				$totals[ $display ] = $sessions;
+			}
+		}
 
-		return $this->ok(
-			$q,
-			[
-				'rows' => array_map(
-					static fn( $r ) => [
-						'network'  => (string) $r['network'],
-						'sessions' => (int) $r['sessions'],
-					],
-					is_array( $rows ) ? $rows : []
-				),
-			],
-			Questions::VIZ_TABLE
-		);
+		arsort( $totals );
+		$totals = array_slice( $totals, 0, 10, true );
+
+		$rows = [];
+		foreach ( $totals as $name => $sessions ) {
+			$rows[] = [
+				'network'  => (string) $name,
+				'sessions' => (int) $sessions,
+			];
+		}
+
+		return $this->ok( $q, [ 'rows' => $rows ], Questions::VIZ_TABLE );
 	}
 
 	/**
@@ -2581,6 +2584,61 @@ final class QuestionResolver {
 				$channel,
 				$start,
 				$end
+			)
+		);
+		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+	}
+
+	/**
+	 * Count sessions whose referrer name/domain matches any of the given
+	 * substring patterns (case-insensitive). Channel-agnostic — used by
+	 * q46's social-network ranking which needs to catch platforms like
+	 * Twitter/X that SourceDetector classifies under Referral, not Social.
+	 *
+	 * Padded to a fixed N=3 patterns (the longest social-platform alias
+	 * list in our vocabulary). The sentinel `__never_matches_xyzzy__`
+	 * contributes zero matches when fewer patterns are passed.
+	 *
+	 * @param string             $from     Date range start (`Y-m-d`).
+	 * @param string             $to       Date range end (`Y-m-d`).
+	 * @param array<int, string> $patterns Up to 3 lowercase substrings.
+	 */
+	private function count_referrer_sessions_by_patterns( string $from, string $to, array $patterns ): int {
+		global $wpdb;
+		$sessions  = TableRegistry::get( 'sessions' );
+		$referrers = TableRegistry::get( 'referrers' );
+
+		if ( empty( $patterns ) ) {
+			return 0;
+		}
+
+		$padded = array_pad( array_slice( $patterns, 0, 3 ), 3, '__never_matches_xyzzy__' );
+		$likes  = array_map(
+			static fn( $p ) => '%' . $wpdb->esc_like( strtolower( (string) $p ) ) . '%',
+			$padded
+		);
+
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		return (int) $wpdb->get_var(
+			$wpdb->prepare(
+				'SELECT COUNT(DISTINCT s.ID)
+				FROM %i s
+				JOIN %i r ON r.ID = s.referrer_id
+				WHERE (
+					(LOWER(r.name) LIKE %s OR LOWER(r.domain) LIKE %s)
+					OR (LOWER(r.name) LIKE %s OR LOWER(r.domain) LIKE %s)
+					OR (LOWER(r.name) LIKE %s OR LOWER(r.domain) LIKE %s)
+				) AND s.started_at BETWEEN %s AND %s',
+				$sessions,
+				$referrers,
+				$likes[0],
+				$likes[0],
+				$likes[1],
+				$likes[1],
+				$likes[2],
+				$likes[2],
+				$from . ' 00:00:00',
+				$to . ' 23:59:59'
 			)
 		);
 		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
