@@ -1,7 +1,8 @@
 import { useMemo } from 'react';
 import { __ } from '@wordpress/i18n';
-import { formatPercentChange } from '@/lib/utils';
-import type { AdvisorAnswer, AdvisorQuestion, AdvisorVizHint } from '@/types/api';
+import { cn, formatPercentChange } from '@/lib/utils';
+import { TimeSeriesChart } from '@/components/charts/time-series-chart';
+import type { AdvisorAnswer, AdvisorQuestion, AdvisorVizHint, DailyMetric } from '@/types/api';
 
 /**
  * Renders the answer body for an expanded QuestionCard.
@@ -55,16 +56,26 @@ export function AnswerViz({ question, answer }: AnswerVizProps) {
 
 const renderKpiTile: VizRenderer = ({ value, formatNumber }) => {
 	// KPI tile shape: `{ visitors }` / `{ sessions }` / `{ pageviews }`.
+	// "Top X" tiles also carry a `label` (e.g. "Organic Search" for top
+	// channel) which renders above the count.
 	const metric = pickKpi(value);
+	const label = typeof value?.label === 'string' && value.label.length > 0 ? value.label : null;
 	return (
-		<div className="flex items-baseline gap-3">
-			<div
-				className="text-5xl font-bold tabular-nums leading-none text-[color:var(--color-primary)]"
-				style={{ letterSpacing: '-0.02em' }}
-			>
-				{metric.value !== undefined ? formatNumber(metric.value) : '—'}
+		<div>
+			{label && (
+				<div className="mb-1 text-[13px] font-medium text-[color:var(--color-primary)]">
+					{label}
+				</div>
+			)}
+			<div className="flex items-baseline gap-3">
+				<div
+					className="text-5xl font-bold tabular-nums leading-none text-[color:var(--color-primary)]"
+					style={{ letterSpacing: '-0.02em' }}
+				>
+					{metric.value !== undefined ? formatNumber(metric.value) : '—'}
+				</div>
+				<div className="text-[13px] text-muted-foreground">{metric.label}</div>
 			</div>
-			<div className="text-[13px] text-muted-foreground">{metric.label}</div>
 		</div>
 	);
 };
@@ -91,8 +102,24 @@ const renderDelta: VizRenderer = ({ value, formatNumber }) => {
 			? 'bg-destructive/10 text-destructive'
 			: 'bg-muted text-muted-foreground';
 
+	// Optional leading YES/NO chip (q86 mobile-vs-desktop). Mirrors the Δ%
+	// chip shape so the answer reads "Yes — 134 ↑ +28%" at a glance.
+	const yesNo = typeof value?.yes_no === 'string' ? value.yes_no : null;
+
 	return (
 		<div className="flex items-baseline gap-3">
+			{yesNo && (
+				<span
+					className={cn(
+						'inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold uppercase tracking-wide',
+						yesNo === 'yes'
+							? 'bg-[color:var(--color-accent)]/15 text-[color:var(--color-sn-green-dk)]'
+							: 'bg-muted text-muted-foreground',
+					)}
+				>
+					{yesNo === 'yes' ? __('Yes', 'statnive') : __('No', 'statnive')}
+				</span>
+			)}
 			<div
 				className="text-5xl font-bold tabular-nums leading-none text-[color:var(--color-primary)]"
 				style={{ letterSpacing: '-0.02em' }}
@@ -177,7 +204,7 @@ const renderGroupedBar: VizRenderer = ({ value, formatNumber }) => {
 		<ul className="space-y-2.5">
 			{rows.slice(0, 10).map((row, i) => {
 				const label = String(
-					row.channel ?? row.device ?? row.network ?? row.name ?? row.code ?? '—',
+					row.label ?? row.channel ?? row.device ?? row.network ?? row.name ?? row.code ?? '—',
 				);
 				const count = Number(row.sessions ?? row.visitors ?? 0);
 				const pct = (count / max) * 100;
@@ -209,6 +236,42 @@ const renderGroupedBar: VizRenderer = ({ value, formatNumber }) => {
 	);
 };
 
+const renderLine: VizRenderer = ({ value }) => {
+	const rows = Array.isArray(value?.rows) ? (value.rows as DailyMetric[]) : [];
+	if (rows.length === 0) {
+		return <p className="text-sm text-muted-foreground">{__('No data yet.', 'statnive')}</p>;
+	}
+	return <TimeSeriesChart data={rows} />;
+};
+
+const renderRecommendation: VizRenderer = ({ value }) => {
+	// q87 — mobile share with a one-line recommendation. The share % is the
+	// hero number; the recommendation sentence below tells the owner what
+	// to do with it.
+	const share = typeof value?.share_pct === 'number' ? value.share_pct : 0;
+	const rec = typeof value?.recommendation === 'string' ? value.recommendation : '';
+	const copy =
+		rec === 'prioritise_mobile'
+			? __('Mobile is the majority. Prioritise the mobile design first.', 'statnive')
+			: __('Desktop still leads. Mobile improvements are secondary for now.', 'statnive');
+	return (
+		<div>
+			<div className="flex items-baseline gap-3">
+				<div
+					className="text-5xl font-bold tabular-nums leading-none text-[color:var(--color-primary)]"
+					style={{ letterSpacing: '-0.02em' }}
+				>
+					{share.toFixed(0)}%
+				</div>
+				<div className="text-[13px] text-muted-foreground">
+					{__('of sessions are on mobile', 'statnive')}
+				</div>
+			</div>
+			<p className="mt-3 text-sm text-foreground/80">{copy}</p>
+		</div>
+	);
+};
+
 const renderJsonFallback: VizRenderer = ({ answer }) => (
 	<pre className="overflow-x-auto rounded bg-muted/40 p-3 text-xs">
 		{JSON.stringify(answer.value, null, 2)}
@@ -227,6 +290,8 @@ const VIZ_RENDERERS: Partial<Record<AdvisorVizHint, VizRenderer>> = {
 	donut: renderGroupedBar,
 	bar: renderGroupedBar,
 	map: renderGroupedBar,
+	line: renderLine,
+	recommendation: renderRecommendation,
 };
 
 /** Pick the canonical KPI from the answer value, with a localized label. */

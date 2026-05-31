@@ -135,6 +135,7 @@ export type AdvisorVizHint =
 	| 'status'
 	| 'funnel'
 	| 'anomaly'
+	| 'recommendation'
 	| 'coming_soon'
 	| 'error';
 

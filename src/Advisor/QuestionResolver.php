@@ -294,8 +294,6 @@ final class QuestionResolver {
 			case 'q61':
 			case 'q62':
 				return $this->answer_utm_medium_filter( $from, $to, $q, [ 'email', 'newsletter' ] );
-			case 'q63':
-				return $this->answer_utm_groupby( $from, $to, $q, 'campaign' );
 			case 'q64':
 				return $this->answer_utm_source_filter( $from, $to, $q, [ 'facebook', 'fb', 'meta' ] );
 			case 'q65':
@@ -417,6 +415,36 @@ final class QuestionResolver {
 			'plan'       => $q['plan'] ?? Questions::PLAN_FREE,
 			'confidence' => $q['confidence'] ?? Questions::CONF_DIRECT,
 		];
+	}
+
+	/**
+	 * Flatten a "top row" of a ranked list into a `{label, visitors, sessions}`
+	 * payload for the KPI-tile viz. Used by q42 (top channel), q73 (top
+	 * country) and q82 (top device). `$extra_field` lets q73 also carry
+	 * the country `code`.
+	 *
+	 * @param array<int, array<string, mixed>> $rows         Pre-ordered ranked list.
+	 * @param string                           $label_field  Row key holding the display label.
+	 * @param array<string, string>            $extra_fields Optional output_key => row_key pairs.
+	 * @return array<string, mixed>
+	 */
+	private function top_row_tile( array $rows, string $label_field, array $extra_fields = [] ): array {
+		$top  = $rows[0] ?? null;
+		$base = $top
+			? [
+				'label'    => (string) ( $top[ $label_field ] ?? '' ),
+				'visitors' => (int) ( $top['visitors'] ?? 0 ),
+				'sessions' => (int) ( $top['sessions'] ?? 0 ),
+			]
+			: [
+				'label'    => null,
+				'visitors' => 0,
+				'sessions' => 0,
+			];
+		foreach ( $extra_fields as $out_key => $row_key ) {
+			$base[ $out_key ] = (string) ( $top[ $row_key ] ?? '' );
+		}
+		return $base;
 	}
 
 	// =================================================================
@@ -808,7 +836,7 @@ final class QuestionResolver {
 		return $this->ok(
 			$q,
 			[ 'rows' => $this->load_daily_series( $from, $to ) ],
-			Questions::VIZ_TABLE
+			Questions::VIZ_LINE
 		);
 	}
 
@@ -1452,20 +1480,24 @@ final class QuestionResolver {
 	 * @return array<string, mixed>
 	 */
 	private function answer_evergreen_posts( string $from, string $to, array $q ): array {
-		// Evergreen heuristic: posts published 180+ days ago (per
+		// Evergreen heuristic: posts published N+ days ago (per
 		// `resources.cached_date`) that still got traffic in [from, to].
-		// Posts without a cached_date (non-WP resources or pre-backfill)
-		// are excluded so the answer doesn't mislead.
+		// 90 days by default — was 180 but test installs rarely have content
+		// that old. Filter `statnive_advisor_evergreen_days` lets power users
+		// re-tighten.
 		global $wpdb;
 		$summary   = TableRegistry::get( 'summary' );
 		$uris      = TableRegistry::get( 'resource_uris' );
 		$resources = TableRegistry::get( 'resources' );
-		$cutoff    = gmdate( 'Y-m-d', strtotime( '-180 days' ) );
+		$days      = (int) apply_filters( 'statnive_advisor_evergreen_days', 90 );
+		$cutoff    = gmdate( 'Y-m-d', strtotime( sprintf( '-%d days', $days ) ) );
 
 		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$rows = $wpdb->get_results(
 			$wpdb->prepare(
-				'SELECT ru.uri AS uri, COALESCE(SUM(s.views), 0) AS views
+				'SELECT ru.uri AS uri,
+						COALESCE(SUM(s.views), 0) AS views,
+						MAX(r.cached_date) AS published
 				FROM %i s
 				JOIN %i ru ON ru.ID = s.resource_uri_id
 				JOIN %i r ON r.resource_id = ru.resource_id
@@ -1492,8 +1524,9 @@ final class QuestionResolver {
 			[
 				'rows' => array_map(
 					static fn( $r ) => [
-						'uri'   => (string) $r['uri'],
-						'views' => (int) $r['views'],
+						'uri'       => (string) $r['uri'],
+						'views'     => (int) $r['views'],
+						'published' => (string) ( $r['published'] ?? '' ),
 					],
 					is_array( $rows ) ? $rows : []
 				),
@@ -1515,8 +1548,11 @@ final class QuestionResolver {
 	 * @return array<string, mixed>
 	 */
 	private function answer_top_channel( string $from, string $to, array $q ): array {
-		$rows = $this->load_referrer_channels( $from, $to );
-		return $this->ok( $q, [ 'rows' => array_slice( $rows, 0, 1 ) ], Questions::VIZ_KPI_TILE );
+		return $this->ok(
+			$q,
+			$this->top_row_tile( $this->load_referrer_channels( $from, $to ), 'channel' ),
+			Questions::VIZ_KPI_TILE
+		);
 	}
 
 	/**
@@ -1572,13 +1608,14 @@ final class QuestionResolver {
 					COUNT(DISTINCT s.ID) AS sessions
 				FROM %i s
 				JOIN %i r ON r.ID = s.referrer_id
-				WHERE r.channel = %s AND s.started_at BETWEEN %s AND %s
+				WHERE r.channel IN (%s, %s) AND s.started_at BETWEEN %s AND %s
 				GROUP BY r.name
 				ORDER BY sessions DESC
 				LIMIT 10',
 				$sessions,
 				$referrers,
 				'Social',
+				'Social Media',
 				$from . ' 00:00:00',
 				$to . ' 23:59:59'
 			),
@@ -1929,8 +1966,15 @@ final class QuestionResolver {
 	 * @return array<string, mixed>
 	 */
 	private function answer_top_country( string $from, string $to, array $q ): array {
-		$rows = $this->load_country_rows( $from, $to );
-		return $this->ok( $q, [ 'rows' => array_slice( $rows, 0, 1 ) ], Questions::VIZ_KPI_TILE );
+		return $this->ok(
+			$q,
+			$this->top_row_tile(
+				$this->load_country_rows( $from, $to ),
+				'name',
+				[ 'code' => 'code' ]
+			),
+			Questions::VIZ_KPI_TILE
+		);
 	}
 
 	/**
@@ -1964,8 +2008,16 @@ final class QuestionResolver {
 		return $this->ok(
 			$q,
 			[
-				'home'          => $home,
-				'international' => $others,
+				'rows' => [
+					[
+						'label'    => __( 'Local', 'statnive' ),
+						'visitors' => $home,
+					],
+					[
+						'label'    => __( 'International', 'statnive' ),
+						'visitors' => $others,
+					],
+				],
 			],
 			Questions::VIZ_DONUT
 		);
@@ -2032,8 +2084,11 @@ final class QuestionResolver {
 	 * @return array<string, mixed>
 	 */
 	private function answer_top_device( string $from, string $to, array $q ): array {
-		$rows = $this->load_device_rows( $from, $to );
-		return $this->ok( $q, [ 'rows' => array_slice( $rows, 0, 1 ) ], Questions::VIZ_KPI_TILE );
+		return $this->ok(
+			$q,
+			$this->top_row_tile( $this->load_device_rows( $from, $to ), 'device' ),
+			Questions::VIZ_KPI_TILE
+		);
 	}
 
 	/**
@@ -2121,6 +2176,7 @@ final class QuestionResolver {
 		return $this->ok(
 			$q,
 			[
+				'yes_no'    => $mobile > $desktop ? 'yes' : 'no',
 				'current'   => $mobile,
 				'previous'  => $desktop,
 				'delta_pct' => round( $delta_pct, 1 ),
@@ -2151,10 +2207,12 @@ final class QuestionResolver {
 		return $this->ok(
 			$q,
 			[
-				'sessions'  => $mobile,
-				'share_pct' => $share,
+				'share_pct'       => $share,
+				'mobile_sessions' => $mobile,
+				'total_sessions'  => $total,
+				'recommendation'  => $share >= 50.0 ? 'prioritise_mobile' : 'desktop_first',
 			],
-			Questions::VIZ_KPI_TILE
+			Questions::VIZ_RECOMMENDATION
 		);
 	}
 
@@ -2492,15 +2550,23 @@ final class QuestionResolver {
 			);
 		}
 
-		// "Direct" maps to NULL referrer_id rather than a row in referrers.
+		// "Direct" sessions land in TWO shapes: either `referrer_id IS NULL`
+		// (no referrer captured) OR `referrer_id` points to a referrers row
+		// whose `channel` was explicitly classified as "Direct" by the
+		// SourceDetector. Mirror the COALESCE pattern q41 uses so the count
+		// catches both — previous `IS NULL`-only version undercounted.
 		if ( 'Direct' === $channel ) {
 			return (int) $wpdb->get_var(
 				$wpdb->prepare(
 					'SELECT COUNT(DISTINCT s.visitor_id)
 					FROM %i s
-					WHERE s.referrer_id IS NULL
+					LEFT JOIN %i r ON r.ID = s.referrer_id
+					WHERE COALESCE(r.channel, %s) = %s
 						AND s.started_at BETWEEN %s AND %s',
 					$sessions,
+					$referrers,
+					'Direct',
+					'Direct',
 					$start,
 					$end
 				)

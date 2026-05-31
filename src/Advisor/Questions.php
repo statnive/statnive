@@ -70,6 +70,7 @@ final class Questions {
 	public const VIZ_STATUS      = 'status';
 	public const VIZ_FUNNEL      = 'funnel';
 	public const VIZ_ANOMALY     = 'anomaly';
+	public const VIZ_RECOMMENDATION = 'recommendation';
 	public const VIZ_COMING_SOON = 'coming_soon';
 	public const VIZ_ERROR       = 'error';
 
@@ -542,7 +543,6 @@ final class Questions {
 			self::q( 'q60', $cat, 'Which UTM medium sent the most traffic?', [ 'utm medium', 'medium' ], self::PLAN_FREE, '/utm', 'table', self::CONF_DIRECT ),
 			self::q( 'q61', $cat, 'Did my newsletter drive traffic?', [ 'newsletter', 'email' ], self::PLAN_FREE, '/utm', 'kpi_tile', self::CONF_DIRECT ),
 			self::q( 'q62', $cat, 'Did my email campaign work?', [ 'email', 'campaign' ], self::PLAN_FREE, '/utm', 'kpi_tile', self::CONF_DIRECT ),
-			self::q( 'q63', $cat, 'Did my influencer link send visitors?', [ 'influencer', 'campaign' ], self::PLAN_FREE, '/utm', 'kpi_tile', self::CONF_DIRECT ),
 			self::q( 'q64', $cat, 'Did my Facebook campaign send traffic?', [ 'facebook', 'meta', 'paid' ], self::PLAN_FREE, '/utm', 'kpi_tile', self::CONF_DIRECT ),
 			self::q( 'q65', $cat, 'Did my Google Ads campaign send traffic?', [ 'google ads', 'cpc', 'paid' ], self::PLAN_FREE, '/utm', 'kpi_tile', self::CONF_DIRECT ),
 			self::q( 'q66', $cat, 'Which landing page did my campaign send people to?', [ 'landing', 'campaign' ], self::PLAN_FREE, '/utm+/pages/entry', 'table', self::CONF_DIRECT, self::SCHEMA_ENTRY_COUNT ),
@@ -800,8 +800,6 @@ final class Questions {
 				return __( 'Did my newsletter drive traffic?', 'statnive' );
 			case 'q62':
 				return __( 'Did my email campaign work?', 'statnive' );
-			case 'q63':
-				return __( 'Did my influencer link send visitors?', 'statnive' );
 			case 'q64':
 				return __( 'Did my Facebook campaign send traffic?', 'statnive' );
 			case 'q65':

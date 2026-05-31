@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-05-31T04:37:04+00:00\n"
+"POT-Creation-Date: 2026-05-31T08:38:45+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: statnive\n"
@@ -299,89 +299,97 @@ msgstr ""
 msgid "Events & Privacy"
 msgstr ""
 
+#: src/Advisor/QuestionResolver.php:1996
+msgid "Local"
+msgstr ""
+
+#: src/Advisor/QuestionResolver.php:2000
+msgid "International"
+msgstr ""
+
 #. translators: %s is a date-range phrase like "today", "in the last 30 days", "this month" — substituted client-side from the dashboard date picker.
-#: src/Advisor/Questions.php:239
+#: src/Advisor/Questions.php:240
 #, php-format
 msgid "How many people visited my site %s?"
 msgstr ""
 
-#: src/Advisor/Questions.php:251
+#: src/Advisor/Questions.php:252
 msgid "How many pageviews did I get?"
 msgstr ""
 
-#: src/Advisor/Questions.php:262
+#: src/Advisor/Questions.php:263
 msgid "How many sessions did I get?"
 msgstr ""
 
 #. translators: %s is a phrase like "with yesterday" or "with the previous 30 days" — substituted client-side from the dashboard date picker.
-#: src/Advisor/Questions.php:274
+#: src/Advisor/Questions.php:275
 #, php-format
 msgid "Is my traffic up or down compared %s?"
 msgstr ""
 
-#: src/Advisor/Questions.php:286
+#: src/Advisor/Questions.php:287
 msgid "Which day had the most traffic?"
 msgstr ""
 
-#: src/Advisor/Questions.php:297
+#: src/Advisor/Questions.php:298
 msgid "Which date had the lowest traffic?"
 msgstr ""
 
-#: src/Advisor/Questions.php:308
+#: src/Advisor/Questions.php:309
 msgid "What is my traffic trend over time?"
 msgstr ""
 
-#: src/Advisor/Questions.php:319
+#: src/Advisor/Questions.php:320
 msgid "Did traffic suddenly drop?"
 msgstr ""
 
-#: src/Advisor/Questions.php:330
+#: src/Advisor/Questions.php:331
 msgid "Did traffic suddenly spike?"
 msgstr ""
 
-#: src/Advisor/Questions.php:341
+#: src/Advisor/Questions.php:342
 msgid "Which source caused the biggest traffic change?"
 msgstr ""
 
-#: src/Advisor/Questions.php:363
+#: src/Advisor/Questions.php:364
 msgid "How many people are on my site right now?"
 msgstr ""
 
-#: src/Advisor/Questions.php:374
+#: src/Advisor/Questions.php:375
 msgid "Which pages are active right now?"
 msgstr ""
 
-#: src/Advisor/Questions.php:385
+#: src/Advisor/Questions.php:386
 msgid "Is Statnive tracking my site?"
 msgstr ""
 
-#: src/Advisor/Questions.php:396
+#: src/Advisor/Questions.php:397
 msgid "Did my test visit appear?"
 msgstr ""
 
 #. translators: %s is a date-range phrase from the date picker — e.g. "today", "in the last 7 days", "last month".
-#: src/Advisor/Questions.php:408
+#: src/Advisor/Questions.php:409
 #, php-format
 msgid "Has Statnive received data %s?"
 msgstr ""
 
-#: src/Advisor/Questions.php:420
+#: src/Advisor/Questions.php:421
 msgid "Has Statnive received data in the last 30 minutes?"
 msgstr ""
 
-#: src/Advisor/Questions.php:431
+#: src/Advisor/Questions.php:432
 msgid "Is one page receiving no visits?"
 msgstr ""
 
-#: src/Advisor/Questions.php:442
+#: src/Advisor/Questions.php:443
 msgid "Is my site showing zero traffic?"
 msgstr ""
 
-#: src/Advisor/Questions.php:453
+#: src/Advisor/Questions.php:454
 msgid "Are tracking hits coming from the wrong domain?"
 msgstr ""
 
-#: src/Advisor/Questions.php:464
+#: src/Advisor/Questions.php:465
 msgid "Are bots affecting my data?"
 msgstr ""
 
@@ -546,234 +554,230 @@ msgid "Did my email campaign work?"
 msgstr ""
 
 #: src/Advisor/Questions.php:804
-msgid "Did my influencer link send visitors?"
-msgstr ""
-
-#: src/Advisor/Questions.php:806
 msgid "Did my Facebook campaign send traffic?"
 msgstr ""
 
-#: src/Advisor/Questions.php:808
+#: src/Advisor/Questions.php:806
 msgid "Did my Google Ads campaign send traffic?"
 msgstr ""
 
-#: src/Advisor/Questions.php:810
+#: src/Advisor/Questions.php:808
 msgid "Which landing page did my campaign send people to?"
 msgstr ""
 
-#: src/Advisor/Questions.php:812
+#: src/Advisor/Questions.php:810
 msgid "Which UTM combination worked best by traffic?"
 msgstr ""
 
-#: src/Advisor/Questions.php:814
+#: src/Advisor/Questions.php:812
 msgid "Did Black Friday increase traffic?"
 msgstr ""
 
-#: src/Advisor/Questions.php:816
+#: src/Advisor/Questions.php:814
 msgid "Which campaign had the best visitor quality?"
 msgstr ""
 
-#: src/Advisor/Questions.php:818
+#: src/Advisor/Questions.php:816
 msgid "Which campaign had the highest bounce count?"
 msgstr ""
 
-#: src/Advisor/Questions.php:820
+#: src/Advisor/Questions.php:818
 msgid "Which campaign should I double down on?"
 msgstr ""
 
-#: src/Advisor/Questions.php:822
+#: src/Advisor/Questions.php:820
 msgid "What countries are my visitors from?"
 msgstr ""
 
-#: src/Advisor/Questions.php:824
+#: src/Advisor/Questions.php:822
 msgid "Which country sends the most traffic?"
 msgstr ""
 
-#: src/Advisor/Questions.php:826
+#: src/Advisor/Questions.php:824
 msgid "Is most of my traffic local or international?"
 msgstr ""
 
-#: src/Advisor/Questions.php:828
+#: src/Advisor/Questions.php:826
 msgid "What language are my visitors using?"
 msgstr ""
 
-#: src/Advisor/Questions.php:830
+#: src/Advisor/Questions.php:828
 msgid "What cities are my visitors from?"
 msgstr ""
 
-#: src/Advisor/Questions.php:832
+#: src/Advisor/Questions.php:830
 msgid "Which city sends the most traffic?"
 msgstr ""
 
-#: src/Advisor/Questions.php:834
+#: src/Advisor/Questions.php:832
 msgid "Did traffic from one country drop?"
 msgstr ""
 
-#: src/Advisor/Questions.php:836
+#: src/Advisor/Questions.php:834
 msgid "Which countries visit a specific page?"
 msgstr ""
 
-#: src/Advisor/Questions.php:838
+#: src/Advisor/Questions.php:836
 msgid "Which countries visit product or pricing pages?"
 msgstr ""
 
-#: src/Advisor/Questions.php:840
+#: src/Advisor/Questions.php:838
 msgid "How much traffic is mobile vs desktop?"
 msgstr ""
 
-#: src/Advisor/Questions.php:842
+#: src/Advisor/Questions.php:840
 msgid "Which device type is most common?"
 msgstr ""
 
-#: src/Advisor/Questions.php:844
+#: src/Advisor/Questions.php:842
 msgid "How much traffic is tablet?"
 msgstr ""
 
-#: src/Advisor/Questions.php:846
+#: src/Advisor/Questions.php:844
 msgid "Which browser do visitors use?"
 msgstr ""
 
-#: src/Advisor/Questions.php:848
+#: src/Advisor/Questions.php:846
 msgid "Which operating systems do visitors use?"
 msgstr ""
 
-#: src/Advisor/Questions.php:850
+#: src/Advisor/Questions.php:848
 msgid "Is mobile traffic higher than desktop?"
 msgstr ""
 
-#: src/Advisor/Questions.php:852
+#: src/Advisor/Questions.php:850
 msgid "Should I prioritize mobile design?"
 msgstr ""
 
-#: src/Advisor/Questions.php:854
+#: src/Advisor/Questions.php:852
 msgid "Which pages are mostly viewed on mobile?"
 msgstr ""
 
-#: src/Advisor/Questions.php:856
+#: src/Advisor/Questions.php:854
 msgid "Which OS/browser should I test first?"
 msgstr ""
 
-#: src/Advisor/Questions.php:858
+#: src/Advisor/Questions.php:856
 msgid "Does mobile look worse than desktop?"
 msgstr ""
 
-#: src/Advisor/Questions.php:860
+#: src/Advisor/Questions.php:858
 msgid "Which device type exits more often?"
 msgstr ""
 
-#: src/Advisor/Questions.php:862
+#: src/Advisor/Questions.php:860
 msgid "How much bot traffic is shown in device breakdown?"
 msgstr ""
 
-#: src/Advisor/Questions.php:864
+#: src/Advisor/Questions.php:862
 msgid "Which pages have the most bounces?"
 msgstr ""
 
-#: src/Advisor/Questions.php:866
+#: src/Advisor/Questions.php:864
 msgid "Which pages have the highest exit count?"
 msgstr ""
 
-#: src/Advisor/Questions.php:868
+#: src/Advisor/Questions.php:866
 msgid "How long do visitors stay on average?"
 msgstr ""
 
-#: src/Advisor/Questions.php:870
+#: src/Advisor/Questions.php:868
 msgid "How many pages does each session view?"
 msgstr ""
 
-#: src/Advisor/Questions.php:872
+#: src/Advisor/Questions.php:870
 msgid "Which pages keep visitors engaged?"
 msgstr ""
 
-#: src/Advisor/Questions.php:874
+#: src/Advisor/Questions.php:872
 msgid "Which traffic source sends engaged visitors?"
 msgstr ""
 
-#: src/Advisor/Questions.php:876
+#: src/Advisor/Questions.php:874
 msgid "Which pages may be broken or confusing?"
 msgstr ""
 
-#: src/Advisor/Questions.php:878
+#: src/Advisor/Questions.php:876
 msgid "What is the bounce rate for a page?"
 msgstr ""
 
-#: src/Advisor/Questions.php:880
+#: src/Advisor/Questions.php:878
 msgid "How many orders did I get?"
 msgstr ""
 
-#: src/Advisor/Questions.php:882
+#: src/Advisor/Questions.php:880
 msgid "How much gross revenue did I make?"
 msgstr ""
 
-#: src/Advisor/Questions.php:884
+#: src/Advisor/Questions.php:882
 msgid "How much net revenue did I make?"
 msgstr ""
 
-#: src/Advisor/Questions.php:886
+#: src/Advisor/Questions.php:884
 msgid "What is my average order value?"
 msgstr ""
 
-#: src/Advisor/Questions.php:888
+#: src/Advisor/Questions.php:886
 msgid "How much did I refund?"
 msgstr ""
 
-#: src/Advisor/Questions.php:890
+#: src/Advisor/Questions.php:888
 msgid "What is my refund rate?"
 msgstr ""
 
-#: src/Advisor/Questions.php:892
+#: src/Advisor/Questions.php:890
 msgid "Which channel brings the most revenue?"
 msgstr ""
 
-#: src/Advisor/Questions.php:894
+#: src/Advisor/Questions.php:892
 msgid "Which UTM campaign brings the most revenue?"
 msgstr ""
 
-#: src/Advisor/Questions.php:896
+#: src/Advisor/Questions.php:894
 msgid "Which landing page brings the most revenue?"
 msgstr ""
 
-#: src/Advisor/Questions.php:898
+#: src/Advisor/Questions.php:896
 msgid "Which product sells the most units?"
 msgstr ""
 
-#: src/Advisor/Questions.php:900
+#: src/Advisor/Questions.php:898
 msgid "Which product makes the most revenue?"
 msgstr ""
 
-#: src/Advisor/Questions.php:902
+#: src/Advisor/Questions.php:900
 msgid "Which coupon is used the most?"
 msgstr ""
 
-#: src/Advisor/Questions.php:904
+#: src/Advisor/Questions.php:902
 msgid "Which coupon gives the most discount?"
 msgstr ""
 
-#: src/Advisor/Questions.php:906
+#: src/Advisor/Questions.php:904
 msgid "What is my funnel conversion rate?"
 msgstr ""
 
-#: src/Advisor/Questions.php:908
+#: src/Advisor/Questions.php:906
 msgid "How much tax and shipping did customers pay?"
 msgstr ""
 
-#: src/Advisor/Questions.php:910
+#: src/Advisor/Questions.php:908
 msgid "Which custom events happened most often?"
 msgstr ""
 
-#: src/Advisor/Questions.php:912
+#: src/Advisor/Questions.php:910
 msgid "How many sessions included a specific event?"
 msgstr ""
 
-#: src/Advisor/Questions.php:914
+#: src/Advisor/Questions.php:912
 msgid "Is a specific custom event firing?"
 msgstr ""
 
-#: src/Advisor/Questions.php:916
+#: src/Advisor/Questions.php:914
 msgid "Is my privacy audit passing?"
 msgstr ""
 
-#: src/Advisor/Questions.php:918
+#: src/Advisor/Questions.php:916
 msgid "What privacy or diagnostics warnings should I fix?"
 msgstr ""
 
@@ -1253,12 +1257,12 @@ msgstr ""
 # React/TypeScript-source strings (merged by bin/extract-react-pot.mjs).
 
 #: resources/react/components/advisor/AnswerModal.tsx:80
-#: resources/react/components/advisor/QuestionCard.tsx:282
+#: resources/react/components/advisor/QuestionCard.tsx:285
 msgid "Live in v1.1 — auto-enables when ready."
 msgstr ""
 
 #: resources/react/components/advisor/AnswerModal.tsx:81
-#: resources/react/components/advisor/QuestionCard.tsx:283
+#: resources/react/components/advisor/QuestionCard.tsx:286
 msgid "Unlocks in Statnive Growth v2."
 msgstr ""
 
@@ -1275,7 +1279,7 @@ msgid "Close answer"
 msgstr ""
 
 #: resources/react/components/advisor/AnswerModal.tsx:136
-#: resources/react/components/advisor/QuestionCard.tsx:308
+#: resources/react/components/advisor/QuestionCard.tsx:311
 msgid "Couldn't load this answer."
 msgstr ""
 
@@ -1287,28 +1291,49 @@ msgstr ""
 msgid "Pin this question"
 msgstr ""
 
-#: resources/react/components/advisor/AnswerViz.tsx:110
-msgid "vs"
+#: resources/react/components/advisor/AnswerViz.tsx:120
+msgid "Yes"
 msgstr ""
 
 #: resources/react/components/advisor/AnswerViz.tsx:120
-#: resources/react/components/advisor/AnswerViz.tsx:173
+msgid "No"
+msgstr ""
+
+#: resources/react/components/advisor/AnswerViz.tsx:137
+msgid "vs"
+msgstr ""
+
+#: resources/react/components/advisor/AnswerViz.tsx:147
+#: resources/react/components/advisor/AnswerViz.tsx:200
+#: resources/react/components/advisor/AnswerViz.tsx:242
 msgid "No data yet."
 msgstr ""
 
-#: resources/react/components/advisor/AnswerViz.tsx:238
+#: resources/react/components/advisor/AnswerViz.tsx:255
+msgid "Mobile is the majority. Prioritise the mobile design first."
+msgstr ""
+
+#: resources/react/components/advisor/AnswerViz.tsx:256
+msgid "Desktop still leads. Mobile improvements are secondary for now."
+msgstr ""
+
+#: resources/react/components/advisor/AnswerViz.tsx:267
+msgid "of sessions are on mobile"
+msgstr ""
+
+#: resources/react/components/advisor/AnswerViz.tsx:303
 msgid "Visitors in selected range"
 msgstr ""
 
-#: resources/react/components/advisor/AnswerViz.tsx:241
+#: resources/react/components/advisor/AnswerViz.tsx:306
 msgid "Sessions in selected range"
 msgstr ""
 
-#: resources/react/components/advisor/AnswerViz.tsx:244
+#: resources/react/components/advisor/AnswerViz.tsx:309
 msgid "Pageviews in selected range"
 msgstr ""
 
-#: resources/react/components/advisor/AnswerViz.tsx:246
+#: resources/react/components/advisor/AnswerViz.tsx:311
 msgid "No data"
 msgstr ""
 
@@ -1336,47 +1361,47 @@ msgstr ""
 msgid "Pin any question from a category tab to see it here."
 msgstr ""
 
-#: resources/react/components/advisor/QuestionCard.tsx:100
+#: resources/react/components/advisor/QuestionCard.tsx:103
 msgid "Unpin \"%s\""
 msgstr ""
 
-#: resources/react/components/advisor/QuestionCard.tsx:105
+#: resources/react/components/advisor/QuestionCard.tsx:108
 msgid "Pin \"%s\""
 msgstr ""
 
-#: resources/react/components/advisor/QuestionCard.tsx:173
+#: resources/react/components/advisor/QuestionCard.tsx:176
 msgid "Following the date picker above. Change the range to see a different period."
 msgstr ""
 
-#: resources/react/components/advisor/QuestionCard.tsx:236
+#: resources/react/components/advisor/QuestionCard.tsx:239
 #: resources/react/components/advisor/SearchSuggestions.tsx:65
 msgid "Coming soon"
 msgstr ""
 
-#: resources/react/components/advisor/QuestionCard.tsx:246
+#: resources/react/components/advisor/QuestionCard.tsx:249
 #: resources/react/pages/overview.tsx:49
 #: resources/react/pages/overview.tsx:51
 #: resources/react/pages/referrers.tsx:104
 msgid "Direct"
 msgstr ""
 
-#: resources/react/components/advisor/QuestionCard.tsx:248
+#: resources/react/components/advisor/QuestionCard.tsx:251
 msgid "Calculated"
 msgstr ""
 
-#: resources/react/components/advisor/QuestionCard.tsx:249
+#: resources/react/components/advisor/QuestionCard.tsx:252
 msgid "Proxy"
 msgstr ""
 
-#: resources/react/components/advisor/QuestionCard.tsx:252
+#: resources/react/components/advisor/QuestionCard.tsx:255
 msgid "Read straight from stored data."
 msgstr ""
 
-#: resources/react/components/advisor/QuestionCard.tsx:254
+#: resources/react/components/advisor/QuestionCard.tsx:257
 msgid "Derived one step from stored data."
 msgstr ""
 
-#: resources/react/components/advisor/QuestionCard.tsx:255
+#: resources/react/components/advisor/QuestionCard.tsx:258
 msgid "Closest available stand-in, indicative not authoritative."
 msgstr ""
 
