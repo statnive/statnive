@@ -19,8 +19,10 @@ final class QuestionsTest extends TestCase {
 		parent::tearDown();
 	}
 
-	public function test_inventory_has_exactly_120_questions(): void {
-		$this->assertCount( 120, Questions::all() );
+	public function test_inventory_has_exactly_118_questions(): void {
+		// 120 originally; q1 + q5 were folded into the dynamic-window
+		// variants q2 + q6 in the May 2026 consolidation.
+		$this->assertCount( 118, Questions::all() );
 	}
 
 	public function test_every_question_id_is_unique(): void {
@@ -107,8 +109,8 @@ final class QuestionsTest extends TestCase {
 		}
 	}
 
-	public function test_valid_ids_returns_120_ids(): void {
-		$this->assertCount( 120, Questions::valid_ids() );
+	public function test_valid_ids_returns_118_ids(): void {
+		$this->assertCount( 118, Questions::valid_ids() );
 	}
 
 	public function test_find_returns_row_for_known_id(): void {

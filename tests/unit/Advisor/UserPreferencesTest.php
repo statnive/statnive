@@ -42,19 +42,19 @@ final class UserPreferencesTest extends TestCase {
 	}
 
 	public function test_set_persists_and_get_reads(): void {
-		$stored = UserPreferences::set( 7, [ 'q1', 'q41', 'q42' ] );
-		$this->assertSame( [ 'q1', 'q41', 'q42' ], $stored );
-		$this->assertSame( [ 'q1', 'q41', 'q42' ], UserPreferences::get( 7 ) );
+		$stored = UserPreferences::set( 7, [ 'q3', 'q41', 'q42' ] );
+		$this->assertSame( [ 'q3', 'q41', 'q42' ], $stored );
+		$this->assertSame( [ 'q3', 'q41', 'q42' ], UserPreferences::get( 7 ) );
 	}
 
 	public function test_set_drops_unknown_ids(): void {
-		$stored = UserPreferences::set( 7, [ 'q1', 'not_a_real_id', 'q41' ] );
-		$this->assertSame( [ 'q1', 'q41' ], $stored );
+		$stored = UserPreferences::set( 7, [ 'q3', 'not_a_real_id', 'q41' ] );
+		$this->assertSame( [ 'q3', 'q41' ], $stored );
 	}
 
 	public function test_set_dedupes_ids(): void {
-		$stored = UserPreferences::set( 7, [ 'q1', 'q1', 'q41' ] );
-		$this->assertSame( [ 'q1', 'q41' ], $stored );
+		$stored = UserPreferences::set( 7, [ 'q3', 'q3', 'q41' ] );
+		$this->assertSame( [ 'q3', 'q41' ], $stored );
 	}
 
 	public function test_set_enforces_max_pins_cap(): void {
@@ -67,8 +67,8 @@ final class UserPreferencesTest extends TestCase {
 	public function test_get_filters_orphan_ids_after_schema_churn(): void {
 		// Simulate a stale meta entry containing IDs that no longer exist.
 		$GLOBALS['statnive_test_user_meta'][7]['statnive_pinned_questions'] =
-			json_encode( [ 'q1', 'q9999', 'q41' ] );
-		$this->assertSame( [ 'q1', 'q41' ], UserPreferences::get( 7 ) );
+			json_encode( [ 'q3', 'q9999', 'q41' ] );
+		$this->assertSame( [ 'q3', 'q41' ], UserPreferences::get( 7 ) );
 	}
 
 	public function test_get_falls_back_to_defaults_when_filtering_empties_list(): void {
@@ -97,20 +97,20 @@ final class UserPreferencesTest extends TestCase {
 	}
 
 	public function test_unpin_removes_id(): void {
-		UserPreferences::set( 7, [ 'q1', 'q41', 'q72' ] );
+		UserPreferences::set( 7, [ 'q3', 'q41', 'q72' ] );
 		$result = UserPreferences::unpin( 7, 'q41' );
-		$this->assertSame( [ 'q1', 'q72' ], $result );
+		$this->assertSame( [ 'q3', 'q72' ], $result );
 	}
 
 	public function test_unpin_idempotent_for_missing_id(): void {
-		UserPreferences::set( 7, [ 'q1', 'q41' ] );
+		UserPreferences::set( 7, [ 'q3', 'q41' ] );
 		$result = UserPreferences::unpin( 7, 'q72' );
-		$this->assertSame( [ 'q1', 'q41' ], $result );
+		$this->assertSame( [ 'q3', 'q41' ], $result );
 	}
 
 	public function test_unpin_to_empty_persists_empty_list_not_defaults(): void {
-		UserPreferences::set( 7, [ 'q1' ] );
-		$result = UserPreferences::unpin( 7, 'q1' );
+		UserPreferences::set( 7, [ 'q3' ] );
+		$result = UserPreferences::unpin( 7, 'q3' );
 		$this->assertSame( [], $result );
 		// Subsequent get() must honor the explicit empty list — confirm via
 		// raw meta inspection rather than get() since get() falls back to
@@ -120,15 +120,15 @@ final class UserPreferencesTest extends TestCase {
 	}
 
 	public function test_erase_removes_the_meta_key(): void {
-		UserPreferences::set( 7, [ 'q1', 'q41' ] );
+		UserPreferences::set( 7, [ 'q3', 'q41' ] );
 		UserPreferences::erase( 7 );
 		$this->assertArrayNotHasKey( 'statnive_pinned_questions', $GLOBALS['statnive_test_user_meta'][7] ?? [] );
 	}
 
 	public function test_per_user_isolation(): void {
-		UserPreferences::set( 7, [ 'q1' ] );
+		UserPreferences::set( 7, [ 'q3' ] );
 		UserPreferences::set( 9, [ 'q41', 'q42' ] );
-		$this->assertSame( [ 'q1' ], UserPreferences::get( 7 ) );
+		$this->assertSame( [ 'q3' ], UserPreferences::get( 7 ) );
 		$this->assertSame( [ 'q41', 'q42' ], UserPreferences::get( 9 ) );
 	}
 }

@@ -190,16 +190,14 @@ final class QuestionResolver {
 	private function dispatch( string $id, string $from, string $to, array $q ): array {
 		switch ( $id ) {
 			// Traffic Overview (cat 1) — all served by /summary aggregations.
-			case 'q1':
-				return $this->answer_visitors_today( $q );
+			// q1 and q5 (degenerate today/yesterday hard-codes) were folded into
+			// the dynamic-window variants q2 and q6 in the May 2026 consolidation.
 			case 'q2':
 				return $this->answer_q2( $from, $to, $q );
 			case 'q3':
 				return $this->answer_pageviews_range( $from, $to, $q );
 			case 'q4':
 				return $this->answer_sessions_range( $from, $to, $q );
-			case 'q5':
-				return $this->answer_today_vs_yesterday( $q );
 			case 'q6':
 				return $this->answer_period_delta( $from, $to, $q );
 			case 'q7':
@@ -224,7 +222,7 @@ final class QuestionResolver {
 			case 'q18':
 				return $this->answer_recent_events_status( $q );
 			case 'q17':
-				return $this->answer_data_today( $q );
+				return $this->answer_data_in_range( $from, $to, $q );
 			case 'q19':
 				return $this->answer_pages_zero_visits( $from, $to, $q );
 			case 'q20':
@@ -687,38 +685,6 @@ final class QuestionResolver {
 	// =================================================================
 
 	/**
-	 * Q1 — "How many people visited my site today?"
-	 *
-	 * @param array<string, mixed> $q Inventory row.
-	 * @return array<string, mixed>
-	 */
-	private function answer_visitors_today( array $q ): array {
-		global $wpdb;
-		$today          = gmdate( 'Y-m-d' );
-		$sessions_table = TableRegistry::get( 'sessions' );
-
-		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-		$visitors = (int) $wpdb->get_var(
-			$wpdb->prepare(
-				'SELECT COUNT(DISTINCT visitor_id) FROM %i WHERE DATE(started_at) = %s',
-				$sessions_table,
-				$today
-			)
-		);
-		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-
-		return $this->ok(
-			$q,
-			[
-				'visitors' => $visitors,
-				'from'     => $today,
-				'to'       => $today,
-			],
-			Questions::VIZ_KPI_TILE
-		);
-	}
-
-	/**
 	 * Q3 — "How many pageviews did I get?"
 	 *
 	 * @param string               $from Date range start (`Y-m-d`).
@@ -761,35 +727,11 @@ final class QuestionResolver {
 	}
 
 	/**
-	 * Q5 — "Is my traffic up or down compared with yesterday?"
+	 * Q6 — "Is my traffic up or down compared {dynamic window}?"
 	 *
-	 * @param array<string, mixed> $q Inventory row.
-	 * @return array<string, mixed>
-	 */
-	private function answer_today_vs_yesterday( array $q ): array {
-		$today_str     = gmdate( 'Y-m-d' );
-		$yesterday_str = gmdate( 'Y-m-d', strtotime( '-1 day' ) );
-
-		$today     = $this->load_day_visitors( $today_str );
-		$yesterday = $this->load_day_visitors( $yesterday_str );
-
-		$delta_pct = ( $yesterday > 0 ) ? ( ( $today - $yesterday ) / $yesterday ) * 100 : 0.0;
-
-		return $this->ok(
-			$q,
-			[
-				'current'     => $today,
-				'previous'    => $yesterday,
-				'delta_pct'   => round( $delta_pct, 1 ),
-				'current_at'  => $today_str,
-				'previous_at' => $yesterday_str,
-			],
-			Questions::VIZ_DELTA
-		);
-	}
-
-	/**
-	 * Q6 — "Is my traffic up or down compared with last week?"
+	 * Period-over-period delta. The current window is the picked range;
+	 * the comparison window is the immediately preceding window of the
+	 * same length. Replaces the legacy q5 "today vs yesterday" hard-code.
 	 *
 	 * @param string               $from Date range start (`Y-m-d`).
 	 * @param string               $to   Date range end (`Y-m-d`).
@@ -1245,15 +1187,25 @@ final class QuestionResolver {
 	}
 
 	/**
-	 * Resolve an Ask me! question.
+	 * Q17 — "Has Statnive received data {dynamic window}?"
 	 *
-	 * @param array<string, mixed> $q Inventory row.
+	 * Picker-aware tracking-health check. Returns the visitor count for
+	 * the selected window; the React `status` viz interprets >0 as healthy.
+	 *
+	 * @param string               $from Date range start (`Y-m-d`).
+	 * @param string               $to   Date range end (`Y-m-d`).
+	 * @param array<string, mixed> $q    Inventory row.
 	 * @return array<string, mixed>
 	 */
-	private function answer_data_today( array $q ): array {
+	private function answer_data_in_range( string $from, string $to, array $q ): array {
+		$totals = $this->load_period_totals( $from, $to );
 		return $this->ok(
 			$q,
-			[ 'visitors' => $this->load_day_visitors( gmdate( 'Y-m-d' ) ) ],
+			[
+				'visitors' => $totals['visitors'],
+				'from'     => $from,
+				'to'       => $to,
+			],
 			Questions::VIZ_KPI_TILE
 		);
 	}

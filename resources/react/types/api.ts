@@ -158,6 +158,14 @@ export interface AdvisorQuestion {
 	confidence: AdvisorConfidence;
 	depends_on_schema?: string;
 	searchable: string[];
+	/**
+	 * Dynamic-window flag. When set, the `question` field is a sprintf
+	 * template with a single `%s` placeholder; React substitutes a
+	 * localised date-range phrase from the current date picker.
+	 * - 'current' = phrase for the active window (e.g. "today", "this month")
+	 * - 'prior'   = phrase for the comparison window (e.g. "with yesterday")
+	 */
+	dynamic_window?: 'current' | 'prior';
 }
 
 export interface AdvisorQuestionsResponse {

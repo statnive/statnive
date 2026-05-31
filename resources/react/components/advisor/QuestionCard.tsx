@@ -3,9 +3,11 @@ import { __, sprintf } from '@wordpress/i18n';
 import { ChevronDown, Pin } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { isQuestionComingSoon } from '@/lib/advisor';
+import { formatDateRangeLabel, formatPriorRangeLabel } from '@/lib/date-range-label';
 import type { AdvisorAnswer, AdvisorQuestion } from '@/types/api';
 import { useAdvisorPinMutations } from '@/hooks/use-advisor-preferences';
 import { useSingleAdvisorAnswer, useCachedAdvisorAnswer } from '@/hooks/use-advisor-answers';
+import { useDateRange } from '@/hooks/use-date-range';
 import { AnswerViz } from './AnswerViz';
 
 /**
@@ -31,6 +33,16 @@ export function QuestionCard({ question, pinned, startExpanded = false }: Questi
 	const [expanded, setExpanded] = useState(startExpanded && !isComingSoon);
 	const headingId = useId();
 	const panelId = useId();
+
+	const { range, params } = useDateRange();
+	const dynamicLabel = question.dynamic_window
+		? question.dynamic_window === 'prior'
+			? formatPriorRangeLabel(range, params)
+			: formatDateRangeLabel(range, params)
+		: null;
+	const resolvedQuestion = dynamicLabel
+		? question.question.replace('%s', dynamicLabel)
+		: question.question;
 
 	const { pin, unpin, isPending } = useAdvisorPinMutations();
 
@@ -140,9 +152,9 @@ export function QuestionCard({ question, pinned, startExpanded = false }: Questi
 								: 'text-[color:var(--color-primary)]',
 						)}
 						style={{ letterSpacing: '-0.01em' }}
-						title={question.question}
+						title={resolvedQuestion}
 					>
-						{question.question}
+						{dynamicLabel ? renderDynamicQuestion(question.question, dynamicLabel) : resolvedQuestion}
 					</span>
 					<ChipCluster question={question} />
 					{!isComingSoon && (
@@ -155,6 +167,15 @@ export function QuestionCard({ question, pinned, startExpanded = false }: Questi
 					)}
 				</button>
 			</div>
+
+			{/* Helper caption — dynamic-window questions follow the date picker
+			    above. Surfaced inline so owners learn the affordance without
+			    expanding the card. */}
+			{dynamicLabel && !isComingSoon && (
+				<p className="px-15 pb-2 pt-0 text-[11px] italic text-muted-foreground/70">
+					{__('Following the date picker above. Change the range to see a different period.', 'statnive')}
+				</p>
+			)}
 
 			{/* Coming-soon caption (always visible, never expandable) */}
 			{isComingSoon && <ComingSoonCaption question={question} />}
@@ -183,6 +204,27 @@ export function QuestionCard({ question, pinned, startExpanded = false }: Questi
 				</div>
 			)}
 		</div>
+	);
+}
+
+/**
+ * Split a sprintf-style question template on `%s` and wrap the dynamic
+ * window phrase in a tinted-accent highlight. Returns a ReactNode so it
+ * can slot directly into the question-text span.
+ */
+function renderDynamicQuestion(template: string, label: string): ReactNode {
+	const idx = template.indexOf('%s');
+	if (idx < 0) return template;
+	const prefix = template.slice(0, idx);
+	const suffix = template.slice(idx + 2);
+	return (
+		<>
+			{prefix}
+			<span className="rounded bg-[color:var(--color-accent)]/10 px-1 font-bold text-foreground">
+				{label}
+			</span>
+			{suffix}
+		</>
 	);
 }
 

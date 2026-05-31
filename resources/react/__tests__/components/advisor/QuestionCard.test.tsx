@@ -25,6 +25,17 @@ vi.mock('@/hooks/use-advisor-preferences', () => ({
 	useAdvisorPinMutations: () => ({ pin, unpin, setPinned: vi.fn(), isPending: false }),
 }));
 
+// `useDateRange` reads TanStack Router search-params; tests don't need a
+// real router, just a stable shape.
+vi.mock('@/hooks/use-date-range', () => ({
+	useDateRange: () => ({
+		range: '7d',
+		params: { from: '2026-05-25', to: '2026-05-31' },
+		previousParams: { from: '2026-05-18', to: '2026-05-24' },
+		setDateRange: vi.fn(),
+	}),
+}));
+
 function withQueryClient(children: ReactNode) {
 	const qc = new QueryClient({ defaultOptions: { queries: { retry: false } } });
 	return <QueryClientProvider client={qc}>{children}</QueryClientProvider>;

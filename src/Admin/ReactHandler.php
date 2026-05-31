@@ -115,6 +115,9 @@ final class ReactHandler {
 				'currency'          => Currency::code(),
 				'currencyMinorUnit' => Currency::decimals(),
 				'currencySymbol'    => Currency::symbol(),
+				// `determine_locale()` honours per-user `user_locale` meta so the
+				// React-side date / number formatters match what __() returns.
+				'locale'            => function_exists( 'determine_locale' ) ? determine_locale() : 'en_US',
 			]
 		);
 
