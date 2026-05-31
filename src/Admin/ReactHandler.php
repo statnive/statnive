@@ -35,6 +35,7 @@ final class ReactHandler {
 	 */
 	public const HOOK_SUFFIXES = [
 		'toplevel_page_statnive',
+		'statnive_page_statnive-ask',
 		'statnive_page_statnive-revenue',
 		'statnive_page_statnive-settings',
 	];
@@ -114,6 +115,9 @@ final class ReactHandler {
 				'currency'          => Currency::code(),
 				'currencyMinorUnit' => Currency::decimals(),
 				'currencySymbol'    => Currency::symbol(),
+				// `determine_locale()` honours per-user `user_locale` meta so the
+				// React-side date / number formatters match what __() returns.
+				'locale'            => function_exists( 'determine_locale' ) ? determine_locale() : 'en_US',
 			]
 		);
 

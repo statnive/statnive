@@ -8,13 +8,32 @@ Stable tag: 1.0.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Privacy-first WordPress analytics with WooCommerce revenue tracking — cookieless, self-hosted, real-time. GeoIP and AI-source attribution.
+Cookieless WordPress analytics with WooCommerce revenue and an Ask me! tab that answers your top questions in one click. Privacy-first, no AI.
 
 == Description ==
 
-**The privacy-first analytics plugin for WordPress — now with a full WooCommerce Revenue Report.**
+**The privacy-first analytics plugin for WordPress, with an Ask me! tab that turns your top questions into one-click answers.**
 
-See exactly who visits your site, where they come from, what they do, and — on WooCommerce stores — how that converts into revenue. No cookies, no third-party trackers, no visitor data sent anywhere. All analytics and revenue data live in your own WordPress database.
+See exactly who visits your site, where they come from, what they do, and on WooCommerce stores how that converts into revenue. No cookies, no third-party trackers, no visitor data sent anywhere. All analytics and revenue data live in your own WordPress database.
+
+= Just ask. No reports to dig through. =
+
+Most analytics dashboards make you learn the tool before you can answer a question. Statnive's **Ask me!** tab flips that around. Pin your 5 favourite questions and the answers fill in the moment the page loads. Browse 10 category tabs (Traffic, Pages, Referrers, Geography, Devices, Real-time, Engagement, Revenue, Events, Campaigns) and click any question to expand the live answer with the same date range you set everywhere else.
+
+Owners typically open Statnive to ask:
+
+* **How much traffic this week?**
+* **Where is my traffic coming from?**
+* **Which pages get the most views?**
+* **What countries are my visitors from?**
+* **Is my traffic mobile or desktop?**
+* **How many people are on my site right now?**
+* **What's my best landing page?**
+* **How much organic search traffic?**
+* **Did my campaign work?**
+* **Is my tracking working?**
+
+Every answer is computed locally from your WordPress database. No AI, no LLM, no third-party API, no question ever leaves your server. The same SQL that powers the dedicated reports answers the Ask me! cards, so the numbers always match what the reports show.
 
 Open source under GPLv2. Self-hosted in your own database — nothing ever leaves your server.
 
@@ -29,6 +48,7 @@ Install, activate, open Statnive — your dashboard fills up within minutes. No 
 
 = Key Features =
 
+* **Ask me! tab** — 120 owner questions across 10 categories, answered straight from your database. Pin the 5 you ask most so they sit at the top of every visit. Search by keyword, jump to the question, see the answer. No AI, no third-party API, no data leaves your server.
 * **WooCommerce Revenue Report** — Net revenue, orders, AOV, conversion rate, refund rate (with period-over-period deltas) · revenue by channel (8 channels including AI Assistants) · top products · cart→checkout→purchase funnel with named drop-off rates. Built on WooCommerce 8.5+ Order Attribution; HPOS + Block Checkout compatible; read-only against WooCommerce.
 * **Zero-touch backfill for existing stores** — On a WooCommerce store with existing orders, Statnive auto-imports your history in the background via Action Scheduler the first time you open the Revenue Report. No CLI required (but `wp statnive wc-backfill` is also available).
 * **Real-time** — Active visitor count, active pages, live pageview feed.
@@ -51,6 +71,16 @@ Source code at [github.com/statnive/statnive](https://github.com/statnive/statni
 That's it. Tracking begins immediately — no configuration, no account, no tracking code to paste.
 
 == Frequently Asked Questions ==
+
+= What is the Ask me! tab? =
+
+Ask me! is a question-first dashboard. Instead of learning which report answers which question, you pick a question in plain language and Statnive shows the answer inline with the same date range you set everywhere else. It ships with 120 questions across 10 categories (Traffic, Real-time, Pages, Referrers, Campaigns, Geography, Devices, Engagement, Revenue, Events) and lets you pin your favourite 10 to the home tab so the answers load the moment you open Statnive.
+
+Common starter questions include *How much traffic this week?*, *Where is my traffic coming from?*, *Which pages get the most views?*, *What countries are my visitors from?*, *Is my traffic mobile or desktop?*, *How many people are on my site right now?*, *Is my tracking working?*
+
+= Does Ask me! send my questions to an AI or any external service? =
+
+No. The 120 questions are pre-built and live entirely inside the plugin. Each question maps to a SQL query that runs locally against your WordPress database, exactly the same SQL the dedicated reports use. There is no AI, no LLM, no chat API, and nothing about your traffic ever leaves your server.
 
 = Does Statnive use cookies? =
 
@@ -96,14 +126,23 @@ No. ~200 server-side bot UA patterns and tracker-side fingerprints (webdriver, a
 
 == Screenshots ==
 
-1. Know your traffic at a glance — visitors, sessions, pageviews and trends that matter
-2. Find what's actually driving results — top sources and top pages side by side
-3. Every page, ranked by what matters — search, sort, find your best content
-4. See where visitors arrive and leave — entry and exit pages side by side
-5. Understand where your traffic comes from — referral, direct, organic, social, AI
-6. Desktop, mobile, bots — device, browser and OS breakdowns in one view
-7. Reach across languages and regions — see which languages your visitors speak
-8. Watch your site breathe in real time — active visitors and live pageviews
+1. WooCommerce Revenue Report — net revenue, AOV, orders, refund rate, and revenue by channel (8 channels including AI Assistants), all inside WordPress. HPOS + Block Checkout compatible.
+2. Ask me! tab — pin your top 5 questions and read the answers the moment you open Statnive. 120 pre-built questions, computed locally, no AI, no third-party API, no data leaves your server.
+3. Privacy-first analytics overview — visitors, sessions, pageviews and trends in one fast dashboard. Cookieless, no fingerprinting, no third-party trackers.
+4. Real-time visitors and live pageviews — verify a campaign, watch a launch, confirm your tracking is alive, all without leaving WordPress.
+5. Visitor map and country breakdown — see which countries drive your WordPress traffic, with privacy-safe coarse geolocation (no IP storage, optional GeoIP).
+6. Traffic sources summary — referral, direct, organic search, social, and AI assistants ranked side by side. Know where every visit really came from.
+7. Top pages report — every page on your site ranked by views, with instant search and sort. Find your best content in seconds.
+8. Entry and exit pages, side by side — find what brings visitors in and where they leave. The foundation of every WordPress conversion-rate improvement.
+9. Smart channel grouping — Direct, Organic Search, Social Media, Email, Referral, Paid, and a dedicated AI Assistants channel (ChatGPT, Claude, Gemini, Perplexity, Copilot, and more).
+10. Desktop, mobile, tablet, bots — device, browser, and OS breakdowns in one privacy-first view. Real humans and bots stay in separate buckets.
+11. Reach across languages and regions — see which languages your WordPress visitors actually speak, and prioritise translations with confidence.
+12. Ask me! — Traffic answers. "How much traffic this week?" "Is traffic up or down?" Pre-built questions answered straight from your database, no AI.
+13. Ask me! — Referrer answers. "Which source drove the most visits?" "How much AI assistant traffic?" Same numbers as the dedicated report.
+14. Ask me! — Pages answers. "What are my top pages this week?" "Best landing page?" One click, no dashboard fishing.
+15. Ask me! — Real-time answers. "How many people are on my site right now?" "Is my tracking working?" Pinned, live, zero clicks.
+16. Ask me! — Campaign answers. "Did my last campaign work?" UTM-aware, WooCommerce-aware, answered straight from your database.
+17. Ask me! — Device answers. "Is my traffic mobile or desktop?" "Which browsers do my visitors use?" Bots stay separate from humans.
 
 == External Services ==
 

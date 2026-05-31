@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Statnive\Privacy;
 
+use Statnive\Advisor\UserPreferences;
 use Statnive\Database\TableRegistry;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -148,6 +149,26 @@ final class PrivacyExporter {
 				'item_id'           => 'session-' . $session->ID,
 				'data'              => $data,
 			];
+		}
+
+		// Page 1 also emits the user's Ask me! pinned-question preferences.
+		// IDs only — no PII or analytics data. Plan §G.5.
+		if ( 1 === $page ) {
+			$pinned = UserPreferences::get( $user->ID );
+			if ( ! empty( $pinned ) ) {
+				$export_items[] = [
+					'group_id'          => 'statnive-preferences',
+					'group_label'       => __( 'Statnive Ask me! Preferences', 'statnive' ),
+					'group_description' => __( 'Question IDs the user has pinned to the Ask me! tab. No personal data — just question identifiers.', 'statnive' ),
+					'item_id'           => 'pinned-questions',
+					'data'              => [
+						[
+							'name'  => __( 'Pinned Questions', 'statnive' ),
+							'value' => implode( ', ', $pinned ),
+						],
+					],
+				];
+			}
 		}
 
 		return [

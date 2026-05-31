@@ -78,6 +78,7 @@ final class AdminAssetScopeTest extends WP_UnitTestCase {
 	public static function statnive_admin_pages(): array {
 		return [
 			'overview' => [ 'toplevel_page_statnive' ],
+			'ask'      => [ 'statnive_page_statnive-ask' ],
 			'revenue'  => [ 'statnive_page_statnive-revenue' ],
 			'settings' => [ 'statnive_page_statnive-settings' ],
 		];
@@ -104,10 +105,11 @@ final class AdminAssetScopeTest extends WP_UnitTestCase {
 		);
 	}
 
-	public function test_hook_suffixes_constant_contains_all_three_pages(): void {
+	public function test_hook_suffixes_constant_contains_all_statnive_pages(): void {
 		$this->assertContains( 'toplevel_page_statnive', ReactHandler::HOOK_SUFFIXES );
+		$this->assertContains( 'statnive_page_statnive-ask', ReactHandler::HOOK_SUFFIXES );
 		$this->assertContains( 'statnive_page_statnive-revenue', ReactHandler::HOOK_SUFFIXES );
 		$this->assertContains( 'statnive_page_statnive-settings', ReactHandler::HOOK_SUFFIXES );
-		$this->assertCount( 3, ReactHandler::HOOK_SUFFIXES );
+		$this->assertCount( 4, ReactHandler::HOOK_SUFFIXES );
 	}
 }

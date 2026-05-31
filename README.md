@@ -8,18 +8,27 @@
 [![WooCommerce](https://img.shields.io/badge/WooCommerce-7.0%2B-96588A.svg)](https://woocommerce.com/)
 [![License](https://img.shields.io/badge/license-GPL--2.0--or--later-green.svg)](https://www.gnu.org/licenses/gpl-2.0.html)
 
-Privacy-first analytics for WordPress, with a full **WooCommerce Revenue Report** built in. No cookies, no third-party transfers, no complicated dashboards — just the metrics that matter, plus the revenue lens for stores that need it.
+Privacy-first analytics for WordPress, with a question-first **Ask me!** tab and a full **WooCommerce Revenue Report** built in. No cookies, no third-party transfers, no AI, no complicated dashboards. Just the answers you actually ask for.
 
+- **Ask me! tab** — Pin your top questions ("How much traffic this week?", "Where is my traffic coming from?", "Which pages get the most views?") and read the answers the moment you open Statnive. 120 questions across 10 categories, all answered locally from your database. No AI, no LLM, no third-party API.
 - **Cookieless by design** — No cookies, localStorage, or fingerprinting. Ever.
 - **Real-time dashboard** — Active visitors, active pages, and a live pageview feed.
-- **WooCommerce Revenue Report** — Net revenue, AOV, refund rate, channel attribution, top products, and the cart→checkout→purchase funnel — all inside WordPress, read-only against WooCommerce.
+- **WooCommerce Revenue Report** — Net revenue, AOV, refund rate, channel attribution, top products, and the cart→checkout→purchase funnel, all inside WordPress, read-only against WooCommerce.
 - **AI source tracking** — Dedicated channel for ChatGPT, Claude, Gemini, Perplexity and 9 more.
 - **Self-hosted** — All data stays in your own WordPress database. Designed to support GDPR, CCPA and APPI compliance.
 
 ## Features
 
+### Ask me! — your top questions, one click away
+- **11 in-page tabs** — *Ask me!* (pinned home) plus 10 categories: Traffic, Real-time, Pages, Referrers, Campaigns, Geography, Devices, Engagement, Revenue, Events
+- **Pin up to 10 questions** to the home tab so the answers fill in the moment you open Statnive
+- **120 owner questions** built from the most-asked phrasings on Reddit, WP.org forums, Indie Hackers and the Shopify Community: *How much traffic this week?*, *Where is my traffic coming from?*, *Which pages get the most views?*, *What countries are my visitors from?*, *Is my traffic mobile or desktop?*, *How many people are on my site right now?*, *What's my best landing page?*, *How much organic search traffic?*, *Did my campaign work?*, *Is my tracking working?*, and 110 more
+- **Search-by-keyword + answer modal** — type "mobile", "bounce", "checkout" and get a ranked list, open the answer in a focused popover without losing the tab you were on
+- **No AI, no LLM, no third-party API** — every answer runs the same SQL as the dedicated report, locally against your database. Your questions never leave the server, your traffic never leaves the server, and the numbers always match what the reports show
+- **Schema-gap and Paid-tier questions stay visible** with a quiet "Coming soon" caption so you can see what's on the way without paywalls or upsells in the v1 surface
+
 ### Analytics Dashboard
-- **Three top-level admin pages**: Overview (with Pages, Referrers, Geography, Devices, Languages, Real-time tabs), Revenue Report, Settings
+- **Top-level admin pages**: Overview (with Pages, Referrers, Geography, Devices, Languages, Real-time tabs), Ask me!, Revenue Report, Settings
 - Real-time visitor counter and live pageview feed
 - Comparison mode (current vs previous period)
 - CSV export for all data views

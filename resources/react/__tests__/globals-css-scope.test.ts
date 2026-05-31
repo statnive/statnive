@@ -37,15 +37,23 @@ describe('globals.css scoping', () => {
 		// the selector list (or at-rule). Skip at-rules and @theme/@layer
 		// wrappers — only leaf style rules matter. Every individual
 		// selector in the list must start with `#statnive-app`.
+		//
+		// `@keyframes` is a special at-rule whose body contains step
+		// selectors (`from`, `to`, `0%`, `100%`, …) that can't be scoped
+		// by spec. Track when we're inside a @keyframes block and skip
+		// scope checks for its direct children.
 		const violations: string[] = [];
 		let depth = 0;
 		let ruleStart = 0;
+		const keyframesDepthStack: number[] = []; // depths at which we entered a @keyframes
 		for (let i = 0; i < stripped.length; i++) {
 			const ch = stripped[i];
 			if (ch === '{') {
 				const selector = stripped.slice(ruleStart, i).trim();
 				const isAtRule = selector.startsWith('@');
-				if (!isAtRule && depth >= 1) {
+				const isKeyframes = /^@(-\w+-)?keyframes\b/.test(selector);
+				const insideKeyframes = keyframesDepthStack.length > 0 && depth === keyframesDepthStack[keyframesDepthStack.length - 1]! + 1;
+				if (!isAtRule && depth >= 1 && !insideKeyframes) {
 					// Split the selector list on top-level commas, respecting
 					// brackets and parens so `:is(a, b)` / `[type='a', 'b']`
 					// don't get split mid-group.
@@ -72,10 +80,16 @@ describe('globals.css scoping', () => {
 						}
 					}
 				}
+				if (isKeyframes) {
+					keyframesDepthStack.push(depth);
+				}
 				depth++;
 				ruleStart = i + 1;
 			} else if (ch === '}') {
 				depth--;
+				if (keyframesDepthStack.length > 0 && depth === keyframesDepthStack[keyframesDepthStack.length - 1]) {
+					keyframesDepthStack.pop();
+				}
 				ruleStart = i + 1;
 			} else if (ch === ';' && depth >= 1) {
 				// Reset rule start after declarations so property names

@@ -8,6 +8,7 @@ import {
 	createHashHistory,
 } from '@tanstack/react-router';
 import { DashboardLayout } from '@/components/layouts/dashboard-layout';
+import { AskPage } from '@/pages/ask';
 import { OverviewPage } from '@/pages/overview';
 import { PagesPage } from '@/pages/pages';
 import { ReferrersPage } from '@/pages/referrers';
@@ -51,6 +52,12 @@ const overviewRoute = createRoute({
 	getParentRoute: () => rootRoute,
 	path: '/',
 	component: OverviewPage,
+});
+
+const askRoute = createRoute({
+	getParentRoute: () => rootRoute,
+	path: '/ask',
+	component: AskPage,
 });
 
 const pagesRoute = createRoute({
@@ -103,6 +110,7 @@ const settingsRoute = createRoute({
 
 const routeTree = rootRoute.addChildren([
 	overviewRoute,
+	askRoute,
 	pagesRoute,
 	referrersRoute,
 	geographyRoute,

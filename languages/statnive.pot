@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-05-23T10:54:43+00:00\n"
+"POT-Creation-Date: 2026-05-31T12:57:02+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: statnive\n"
@@ -31,7 +31,8 @@ msgstr ""
 
 #. Author of the plugin
 #: statnive.php
-#: src/Admin/AdminMenuManager.php:46
+#: src/Admin/AdminMenuManager.php:48
+#: statnive-dist/statnive/src/Admin/AdminMenuManager.php:39
 msgid "Statnive"
 msgstr ""
 
@@ -41,123 +42,153 @@ msgid "https://statnive.com"
 msgstr ""
 
 #: src/Admin/AdminBarWidget.php:56
+#: statnive-dist/statnive/src/Admin/AdminBarWidget.php:56
 msgid "Statnive — Today's visitors"
 msgstr ""
 
-#: src/Admin/AdminMenuManager.php:45
-#: src/Privacy/PrivacyEraser.php:43
-#: src/Privacy/PrivacyExporter.php:43
+#: src/Admin/AdminMenuManager.php:47
+#: src/Privacy/PrivacyEraser.php:44
+#: src/Privacy/PrivacyExporter.php:44
+#: statnive-dist/statnive/src/Admin/AdminMenuManager.php:38
+#: statnive-dist/statnive/src/Privacy/PrivacyEraser.php:43
+#: statnive-dist/statnive/src/Privacy/PrivacyExporter.php:43
 msgid "Statnive Analytics"
 msgstr ""
 
-#: src/Admin/AdminMenuManager.php:56
-#: src/Admin/AdminMenuManager.php:57
+#: src/Admin/AdminMenuManager.php:58
+#: src/Admin/AdminMenuManager.php:59
 msgid "Overview"
 msgstr ""
 
-#: src/Admin/AdminMenuManager.php:65
-#: src/Admin/AdminMenuManager.php:66
+#: src/Admin/AdminMenuManager.php:67
+#: src/Admin/AdminMenuManager.php:68
+msgid "Ask me!"
+msgstr ""
+
+#: src/Admin/AdminMenuManager.php:76
+#: src/Admin/AdminMenuManager.php:77
 msgid "Revenue Report"
 msgstr ""
 
-#: src/Admin/AdminMenuManager.php:74
-#: src/Admin/AdminMenuManager.php:75
+#: src/Admin/AdminMenuManager.php:85
+#: src/Admin/AdminMenuManager.php:86
 msgid "Settings"
 msgstr ""
 
 #: src/Admin/CronHealth.php:86
+#: statnive-dist/statnive/src/Admin/CronHealth.php:86
 msgid "Daily salt rotation"
 msgstr ""
 
 #: src/Admin/CronHealth.php:91
+#: statnive-dist/statnive/src/Admin/CronHealth.php:91
 msgid "Daily data aggregation"
 msgstr ""
 
 #: src/Admin/CronHealth.php:96
+#: statnive-dist/statnive/src/Admin/CronHealth.php:96
 msgid "Retention cleanup"
 msgstr ""
 
 #: src/Admin/CronHealth.php:101
+#: statnive-dist/statnive/src/Admin/CronHealth.php:101
 msgid "Weekly GeoIP database update"
 msgstr ""
 
 #: src/Admin/GeoIPNotice.php:96
+#: statnive-dist/statnive/src/Admin/GeoIPNotice.php:96
 msgid "Statnive: GeoIP is enabled but no MaxMind license key is configured."
 msgstr ""
 
 #: src/Admin/GeoIPNotice.php:97
+#: statnive-dist/statnive/src/Admin/GeoIPNotice.php:97
 msgid "Impact: visitor country/region data will not appear in your reports. Page tracking, sources, devices and all other metrics continue to work normally."
 msgstr ""
 
 #: src/Admin/GeoIPNotice.php:98
+#: statnive-dist/statnive/src/Admin/GeoIPNotice.php:98
 msgid "What Statnive will do: retry the GeoIP database download every week. No additional alerts will be raised until the key is added or GeoIP is disabled."
 msgstr ""
 
 #. translators: 1: MaxMind signup URL, 2: MaxMind EULA URL
 #: src/Admin/GeoIPNotice.php:102
+#: statnive-dist/statnive/src/Admin/GeoIPNotice.php:102
 #, php-format
 msgid "<strong>To fix:</strong> <a href=\"%1$s\" target=\"_blank\" rel=\"noopener\">get a free MaxMind license key</a> (requires accepting the <a href=\"%2$s\" target=\"_blank\" rel=\"noopener\">GeoLite2 EULA</a>) and paste it into Settings → GeoIP. Or disable GeoIP in Settings to dismiss this notice."
 msgstr ""
 
 #: src/Admin/GeoIPNotice.php:139
+#: statnive-dist/statnive/src/Admin/GeoIPNotice.php:139
 msgid "Statnive: WordPress cron jobs are not running on time."
 msgstr ""
 
 #: src/Admin/GeoIPNotice.php:143
+#: statnive-dist/statnive/src/Admin/GeoIPNotice.php:143
 msgid "These Statnive background jobs have not completed within their normal window:"
 msgstr ""
 
 #. translators: 1: example crontab line, 2: WP-CLI command
 #: src/Admin/GeoIPNotice.php:154
+#: statnive-dist/statnive/src/Admin/GeoIPNotice.php:154
 #, php-format
 msgid "<strong>To fix:</strong> add a system cron that pings <code>wp-cron.php</code> every five minutes — for example <code>%1$s</code> — or run <code>%2$s</code> via WP-CLI."
 msgstr ""
 
 #: src/Admin/GeoIPNotice.php:166
+#: statnive-dist/statnive/src/Admin/GeoIPNotice.php:166
 msgid "What Statnive will do automatically: this notice self-dismisses as soon as every job runs again within its normal window. Clicking \"Run cleanup now\" below records a fresh heartbeat, which clears the warning until the next scheduled cycle."
 msgstr ""
 
 #: src/Admin/GeoIPNotice.php:172
+#: statnive-dist/statnive/src/Admin/GeoIPNotice.php:172
 msgid "Run cleanup now"
 msgstr ""
 
 #: src/Admin/GeoIPNotice.php:177
 #: src/Admin/WooCommerceBackfillNotice.php:164
+#: statnive-dist/statnive/src/Admin/GeoIPNotice.php:177
 msgid "Dismiss"
 msgstr ""
 
 #: src/Admin/GeoIPNotice.php:179
+#: statnive-dist/statnive/src/Admin/GeoIPNotice.php:179
 msgid "Dismiss this Statnive cron warning"
 msgstr ""
 
 #. translators: %s = job label, e.g. "Daily data aggregation"
 #: src/Admin/GeoIPNotice.php:273
+#: statnive-dist/statnive/src/Admin/GeoIPNotice.php:273
 #, php-format
 msgid "%s — has not run yet."
 msgstr ""
 
 #. translators: 1: job label, 2: localised date/time of last successful run
 #: src/Admin/GeoIPNotice.php:287
+#: statnive-dist/statnive/src/Admin/GeoIPNotice.php:287
 #, php-format
 msgid "%1$s — last ran %2$s."
 msgstr ""
 
 #: src/Admin/GeoIPNotice.php:307
+#: statnive-dist/statnive/src/Admin/GeoIPNotice.php:307
 msgid "You do not have permission to run Statnive cron jobs."
 msgstr ""
 
 #: src/Admin/GeoIPNotice.php:316
+#: statnive-dist/statnive/src/Admin/GeoIPNotice.php:316
 msgid "Statnive cron jobs ran successfully. The warning will reappear if cron stops firing again."
 msgstr ""
 
 #. translators: %s = error message
 #: src/Admin/GeoIPNotice.php:321
+#: statnive-dist/statnive/src/Admin/GeoIPNotice.php:321
 #, php-format
 msgid "Statnive cron run failed: %s"
 msgstr ""
 
 #: src/Admin/GeoIPNotice.php:353
 #: src/Admin/WooCommerceBackfillNotice.php:328
+#: statnive-dist/statnive/src/Admin/GeoIPNotice.php:353
 msgid "You do not have permission to dismiss this notice."
 msgstr ""
 
@@ -218,32 +249,571 @@ msgstr ""
 msgid "Statnive could not start the import. Please try again later."
 msgstr ""
 
+#. translators: Ask me! category tab label
+#: src/Advisor/Categories.php:111
+msgid "Traffic Overview"
+msgstr ""
+
+#. translators: Ask me! category tab label
+#: src/Advisor/Categories.php:114
+msgid "Real-time & Tracking Health"
+msgstr ""
+
+#. translators: Ask me! category tab label
+#: src/Advisor/Categories.php:117
+msgid "Pages & Content"
+msgstr ""
+
+#. translators: Ask me! category tab label
+#: src/Advisor/Categories.php:120
+msgid "Referrers & Channels"
+msgstr ""
+
+#. translators: Ask me! category tab label
+#: src/Advisor/Categories.php:123
+msgid "Campaigns & UTM"
+msgstr ""
+
+#. translators: Ask me! category tab label
+#: src/Advisor/Categories.php:126
+msgid "Geography & Language"
+msgstr ""
+
+#. translators: Ask me! category tab label
+#: src/Advisor/Categories.php:129
+msgid "Devices & Browsers"
+msgstr ""
+
+#. translators: Ask me! category tab label
+#: src/Advisor/Categories.php:132
+msgid "Engagement & Quality"
+msgstr ""
+
+#. translators: Ask me! category tab label
+#: src/Advisor/Categories.php:135
+msgid "Revenue"
+msgstr ""
+
+#. translators: Ask me! category tab label
+#: src/Advisor/Categories.php:138
+msgid "Events & Privacy"
+msgstr ""
+
+#: src/Advisor/QuestionResolver.php:2009
+msgid "Local"
+msgstr ""
+
+#: src/Advisor/QuestionResolver.php:2013
+msgid "International"
+msgstr ""
+
+#. translators: %s is a date-range phrase like "today", "in the last 30 days", "this month" — substituted client-side from the dashboard date picker.
+#: src/Advisor/Questions.php:240
+#, php-format
+msgid "How many people visited my site %s?"
+msgstr ""
+
+#: src/Advisor/Questions.php:252
+msgid "How many pageviews did I get?"
+msgstr ""
+
+#: src/Advisor/Questions.php:263
+msgid "How many sessions did I get?"
+msgstr ""
+
+#. translators: %s is a phrase like "with yesterday" or "with the previous 30 days" — substituted client-side from the dashboard date picker.
+#: src/Advisor/Questions.php:275
+#, php-format
+msgid "Is my traffic up or down compared %s?"
+msgstr ""
+
+#: src/Advisor/Questions.php:287
+msgid "Which day had the most traffic?"
+msgstr ""
+
+#: src/Advisor/Questions.php:298
+msgid "Which date had the lowest traffic?"
+msgstr ""
+
+#: src/Advisor/Questions.php:309
+msgid "What is my traffic trend over time?"
+msgstr ""
+
+#: src/Advisor/Questions.php:320
+msgid "Has my traffic dropped sharply on the latest day?"
+msgstr ""
+
+#: src/Advisor/Questions.php:331
+msgid "Has my traffic spiked sharply on the latest day?"
+msgstr ""
+
+#: src/Advisor/Questions.php:342
+msgid "Which source caused the biggest traffic change?"
+msgstr ""
+
+#: src/Advisor/Questions.php:364
+msgid "How many people are on my site right now?"
+msgstr ""
+
+#: src/Advisor/Questions.php:375
+msgid "Which pages are active right now?"
+msgstr ""
+
+#: src/Advisor/Questions.php:386
+msgid "Is Statnive tracking my site?"
+msgstr ""
+
+#: src/Advisor/Questions.php:397
+msgid "Did my test visit appear?"
+msgstr ""
+
+#. translators: %s is a date-range phrase from the date picker — e.g. "today", "in the last 7 days", "last month".
+#: src/Advisor/Questions.php:409
+#, php-format
+msgid "Has Statnive received data %s?"
+msgstr ""
+
+#: src/Advisor/Questions.php:421
+msgid "Has Statnive received data in the last 30 minutes?"
+msgstr ""
+
+#: src/Advisor/Questions.php:432
+msgid "Is one page receiving no visits?"
+msgstr ""
+
+#: src/Advisor/Questions.php:443
+msgid "Is my site showing zero traffic?"
+msgstr ""
+
+#: src/Advisor/Questions.php:454
+msgid "Are tracking hits coming from the wrong domain?"
+msgstr ""
+
+#: src/Advisor/Questions.php:465
+msgid "Are bots affecting my data?"
+msgstr ""
+
+#: src/Advisor/Questions.php:731
+msgid "What are my top pages?"
+msgstr ""
+
+#: src/Advisor/Questions.php:733
+msgid "What are my most-read posts?"
+msgstr ""
+
+#. translators: %s is a date-range phrase from the date picker — e.g. "today", "this week", "in the last 30 days".
+#: src/Advisor/Questions.php:736
+#, php-format
+msgid "Which page got the most views %s?"
+msgstr ""
+
+#: src/Advisor/Questions.php:738
+msgid "What is my best landing page?"
+msgstr ""
+
+#: src/Advisor/Questions.php:740
+msgid "Which pages do people enter from?"
+msgstr ""
+
+#: src/Advisor/Questions.php:742
+msgid "Which pages do people leave from?"
+msgstr ""
+
+#: src/Advisor/Questions.php:744
+msgid "Which pages have the most exits?"
+msgstr ""
+
+#: src/Advisor/Questions.php:746
+msgid "Which page titles get the most views?"
+msgstr ""
+
+#: src/Advisor/Questions.php:748
+msgid "Did my latest post get traffic?"
+msgstr ""
+
+#: src/Advisor/Questions.php:750
+msgid "Did my homepage get seen?"
+msgstr ""
+
+#: src/Advisor/Questions.php:752
+msgid "How many people viewed my contact page?"
+msgstr ""
+
+#: src/Advisor/Questions.php:754
+msgid "How many people viewed my about page?"
+msgstr ""
+
+#: src/Advisor/Questions.php:756
+msgid "How many people viewed my pricing page?"
+msgstr ""
+
+#: src/Advisor/Questions.php:758
+msgid "Which old posts still get traffic?"
+msgstr ""
+
+#: src/Advisor/Questions.php:760
+msgid "Which pages are losing visitors?"
+msgstr ""
+
+#: src/Advisor/Questions.php:762
+msgid "Which pages probably need updating?"
+msgstr ""
+
+#: src/Advisor/Questions.php:764
+msgid "Which pages have the longest average duration?"
+msgstr ""
+
+#: src/Advisor/Questions.php:766
+msgid "Where is my traffic coming from?"
+msgstr ""
+
+#: src/Advisor/Questions.php:768
+msgid "Which channel sends the most traffic?"
+msgstr ""
+
+#: src/Advisor/Questions.php:770
+msgid "How much traffic comes from Google?"
+msgstr ""
+
+#: src/Advisor/Questions.php:772
+msgid "How much traffic comes from organic search?"
+msgstr ""
+
+#: src/Advisor/Questions.php:774
+msgid "How much traffic comes from social media?"
+msgstr ""
+
+#: src/Advisor/Questions.php:776
+msgid "Which social network sends the most traffic?"
+msgstr ""
+
+#: src/Advisor/Questions.php:778
+msgid "How much traffic comes from direct visits?"
+msgstr ""
+
+#: src/Advisor/Questions.php:780
+msgid "Did Reddit send traffic?"
+msgstr ""
+
+#: src/Advisor/Questions.php:782
+msgid "Did Twitter/X send traffic?"
+msgstr ""
+
+#: src/Advisor/Questions.php:784
+msgid "Did Facebook send traffic?"
+msgstr ""
+
+#: src/Advisor/Questions.php:786
+msgid "Did Instagram send traffic?"
+msgstr ""
+
+#: src/Advisor/Questions.php:788
+msgid "Did YouTube send traffic?"
+msgstr ""
+
+#: src/Advisor/Questions.php:790
+msgid "Are AI tools sending traffic?"
+msgstr ""
+
+#: src/Advisor/Questions.php:792
+msgid "Is organic traffic increasing?"
+msgstr ""
+
+#: src/Advisor/Questions.php:794
+msgid "Is referral traffic increasing?"
+msgstr ""
+
+#: src/Advisor/Questions.php:796
+msgid "Which referrer sends low-quality traffic?"
+msgstr ""
+
+#: src/Advisor/Questions.php:798
+msgid "Did my campaign drive traffic?"
+msgstr ""
+
+#: src/Advisor/Questions.php:800
+msgid "Which UTM campaign sent the most visitors?"
+msgstr ""
+
+#: src/Advisor/Questions.php:802
+msgid "Which UTM source sent the most traffic?"
+msgstr ""
+
+#: src/Advisor/Questions.php:804
+msgid "Which UTM medium sent the most traffic?"
+msgstr ""
+
+#: src/Advisor/Questions.php:806
+msgid "Did my newsletter drive traffic?"
+msgstr ""
+
+#: src/Advisor/Questions.php:808
+msgid "Did my email campaign work?"
+msgstr ""
+
+#: src/Advisor/Questions.php:810
+msgid "Did my Facebook campaign send traffic?"
+msgstr ""
+
+#: src/Advisor/Questions.php:812
+msgid "Did my Google Ads campaign send traffic?"
+msgstr ""
+
+#: src/Advisor/Questions.php:814
+msgid "Which landing page did my campaign send people to?"
+msgstr ""
+
+#: src/Advisor/Questions.php:816
+msgid "Which UTM combination worked best by traffic?"
+msgstr ""
+
+#: src/Advisor/Questions.php:818
+msgid "Did Black Friday increase traffic?"
+msgstr ""
+
+#: src/Advisor/Questions.php:820
+msgid "Which campaign had the best visitor quality?"
+msgstr ""
+
+#: src/Advisor/Questions.php:822
+msgid "Which campaign had the highest bounce count?"
+msgstr ""
+
+#: src/Advisor/Questions.php:824
+msgid "Which campaign should I double down on?"
+msgstr ""
+
+#: src/Advisor/Questions.php:826
+msgid "What countries are my visitors from?"
+msgstr ""
+
+#: src/Advisor/Questions.php:828
+msgid "Which country sends the most traffic?"
+msgstr ""
+
+#: src/Advisor/Questions.php:830
+msgid "Is most of my traffic local or international?"
+msgstr ""
+
+#: src/Advisor/Questions.php:832
+msgid "What language are my visitors using?"
+msgstr ""
+
+#: src/Advisor/Questions.php:834
+msgid "What cities are my visitors from?"
+msgstr ""
+
+#: src/Advisor/Questions.php:836
+msgid "Which city sends the most traffic?"
+msgstr ""
+
+#: src/Advisor/Questions.php:838
+msgid "Did traffic from one country drop?"
+msgstr ""
+
+#: src/Advisor/Questions.php:840
+msgid "Which countries visit a specific page?"
+msgstr ""
+
+#: src/Advisor/Questions.php:842
+msgid "Which countries visit product or pricing pages?"
+msgstr ""
+
+#: src/Advisor/Questions.php:844
+msgid "How much traffic is mobile vs desktop?"
+msgstr ""
+
+#: src/Advisor/Questions.php:846
+msgid "Which device type is most common?"
+msgstr ""
+
+#: src/Advisor/Questions.php:848
+msgid "How much traffic is tablet?"
+msgstr ""
+
+#: src/Advisor/Questions.php:850
+msgid "Which browser do visitors use?"
+msgstr ""
+
+#: src/Advisor/Questions.php:852
+msgid "Which operating systems do visitors use?"
+msgstr ""
+
+#: src/Advisor/Questions.php:854
+msgid "Is mobile traffic higher than desktop?"
+msgstr ""
+
+#: src/Advisor/Questions.php:856
+msgid "Should I prioritize mobile design?"
+msgstr ""
+
+#: src/Advisor/Questions.php:858
+msgid "Which pages are mostly viewed on mobile?"
+msgstr ""
+
+#: src/Advisor/Questions.php:860
+msgid "Which OS/browser should I test first?"
+msgstr ""
+
+#: src/Advisor/Questions.php:862
+msgid "Does mobile look worse than desktop?"
+msgstr ""
+
+#: src/Advisor/Questions.php:864
+msgid "Which device type exits more often?"
+msgstr ""
+
+#: src/Advisor/Questions.php:866
+msgid "How much bot traffic is shown in device breakdown?"
+msgstr ""
+
+#: src/Advisor/Questions.php:868
+msgid "Which pages have the most bounces?"
+msgstr ""
+
+#: src/Advisor/Questions.php:870
+msgid "Which pages have the highest exit count?"
+msgstr ""
+
+#: src/Advisor/Questions.php:872
+msgid "How long do visitors stay on average?"
+msgstr ""
+
+#: src/Advisor/Questions.php:874
+msgid "How many pages does each session view?"
+msgstr ""
+
+#: src/Advisor/Questions.php:876
+msgid "Which pages keep visitors engaged?"
+msgstr ""
+
+#: src/Advisor/Questions.php:878
+msgid "Which traffic source sends engaged visitors?"
+msgstr ""
+
+#: src/Advisor/Questions.php:880
+msgid "Which pages may be broken or confusing?"
+msgstr ""
+
+#: src/Advisor/Questions.php:882
+msgid "What is the bounce rate for a page?"
+msgstr ""
+
+#: src/Advisor/Questions.php:884
+msgid "How many orders did I get?"
+msgstr ""
+
+#: src/Advisor/Questions.php:886
+msgid "How much gross revenue did I make?"
+msgstr ""
+
+#: src/Advisor/Questions.php:888
+msgid "How much net revenue did I make?"
+msgstr ""
+
+#: src/Advisor/Questions.php:890
+msgid "What is my average order value?"
+msgstr ""
+
+#: src/Advisor/Questions.php:892
+msgid "How much did I refund?"
+msgstr ""
+
+#: src/Advisor/Questions.php:894
+msgid "What is my refund rate?"
+msgstr ""
+
+#: src/Advisor/Questions.php:896
+msgid "Which channel brings the most revenue?"
+msgstr ""
+
+#: src/Advisor/Questions.php:898
+msgid "Which UTM campaign brings the most revenue?"
+msgstr ""
+
+#: src/Advisor/Questions.php:900
+msgid "Which landing page brings the most revenue?"
+msgstr ""
+
+#: src/Advisor/Questions.php:902
+msgid "Which product sells the most units?"
+msgstr ""
+
+#: src/Advisor/Questions.php:904
+msgid "Which product makes the most revenue?"
+msgstr ""
+
+#: src/Advisor/Questions.php:906
+msgid "Which coupon is used the most?"
+msgstr ""
+
+#: src/Advisor/Questions.php:908
+msgid "Which coupon gives the most discount?"
+msgstr ""
+
+#: src/Advisor/Questions.php:910
+msgid "What is my funnel conversion rate?"
+msgstr ""
+
+#: src/Advisor/Questions.php:912
+msgid "How much tax and shipping did customers pay?"
+msgstr ""
+
+#: src/Advisor/Questions.php:914
+msgid "Which custom events happened most often?"
+msgstr ""
+
+#: src/Advisor/Questions.php:916
+msgid "How many sessions included a specific event?"
+msgstr ""
+
+#: src/Advisor/Questions.php:918
+msgid "Is a specific custom event firing?"
+msgstr ""
+
+#: src/Advisor/Questions.php:920
+msgid "Is my privacy audit passing?"
+msgstr ""
+
+#: src/Advisor/Questions.php:922
+msgid "What privacy or diagnostics warnings should I fix?"
+msgstr ""
+
 #: src/Cron/CronRegistrar.php:32
+#: statnive-dist/statnive/src/Cron/CronRegistrar.php:32
 msgid "Once Weekly"
 msgstr ""
 
 #: src/Database/Migrator.php:308
+#: statnive-dist/statnive/src/Database/Migrator.php:259
 msgid "Statnive: plugin version mismatch detected."
 msgstr ""
 
 #. translators: 1: stored schema version, 2: running plugin version
 #: src/Database/Migrator.php:312
+#: statnive-dist/statnive/src/Database/Migrator.php:263
 #, php-format
 msgid "Your database schema is at version %1$s but the running plugin is version %2$s. This may happen if you downgraded the plugin. Please re-install the latest version to avoid data inconsistencies."
 msgstr ""
 
 #: src/Plugin.php:136
+#: statnive-dist/statnive/src/Plugin.php:124
 msgid "You do not have permission to activate plugins."
 msgstr ""
 
 #: src/Plugin.php:137
 #: src/Plugin.php:153
 #: src/Plugin.php:169
+#: statnive-dist/statnive/src/Plugin.php:125
+#: statnive-dist/statnive/src/Plugin.php:141
+#: statnive-dist/statnive/src/Plugin.php:157
 msgid "Plugin Activation Error"
 msgstr ""
 
 #. translators: 1: Required PHP version, 2: Current PHP version
 #: src/Plugin.php:148
+#: statnive-dist/statnive/src/Plugin.php:136
+#: statnive-dist/statnive/statnive.php:68
 #: statnive.php:68
 #, php-format
 msgid "Statnive requires PHP %1$s or higher. You are running PHP %2$s."
@@ -251,341 +821,603 @@ msgstr ""
 
 #. translators: 1: Required WordPress version, 2: Current WordPress version
 #: src/Plugin.php:164
+#: statnive-dist/statnive/src/Plugin.php:152
+#: statnive-dist/statnive/statnive.php:93
 #: statnive.php:93
 #, php-format
 msgid "Statnive requires WordPress %1$s or higher. You are running WordPress %2$s."
 msgstr ""
 
 #: src/Privacy/ComplianceAuditor.php:70
+#: statnive-dist/statnive/src/Privacy/ComplianceAuditor.php:70
 msgid "Consent mode configured"
 msgstr ""
 
 #. translators: %s: consent mode name.
 #: src/Privacy/ComplianceAuditor.php:74
+#: statnive-dist/statnive/src/Privacy/ComplianceAuditor.php:74
 #, php-format
 msgid "Consent mode: %s"
 msgstr ""
 
 #: src/Privacy/ComplianceAuditor.php:75
+#: statnive-dist/statnive/src/Privacy/ComplianceAuditor.php:75
 msgid "No consent mode configured. Set one in Settings."
 msgstr ""
 
 #: src/Privacy/ComplianceAuditor.php:88
+#: statnive-dist/statnive/src/Privacy/ComplianceAuditor.php:88
 msgid "Do Not Track honored"
 msgstr ""
 
 #: src/Privacy/ComplianceAuditor.php:91
+#: statnive-dist/statnive/src/Privacy/ComplianceAuditor.php:91
 msgid "DNT header is respected."
 msgstr ""
 
 #: src/Privacy/ComplianceAuditor.php:92
+#: statnive-dist/statnive/src/Privacy/ComplianceAuditor.php:92
 msgid "DNT header is not honored. Consider enabling for privacy compliance."
 msgstr ""
 
 #: src/Privacy/ComplianceAuditor.php:105
+#: statnive-dist/statnive/src/Privacy/ComplianceAuditor.php:105
 msgid "Global Privacy Control honored"
 msgstr ""
 
 #: src/Privacy/ComplianceAuditor.php:108
+#: statnive-dist/statnive/src/Privacy/ComplianceAuditor.php:108
 msgid "GPC header is respected."
 msgstr ""
 
 #: src/Privacy/ComplianceAuditor.php:109
+#: statnive-dist/statnive/src/Privacy/ComplianceAuditor.php:109
 msgid "GPC header is not honored. Required under some US state laws."
 msgstr ""
 
 #: src/Privacy/ComplianceAuditor.php:123
+#: statnive-dist/statnive/src/Privacy/ComplianceAuditor.php:123
 msgid "Data retention configured"
 msgstr ""
 
 #. translators: %1$d: number of days, %2$s: retention mode.
 #: src/Privacy/ComplianceAuditor.php:127
+#: statnive-dist/statnive/src/Privacy/ComplianceAuditor.php:127
 #, php-format
 msgid "Data retained for %1$d days (%2$s mode)."
 msgstr ""
 
 #: src/Privacy/ComplianceAuditor.php:128
+#: statnive-dist/statnive/src/Privacy/ComplianceAuditor.php:128
 msgid "Data retained forever. Consider setting a retention period for compliance."
 msgstr ""
 
 #: src/Privacy/ComplianceAuditor.php:142
+#: statnive-dist/statnive/src/Privacy/ComplianceAuditor.php:142
 msgid "Privacy policy page published"
 msgstr ""
 
 #: src/Privacy/ComplianceAuditor.php:145
+#: statnive-dist/statnive/src/Privacy/ComplianceAuditor.php:145
 msgid "Privacy policy page is published. Statnive content auto-generated."
 msgstr ""
 
 #: src/Privacy/ComplianceAuditor.php:146
+#: statnive-dist/statnive/src/Privacy/ComplianceAuditor.php:146
 msgid "No published privacy policy page found. Create one in Settings → Privacy."
 msgstr ""
 
 #: src/Privacy/ComplianceAuditor.php:159
+#: statnive-dist/statnive/src/Privacy/ComplianceAuditor.php:159
 msgid "No raw IP addresses stored"
 msgstr ""
 
 #: src/Privacy/ComplianceAuditor.php:161
+#: statnive-dist/statnive/src/Privacy/ComplianceAuditor.php:161
 msgid "IP addresses are discarded immediately after hashing and GeoIP lookup."
 msgstr ""
 
 #: src/Privacy/ComplianceAuditor.php:181
+#: statnive-dist/statnive/src/Privacy/ComplianceAuditor.php:181
 msgid "Daily salt rotation active"
 msgstr ""
 
 #. translators: %s: datetime of last salt rotation.
 #: src/Privacy/ComplianceAuditor.php:185
+#: statnive-dist/statnive/src/Privacy/ComplianceAuditor.php:185
 #, php-format
 msgid "Last rotation: %s"
 msgstr ""
 
 #: src/Privacy/ComplianceAuditor.php:186
+#: statnive-dist/statnive/src/Privacy/ComplianceAuditor.php:186
 msgid "Salt rotation may not be running. Check WP-Cron."
 msgstr ""
 
 #: src/Privacy/ComplianceAuditor.php:198
+#: statnive-dist/statnive/src/Privacy/ComplianceAuditor.php:198
 msgid "Cookie-free tracking"
 msgstr ""
 
 #: src/Privacy/ComplianceAuditor.php:200
+#: statnive-dist/statnive/src/Privacy/ComplianceAuditor.php:200
 msgid "Statnive uses no cookies, localStorage, or sessionStorage by design."
 msgstr ""
 
 #: src/Privacy/ComplianceAuditor.php:213
 #: src/Privacy/ComplianceAuditor.php:222
+#: statnive-dist/statnive/src/Privacy/ComplianceAuditor.php:213
+#: statnive-dist/statnive/src/Privacy/ComplianceAuditor.php:222
 msgid "Data purge operational"
 msgstr ""
 
 #: src/Privacy/ComplianceAuditor.php:215
+#: statnive-dist/statnive/src/Privacy/ComplianceAuditor.php:215
 msgid "Retention mode is \"forever\" — no purge needed."
 msgstr ""
 
 #: src/Privacy/ComplianceAuditor.php:225
+#: statnive-dist/statnive/src/Privacy/ComplianceAuditor.php:225
 msgid "Data purge cron is scheduled."
 msgstr ""
 
 #: src/Privacy/ComplianceAuditor.php:226
+#: statnive-dist/statnive/src/Privacy/ComplianceAuditor.php:226
 msgid "Data purge cron not scheduled. Deactivate and reactivate the plugin."
 msgstr ""
 
 #: src/Privacy/ComplianceAuditor.php:239
+#: statnive-dist/statnive/src/Privacy/ComplianceAuditor.php:239
 msgid "HTTPS enabled"
 msgstr ""
 
 #: src/Privacy/ComplianceAuditor.php:242
+#: statnive-dist/statnive/src/Privacy/ComplianceAuditor.php:242
 msgid "Site is served over HTTPS."
 msgstr ""
 
 #: src/Privacy/ComplianceAuditor.php:243
+#: statnive-dist/statnive/src/Privacy/ComplianceAuditor.php:243
 msgid "Site not using HTTPS. Analytics data transmitted in plaintext."
 msgstr ""
 
+#: src/Privacy/PrivacyEraser.php:125
+msgid "Removed Ask me! pinned-question preferences."
+msgstr ""
+
 #. translators: %d: number of sessions anonymized
-#: src/Privacy/PrivacyEraser.php:124
+#: src/Privacy/PrivacyEraser.php:135
+#: statnive-dist/statnive/src/Privacy/PrivacyEraser.php:124
 #, php-format
 msgid "Anonymized %d analytics session(s). Aggregate statistics preserved."
 msgstr ""
 
-#: src/Privacy/PrivacyExporter.php:102
+#: src/Privacy/PrivacyExporter.php:103
+#: statnive-dist/statnive/src/Privacy/PrivacyExporter.php:102
 msgid "Session Start"
 msgstr ""
 
-#: src/Privacy/PrivacyExporter.php:106
+#: src/Privacy/PrivacyExporter.php:107
+#: statnive-dist/statnive/src/Privacy/PrivacyExporter.php:106
 msgid "Session End"
 msgstr ""
 
-#: src/Privacy/PrivacyExporter.php:107
+#: src/Privacy/PrivacyExporter.php:108
+#: statnive-dist/statnive/src/Privacy/PrivacyExporter.php:107
 msgid "Active"
 msgstr ""
 
-#: src/Privacy/PrivacyExporter.php:110
+#: src/Privacy/PrivacyExporter.php:111
+#: statnive-dist/statnive/src/Privacy/PrivacyExporter.php:110
 msgid "Pages Viewed"
 msgstr ""
 
-#: src/Privacy/PrivacyExporter.php:114
+#: src/Privacy/PrivacyExporter.php:115
+#: statnive-dist/statnive/src/Privacy/PrivacyExporter.php:114
 msgid "Duration (seconds)"
 msgstr ""
 
-#: src/Privacy/PrivacyExporter.php:139
+#: src/Privacy/PrivacyExporter.php:140
+#: statnive-dist/statnive/src/Privacy/PrivacyExporter.php:139
 msgid "Pages Visited"
 msgstr ""
 
-#: src/Privacy/PrivacyExporter.php:146
+#: src/Privacy/PrivacyExporter.php:147
+#: statnive-dist/statnive/src/Privacy/PrivacyExporter.php:146
 msgid "Statnive Analytics Sessions"
 msgstr ""
 
-#: src/Privacy/PrivacyExporter.php:147
+#: src/Privacy/PrivacyExporter.php:148
+#: statnive-dist/statnive/src/Privacy/PrivacyExporter.php:147
 msgid "Analytics sessions recorded by Statnive. No IP addresses or cookies are stored."
 msgstr ""
 
+#: src/Privacy/PrivacyExporter.php:161
+msgid "Statnive Ask me! Preferences"
+msgstr ""
+
+#: src/Privacy/PrivacyExporter.php:162
+msgid "Question IDs the user has pinned to the Ask me! tab. No personal data — just question identifiers."
+msgstr ""
+
+#: src/Privacy/PrivacyExporter.php:166
+msgid "Pinned Questions"
+msgstr ""
+
 #: src/Privacy/PrivacyPolicyGenerator.php:55
+#: statnive-dist/statnive/src/Privacy/PrivacyPolicyGenerator.php:55
 msgid "Analytics (Statnive)"
 msgstr ""
 
 #: src/Privacy/PrivacyPolicyGenerator.php:56
+#: statnive-dist/statnive/src/Privacy/PrivacyPolicyGenerator.php:56
 msgid "This website uses Statnive, a privacy-first analytics plugin that runs entirely on our server. No data is shared with third-party services."
 msgstr ""
 
 #: src/Privacy/PrivacyPolicyGenerator.php:59
+#: statnive-dist/statnive/src/Privacy/PrivacyPolicyGenerator.php:59
 msgid "Cookies & Tracking"
 msgstr ""
 
 #: src/Privacy/PrivacyPolicyGenerator.php:60
+#: statnive-dist/statnive/src/Privacy/PrivacyPolicyGenerator.php:60
 msgid "Statnive does not use cookies, localStorage, sessionStorage, or any form of browser fingerprinting. Visitor identification uses a daily-rotating cryptographic hash that cannot be reversed or used to track individuals across days."
 msgstr ""
 
 #: src/Privacy/PrivacyPolicyGenerator.php:63
+#: statnive-dist/statnive/src/Privacy/PrivacyPolicyGenerator.php:63
 msgid "Data Collected"
 msgstr ""
 
 #: src/Privacy/PrivacyPolicyGenerator.php:64
+#: statnive-dist/statnive/src/Privacy/PrivacyPolicyGenerator.php:64
 msgid "We collect the following anonymized data for each page visit:"
 msgstr ""
 
 #: src/Privacy/PrivacyPolicyGenerator.php:66
+#: statnive-dist/statnive/src/Privacy/PrivacyPolicyGenerator.php:66
 msgid "Page URL visited (without query parameters)"
 msgstr ""
 
 #: src/Privacy/PrivacyPolicyGenerator.php:67
+#: statnive-dist/statnive/src/Privacy/PrivacyPolicyGenerator.php:67
 msgid "Referrer URL (domain only, query parameters stripped)"
 msgstr ""
 
 #: src/Privacy/PrivacyPolicyGenerator.php:68
+#: statnive-dist/statnive/src/Privacy/PrivacyPolicyGenerator.php:68
 msgid "Country and city (derived from IP, which is immediately discarded)"
 msgstr ""
 
 #: src/Privacy/PrivacyPolicyGenerator.php:69
+#: statnive-dist/statnive/src/Privacy/PrivacyPolicyGenerator.php:69
 msgid "Device type, browser, and operating system"
 msgstr ""
 
 #: src/Privacy/PrivacyPolicyGenerator.php:70
+#: statnive-dist/statnive/src/Privacy/PrivacyPolicyGenerator.php:70
 msgid "Screen resolution, language, and timezone"
 msgstr ""
 
 #: src/Privacy/PrivacyPolicyGenerator.php:74
+#: statnive-dist/statnive/src/Privacy/PrivacyPolicyGenerator.php:74
 msgid "IP Address Handling"
 msgstr ""
 
 #: src/Privacy/PrivacyPolicyGenerator.php:75
+#: statnive-dist/statnive/src/Privacy/PrivacyPolicyGenerator.php:75
 msgid "Your IP address is never stored. It is used only momentarily to determine your approximate geographic location and to generate a one-way cryptographic hash for visit counting. The IP is discarded immediately after processing and cannot be recovered from the stored hash."
 msgstr ""
 
 #: src/Privacy/PrivacyPolicyGenerator.php:76
+#: statnive-dist/statnive/src/Privacy/PrivacyPolicyGenerator.php:76
 msgid "When no IP-derived geolocation source is configured, an approximate country may be inferred from your browser’s timezone setting. The timezone string is processed on this site’s server only and is not transmitted to any third party."
 msgstr ""
 
 #: src/Privacy/PrivacyPolicyGenerator.php:79
+#: statnive-dist/statnive/src/Privacy/PrivacyPolicyGenerator.php:79
 msgid "Consent"
 msgstr ""
 
 #: src/Privacy/PrivacyPolicyGenerator.php:81
+#: statnive-dist/statnive/src/Privacy/PrivacyPolicyGenerator.php:81
 msgid "Because Statnive uses no cookies and stores no personal data, analytics run in cookieless mode without requiring consent under most privacy regulations."
 msgstr ""
 
 #: src/Privacy/PrivacyPolicyGenerator.php:83
+#: statnive-dist/statnive/src/Privacy/PrivacyPolicyGenerator.php:83
 msgid "Analytics are disabled until you provide explicit consent through our cookie/consent banner. No data is collected before consent is granted."
 msgstr ""
 
 #: src/Privacy/PrivacyPolicyGenerator.php:85
+#: statnive-dist/statnive/src/Privacy/PrivacyPolicyGenerator.php:85
 msgid "Analytics are active for all visitors. You may opt out using your browser's Do Not Track or Global Privacy Control settings."
 msgstr ""
 
 #: src/Privacy/PrivacyPolicyGenerator.php:90
+#: statnive-dist/statnive/src/Privacy/PrivacyPolicyGenerator.php:90
 msgid "Do Not Track & Global Privacy Control"
 msgstr ""
 
 #: src/Privacy/PrivacyPolicyGenerator.php:93
+#: statnive-dist/statnive/src/Privacy/PrivacyPolicyGenerator.php:93
 msgid "Do Not Track (DNT)"
 msgstr ""
 
 #: src/Privacy/PrivacyPolicyGenerator.php:96
+#: statnive-dist/statnive/src/Privacy/PrivacyPolicyGenerator.php:96
 msgid "Global Privacy Control (GPC)"
 msgstr ""
 
 #. translators: %s: comma-separated list of privacy signals
 #: src/Privacy/PrivacyPolicyGenerator.php:100
+#: statnive-dist/statnive/src/Privacy/PrivacyPolicyGenerator.php:100
 #, php-format
 msgid "We honor the following browser privacy signals: %s. When enabled, no analytics data is collected."
 msgstr ""
 
 #: src/Privacy/PrivacyPolicyGenerator.php:106
+#: statnive-dist/statnive/src/Privacy/PrivacyPolicyGenerator.php:106
 msgid "Data Retention"
 msgstr ""
 
 #: src/Privacy/PrivacyPolicyGenerator.php:108
+#: statnive-dist/statnive/src/Privacy/PrivacyPolicyGenerator.php:108
 msgid "Aggregated analytics data is retained indefinitely. No personal data is stored."
 msgstr ""
 
 #. translators: %d: number of days
 #: src/Privacy/PrivacyPolicyGenerator.php:112
+#: statnive-dist/statnive/src/Privacy/PrivacyPolicyGenerator.php:112
 #, php-format
 msgid "Raw analytics data is automatically deleted after %d days. Only aggregated statistics are retained for historical reporting."
 msgstr ""
 
 #: src/Privacy/PrivacyPolicyGenerator.php:118
+#: statnive-dist/statnive/src/Privacy/PrivacyPolicyGenerator.php:118
 msgid "Your Rights"
 msgstr ""
 
 #: src/Privacy/PrivacyPolicyGenerator.php:119
+#: statnive-dist/statnive/src/Privacy/PrivacyPolicyGenerator.php:119
 msgid "You may request export or deletion of any analytics data associated with your user account through the WordPress personal data tools. Anonymous visitor data cannot be attributed to individuals due to the cookieless, hash-based architecture."
 msgstr ""
 
 #: src/Privacy/SiteHealthIntegration.php:33
+#: statnive-dist/statnive/src/Privacy/SiteHealthIntegration.php:33
 msgid "Statnive Privacy Compliance"
 msgstr ""
 
 #: src/Privacy/SiteHealthIntegration.php:38
+#: statnive-dist/statnive/src/Privacy/SiteHealthIntegration.php:38
 msgid "Statnive Data Retention"
 msgstr ""
 
 #: src/Privacy/SiteHealthIntegration.php:55
+#: statnive-dist/statnive/src/Privacy/SiteHealthIntegration.php:55
 msgid "Statnive privacy compliance is strong."
 msgstr ""
 
 #: src/Privacy/SiteHealthIntegration.php:58
+#: statnive-dist/statnive/src/Privacy/SiteHealthIntegration.php:58
 msgid "Statnive privacy settings could be improved. Review the Privacy Audit in your dashboard."
 msgstr ""
 
 #: src/Privacy/SiteHealthIntegration.php:61
+#: statnive-dist/statnive/src/Privacy/SiteHealthIntegration.php:61
 msgid "Statnive privacy compliance needs attention. Open Settings to configure privacy options."
 msgstr ""
 
 #. translators: %d: compliance score
 #: src/Privacy/SiteHealthIntegration.php:67
+#: statnive-dist/statnive/src/Privacy/SiteHealthIntegration.php:67
 #, php-format
 msgid "Statnive Privacy Score: %d/100"
 msgstr ""
 
 #: src/Privacy/SiteHealthIntegration.php:79
+#: statnive-dist/statnive/src/Privacy/SiteHealthIntegration.php:79
 msgid "Review Privacy Settings"
 msgstr ""
 
 #: src/Privacy/SiteHealthIntegration.php:96
+#: statnive-dist/statnive/src/Privacy/SiteHealthIntegration.php:96
 msgid "Statnive: Data retained indefinitely"
 msgstr ""
 
 #: src/Privacy/SiteHealthIntegration.php:102
+#: statnive-dist/statnive/src/Privacy/SiteHealthIntegration.php:102
 msgid "Analytics data is retained forever. Consider setting a retention period for data minimization best practices."
 msgstr ""
 
 #: src/Privacy/SiteHealthIntegration.php:106
+#: statnive-dist/statnive/src/Privacy/SiteHealthIntegration.php:106
 msgid "Configure Retention"
 msgstr ""
 
 #. translators: %1$d: days, %2$s: mode
 #: src/Privacy/SiteHealthIntegration.php:115
+#: statnive-dist/statnive/src/Privacy/SiteHealthIntegration.php:115
 #, php-format
 msgid "Statnive: %1$d-day retention (%2$s)"
 msgstr ""
 
 #: src/Privacy/SiteHealthIntegration.php:124
+#: statnive-dist/statnive/src/Privacy/SiteHealthIntegration.php:124
 msgid "Data retention is configured with automatic cleanup."
 msgstr ""
 
+#: statnive-dist/statnive/statnive.php:111
 #: statnive.php:111
 msgid "Statnive: Composer autoloader not found. Please run \"composer install\" in the plugin directory."
 msgstr ""
 
 # React/TypeScript-source strings (merged by bin/extract-react-pot.mjs).
+
+#: resources/react/components/advisor/AnswerModal.tsx:83
+#: resources/react/components/advisor/QuestionCard.tsx:248
+msgid "Live in v1.1 — auto-enables when ready."
+msgstr ""
+
+#: resources/react/components/advisor/AnswerModal.tsx:84
+#: resources/react/components/advisor/QuestionCard.tsx:249
+msgid "Unlocks in Statnive Growth v2."
+msgstr ""
+
+#: resources/react/components/advisor/AnswerModal.tsx:115
+msgid "Free"
+msgstr ""
+
+#: resources/react/components/advisor/AnswerModal.tsx:115
+msgid "Paid"
+msgstr ""
+
+#: resources/react/components/advisor/AnswerModal.tsx:124
+msgid "Close answer"
+msgstr ""
+
+#: resources/react/components/advisor/AnswerModal.tsx:139
+#: resources/react/components/advisor/QuestionCard.tsx:276
+msgid "Couldn't load this answer."
+msgstr ""
+
+#: resources/react/components/advisor/AnswerModal.tsx:168
+msgid "Pinned"
+msgstr ""
+
+#: resources/react/components/advisor/AnswerModal.tsx:169
+msgid "Pin this question"
+msgstr ""
+
+#: resources/react/components/advisor/AnswerViz.tsx:120
+msgid "Yes"
+msgstr ""
+
+#: resources/react/components/advisor/AnswerViz.tsx:120
+msgid "No"
+msgstr ""
+
+#: resources/react/components/advisor/AnswerViz.tsx:137
+msgid "vs"
+msgstr ""
+
+#: resources/react/components/advisor/AnswerViz.tsx:147
+#: resources/react/components/advisor/AnswerViz.tsx:200
+#: resources/react/components/advisor/AnswerViz.tsx:242
+msgid "No data yet."
+msgstr ""
+
+#: resources/react/components/advisor/AnswerViz.tsx:255
+msgid "Mobile is the majority. Prioritise the mobile design first."
+msgstr ""
+
+#: resources/react/components/advisor/AnswerViz.tsx:256
+msgid "Desktop still leads. Mobile improvements are secondary for now."
+msgstr ""
+
+#: resources/react/components/advisor/AnswerViz.tsx:267
+msgid "of sessions are on mobile"
+msgstr ""
+
+#: resources/react/components/advisor/AnswerViz.tsx:303
+msgid "Visitors in selected range"
+msgstr ""
+
+#: resources/react/components/advisor/AnswerViz.tsx:306
+msgid "Sessions in selected range"
+msgstr ""
+
+#: resources/react/components/advisor/AnswerViz.tsx:309
+msgid "Pageviews in selected range"
+msgstr ""
+
+#: resources/react/components/advisor/AnswerViz.tsx:311
+msgid "No data"
+msgstr ""
+
+#: resources/react/components/advisor/PinCapHint.tsx:74
+msgid "You’re at %1$d of %2$d pins."
+msgstr ""
+
+#: resources/react/components/advisor/PinCapHint.tsx:82
+msgid "Unpin one to add another, or get %d pins with Statnive Growth v2."
+msgstr ""
+
+#: resources/react/components/advisor/PinnedTab.tsx:43
+msgid "Your pinned questions. Pin more from any category."
+msgstr ""
+
+#: resources/react/components/advisor/PinnedTab.tsx:56
+msgid "pinned"
+msgstr ""
+
+#: resources/react/components/advisor/PinnedTab.tsx:68
+msgid "No pinned questions yet."
+msgstr ""
+
+#: resources/react/components/advisor/PinnedTab.tsx:71
+msgid "Pin any question from a category tab to see it here."
+msgstr ""
+
+#: resources/react/components/advisor/QuestionCard.tsx:95
+msgid "Unpin \"%s\""
+msgstr ""
+
+#: resources/react/components/advisor/QuestionCard.tsx:100
+msgid "Pin \"%s\""
+msgstr ""
+
+#: resources/react/components/advisor/QuestionCard.tsx:202
+#: resources/react/components/advisor/SearchSuggestions.tsx:79
+msgid "Coming soon"
+msgstr ""
+
+#: resources/react/components/advisor/QuestionCard.tsx:212
+#: resources/react/pages/overview.tsx:49
+#: resources/react/pages/overview.tsx:51
+#: resources/react/pages/referrers.tsx:104
+msgid "Direct"
+msgstr ""
+
+#: resources/react/components/advisor/QuestionCard.tsx:214
+msgid "Calculated"
+msgstr ""
+
+#: resources/react/components/advisor/QuestionCard.tsx:215
+msgid "Proxy"
+msgstr ""
+
+#: resources/react/components/advisor/QuestionCard.tsx:218
+msgid "Read straight from stored data."
+msgstr ""
+
+#: resources/react/components/advisor/QuestionCard.tsx:220
+msgid "Derived one step from stored data."
+msgstr ""
+
+#: resources/react/components/advisor/QuestionCard.tsx:221
+msgid "Closest available stand-in, indicative not authoritative."
+msgstr ""
+
+#: resources/react/components/advisor/QuestionCard.tsx:298
+msgid "Showing %s. Change the date picker above for a different period."
+msgstr ""
+
+#: resources/react/components/advisor/QuestionTabs.tsx:151
+msgid "Ask me! categories"
+msgstr ""
+
+#: resources/react/components/advisor/SearchBox.tsx:105
+msgid "Search 120 questions about your traffic, sales, or visitors…"
+msgstr ""
+
+#: resources/react/components/advisor/SearchBox.tsx:109
+msgid "Search questions"
+msgstr ""
+
+#: resources/react/components/advisor/SearchBox.tsx:136
+msgid "No questions match. Try a different keyword, or browse the category tabs."
+msgstr ""
 
 #: resources/react/components/charts/pie-chart-card.tsx:88
 msgid "Total"
@@ -622,11 +1454,11 @@ msgstr ""
 msgid "Date"
 msgstr ""
 
-#: resources/react/components/layouts/dashboard-layout.tsx:120
+#: resources/react/components/layouts/dashboard-layout.tsx:131
 msgid "Skip to content"
 msgstr ""
 
-#: resources/react/components/layouts/dashboard-layout.tsx:150
+#: resources/react/components/layouts/dashboard-layout.tsx:163
 msgid "Dashboard navigation"
 msgstr ""
 
@@ -678,6 +1510,50 @@ msgstr ""
 msgid "online"
 msgstr ""
 
+#: resources/react/lib/date-range-label.ts:48
+msgid "today"
+msgstr ""
+
+#: resources/react/lib/date-range-label.ts:50
+msgid "in the last 7 days"
+msgstr ""
+
+#: resources/react/lib/date-range-label.ts:52
+msgid "in the last 30 days"
+msgstr ""
+
+#: resources/react/lib/date-range-label.ts:54
+msgid "this month"
+msgstr ""
+
+#: resources/react/lib/date-range-label.ts:56
+msgid "last month"
+msgstr ""
+
+#: resources/react/lib/date-range-label.ts:65
+msgid "with yesterday"
+msgstr ""
+
+#: resources/react/lib/date-range-label.ts:67
+msgid "with the previous 7 days"
+msgstr ""
+
+#: resources/react/lib/date-range-label.ts:69
+msgid "with the previous 30 days"
+msgstr ""
+
+#: resources/react/lib/date-range-label.ts:71
+msgid "with last month"
+msgstr ""
+
+#: resources/react/lib/date-range-label.ts:73
+msgid "with the month before"
+msgstr ""
+
+#: resources/react/lib/date-range-label.ts:77
+msgid "with the previous %d days"
+msgstr ""
+
 #: resources/react/lib/wp-commands.ts:26
 msgid "Statnive: Go to Overview"
 msgstr ""
@@ -704,6 +1580,10 @@ msgstr ""
 
 #: resources/react/lib/wp-commands.ts:32
 msgid "Statnive: Go to Settings"
+msgstr ""
+
+#: resources/react/pages/ask.tsx:55
+msgid "Could not load Ask me! questions."
 msgstr ""
 
 #: resources/react/pages/devices.tsx:32
@@ -836,12 +1716,6 @@ msgstr ""
 #: resources/react/pages/overview.tsx:46
 #: resources/react/pages/referrers.tsx:38
 msgid "Source"
-msgstr ""
-
-#: resources/react/pages/overview.tsx:49
-#: resources/react/pages/overview.tsx:51
-#: resources/react/pages/referrers.tsx:104
-msgid "Direct"
 msgstr ""
 
 #: resources/react/pages/overview.tsx:81
@@ -1039,10 +1913,6 @@ msgstr ""
 
 #: resources/react/pages/revenue.tsx:164
 msgid "Channel"
-msgstr ""
-
-#: resources/react/pages/revenue.tsx:175
-msgid "Revenue"
 msgstr ""
 
 #: resources/react/pages/revenue.tsx:181

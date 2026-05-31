@@ -14,6 +14,8 @@ declare global {
 			currencyMinorUnit?: number;
 			/** Currency symbol — defensive; React uses Intl.NumberFormat directly. */
 			currencySymbol?: string;
+			/** WP user locale (e.g. 'en_US', 'de_DE'). Drives `Intl.DateTimeFormat` so the dynamic-window labels match the rest of the page's language. */
+			locale?: string;
 		};
 	}
 }
