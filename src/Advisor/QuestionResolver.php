@@ -1104,6 +1104,12 @@ final class QuestionResolver {
 		$has      = ( 'drop' === $direction ) ? $is_drop : $is_spike;
 
 		return [
+			// `yes_no` powers the leading chip on the delta viz so q10 and
+			// q11 surface different YES/NO answers off the same underlying
+			// `current` / `baseline` / `delta_pct` numbers. q10 answers
+			// "drop?" — YES when `delta_pct <= -15%`. q11 answers "spike?"
+			// — YES when `delta_pct >= 25%`.
+			'yes_no'      => $has ? 'yes' : 'no',
 			'has_anomaly' => $has,
 			'current'     => (int) $last['visitors'],
 			'baseline'    => (int) round( $mean ),
